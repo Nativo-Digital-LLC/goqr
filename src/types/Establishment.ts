@@ -1,3 +1,4 @@
+import { PaymentFrequency, PaymentMethod } from './Bill';
 import { CategoryProps } from './Category';
 
 export interface EstablishmentProps {
@@ -17,6 +18,8 @@ export interface EstablishmentProps {
 	requiresTaxReceipt: boolean;
 	rnc: string | null;
 	companyName: string | null;
+	paymentMethod: PaymentMethod;
+	paymentFrequency: PaymentFrequency;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string;
