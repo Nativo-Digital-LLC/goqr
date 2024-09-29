@@ -6,6 +6,7 @@ import RegisterPage from './pages/auth/register';
 import MenuPage from './pages/menu';
 import DashboardPage from './pages/dashboard';
 import VerifyEmailPage from './pages/verify-email';
+import NotFoundPage from './pages/404';
 
 const router = createBrowserRouter([
 	{
@@ -29,8 +30,12 @@ const router = createBrowserRouter([
 		element: <VerifyEmailPage />
 	},
 	{
-		path: '*',
+		path: '/m/:establishmentUrl',
 		element: <MenuPage />
+	},
+	{
+		path: '*',
+		element: <NotFoundPage />
 	}
 ]);
 

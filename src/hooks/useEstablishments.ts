@@ -10,16 +10,18 @@ type UseGetEstablishmentByDomainType = [
 	AppwriteException | null
 ];
 
-export const useGetEstablishmentByDomain = (domain: string): UseGetEstablishmentByDomainType => {
+export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmentByDomainType => {
 	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
 	useEffect(() => {
-		load();
-	}, []);
+		if (domain) {
+			load(domain);
+		}
+	}, [domain]);
 
-	async function load() {
+	async function load(domain: string) {
 		try {
 			setLoading(true);
 			setError(null);

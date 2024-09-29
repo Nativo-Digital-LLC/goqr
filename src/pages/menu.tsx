@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
 import { Header, SubcategoryCard, CategoriesMenu, EstablishmentInfo } from '../components';
 
 export default function MenuPage() {
+	const { establishmentUrl } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const [establishment, loading, error] = useGetEstablishmentByDomain('trattoria.gustico.do');
+	const [establishment, loading, error] = useGetEstablishmentByDomain(establishmentUrl);
 	const selected = useMemo(() => {
 		const params = new URLSearchParams(location.search);
 		const categoryId = params.get('categoryId');
