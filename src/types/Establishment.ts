@@ -14,6 +14,9 @@ export interface EstablishmentProps {
 	whatsapp: string | null;
 	mainHexColor: string;
 	categories: CategoryProps[];
+	requiresTaxReceipt: boolean;
+	rnc: string | null;
+	companyName: string | null;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string;
@@ -29,6 +32,9 @@ export interface CreateEstablishmentParams {
 	addressLink?: string;
 	phone: string;
 	whatsapp?: string;
+	requiresTaxReceipt?: boolean;
+	rnc?: string;
+	companyName?: string;
 	logo?: File;
 	banner?: File;
 }
