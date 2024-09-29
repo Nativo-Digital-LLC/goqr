@@ -2,7 +2,7 @@ import { ID, Query } from 'appwrite';
 
 import { db, storage } from '../utils/appwrite';
 import { Collection } from '../constants/Collections';
-import { CreateEstablishmentParams, EstablishmentProps } from '../types/Establishment';
+import { CreateEstablishmentParams, EstablishmentProps, TaxPayerProps } from '../types/Establishment';
 
 export async function createEstablishment(params: CreateEstablishmentParams) {
 	let bannerUrl: string | undefined;
@@ -89,4 +89,14 @@ export async function getEstablishmentsByUserId(userId: string) {
 		);
 
 	return documents as unknown as EstablishmentProps[];
+}
+
+export async function getTaxInformation(rnc: string) {
+	const res = await fetch(`https://api.betapos.com.do/taxpayers/by-rnc/${rnc}`);
+	const data = await res.json();
+	if (!res.ok) {
+		throw new Error(JSON.stringify(data));
+	}
+
+	return data as TaxPayerProps | null;
 }

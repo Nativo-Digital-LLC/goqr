@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
-import { CreateEstablishmentParams, EstablishmentProps } from '../types/Establishment';
-import { createEstablishment, getEstablishmentByDomain, getEstablishmentsByUserId } from '../services/establishments';
+import { CreateEstablishmentParams, EstablishmentProps, TaxPayerProps } from '../types/Establishment';
+import { createEstablishment, getEstablishmentByDomain, getEstablishmentsByUserId, getTaxInformation } from '../services/establishments';
 
 type UseGetEstablishmentByDomainType = [
 	EstablishmentProps | null,
@@ -96,4 +96,40 @@ export const useCreateEstablishment = (): UseCreateEstablishmentType => {
 	}
 
 	return [handleCreate, loading, error];
+}
+
+type UseGetTaxPayerInfoType = [
+	(rnc: string) => void,
+	TaxPayerProps | null,
+	boolean,
+	Error | string | null
+];
+
+export const useGetTaxPayerInfo = (): UseGetTaxPayerInfoType => {
+	const [loading, setLoading] = useState(false);
+	const [taxpayer, setTaxpayer] = useState<TaxPayerProps | null>(null);
+	const [error, setError] = useState<string | Error | null>(null);
+
+	async function load(rnc: string) {
+		try {
+			setLoading(true);
+			setError(null);
+			const data = await getTaxInformation(rnc);
+			if (!data) {
+				return setError('RNC no encontrado');
+			}
+
+			if (data?.status.name !== 'ACTIVO' && data?.status.name !== 'NORMAL') {
+				return setError('RNC ' + data?.status.name);
+			}
+
+			setTaxpayer(data);
+		} catch (error) {
+			setError(error as Error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [load, taxpayer, loading, error];
 }

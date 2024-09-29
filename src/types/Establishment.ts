@@ -42,3 +42,26 @@ export interface CreateEstablishmentParams {
 	banner?: File;
 }
 
+export interface TaxPayerProps {
+	rnc: string;
+	name: string;
+	statusId: string;
+	createdAt: string;
+	updatedAt: string;
+	status: {
+		id: string;
+		name: TaxPayerStatusName;
+		createdAt: string;
+		updatedAt: string;
+	}
+}
+
+export type TaxPayerStatusName =
+	| 'ACTIVO'
+	| 'DADO DE BAJA'
+	| 'SUSPENDIDO'
+	| 'ANULADO'
+	| 'CESE TEMPORAL'
+	| 'RECHAZADO'
+	| 'NORMAL'
+	| string;
