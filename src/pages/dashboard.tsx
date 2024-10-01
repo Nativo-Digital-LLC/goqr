@@ -1,16 +1,16 @@
 import { Button, Card, Col, Row, Space, Typography } from 'antd';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 
-import { useGetSession } from '../hooks/useAuth';
 import { useGetEstablishmentsByUserId } from '../hooks/useEstablishments';
 import { ModalNewEstablishment } from '../components';
 import { ModalOpener$ } from '../utils/helpers';
 import { ModalName } from '../types/Modals';
+import { useSessionStore } from '../store/session';
 
 const { Text } = Typography;
 
 export default function DashboardPage() {
-	const [session] = useGetSession();
+	const session = useSessionStore(({ session }) => session);
 	const [establishments] = useGetEstablishmentsByUserId(session?.$id);
 
 	return (

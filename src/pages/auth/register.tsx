@@ -1,12 +1,11 @@
 import { Button, Checkbox, Form, Input, Space } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useRegister } from '../../hooks/useAuth';
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
-	const [register, loading, error] = useRegister();
-	console.log(error);
+	const [register, loading] = useRegister();
 
 	return (
 		<div
@@ -81,9 +80,11 @@ export default function RegisterPage() {
 
 						o
 
-						<Button type='default'>
-							Acceder
-						</Button>
+						<Link to='/login'>
+							<Button type='default'>
+								Acceder
+							</Button>
+						</Link>
 					</Space>
 					<br />
 					<br />

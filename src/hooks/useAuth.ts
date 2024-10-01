@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react';
-import { AppwriteException, Models } from 'appwrite';
+import { useState } from 'react';
+import { AppwriteException } from 'appwrite';
 
-import { createAccount, login, sendVerificationEmail } from '../services/auth';
+import {
+	createAccount,
+	login,
+	logout,
+	// sendVerificationEmail
+} from '../services/auth';
 import { account } from '../utils/appwrite';
+import { useSessionStore } from '../store/session';
 
 type UseRegisterType = [
 	(
@@ -18,6 +24,7 @@ type UseRegisterType = [
 export const useRegister = (): UseRegisterType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
+	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleRegister(name: string, email: string, password: string, onDone?: () => void) {
 		try {
@@ -28,11 +35,20 @@ export const useRegister = (): UseRegisterType => {
 				email,
 				password
 			);
-			await login(
+			const session = await login(
 				email,
 				password
 			);
-			await sendVerificationEmail();
+			const user = await account.get();
+			setSession({
+				...session,
+				user
+			});
+			/**
+			 * await sendVerificationEmail();
+			 * Falla al enviar correo de confirmacion,
+			 * {"message":"The current user session could not be found.","code":404,"type":"user_session_not_found","version":"1.5.11"}
+			 */
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException)
@@ -57,15 +73,21 @@ type UseLoginType = [
 export const useLogin = (): UseLoginType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
+	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleLogin(email: string, password: string, onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
-			await login(
+			const session = await login(
 				email,
 				password
 			);
+			const user = await account.get();
+			setSession({
+				...session,
+				user
+			});
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException)
@@ -77,42 +99,28 @@ export const useLogin = (): UseLoginType => {
 	return [handleLogin, loading, error];
 }
 
-type UseGetSessionType = [
-	Models.User<Models.Preferences> | null,
+type UseLogoutType = [
+	(onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useGetSession = (): UseGetSessionType => {
-	const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+export const useLogout = (): UseLogoutType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	useEffect(() => {
-		load();
-	}, []);
-
-	async function load() {
+	async function handleLogout(onDone?: () => void) {
 		try {
-			// const { total, sessions } = await account.listSessions();
-			// if (total === 0) {
-			// 	return;
-			// }
-
-			// const session = sessions.find(({ current }) => current);
-			// if (!session) {
-			// 	return;
-			// }
 			setLoading(true);
 			setError(null);
-			const data = await account.get();
-			setUser(data);
+			await logout();
+			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as AppwriteException)
 		} finally {
 			setLoading(false);
 		}
 	}
 
-	return [user, loading, error];
+	return [handleLogout, loading, error];
 }
