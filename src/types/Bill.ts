@@ -5,5 +5,6 @@ export enum PaymentMethod {
 
 export enum PaymentFrequency {
 	Monthly = 'Monthly',
-	Annual = 'Annual'
+	Annual = 'Annual',
+	Never = 'Never' // Cuando el cliente contrató un plan de por vida
 }
