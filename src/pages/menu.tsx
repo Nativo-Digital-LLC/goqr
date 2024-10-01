@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
@@ -27,17 +27,6 @@ export default function MenuPage() {
 
 		return establishment.categories.find(({ $id }) => $id === selected.categoryId) || null
 	}, [establishment, selected.categoryId]);
-	const selectedSubcategory = useMemo(() => {
-		if (!selectedCategory || selectedCategory.subcategories.length === 0 || !selected.subcategoryId) {
-			return null;
-		}
-
-		return selectedCategory
-			.subcategories
-			.find(({ $id }) => $id === selected.subcategoryId) || null;
-	}, [selectedCategory, selected.subcategoryId]);
-
-	const [search, setSearch] = useState('');
 
 	useEffect(() => {
 		if (!establishment || establishment.categories.length === 0) {
@@ -120,7 +109,6 @@ export default function MenuPage() {
 							borderRadius: 30,
 							fontSize: 14
 						}}
-						onChange={({ target }) => setSearch(target.value)}
 					/>
 					<br />
 					<br />

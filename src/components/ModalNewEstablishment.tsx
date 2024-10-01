@@ -2,15 +2,9 @@ import { Modal } from 'antd';
 
 import { useModalVisible } from '../hooks/useModal';
 import { ModalName } from '../types/Modals';
-import { useCreateEstablishment } from '../hooks/useEstablishments';
 
-interface ModalNewEstablishmentProps {
-	onFinish: () => void;
-}
-
-export const ModalNewEstablishment = ({ onFinish }: ModalNewEstablishmentProps) => {
+export const ModalNewEstablishment = () => {
 	const [visible, close] = useModalVisible(ModalName.NewEstablishment);
-	const [create, loading, error] = useCreateEstablishment();
 
 	return (
 		<Modal
