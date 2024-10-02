@@ -24,15 +24,15 @@ export default function HomePage() {
 						<div>
 							<picture>
 								<source
-									srcSet="/src/assets/images/example/menu-example-1.webp"
+									srcSet="../assets/images/example/menu-example-1.webp"
 									type="image/webp"
 								/>
 								<source
-									srcSet="/src/assets/images/example/menu-example-1.jpg"
+									srcSet="../assets/images/example/menu-example-1.jpg"
 									type="image/jpeg"
 								/>
 								<img
-									src="/src/assets/images/example/menu-example-1.jpg"
+									src="../assets/images/example/menu-example-1.jpg"
 									alt="QrCode landing, categories"
 								/>
 							</picture>
@@ -40,15 +40,15 @@ export default function HomePage() {
 						<div>
 							<picture>
 								<source
-									srcSet="/src/assets/images/example/menu-example-2.webp"
+									srcSet="../assets/images/example/menu-example-2.webp"
 									type="image/webp"
 								/>
 								<source
-									srcSet="/src/assets/images/example/menu-example-2.jpg"
+									srcSet="../assets/images/example/menu-example-2.jpg"
 									type="image/jpeg"
 								/>
 								<img
-									src="/src/assets/images/example/menu-example-2.jpg"
+									src="../assets/images/example/menu-example-2.jpg"
 									alt="QrCode landing, items"
 								/>
 							</picture>
@@ -63,7 +63,7 @@ export default function HomePage() {
 						<div>
 							<div></div>
 							<img
-								src="/src/assets/images/example/menu-example-1.jpg"
+								src="../assets/images/example/menu-example-1.jpg"
 								alt="Qr menu design"
 							/>
 						</div>
@@ -107,7 +107,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="/src/assets/images/benefits/benefits-1.svg"
+									src="../assets/images/benefits/benefits-1.svg"
 									alt="QR code menu, enhancing customer experience"
 								/>
 							</div>
@@ -130,7 +130,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="/src/assets/images/benefits/benefits-2.svg"
+									src="../assets/images/benefits/benefits-2.svg"
 									alt="QR code menu, attracting new customers"
 								/>
 							</div>
@@ -153,7 +153,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="/src/assets/images/benefits/benefits-3.svg"
+									src="../assets/images/benefits/benefits-3.svg"
 									alt="QR code menu, increases sales"
 								/>
 							</div>
@@ -176,7 +176,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="/src/assets/images/benefits/benefits-4.svg"
+									src="../assets/images/benefits/benefits-4.svg"
 									alt="QR code menu, saving business resources"
 								/>
 							</div>
@@ -221,13 +221,13 @@ export default function HomePage() {
 					</div>
 					<div>
 						<img
-							src="/src/assets/images/prices/price-1.svg"
+							src="../assets/images/prices/price-1.svg"
 							alt="QR code menu for free"
 						/>
 					</div>
 					<div>
 						<img
-							src="/src/assets/images/prices/price-2.svg"
+							src="../assets/images/prices/price-2.svg"
 							alt="Digital menu prices"
 						/>
 					</div>
