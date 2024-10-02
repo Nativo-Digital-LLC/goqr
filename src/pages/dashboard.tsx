@@ -30,7 +30,7 @@ export default function DashboardPage() {
 							<Card>
 								<Space direction='vertical'>
 									<Text strong>{name}</Text>
-									<Text>{domain}</Text>
+									<Text copyable>goqr.com.do/m/{domain}</Text>
 								</Space>
 								<br />
 								<br />
