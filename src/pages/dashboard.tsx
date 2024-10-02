@@ -1,5 +1,6 @@
 import { Button, Card, Col, Row, Space, Typography } from 'antd';
 import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 import { useGetEstablishmentsByUserId } from '../hooks/useEstablishments';
 import { ModalNewEstablishment } from '../components';
@@ -36,9 +37,11 @@ export default function DashboardPage() {
 								<br />
 								<br />
 
-								<Button type='primary' style={{ width: '100%' }}>
-									Editar Menú
-								</Button>
+								<Link to={`/m/${domain}`}>
+									<Button type='primary' style={{ width: '100%' }}>
+										Editar Menú
+									</Button>
+								</Link>
 							</Card>
 						</Col>
 					))}
