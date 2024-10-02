@@ -40,7 +40,8 @@ export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmen
 type UseGetEstablishmentsByUserIdType = [
 	EstablishmentProps[],
 	boolean,
-	AppwriteException | null
+	AppwriteException | null,
+	(userId: string) => void
 ];
 
 export const useGetEstablishmentsByUserId = (userId?: string): UseGetEstablishmentsByUserIdType => {
@@ -69,7 +70,7 @@ export const useGetEstablishmentsByUserId = (userId?: string): UseGetEstablishme
 		}
 	}
 
-	return [establishments, loading, error];
+	return [establishments, loading, error, load];
 }
 
 type UseCreateEstablishmentType = [

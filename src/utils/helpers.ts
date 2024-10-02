@@ -100,20 +100,24 @@ export function customFormat(input: string, example: string) {
  * Evita que un input pueda recibir caracteres no numericos
  * Esta funcion puede ser insertada en un Event Listener de tipo keydown
  */
-// export function avoidNotNumerics(event: any) {
-// 	if (event.code === 'Space') {
-// 		return event.preventDefault();
-// 	}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function avoidNotNumerics(event: any, decimals = 0){
+	if(['Backspace', 'Delete', 'Tab', 'ArrowRight', 'ArrowLeft', 'Enter'].includes(event.key))
+		return;
 
-// 	if(['Backspace', 'Delete', 'Tab', 'Enter'].includes(event.key)) {
-// 		return;
-// 	}
+	if(event.key === ' ')
+		return event.preventDefault();
 
-// 	const isNumber = !isNaN(Number(event.key));
-// 	const hasPoint = event.target.value.includes('.');
-// 	const isFirstPoint = (event.key === '.' && !event.target.value.includes('.'));
-// 	const have2Decimals = hasPoint && event.target.value.split('.').pop().length === 2;
+	if(!decimals && event.key === '.')
+		return event.preventDefault();
 
-// 	if((!isNumber && !isFirstPoint) || have2Decimals)
-// 		event.preventDefault();
-// }
+	const hasPoint = event.target.value.includes('.');
+	const limitDecimals = hasPoint && event.target.value.split('.').pop().length === decimals;
+	if(limitDecimals)
+		return event.preventDefault()
+
+	const isFirstPoint = (event.key === '.' && !event.target.value.includes('.'));
+	const isNumber = !isNaN(Number(event.key));
+	if(!isNumber && !isFirstPoint)
+		event.preventDefault();
+}

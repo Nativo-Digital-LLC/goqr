@@ -11,7 +11,7 @@ const { Text } = Typography;
 
 export default function DashboardPage() {
 	const session = useSessionStore(({ session }) => session);
-	const [establishments] = useGetEstablishmentsByUserId(session?.$id);
+	const [establishments, , , reload] = useGetEstablishmentsByUserId(session?.$id);
 
 	return (
 		<div style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
@@ -67,7 +67,9 @@ export default function DashboardPage() {
 				</Row>
 			</div>
 
-			<ModalNewEstablishment />
+			<ModalNewEstablishment
+				onFinish={() => reload(`${session?.userId}`)}
+			/>
 		</div>
 	)
 }
