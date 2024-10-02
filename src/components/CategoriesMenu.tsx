@@ -66,17 +66,19 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 						{category.name}
 					</button>
 
-					<Button
-						icon={<PlusOutlined />}
-						shape='circle'
-						onClick={() => ModalOpener$.next({
-							name: ModalName.NewCategory,
-							extra: {
-								order: category.order + 1,
-								establishmentId
-							}
-						})}
-					/>
+					{isEditable && (
+						<Button
+							icon={<PlusOutlined />}
+							shape='circle'
+							onClick={() => ModalOpener$.next({
+								name: ModalName.NewCategory,
+								extra: {
+									order: category.order + 1,
+									establishmentId
+								}
+							})}
+						/>
+					)}
 				</Space>
 			))}
 		</div>
