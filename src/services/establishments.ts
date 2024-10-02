@@ -75,7 +75,12 @@ export async function getEstablishmentByDomain(domain: string) {
 		return null;
 	}
 
-	return documents[0] as unknown as EstablishmentProps;
+	const { categories, ...rest } = documents[0] as unknown as EstablishmentProps;
+
+	return {
+		categories: categories.sort((a, b) => a.order - b.order),
+		...rest
+	}
 }
 
 export async function getEstablishmentsByUserId(userId: string) {
