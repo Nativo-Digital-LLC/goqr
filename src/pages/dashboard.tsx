@@ -11,7 +11,7 @@ const { Text } = Typography;
 
 export default function DashboardPage() {
 	const session = useSessionStore(({ session }) => session);
-	const [establishments, , , reload] = useGetEstablishmentsByUserId(session?.$id);
+	const [establishments, , , reload] = useGetEstablishmentsByUserId(session?.userId);
 
 	return (
 		<div style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
