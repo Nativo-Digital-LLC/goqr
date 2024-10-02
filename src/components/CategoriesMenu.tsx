@@ -10,7 +10,7 @@ import {
 import { CategoryProps } from '../types/Category';
 import { ModalOpener$ } from '../utils/helpers';
 import { ModalName } from '../types/Modals';
-import { useDeleteCategory } from '../hooks/useCategories';
+import { useDeleteCategory, useUpdateCategoryOrder } from '../hooks/useCategories';
 
 const { Text } = Typography;
 
@@ -34,7 +34,8 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 		isEditable,
 		establishmentId
 	} = props;
-	const [_delete, deleting, error] = useDeleteCategory();
+	const [_delete, deleting] = useDeleteCategory();
+	const [updateOrder, updatingOrder] = useUpdateCategoryOrder();
 
 	return (
 		<div
@@ -96,7 +97,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 							}}
 							onClick={() => onSelect(category.$id)}
 						>
-							{category.name}
+							{category.name} - {category.order}
 						</Button>
 
 						{isEditable && (
@@ -110,10 +111,12 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 									justifySelf: 'center'
 								}}
 							>
-								{category.order > 1 && (
+								{category.order > Math.min(...categories.map(({ order }) => order)) && (
 									<Button
 										type='text'
 										icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
+										loading={updatingOrder}
+										onClick={() => updateOrder(establishmentId, category.$id, 'left', onChange)}
 									/>
 								)}
 
@@ -121,6 +124,8 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 									<Button
 										type='text'
 										icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
+										loading={updatingOrder}
+										onClick={() => updateOrder(establishmentId, category.$id, 'right', onChange)}
 									/>
 								)}
 

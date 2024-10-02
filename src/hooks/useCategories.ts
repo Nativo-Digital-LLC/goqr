@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
-import { createCategory, deleteCategory } from '../services/categories';
+import { createCategory, deleteCategory, updateCategoryOrder } from '../services/categories';
 
 type UseCreateCategoryType = [
 	(
@@ -58,6 +58,46 @@ export const useDeleteCategory = (): UseDeleteCategoryType => {
 			setLoading(true);
 			setError(null);
 			await deleteCategory(id);
+			onDone?.();
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleDelete, loading, error];
+}
+
+type UseUpdateCategoryOrderType = [
+	(
+		establishmentId: string,
+		id: string,
+		dir: 'left' | 'right',
+		onDone?: () => void
+	) => void,
+	boolean,
+	AppwriteException | null
+];
+
+export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleDelete(
+		establishmentId: string,
+		id: string,
+		dir: 'left' | 'right',
+		onDone?: () => void
+	) {
+		try {
+			setLoading(true);
+			setError(null);
+			await updateCategoryOrder(
+				establishmentId,
+				id,
+				dir
+			);
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException);
