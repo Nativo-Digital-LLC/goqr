@@ -2,7 +2,11 @@ export interface ProductProps {
 	$id: string;
 	name: string;
 	description: string;
-	price: number;
+	prices: {
+		label?: string;
+		price: number;
+	};
+	order: number;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string | null;
