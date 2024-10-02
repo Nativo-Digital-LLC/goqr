@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
-import { CreateEstablishmentParams, EstablishmentProps, TaxPayerProps } from '../types/Establishment';
-import { createEstablishment, getEstablishmentByDomain, getEstablishmentsByUserId, getTaxInformation } from '../services/establishments';
+import {
+	CreateEstablishmentParams,
+	EstablishmentProps,
+	TaxPayerProps
+} from '../types/Establishment';
+import {
+	createEstablishment,
+	getEstablishmentByDomain,
+	getEstablishmentsByUserId,
+	getTaxInformation
+} from '../services/establishments';
 
 type UseGetEstablishmentByDomainType = [
 	EstablishmentProps | null,
 	boolean,
-	AppwriteException | null
+	AppwriteException | null,
+	(domain: string) => void
 ];
 
 export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmentByDomainType => {
@@ -34,7 +44,7 @@ export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmen
 		}
 	}
 
-	return [establishment, loading, error];
+	return [establishment, loading, error, load];
 }
 
 type UseGetEstablishmentsByUserIdType = [

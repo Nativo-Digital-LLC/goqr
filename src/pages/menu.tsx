@@ -2,14 +2,19 @@ import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
-import { Header, SubcategoryCard, CategoriesMenu, EstablishmentInfo } from '../components';
+import { Header, SubcategoryCard, CategoriesMenu, EstablishmentInfo, ModalNewCategory } from '../components';
+import { useSessionStore } from '../store/session';
 
 export default function MenuPage() {
 	const { establishmentUrl } = useParams();
+	const session = useSessionStore(({ session }) => session);
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const [establishment, loading, error] = useGetEstablishmentByDomain(establishmentUrl);
+	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
+	const isEditable = useMemo(() => {
+		return establishment && session && session.userId === establishment.userId || false;
+	}, [session, establishment]);
 	const selected = useMemo(() => {
 		const params = new URLSearchParams(location.search);
 		const categoryId = params.get('categoryId');
@@ -78,8 +83,9 @@ export default function MenuPage() {
 						zIndex: 100,
 						backgroundColor: '#FFF',
 						padding: 20,
-						overflowY: 'scroll'
+						overflowY: 'scroll',
 					}}
+					className='hide-scrollbar-y'
 				>
 					<EstablishmentInfo
 						name={establishment.name}
@@ -95,6 +101,8 @@ export default function MenuPage() {
 						selectedCategoryId={selected.categoryId ?? undefined}
 						color={establishment.mainHexColor}
 						onChange={(id) => handleUrlChanges('categoryId', id)}
+						establishmentId={establishment.$id}
+						isEditable={isEditable}
 					/>
 					<br />
 					<br />
@@ -126,6 +134,10 @@ export default function MenuPage() {
 					})}
 				</div>
 			</div>
+
+			<ModalNewCategory
+				onFinish={() => reload(establishmentUrl!)}
+			/>
 		</div>
 	);
 }
