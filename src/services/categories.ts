@@ -42,3 +42,11 @@ export async function createCategory(establishmentId: string, name: string, orde
 		}
 	);
 }
+
+export async function deleteCategory(id: string) {
+	await db.deleteDocument(
+		import.meta.env.VITE_APP_WRITE_DB_ID,
+		Collection.Categories,
+		id
+	);
+}

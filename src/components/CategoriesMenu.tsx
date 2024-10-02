@@ -1,9 +1,18 @@
-import { Button, Space } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Space, Typography } from 'antd';
+import {
+	CaretLeftOutlined,
+	CaretRightOutlined,
+	DeleteOutlined,
+	EditOutlined,
+	PlusOutlined
+} from '@ant-design/icons';
 
 import { CategoryProps } from '../types/Category';
 import { ModalOpener$ } from '../utils/helpers';
 import { ModalName } from '../types/Modals';
+import { useDeleteCategory } from '../hooks/useCategories';
+
+const { Text } = Typography;
 
 interface CategoriesMenuProps {
 	selectedCategoryId?: string;
@@ -11,11 +20,21 @@ interface CategoriesMenuProps {
 	categories: CategoryProps[];
 	color: string;
 	isEditable: boolean;
-	onChange: (id: string) => void;
+	onSelect: (id: string) => void;
+	onChange: () => void;
 }
 
 export const CategoriesMenu = (props: CategoriesMenuProps) => {
-	const { categories, color, selectedCategoryId, onChange, isEditable, establishmentId } = props;
+	const {
+		categories,
+		color,
+		selectedCategoryId,
+		onChange,
+		onSelect,
+		isEditable,
+		establishmentId
+	} = props;
+	const [_delete, deleting, error] = useDeleteCategory();
 
 	return (
 		<div
@@ -41,35 +60,104 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 				/>
 			)}
 			{categories.map((category) => (
-				<Space key={category.$id}>
-					<button
-						key={category.$id}
+				<div
+					key={category.$id}
+					style={{
+						display: 'flex',
+						gap: 10
+					}}
+				>
+					<div
 						style={{
-							border: `3px solid ${color}`,
-							background: (selectedCategoryId === category.$id)
-								? color
-								: 'none',
-							boxShadow: 'none',
-							borderRadius: 20,
-							padding: '4px 16px',
-							color: (selectedCategoryId === category.$id)
-								? '#FFF'
-								: color,
-							fontSize: 14,
-							fontWeight: 'bold',
-							height: 34,
-							textWrap: 'nowrap',
-							cursor: 'pointer'
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							gap: 10
 						}}
-						onClick={() => onChange(category.$id)}
 					>
-						{category.name}
-					</button>
+						<Button
+							key={category.$id}
+							style={{
+								border: `3px solid ${color}`,
+								background: (selectedCategoryId === category.$id)
+									? color
+									: 'none',
+								boxShadow: 'none',
+								borderRadius: 20,
+								padding: '4px 16px',
+								color: (selectedCategoryId === category.$id)
+									? '#FFF'
+									: color,
+								fontSize: 14,
+								fontWeight: 'bold',
+								height: 34,
+								textWrap: 'nowrap',
+								cursor: 'pointer'
+							}}
+							onClick={() => onSelect(category.$id)}
+						>
+							{category.name}
+						</Button>
+
+						{isEditable && (
+							<div
+								style={{
+									backgroundColor: color,
+									borderRadius: 4,
+									flexWrap: 'nowrap',
+									display: 'flex',
+									width: 'auto',
+									justifySelf: 'center'
+								}}
+							>
+								{category.order > 1 && (
+									<Button
+										type='text'
+										icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
+									/>
+								)}
+
+								{category.order < Math.max(...categories.map(({ order }) => order)) && (
+									<Button
+										type='text'
+										icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
+									/>
+								)}
+
+								<Button
+									type='text'
+									icon={<EditOutlined style={{ color: '#FFF' }} />}
+								/>
+
+								<Popconfirm
+									placement='bottom'
+									title='¿Eliminar menú?'
+									description={(
+										<Space direction='vertical'>
+											<Text>Se eliminará "{category.name}"</Text>
+											<Text type='danger'>junto con todas sus categorías!</Text>
+										</Space>
+									)}
+									okText='Si, eliminar'
+									cancelText='No'
+									onConfirm={() => _delete(category.$id, onChange)}
+								>
+									<Button
+										type='text'
+										icon={<DeleteOutlined style={{ color: '#FFF' }} />}
+										loading={deleting}
+									/>
+								</Popconfirm>
+
+							</div>
+						)}
+					</div>
 
 					{isEditable && (
 						<Button
 							icon={<PlusOutlined />}
 							shape='circle'
+							style={{ alignSelf: 'start' }}
 							onClick={() => ModalOpener$.next({
 								name: ModalName.NewCategory,
 								extra: {
@@ -79,7 +167,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 							})}
 						/>
 					)}
-				</Space>
+				</div>
 			))}
 		</div>
 	);

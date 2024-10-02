@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
-import { createCategory } from '../services/categories';
+import { createCategory, deleteCategory } from '../services/categories';
 
 type UseCreateCategoryType = [
 	(
@@ -41,4 +41,30 @@ export const useCreateCategory = (): UseCreateCategoryType => {
 	}
 
 	return [handleCreate, loading, error];
+}
+
+type UseDeleteCategoryType = [
+	(id: string, onDone?: () => void) => void,
+	boolean,
+	AppwriteException | null
+];
+
+export const useDeleteCategory = (): UseDeleteCategoryType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleDelete(id: string, onDone?: () => void) {
+		try {
+			setLoading(true);
+			setError(null);
+			await deleteCategory(id);
+			onDone?.();
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleDelete, loading, error];
 }

@@ -100,7 +100,8 @@ export default function MenuPage() {
 						categories={establishment.categories}
 						selectedCategoryId={selected.categoryId ?? undefined}
 						color={establishment.mainHexColor}
-						onChange={(id) => handleUrlChanges('categoryId', id)}
+						onSelect={(id) => handleUrlChanges('categoryId', id)}
+						onChange={() => reload(establishmentUrl!)}
 						establishmentId={establishment.$id}
 						isEditable={isEditable}
 					/>
