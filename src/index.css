@@ -2,10 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+	--primary: #fde8db;
+	--secondary: #ff9a76;
+	--tertiary: #ffffff;
+	--text: #4c4c4c;
+}
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	color: var(--text);
 }
 
 .hide-scrollbar-y {
