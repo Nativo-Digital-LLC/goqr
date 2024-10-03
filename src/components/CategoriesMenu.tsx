@@ -52,7 +52,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 					icon={<PlusOutlined />}
 					shape='circle'
 					onClick={() => ModalOpener$.next({
-						name: ModalName.NewCategory,
+						name: ModalName.Category,
 						extra: {
 							order: 1,
 							establishmentId
@@ -97,7 +97,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 							}}
 							onClick={() => onSelect(category.$id)}
 						>
-							{category.name} - {category.order}
+							{category.name}
 						</Button>
 
 						{isEditable && (
@@ -132,6 +132,14 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 								<Button
 									type='text'
 									icon={<EditOutlined style={{ color: '#FFF' }} />}
+									onClick={() => ModalOpener$.next({
+										name: ModalName.Category,
+										extra: {
+											id: category.$id,
+											establishmentId,
+											name: category.name
+										}
+									})}
 								/>
 
 								<Popconfirm
@@ -164,7 +172,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 							shape='circle'
 							style={{ alignSelf: 'start' }}
 							onClick={() => ModalOpener$.next({
-								name: ModalName.NewCategory,
+								name: ModalName.Category,
 								extra: {
 									order: category.order + 1,
 									establishmentId

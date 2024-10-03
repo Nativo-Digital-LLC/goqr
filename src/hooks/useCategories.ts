@@ -1,37 +1,39 @@
 import { useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
-import { createCategory, deleteCategory, updateCategoryOrder } from '../services/categories';
+import { createCategory, deleteCategory, updateCategoryName, updateCategoryOrder } from '../services/categories';
 
-type UseCreateCategoryType = [
-	(
-		establishmentId: string,
-		name: string,
-		order: number,
-		onDone?: () => void
-	) => void,
+interface SaveCategoryParams {
+	id?: string;
+	establishmentId: string;
+	name: string;
+	order?: number;
+}
+
+type UseSaveCategoryType = [
+	(params: SaveCategoryParams, onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useCreateCategory = (): UseCreateCategoryType => {
+export const useSaveCategory = (): UseSaveCategoryType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleCreate(
-		establishmentId: string,
-		name: string,
-		order: number,
-		onDone?: () => void
-	) {
+	async function handleSave(params: SaveCategoryParams, onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
-			await createCategory(
-				establishmentId,
-				name,
-				order
-			);
+			if (params.id) {
+				await updateCategoryName(params.id, params.name);
+			} else {
+				await createCategory(
+					params.establishmentId,
+					params.name,
+					params.order!
+				);
+			}
+
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException);
@@ -40,7 +42,7 @@ export const useCreateCategory = (): UseCreateCategoryType => {
 		}
 	}
 
-	return [handleCreate, loading, error];
+	return [handleSave, loading, error];
 }
 
 type UseDeleteCategoryType = [

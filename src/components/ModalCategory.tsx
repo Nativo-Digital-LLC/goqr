@@ -3,27 +3,33 @@ import { Form, Modal, Input } from 'antd';
 
 import { useModalVisible } from '../hooks/useModal';
 import { ModalName } from '../types/Modals';
-import { useCreateCategory } from '../hooks/useCategories';
+import { useSaveCategory } from '../hooks/useCategories';
 
 interface ExtraType {
-	order: number;
+	id?: string;
+	order?: number;
 	establishmentId: string;
+	name?: string;
 }
 
-export const ModalNewCategory = ({ onFinish }: { onFinish: () => void }) => {
-	const [visible, close, extra] = useModalVisible<ExtraType>(ModalName.NewCategory);
-	const [save, saving] = useCreateCategory();
+export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
+	const [visible, close, extra] = useModalVisible<ExtraType>(ModalName.Category);
+	const [save, saving] = useSaveCategory();
 	const [form] = Form.useForm();
 
 	useEffect(() => {
 		form.resetFields();
-	}, [visible, form]);
+
+		if (extra?.name) {
+			form.setFieldValue('name', extra.name);
+		}
+	}, [visible, form, extra]);
 
 	return (
 		<Modal
 			open={visible}
 			onCancel={close}
-			title='Nuevo Menú'
+			title={extra?.name ? 'Modificar Menú': 'Nuevo Menú'}
 			width={300}
 			okText='Guardar'
 			cancelText='Cerrar'
@@ -34,15 +40,17 @@ export const ModalNewCategory = ({ onFinish }: { onFinish: () => void }) => {
 				layout='vertical'
 				form={form}
 				onFinish={({ name }) => {
-					save(
-						extra!.establishmentId,
+					const data = {
 						name,
-						extra!.order,
-						() => {
-							onFinish();
-							close();
-						}
-					);
+						establishmentId: extra!.establishmentId,
+						id: extra?.id,
+						order: extra?.order
+					};
+
+					save(data, () => {
+						onFinish();
+						close();
+					});
 				}}
 			>
 				<Form.Item

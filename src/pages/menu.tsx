@@ -2,7 +2,13 @@ import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
-import { Header, SubcategoryCard, CategoriesMenu, EstablishmentInfo, ModalNewCategory } from '../components';
+import {
+	Header,
+	SubcategoryCard,
+	CategoriesMenu,
+	EstablishmentInfo,
+	ModalCategory
+} from '../components';
 import { useSessionStore } from '../store/session';
 
 export default function MenuPage() {
@@ -136,7 +142,7 @@ export default function MenuPage() {
 				</div>
 			</div>
 
-			<ModalNewCategory
+			<ModalCategory
 				onFinish={() => reload(establishmentUrl!)}
 			/>
 		</div>
