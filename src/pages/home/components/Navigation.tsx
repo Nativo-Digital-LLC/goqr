@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Navigation() {
 	return (
 		<div className={`py-4 px-[25px] bg-[--primary] flex justify-between`}>
@@ -8,15 +10,15 @@ export default function Navigation() {
 				<b className="z-[2] relative">GoQr</b>
 			</a>
 			<div className="items-center flex">
-				<a href="/" className="mx-5">
+				<Link to="/login" className="mx-5">
 					Login
-				</a>
-				<a
-					href="/"
+				</Link>
+				<Link
+					to="/register"
 					className="bg-[--secondary] px-4 py-[6px] rounded-[7px] text-[--tertiary]"
 				>
 					Create menu
-				</a>
+				</Link>
 			</div>
 		</div>
 	);
