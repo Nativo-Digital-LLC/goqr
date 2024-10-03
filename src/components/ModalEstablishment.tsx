@@ -17,29 +17,34 @@ import { useModalVisible } from '../hooks/useModal';
 import { ModalName } from '../types/Modals';
 import { avoidNotNumerics } from '../utils/helpers';
 import { PaymentFrequency, PaymentMethod } from '../types/Bill';
-import { useCreateEstablishment } from '../hooks/useEstablishments';
+import { useSaveEstablishment } from '../hooks/useEstablishments';
 import { useSessionStore } from '../store/session';
+import { EstablishmentProps } from '../types/Establishment';
 
-export const ModalNewEstablishment = ({ onFinish }: { onFinish: () => void }) => {
+export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 	const session = useSessionStore(({ session }) => session);
-	const [visible, close] = useModalVisible(ModalName.NewEstablishment);
+	const [visible, close, extra] = useModalVisible<EstablishmentProps | undefined>(ModalName.Establishment);
 	const [requiresTaxReceipt, setRequiresTaxReceipt] = useState(false);
 	const [form] = Form.useForm();
 
-	const [save, saving, error] = useCreateEstablishment();
+	const [save, saving, error] = useSaveEstablishment();
 	if (error) {
 		console.error(error);
 	}
 
 	useEffect(() => {
 		form.resetFields();
-	}, [visible, form]);
+
+		if (extra) {
+			form.setFieldsValue(extra);
+		}
+	}, [visible, form, extra]);
 
 	return (
 		<Modal
 			open={visible}
 			onCancel={close}
-			title='Nuevo Local'
+			title={extra ? 'Modificar Local' : 'Nuevo Local'}
 			width={800}
 			okText='Guardar'
 			cancelText='Cerrar'
@@ -52,12 +57,17 @@ export const ModalNewEstablishment = ({ onFinish }: { onFinish: () => void }) =>
 				layout='vertical'
 				form={form}
 				onFinish={(data) => {
+					const color = (data.mainHexColor.toHexString)
+						? data.mainHexColor.toHexString()
+						: undefined;
+
 					save(
 						{
+							id: extra?.$id,
 							userId: `${session?.userId}`,
-							color: data.mainHexColor.toHexString(),
+							color,
 							name: data.name,
-							url: data.domain,
+							domain: data.domain,
 							description: data.description,
 							address: data.address,
 							addressLink: data.addressLink,
@@ -89,10 +99,14 @@ export const ModalNewEstablishment = ({ onFinish }: { onFinish: () => void }) =>
 						<Form.Item
 							label='URL'
 							name='domain'
-							rules={[{ required: true , message: 'Elige tu URL' }]}
+							rules={[{
+								required: !extra,
+								message: 'Elige tu URL'
+							}]}
 						>
 							<Input
 								prefix='goqr.com.do/m/'
+								disabled={!!extra}
 							/>
 						</Form.Item>
 

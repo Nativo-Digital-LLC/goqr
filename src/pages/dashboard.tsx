@@ -3,7 +3,7 @@ import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import { useGetEstablishmentsByUserId } from '../hooks/useEstablishments';
-import { ModalNewEstablishment } from '../components';
+import { ModalEstablishment } from '../components';
 import { ModalOpener$ } from '../utils/helpers';
 import { ModalName } from '../types/Modals';
 import { useSessionStore } from '../store/session';
@@ -59,7 +59,7 @@ export default function DashboardPage() {
 								alignItems: 'center',
 								justifyContent: 'center'
 							}}
-							onClick={() => ModalOpener$.next({ name: ModalName.NewEstablishment })}
+							onClick={() => ModalOpener$.next({ name: ModalName.Establishment })}
 							hoverable
 						>
 							<AppstoreAddOutlined style={{ fontSize: 32, display: 'block' }} />
@@ -70,7 +70,7 @@ export default function DashboardPage() {
 				</Row>
 			</div>
 
-			<ModalNewEstablishment
+			<ModalEstablishment
 				onFinish={() => reload(`${session?.userId}`)}
 			/>
 		</div>

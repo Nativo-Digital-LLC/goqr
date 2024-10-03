@@ -10,7 +10,8 @@ import {
 	createEstablishment,
 	getEstablishmentByDomain,
 	getEstablishmentsByUserId,
-	getTaxInformation
+	getTaxInformation,
+	updateEstablishment
 } from '../services/establishments';
 
 type UseGetEstablishmentByDomainType = [
@@ -83,21 +84,28 @@ export const useGetEstablishmentsByUserId = (userId?: string): UseGetEstablishme
 	return [establishments, loading, error, load];
 }
 
-type UseCreateEstablishmentType = [
-	(params: CreateEstablishmentParams, onDone?: () => void) => void,
+type SaveEstablishmentParams = Partial<CreateEstablishmentParams> & { id?: string; };
+
+type UseSaveEstablishmentType = [
+	(params: SaveEstablishmentParams, onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useCreateEstablishment = (): UseCreateEstablishmentType => {
+
+export const useSaveEstablishment = (): UseSaveEstablishmentType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleCreate(params: CreateEstablishmentParams, onDone?: () => void) {
+	async function handleSave({ id, ...rest }: SaveEstablishmentParams, onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
-			await createEstablishment(params);
+			if (id) {
+				await updateEstablishment(id, rest);
+			} else {
+				await createEstablishment(rest as CreateEstablishmentParams);
+			}
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException);
@@ -106,7 +114,7 @@ export const useCreateEstablishment = (): UseCreateEstablishmentType => {
 		}
 	}
 
-	return [handleCreate, loading, error];
+	return [handleSave, loading, error];
 }
 
 type UseGetTaxPayerInfoType = [

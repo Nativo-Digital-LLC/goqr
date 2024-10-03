@@ -29,7 +29,7 @@ export interface CreateEstablishmentParams {
 	userId: string;
 	color: string;
 	name: string;
-	url: string;
+	domain: string;
 	description: string;
 	address: string;
 	addressLink?: string;

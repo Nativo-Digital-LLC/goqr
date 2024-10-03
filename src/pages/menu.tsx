@@ -7,7 +7,8 @@ import {
 	SubcategoryCard,
 	CategoriesMenu,
 	EstablishmentInfo,
-	ModalCategory
+	ModalCategory,
+	ModalEstablishment
 } from '../components';
 import { useSessionStore } from '../store/session';
 
@@ -94,10 +95,8 @@ export default function MenuPage() {
 					className='hide-scrollbar-y'
 				>
 					<EstablishmentInfo
-						name={establishment.name}
-						description={establishment.description}
-						phone={establishment.phone + ''}
-						address={establishment.address}
+						establishment={establishment}
+						isEditable={isEditable}
 					/>
 					<br />
 					<br />
@@ -111,7 +110,6 @@ export default function MenuPage() {
 						establishmentId={establishment.$id}
 						isEditable={isEditable}
 					/>
-					<br />
 					<br />
 
 					<input
@@ -143,6 +141,10 @@ export default function MenuPage() {
 			</div>
 
 			<ModalCategory
+				onFinish={() => reload(establishmentUrl!)}
+			/>
+
+			<ModalEstablishment
 				onFinish={() => reload(establishmentUrl!)}
 			/>
 		</div>

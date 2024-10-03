@@ -1,42 +1,22 @@
 import { ID, Query } from 'appwrite';
 
-import { db, storage } from '../utils/appwrite';
+import { db } from '../utils/appwrite';
 import { Collection } from '../constants/Collections';
-import { CreateEstablishmentParams, EstablishmentProps, TaxPayerProps } from '../types/Establishment';
+import {
+	CreateEstablishmentParams,
+	EstablishmentProps,
+	TaxPayerProps
+} from '../types/Establishment';
+import { uploadFile } from '../utils/helpers';
 
 export async function createEstablishment(params: CreateEstablishmentParams) {
-	let bannerUrl: string | undefined;
-	let logoUrl: string | undefined;
+	const bannerUrl = (params.banner)
+		? await uploadFile(params.banner)
+		: undefined;
 
-	if (params.banner) {
-		const { $id } = await storage.createFile(
-			import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-			ID.unique(),
-			params.banner
-		);
-
-		const url = await storage.getFilePreview(
-			import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-			$id
-		);
-
-		bannerUrl = url.toString();
-	}
-
-	if (params.logo) {
-		const { $id } = await storage.createFile(
-			import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-			ID.unique(),
-			params.logo
-		);
-
-		const url = await storage.getFilePreview(
-			import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-			$id
-		);
-
-		logoUrl = url.toString();
-	}
+	const logoUrl = (params.logo)
+		? await uploadFile(params.logo)
+		: undefined;
 
 	await db.createDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
@@ -49,7 +29,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			name: params.name,
 			description: params.description,
 			address: params.address,
-			domain: params.url,
+			domain: params.domain,
 			addressLink: params.addressLink,
 			phone: params.phone,
 			whatsapp: params.whatsapp,
@@ -60,6 +40,28 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		}
 	);
 }
+
+export async function updateEstablishment(id: string, { banner, logo, ...rest }: Partial<CreateEstablishmentParams>) {
+	const bannerUrl = (banner)
+		? await uploadFile(banner)
+		: undefined;
+
+	const logoUrl = (logo)
+		? await uploadFile(logo)
+		: undefined;
+
+	await db.updateDocument(
+		import.meta.env.VITE_APP_WRITE_DB_ID,
+		Collection.Establishments,
+		id,
+		{
+			logoUrl,
+			bannerUrl,
+			...rest
+		}
+	);
+}
+
 
 export async function getEstablishmentByDomain(domain: string) {
 	const { total, documents } = await db

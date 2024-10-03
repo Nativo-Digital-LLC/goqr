@@ -1,6 +1,8 @@
 import { Subject } from 'rxjs';
+import { ID } from 'appwrite';
 
 import { ModalName } from '../types/Modals';
+import { storage } from './appwrite';
 
 export const ModalOpener$ = new Subject<{ name: ModalName; extra?: unknown; }>();
 
@@ -120,4 +122,19 @@ export function avoidNotNumerics(event: any, decimals = 0){
 	const isNumber = !isNaN(Number(event.key));
 	if(!isNumber && !isFirstPoint)
 		event.preventDefault();
+}
+
+export async function uploadFile(file: File) {
+	const { $id } = await storage.createFile(
+		import.meta.env.VITE_APP_WRITE_BUCKET_ID,
+		ID.unique(),
+		file
+	);
+
+	const url = await storage.getFilePreview(
+		import.meta.env.VITE_APP_WRITE_BUCKET_ID,
+		$id
+	);
+
+	return url;
 }
