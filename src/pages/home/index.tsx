@@ -1,38 +1,42 @@
+import {
+	Benefits1,
+	Benefits2,
+	Benefits3,
+	Benefits4,
+	MenuExample1Jpg,
+	MenuExample1Webp,
+	MenuExample2Jpg,
+	MenuExample2Webp,
+	Price1,
+	Price2,
+} from "../../constants/LandingImages";
+import Navigation from "./components/Navigation";
+
 export default function HomePage() {
 	return (
 		<>
-			<div>
-				<div>
-					<a href="/">
-						<b>GoQr</b>
-					</a>
-					<div>
-						<a href="/">Login</a>
-						<a href="/">Create Menu</a>
-					</div>
-				</div>
-				<div>
-					<h1>
-						<b>QR Code Menu,</b> that works for you
-					</h1>
-					<a href="/">Create Qr menu</a>
-				</div>
-			</div>
+			<Navigation />
 			<div>
 				<div className="min-h-screen bg-[#FDE8DB] p-3">
+					<div>
+						<h1>
+							<b>QR Code Menu,</b> that works for you
+						</h1>
+						<a href="/">Create Qr menu</a>
+					</div>
 					<div>
 						<div>
 							<picture>
 								<source
-									srcSet="../assets/images/example/menu-example-1.webp"
+									srcSet={MenuExample1Webp}
 									type="image/webp"
 								/>
 								<source
-									srcSet="../assets/images/example/menu-example-1.jpg"
+									srcSet={MenuExample1Jpg}
 									type="image/jpeg"
 								/>
 								<img
-									src="../assets/images/example/menu-example-1.jpg"
+									src={MenuExample1Jpg}
 									alt="QrCode landing, categories"
 								/>
 							</picture>
@@ -40,15 +44,15 @@ export default function HomePage() {
 						<div>
 							<picture>
 								<source
-									srcSet="../assets/images/example/menu-example-2.webp"
+									srcSet={MenuExample2Webp}
 									type="image/webp"
 								/>
 								<source
-									srcSet="../assets/images/example/menu-example-2.jpg"
+									srcSet={MenuExample2Jpg}
 									type="image/jpeg"
 								/>
 								<img
-									src="../assets/images/example/menu-example-2.jpg"
+									src={MenuExample2Jpg}
 									alt="QrCode landing, items"
 								/>
 							</picture>
@@ -62,10 +66,7 @@ export default function HomePage() {
 					<div>
 						<div>
 							<div></div>
-							<img
-								src="../assets/images/example/menu-example-1.jpg"
-								alt="Qr menu design"
-							/>
+							<img src={MenuExample1Jpg} alt="Qr menu design" />
 						</div>
 						<div>
 							<p>
@@ -107,7 +108,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="../assets/images/benefits/benefits-1.svg"
+									src={Benefits1}
 									alt="QR code menu, enhancing customer experience"
 								/>
 							</div>
@@ -130,7 +131,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="../assets/images/benefits/benefits-2.svg"
+									src={Benefits2}
 									alt="QR code menu, attracting new customers"
 								/>
 							</div>
@@ -153,7 +154,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="../assets/images/benefits/benefits-3.svg"
+									src={Benefits3}
 									alt="QR code menu, increases sales"
 								/>
 							</div>
@@ -176,7 +177,7 @@ export default function HomePage() {
 							</div>
 							<div>
 								<img
-									src="../assets/images/benefits/benefits-4.svg"
+									src={Benefits4}
 									alt="QR code menu, saving business resources"
 								/>
 							</div>
@@ -220,16 +221,10 @@ export default function HomePage() {
 						<a href="/">Try it for free</a>
 					</div>
 					<div>
-						<img
-							src="../assets/images/prices/price-1.svg"
-							alt="QR code menu for free"
-						/>
+						<img src={Price1} alt="QR code menu for free" />
 					</div>
 					<div>
-						<img
-							src="../assets/images/prices/price-2.svg"
-							alt="Digital menu prices"
-						/>
+						<img src={Price2} alt="Digital menu prices" />
 					</div>
 				</div>
 				<div className="min-h-screen bg-[#FFF] p-3">
