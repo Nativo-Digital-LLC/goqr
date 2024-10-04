@@ -17,17 +17,19 @@ export const Header = ({ bannerUrl, logoUrl }: HeaderProps) => {
 				alignItems: 'center'
 			}}
 		>
-			<img
-				src={logoUrl!}
-				style={{
-					marginTop: -30,
-					width: 80,
-					height: 80,
-					borderRadius: 40,
-					objectFit: 'contain',
-					backgroundColor: '#FFF'
-				}}
-			/>
+			{logoUrl && (
+				<img
+					src={logoUrl!}
+					style={{
+						marginTop: -30,
+						width: 80,
+						height: 80,
+						borderRadius: 40,
+						objectFit: 'contain',
+						backgroundColor: '#FFF'
+					}}
+				/>
+			)}
 		</header>
 	);
 }
