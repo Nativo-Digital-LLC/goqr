@@ -14,7 +14,7 @@ import Navigation from "./components/Navigation";
 
 export default function HomePage() {
 	return (
-		<>
+		<div className="landing-page">
 			<Navigation />
 			<div>
 				<div className="min-h-screen bg-[#FDE8DB] p-3">
