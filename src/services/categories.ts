@@ -43,11 +43,29 @@ export async function createCategory(establishmentId: string, name: string, orde
 	);
 }
 
-export async function deleteCategory(id: string) {
-	await db.deleteDocument(
+export async function deleteCategory(id: string, establishmentId: string) {
+	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
-		id
+		id,
+		{
+			deletedAt: new Date()
+		}
+	);
+
+	const { categories } = await db.getDocument(
+		import.meta.env.VITE_APP_WRITE_DB_ID,
+		Collection.Establishments,
+		establishmentId
+	) as unknown as EstablishmentProps;
+
+	await db.updateDocument(
+		import.meta.env.VITE_APP_WRITE_DB_ID,
+		Collection.Establishments,
+		establishmentId,
+		{
+			categories: categories.filter(({ $id }) => $id !== id)
+		}
 	);
 }
 
@@ -95,7 +113,7 @@ export async function updateCategoryOrder(establishmentId: string, id: string, d
 	});
 
 	if (!categoryInNewPosition) {
-		console.error('No se encontro la categoria dyacente');
+		console.error('No se encontro la categoria adyacente');
 		return;
 	}
 

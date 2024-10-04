@@ -24,7 +24,8 @@ export const Header = ({ bannerUrl, logoUrl }: HeaderProps) => {
 					width: 80,
 					height: 80,
 					borderRadius: 40,
-					objectFit: 'cover'
+					objectFit: 'contain',
+					backgroundColor: '#FFF'
 				}}
 			/>
 		</header>

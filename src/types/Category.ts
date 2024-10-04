@@ -1,4 +1,4 @@
-import { SubcategoryProps } from './Subcategories';
+import { SubcategoryProps } from './Subcategory';
 
 export interface CategoryProps {
 	$id: string;

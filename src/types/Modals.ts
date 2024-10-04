@@ -1,4 +1,5 @@
 export enum ModalName {
 	Establishment = 'ESTABLISHMENT',
-	Category = 'CATEGORY'
+	Category = 'CATEGORY',
+	Subcategory = 'Subcategory'
 }

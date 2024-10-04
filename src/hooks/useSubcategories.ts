@@ -2,40 +2,42 @@ import { useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
 import {
-	createCategory,
-	deleteCategory,
-	updateCategoryName,
-	updateCategoryOrder
-} from '../services/categories';
+	createSubcategory,
+	updateSubcategory,
+	changeSubcategoryOrder,
+	deleteSubcategory
+} from '../services/subcategories';
 
-interface SaveCategoryParams {
+interface SaveSubcategoryParams {
 	id?: string;
-	establishmentId: string;
+	categoryId: string;
 	name: string;
+	photo?: File;
 	order?: number;
 }
 
-type UseSaveCategoryType = [
-	(params: SaveCategoryParams, onDone?: () => void) => void,
+type UseSaveSubcategoryType = [
+	(params: SaveSubcategoryParams, onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useSaveCategory = (): UseSaveCategoryType => {
+export const useSaveSubcategory = (): UseSaveSubcategoryType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleSave(params: SaveCategoryParams, onDone?: () => void) {
+	async function handleSave(params: SaveSubcategoryParams, onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
 			if (params.id) {
-				await updateCategoryName(params.id, params.name);
+				await updateSubcategory(params.id, params?.name, params?.photo);
 			} else {
-				await createCategory(
-					params.establishmentId,
+				await createSubcategory(
+					params.categoryId,
 					params.name,
-					params.order!
+					params.order!,
+					params.photo!
 				);
 			}
 
@@ -50,21 +52,21 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 	return [handleSave, loading, error];
 }
 
-type UseDeleteCategoryType = [
+type UseDeleteSubcategoryType = [
 	(id: string, establishmentId: string, onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useDeleteCategory = (): UseDeleteCategoryType => {
+export const useDeleteSubcategory = (): UseDeleteSubcategoryType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleDelete(id: string, establishmentId: string, onDone?: () => void) {
+	async function handleDelete(id: string, categoryId: string, onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
-			await deleteCategory(id, establishmentId);
+			await deleteSubcategory(id, categoryId);
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException);
@@ -76,32 +78,32 @@ export const useDeleteCategory = (): UseDeleteCategoryType => {
 	return [handleDelete, loading, error];
 }
 
-type UseUpdateCategoryOrderType = [
+type UseChangeSubcategoryOrderType = [
 	(
-		establishmentId: string,
+		categoryId: string,
 		id: string,
-		dir: 'left' | 'right',
+		dir: 'up' | 'down',
 		onDone?: () => void
 	) => void,
 	boolean,
 	AppwriteException | null
 ];
 
-export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
+export const useUpdateSubcategoryOrder = (): UseChangeSubcategoryOrderType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
 	async function handleDelete(
-		establishmentId: string,
+		categoryd: string,
 		id: string,
-		dir: 'left' | 'right',
+		dir: 'up' | 'down',
 		onDone?: () => void
 	) {
 		try {
 			setLoading(true);
 			setError(null);
-			await updateCategoryOrder(
-				establishmentId,
+			await changeSubcategoryOrder(
+				categoryd,
 				id,
 				dir
 			);

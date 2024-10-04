@@ -1,5 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Button, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
 import {
@@ -11,6 +13,11 @@ import {
 	ModalEstablishment
 } from '../components';
 import { useSessionStore } from '../store/session';
+import { ModalSubcategory } from '../components/ModalSubcategory';
+import { ModalOpener$ } from '../utils/helpers';
+import { ModalName } from '../types/Modals';
+
+const { Text } = Typography;
 
 export default function MenuPage() {
 	const { establishmentUrl } = useParams();
@@ -41,7 +48,9 @@ export default function MenuPage() {
 	}, [establishment, selected.categoryId]);
 
 	useEffect(() => {
-		if (!establishment || establishment.categories.length === 0) {
+		const params = new URLSearchParams(location.search);
+		const categoryId = params.get('categoryId');
+		if (!establishment || establishment.categories.length === 0 || categoryId) {
 			return;
 		}
 
@@ -68,8 +77,18 @@ export default function MenuPage() {
 		return <p>No encontrado</p>;
 	}
 
-	function handleUrlChanges(key: string, value: string) {
+	function handleUrlChanges(key: string, value: string, reset = false) {
 		const params = new URLSearchParams(location.search);
+		if (reset) {
+			const keys = Object.keys(
+				Object.fromEntries(params.entries())
+			);
+
+			for (const key of keys) {
+				params.delete(key);
+			}
+		}
+
 		params.set(key, value);
 		navigate(`${location.pathname}?${params.toString()}`);
 	}
@@ -105,7 +124,7 @@ export default function MenuPage() {
 						categories={establishment.categories}
 						selectedCategoryId={selected.categoryId ?? undefined}
 						color={establishment.mainHexColor}
-						onSelect={(id) => handleUrlChanges('categoryId', id)}
+						onSelect={(id) => handleUrlChanges('categoryId', id, true)}
 						onChange={() => reload(establishmentUrl!)}
 						establishmentId={establishment.$id}
 						isEditable={isEditable}
@@ -126,15 +145,64 @@ export default function MenuPage() {
 					<br />
 					<br />
 
-					{!selected.subcategoryId && selectedCategory?.subcategories?.map((subcategory) => {
-						const { $id, name, photoUrl } = subcategory;
-						return (
-							<SubcategoryCard
-								key={$id}
-								name={name}
-								photoUrl={photoUrl ?? undefined}
-								onPress={() => handleUrlChanges('subcategoryId', $id)}
+					{isEditable && (
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 10,
+								marginBottom: 20
+							}}
+						>
+							<Text style={{ textAlign: 'center' }}>AÑADIR CATEGORÍA</Text>
+							<Button
+								type='primary'
+								shape='round'
+								icon={<PlusOutlined />}
+								style={{
+									width: '100%',
+									backgroundColor: establishment.mainHexColor
+								}}
+								onClick={() => ModalOpener$.next({
+									name: ModalName.Subcategory,
+									extra: {
+										order: 1,
+										categoryId: selectedCategory?.$id
+									}
+								})}
 							/>
+						</div>
+					)}
+
+					{!selected?.subcategoryId && selectedCategory?.subcategories?.map((subcategory) => {
+						const { $id, name, photoUrl, order } = subcategory;
+						return (
+							<Fragment key={$id}>
+								<SubcategoryCard
+									name={name}
+									photoUrl={photoUrl ?? undefined}
+									onPress={() => handleUrlChanges('subcategoryId', $id)}
+								/>
+
+								{isEditable && (
+									<Button
+										type='primary'
+										shape='round'
+										icon={<PlusOutlined />}
+										style={{
+											width: '100%',
+											backgroundColor: establishment.mainHexColor
+										}}
+										onClick={() => ModalOpener$.next({
+											name: ModalName.Subcategory,
+											extra: {
+												order: order + 1,
+												categoryId: selectedCategory?.$id
+											}
+										})}
+									/>
+								)}
+							</Fragment>
 						);
 					})}
 				</div>
@@ -145,6 +213,10 @@ export default function MenuPage() {
 			/>
 
 			<ModalEstablishment
+				onFinish={() => reload(establishmentUrl!)}
+			/>
+
+			<ModalSubcategory
 				onFinish={() => reload(establishmentUrl!)}
 			/>
 		</div>

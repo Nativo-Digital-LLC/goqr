@@ -153,7 +153,11 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 									)}
 									okText='Si, eliminar'
 									cancelText='No'
-									onConfirm={() => _delete(category.$id, onChange)}
+									onConfirm={() => _delete(
+										category.$id,
+										establishmentId,
+										onChange
+									)}
 								>
 									<Button
 										type='text'
