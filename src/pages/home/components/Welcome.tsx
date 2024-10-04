@@ -7,8 +7,8 @@ import {
 
 export default function Welcome() {
 	return (
-		<div className="min-h-screen bg-[--primary] py-4 px-[25px]">
-			<div className="max-h-[200px] text-center mb-[50px] flex justify-center items-center flex-col">
+		<div className="h-auto bg-[--primary] py-4 px-[50px]">
+			<div className="max-h-[200px] text-center mb-[100px] flex justify-center items-center flex-col">
 				<h1 className="text-center max-w-[270px] text-[35px] leading-none font-[500] mb-[50px]">
 					<b className="text-[36px] text-[--secondary] text-center">
 						QR Code Menu,
@@ -22,7 +22,7 @@ export default function Welcome() {
 					Create menu
 				</a>
 			</div>
-			<div className="absolute flex bottom-[-300px] h-[485px]">
+			<div className="flex max-h-[200px]">
 				<div className="rotate-[-4deg] translate-y-[-30px] z-[2] shadow-slate-600 drop-shadow-lg">
 					<picture>
 						<source srcSet={MenuExample1Webp} type="image/webp" />
@@ -34,7 +34,7 @@ export default function Welcome() {
 						/>
 					</picture>
 				</div>
-				<div className="rotate-[8deg] translate-x-[-35px] scale-[.9] z-[1]">
+				<div className="rotate-[8deg] translate-x-[-10px] scale-[.9] z-[1]">
 					<picture>
 						<source srcSet={MenuExample2Webp} type="image/webp" />
 						<source srcSet={MenuExample2Jpg} type="image/jpeg" />
