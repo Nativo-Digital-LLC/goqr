@@ -4,62 +4,20 @@ import {
 	Benefits3,
 	Benefits4,
 	MenuExample1Jpg,
-	MenuExample1Webp,
-	MenuExample2Jpg,
-	MenuExample2Webp,
 	Price1,
 	Price2,
 } from "../../constants/LandingImages";
+
 import Navigation from "./components/Navigation";
+import Welcome from "./components/Welcome";
 
 export default function HomePage() {
 	return (
 		<div className="landing-page">
 			<Navigation />
 			<div>
-				<div className="min-h-screen bg-[#FDE8DB] p-3">
-					<div>
-						<h1>
-							<b>QR Code Menu,</b> that works for you
-						</h1>
-						<a href="/">Create Qr menu</a>
-					</div>
-					<div>
-						<div>
-							<picture>
-								<source
-									srcSet={MenuExample1Webp}
-									type="image/webp"
-								/>
-								<source
-									srcSet={MenuExample1Jpg}
-									type="image/jpeg"
-								/>
-								<img
-									src={MenuExample1Jpg}
-									alt="QrCode landing, categories"
-								/>
-							</picture>
-						</div>
-						<div>
-							<picture>
-								<source
-									srcSet={MenuExample2Webp}
-									type="image/webp"
-								/>
-								<source
-									srcSet={MenuExample2Jpg}
-									type="image/jpeg"
-								/>
-								<img
-									src={MenuExample2Jpg}
-									alt="QrCode landing, items"
-								/>
-							</picture>
-						</div>
-					</div>
-				</div>
-				<div className="min-h-screen bg-[#FFF] p-3">
+				<Welcome />
+				<div className="min-h-screen bg-[#FFF] p-3 z-[3] relative">
 					<div>
 						<h2>QrCode menu</h2>
 					</div>
@@ -396,6 +354,6 @@ export default function HomePage() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
