@@ -69,7 +69,7 @@ export default function MenuPage() {
 		return <p>Error, {JSON.stringify(error, null, 4)}</p>
 	}
 
-	if (loading) {
+	if (loading && !establishment) {
 		return null;
 	}
 
@@ -174,40 +174,45 @@ export default function MenuPage() {
 						</div>
 					)}
 
-					{!selected?.subcategoryId && selectedCategory?.subcategories?.map((subcategory) => {
-						const { $id, order } = subcategory;
-						return (
-							<Fragment key={$id}>
-								<SubcategoryCard
-									subcategory={subcategory}
-									isEditable={isEditable}
-									categoryId={selected.categoryId!}
-									onPress={() => handleUrlChanges('subcategoryId', $id)}
-									onChange={() => reload(establishmentUrl!)}
-								/>
-
-								{isEditable && (
-									<Button
-										type='primary'
-										shape='round'
-										icon={<PlusOutlined />}
-										style={{
-											width: '100%',
-											backgroundColor: establishment.mainHexColor,
-											marginBottom: 20
-										}}
-										onClick={() => ModalOpener$.next({
-											name: ModalName.Subcategory,
-											extra: {
-												order: order + 1,
-												categoryId: selectedCategory?.$id
-											}
-										})}
+					{!selected?.subcategoryId && selectedCategory
+						?.subcategories
+						?.sort((a, b) => a.order - b.order)
+						?.map((subcategory, index) => {
+							const { $id, order } = subcategory;
+							return (
+								<Fragment key={$id}>
+									<SubcategoryCard
+										subcategory={subcategory}
+										isEditable={isEditable}
+										categoryId={selected.categoryId!}
+										showMoveUp={index > 0}
+										showMoveDown={index < selectedCategory?.subcategories?.length - 1}
+										onPress={() => handleUrlChanges('subcategoryId', $id)}
+										onChange={() => reload(establishmentUrl!)}
 									/>
-								)}
-							</Fragment>
-						);
-					})}
+
+									{isEditable && (
+										<Button
+											type='primary'
+											shape='round'
+											icon={<PlusOutlined />}
+											style={{
+												width: '100%',
+												backgroundColor: establishment.mainHexColor,
+												marginBottom: 20
+											}}
+											onClick={() => ModalOpener$.next({
+												name: ModalName.Subcategory,
+												extra: {
+													order: order + 1,
+													categoryId: selectedCategory?.$id
+												}
+											})}
+										/>
+									)}
+								</Fragment>
+							);
+						})}
 
 					<Row justify='center'>
 						<a

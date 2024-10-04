@@ -77,7 +77,7 @@ export async function changeSubcategoryOrder(categoryId: string, id: string, dir
 
 	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
+		Collection.Subcategories,
 		id,
 		{ order }
 	);
