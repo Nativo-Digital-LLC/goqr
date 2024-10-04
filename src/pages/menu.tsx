@@ -1,21 +1,18 @@
-import { Fragment, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Button, Row, Typography } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Row, Typography } from 'antd';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
 import {
 	Header,
-	SubcategoryCard,
 	CategoriesMenu,
 	EstablishmentInfo,
 	ModalCategory,
-	ModalEstablishment
+	ModalEstablishment,
+	SubcategoriesList
 } from '../components';
 import { useSessionStore } from '../store/session';
 import { ModalSubcategory } from '../components/ModalSubcategory';
-import { ModalOpener$ } from '../utils/helpers';
-import { ModalName } from '../types/Modals';
 
 const { Text } = Typography;
 
@@ -131,88 +128,34 @@ export default function MenuPage() {
 					/>
 					<br />
 
-					<input
-						placeholder='Buscar'
-						style={{
-							border: 'none',
-							backgroundColor: 'rgba(0, 0, 0, 0.1)',
-							width: '100%',
-							padding: '10px 20px',
-							borderRadius: 30,
-							fontSize: 14
-						}}
-					/>
-					<br />
-					<br />
-
-					{isEditable && (
-						<div
+					{!selected.subcategoryId && (
+						<input
+							placeholder='Buscar'
 							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 10,
-								marginBottom: 20
+								border: 'none',
+								backgroundColor: 'rgba(0, 0, 0, 0.1)',
+								width: '100%',
+								padding: '10px 20px',
+								borderRadius: 30,
+								fontSize: 14
 							}}
-						>
-							<Text style={{ textAlign: 'center' }}>AÑADIR CATEGORÍA</Text>
-							<Button
-								type='primary'
-								shape='round'
-								icon={<PlusOutlined />}
-								style={{
-									width: '100%',
-									backgroundColor: establishment.mainHexColor
-								}}
-								onClick={() => ModalOpener$.next({
-									name: ModalName.Subcategory,
-									extra: {
-										order: 1,
-										categoryId: selectedCategory?.$id
-									}
-								})}
-							/>
-						</div>
+						/>
 					)}
+					<br />
+					<br />
 
-					{!selected?.subcategoryId && selectedCategory
-						?.subcategories
-						?.sort((a, b) => a.order - b.order)
-						?.map((subcategory, index) => {
-							const { $id, order } = subcategory;
-							return (
-								<Fragment key={$id}>
-									<SubcategoryCard
-										subcategory={subcategory}
-										isEditable={isEditable}
-										categoryId={selected.categoryId!}
-										showMoveUp={index > 0}
-										showMoveDown={index < selectedCategory?.subcategories?.length - 1}
-										onPress={() => handleUrlChanges('subcategoryId', $id)}
-										onChange={() => reload(establishmentUrl!)}
-									/>
-
-									{isEditable && (
-										<Button
-											type='primary'
-											shape='round'
-											icon={<PlusOutlined />}
-											style={{
-												width: '100%',
-												backgroundColor: establishment.mainHexColor,
-												marginBottom: 20
-											}}
-											onClick={() => ModalOpener$.next({
-												name: ModalName.Subcategory,
-												extra: {
-													order: order + 1,
-													categoryId: selectedCategory?.$id
-												}
-											})}
-										/>
-									)}
-								</Fragment>
-							);
-						})}
+					<SubcategoriesList
+						subcategories={selectedCategory?.subcategories || []}
+						mainColor={establishment.mainHexColor}
+						isEditable={isEditable}
+						category={{
+							name: selectedCategory?.name || '',
+							id: selectedCategory?.$id || ''
+						}}
+						show={!selected.subcategoryId}
+						onChange={() => reload(establishmentUrl!)}
+						onPress={(id) => handleUrlChanges('subcategoryId', id)}
+					/>
 
 					<Row justify='center'>
 						<a
