@@ -205,6 +205,15 @@ export default function MenuPage() {
 							</Fragment>
 						);
 					})}
+
+					<Row justify='center'>
+						<a
+							href='https://goqr.com.do'
+							target='_blank'
+						>
+							<Text>goqr.com.do</Text>
+						</a>
+					</Row>
 				</div>
 			</div>
 
