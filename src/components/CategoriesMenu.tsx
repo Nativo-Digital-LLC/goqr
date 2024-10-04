@@ -60,7 +60,9 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 					})}
 				/>
 			)}
-			{categories.map((category) => (
+			{categories
+				.sort((a, b) => a.order - b.order)
+				.map((category) => (
 				<div
 					key={category.$id}
 					style={{
