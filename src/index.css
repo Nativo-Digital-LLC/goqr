@@ -17,6 +17,11 @@
 
 .landing-page {
 	color: var(--text);
+	display: flex;
+	flex-direction: column;
+	min-width: 100vw;
+	background-color: red;
+	overflow: hidden;
 }
 
 .hide-scrollbar-y {
