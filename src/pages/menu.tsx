@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Button, Typography } from 'antd';
+import { Button, Row, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
@@ -175,13 +175,15 @@ export default function MenuPage() {
 					)}
 
 					{!selected?.subcategoryId && selectedCategory?.subcategories?.map((subcategory) => {
-						const { $id, name, photoUrl, order } = subcategory;
+						const { $id, order } = subcategory;
 						return (
 							<Fragment key={$id}>
 								<SubcategoryCard
-									name={name}
-									photoUrl={photoUrl ?? undefined}
+									subcategory={subcategory}
+									isEditable={isEditable}
+									categoryId={selected.categoryId!}
 									onPress={() => handleUrlChanges('subcategoryId', $id)}
+									onChange={() => reload(establishmentUrl!)}
 								/>
 
 								{isEditable && (
@@ -191,7 +193,8 @@ export default function MenuPage() {
 										icon={<PlusOutlined />}
 										style={{
 											width: '100%',
-											backgroundColor: establishment.mainHexColor
+											backgroundColor: establishment.mainHexColor,
+											marginBottom: 20
 										}}
 										onClick={() => ModalOpener$.next({
 											name: ModalName.Subcategory,

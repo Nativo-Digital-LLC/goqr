@@ -53,7 +53,7 @@ export const useSaveSubcategory = (): UseSaveSubcategoryType => {
 }
 
 type UseDeleteSubcategoryType = [
-	(id: string, establishmentId: string, onDone?: () => void) => void,
+	(id: string, categoryId: string, onDone?: () => void) => void,
 	boolean,
 	AppwriteException | null
 ];

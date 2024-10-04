@@ -1,10 +1,34 @@
+import {
+	CaretDownOutlined,
+	CaretUpOutlined,
+	DeleteOutlined,
+	EditOutlined
+} from '@ant-design/icons';
+import { Button } from 'antd';
+
+import { useDeleteSubcategory } from '../hooks/useSubcategories';
+import { ModalOpener$ } from '../utils/helpers';
+import { ModalName } from '../types/Modals';
+import { SubcategoryProps } from '../types/Subcategory';
+
 interface SubcategoryCardProps {
-	name: string;
-	photoUrl?: string;
+	subcategory: SubcategoryProps;
+	categoryId: string;
+	isEditable: boolean;
 	onPress: () => void;
+	onChange: () => void;
 }
 
-export const SubcategoryCard = ({ photoUrl, name, onPress }: SubcategoryCardProps) => {
+export const SubcategoryCard = (props: SubcategoryCardProps) => {
+	const {
+		subcategory,
+		isEditable,
+		categoryId,
+		onPress,
+		onChange
+	} = props;
+	const [_delete, deleting] = useDeleteSubcategory();
+
 	return (
 		<div
 			style={{
@@ -13,7 +37,7 @@ export const SubcategoryCard = ({ photoUrl, name, onPress }: SubcategoryCardProp
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundImage: `url(${photoUrl})`,
+				backgroundImage: `url(${subcategory.photoUrl})`,
 				backgroundPosition: 'center',
 				backgroundSize: 'cover',
 				borderRadius: 20,
@@ -22,9 +46,11 @@ export const SubcategoryCard = ({ photoUrl, name, onPress }: SubcategoryCardProp
 				position: 'relative',
 				overflow: 'hidden',
 				cursor: 'pointer',
-				marginBottom: 20
+				marginBottom: 20,
 			}}
-			onClick={() => onPress()}
+			className='subcategory-card'
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			onClick={({ target }: any) => target.tagName === 'SPAN' && onPress()}
 		>
 			<span
 				style={{
@@ -39,7 +65,55 @@ export const SubcategoryCard = ({ photoUrl, name, onPress }: SubcategoryCardProp
 					zIndex: 10
 				}}
 			/>
-			<span style={{ zIndex: 20 }}>{name}</span>
+			<span style={{ zIndex: 20 }}>{subcategory.name}</span>
+
+			{isEditable && (
+				<div
+					style={{
+						position: 'absolute',
+						right: 10,
+						top: 10,
+						borderRadius: 10,
+						backgroundColor: '#FFF',
+						display: 'flex',
+						gap: 4,
+						zIndex: 20
+					}}
+					className='subcategory-options'
+				>
+					<Button
+						type='text'
+						icon={<CaretUpOutlined />}
+						onClick={() => null}
+					/>
+
+					<Button
+						type='text'
+						icon={<CaretDownOutlined />}
+						onClick={() => null}
+					/>
+
+					<Button
+						type='text'
+						icon={<EditOutlined />}
+						onClick={() => ModalOpener$.next({
+							name: ModalName.Subcategory,
+							extra: subcategory
+						})}
+					/>
+
+					<Button
+						type='text'
+						icon={<DeleteOutlined />}
+						loading={deleting}
+						onClick={() => _delete(
+							subcategory.$id,
+							categoryId,
+							onChange
+						)}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

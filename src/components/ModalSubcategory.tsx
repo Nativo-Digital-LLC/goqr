@@ -11,9 +11,8 @@ type ExtraType = Partial<SubcategoryProps> & { categoryId: string; };
 
 export const ModalSubcategory = ({ onFinish }: { onFinish: () => void }) => {
 	const [visible, close, extra] = useModalVisible<ExtraType>(ModalName.Subcategory)
-	const [save, saving, error] = useSaveSubcategory();
+	const [save, saving] = useSaveSubcategory();
 	const [form] = Form.useForm();
-	console.error(error);
 
 	useEffect(() => {
 		form.resetFields();
