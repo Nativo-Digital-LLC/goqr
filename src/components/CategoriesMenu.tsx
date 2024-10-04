@@ -63,131 +63,131 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 			{categories
 				.sort((a, b) => a.order - b.order)
 				.map((category) => (
-				<div
-					key={category.$id}
-					style={{
-						display: 'flex',
-						gap: 10
-					}}
-				>
 					<div
+						key={category.$id}
 						style={{
 							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
 							gap: 10
 						}}
 					>
-						<Button
-							key={category.$id}
+						<div
 							style={{
-								border: `3px solid ${color}`,
-								background: (selectedCategoryId === category.$id)
-									? color
-									: 'none',
-								boxShadow: 'none',
-								borderRadius: 20,
-								padding: '4px 16px',
-								color: (selectedCategoryId === category.$id)
-									? '#FFF'
-									: color,
-								fontSize: 14,
-								fontWeight: 'bold',
-								height: 34,
-								textWrap: 'nowrap',
-								cursor: 'pointer'
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								gap: 10
 							}}
-							onClick={() => onSelect(category.$id)}
 						>
-							{category.name}
-						</Button>
+							<Button
+								key={category.$id}
+								style={{
+									border: `3px solid ${color}`,
+									background: (selectedCategoryId === category.$id)
+										? color
+										: 'none',
+									boxShadow: 'none',
+									borderRadius: 20,
+									padding: '4px 16px',
+									color: (selectedCategoryId === category.$id)
+										? '#FFF'
+										: color,
+									fontSize: 14,
+									fontWeight: 'bold',
+									height: 34,
+									textWrap: 'nowrap',
+									cursor: 'pointer'
+								}}
+								onClick={() => onSelect(category.$id)}
+							>
+								{category.name}
+							</Button>
+
+							{isEditable && (
+								<div
+									style={{
+										backgroundColor: color,
+										borderRadius: 4,
+										flexWrap: 'nowrap',
+										display: 'flex',
+										width: 'auto',
+										justifySelf: 'center'
+									}}
+								>
+									{category.order > Math.min(...categories.map(({ order }) => order)) && (
+										<Button
+											type='text'
+											icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
+											loading={updatingOrder}
+											onClick={() => updateOrder(establishmentId, category.$id, 'left', onChange)}
+										/>
+									)}
+
+									{category.order < Math.max(...categories.map(({ order }) => order)) && (
+										<Button
+											type='text'
+											icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
+											loading={updatingOrder}
+											onClick={() => updateOrder(establishmentId, category.$id, 'right', onChange)}
+										/>
+									)}
+
+									<Button
+										type='text'
+										icon={<EditOutlined style={{ color: '#FFF' }} />}
+										onClick={() => ModalOpener$.next({
+											name: ModalName.Category,
+											extra: {
+												id: category.$id,
+												establishmentId,
+												name: category.name
+											}
+										})}
+									/>
+
+									<Popconfirm
+										placement='bottom'
+										title='¿Eliminar menú?'
+										description={(
+											<Space direction='vertical'>
+												<Text>Se eliminará "{category.name}"</Text>
+												<Text type='danger'>junto con todas sus categorías!</Text>
+											</Space>
+										)}
+										okText='Si, eliminar'
+										cancelText='No'
+										onConfirm={() => _delete(
+											category.$id,
+											establishmentId,
+											onChange
+										)}
+									>
+										<Button
+											type='text'
+											icon={<DeleteOutlined style={{ color: '#FFF' }} />}
+											loading={deleting}
+										/>
+									</Popconfirm>
+
+								</div>
+							)}
+						</div>
 
 						{isEditable && (
-							<div
-								style={{
-									backgroundColor: color,
-									borderRadius: 4,
-									flexWrap: 'nowrap',
-									display: 'flex',
-									width: 'auto',
-									justifySelf: 'center'
-								}}
-							>
-								{category.order > Math.min(...categories.map(({ order }) => order)) && (
-									<Button
-										type='text'
-										icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
-										loading={updatingOrder}
-										onClick={() => updateOrder(establishmentId, category.$id, 'left', onChange)}
-									/>
-								)}
-
-								{category.order < Math.max(...categories.map(({ order }) => order)) && (
-									<Button
-										type='text'
-										icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
-										loading={updatingOrder}
-										onClick={() => updateOrder(establishmentId, category.$id, 'right', onChange)}
-									/>
-								)}
-
-								<Button
-									type='text'
-									icon={<EditOutlined style={{ color: '#FFF' }} />}
-									onClick={() => ModalOpener$.next({
-										name: ModalName.Category,
-										extra: {
-											id: category.$id,
-											establishmentId,
-											name: category.name
-										}
-									})}
-								/>
-
-								<Popconfirm
-									placement='bottom'
-									title='¿Eliminar menú?'
-									description={(
-										<Space direction='vertical'>
-											<Text>Se eliminará "{category.name}"</Text>
-											<Text type='danger'>junto con todas sus categorías!</Text>
-										</Space>
-									)}
-									okText='Si, eliminar'
-									cancelText='No'
-									onConfirm={() => _delete(
-										category.$id,
-										establishmentId,
-										onChange
-									)}
-								>
-									<Button
-										type='text'
-										icon={<DeleteOutlined style={{ color: '#FFF' }} />}
-										loading={deleting}
-									/>
-								</Popconfirm>
-
-							</div>
+							<Button
+								icon={<PlusOutlined />}
+								shape='circle'
+								style={{ alignSelf: 'start' }}
+								onClick={() => ModalOpener$.next({
+									name: ModalName.Category,
+									extra: {
+										order: category.order + 1,
+										establishmentId
+									}
+								})}
+							/>
 						)}
 					</div>
-
-					{isEditable && (
-						<Button
-							icon={<PlusOutlined />}
-							shape='circle'
-							style={{ alignSelf: 'start' }}
-							onClick={() => ModalOpener$.next({
-								name: ModalName.Category,
-								extra: {
-									order: category.order + 1,
-									establishmentId
-								}
-							})}
-						/>
-					)}
-				</div>
-			))}
+				))}
 		</div>
 	);
 }
