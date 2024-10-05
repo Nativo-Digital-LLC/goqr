@@ -1,13 +1,6 @@
-import {
-	Benefits1,
-	Benefits2,
-	Benefits3,
-	Benefits4,
-	Price1,
-	Price2,
-} from "../../constants/LandingImages";
+import { Price1, Price2 } from "../../constants/LandingImages";
 
-import { Navigation, Welcome, Information } from "./screens";
+import { Navigation, Welcome, Information, Benefits } from "./screens";
 
 export default function HomePage() {
 	return (
@@ -16,100 +9,7 @@ export default function HomePage() {
 			<div>
 				<Welcome />
 				<Information />
-				<div className="min-h-screen bg-[#FDE8DB] p-3">
-					<div>
-						<h2>QrCode menu benefits</h2>
-					</div>
-					<div>
-						<div>
-							<div>
-								<h3>Enhancing Customer Experience</h3>
-								<div>
-									<span>
-										Working with digital menu is easier.
-										Loading of the menu is faster. There is
-										more useful information in digital menu.
-									</span>
-								</div>
-							</div>
-							<div>
-								<img
-									src={Benefits1}
-									alt="QR code menu, enhancing customer experience"
-								/>
-							</div>
-						</div>
-						<div>
-							<div>
-								<h3>Attracting new customers</h3>
-								<div>
-									<span>
-										Guests are able to leave their reviews
-										directly from the QR code menu. The more
-										reviews - the more new guests are coming
-										from reviews.
-									</span>
-									<span>
-										Convenient menu language switch - more
-										guests-foreigners.
-									</span>
-								</div>
-							</div>
-							<div>
-								<img
-									src={Benefits2}
-									alt="QR code menu, attracting new customers"
-								/>
-							</div>
-						</div>
-						<div>
-							<div>
-								<h3>QR code menu increases sales</h3>
-								<div>
-									<span>
-										Digital QR code menu sells more. Photos
-										increase the appetite - the appetite
-										increases the average check.
-									</span>
-									<span>
-										Making an order becomes easier. Less
-										time to wonder, more spontaneous
-										purchases - higher average check.
-									</span>
-								</div>
-							</div>
-							<div>
-								<img
-									src={Benefits3}
-									alt="QR code menu, increases sales"
-								/>
-							</div>
-						</div>
-						<div>
-							<div>
-								<h3>Saving business resources</h3>
-								<div>
-									<span>
-										Our QR code menu is easy to edit. Higher
-										relevance of the menu, less time and
-										money spent on updating the menu.
-									</span>
-									<span>
-										Our QR menu works right away. No need to
-										install applications, buy terminals,
-										wait for confirmation etc.
-									</span>
-								</div>
-							</div>
-							<div>
-								<img
-									src={Benefits4}
-									alt="QR code menu, saving business resources"
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
+				<Benefits />
 				<div className="min-h-screen bg-[#FDE8DB] p-3">
 					<div>
 						<h2>QrCode menu service prices</h2>
