@@ -65,6 +65,7 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 			width={400}
 			title={extra?.$id ? 'Modificar Producto' : 'Nuevo Producto'}
 			footer={false}
+			maskClosable={false}
 		>
 			<Form
 				form={form}
