@@ -1,6 +1,4 @@
-import { Price1, Price2 } from "../../constants/LandingImages";
-
-import { Navigation, Welcome, Information, Benefits } from "./screens";
+import { Navigation, Welcome, Information, Benefits, Prices } from "./screens";
 
 export default function HomePage() {
 	return (
@@ -10,49 +8,7 @@ export default function HomePage() {
 				<Welcome />
 				<Information />
 				<Benefits />
-				<div className="min-h-screen bg-[#FDE8DB] p-3">
-					<div>
-						<h2>QrCode menu service prices</h2>
-					</div>
-					<div>
-						<div>
-							<span>If paid monthly</span>
-							<span>$10</span>
-							<span>Charged every month</span>
-							<span>Total amount is $10</span>
-						</div>
-						<div>
-							<span>If paid every 6 months</span>
-							<span>$9.6</span>
-							<span>Charged every 6 months</span>
-							<span>Total amount is $57.6</span>
-						</div>
-						<div>
-							<span>If paid annually</span>
-							<span>$9</span>
-							<span>Charged every 12 months</span>
-							<span>Total amount is $108</span>
-						</div>
-					</div>
-					<div>
-						<span>VAT may be applicable</span>
-					</div>
-					<div>
-						<h3>Free QR code menu for a month</h3>
-						<p>
-							You can try our QR code menu service first, and then
-							decide does it suits you or not. It's free and we do
-							not ask for your credit card details.
-						</p>
-						<a href="/">Try it for free</a>
-					</div>
-					<div>
-						<img src={Price1} alt="QR code menu for free" />
-					</div>
-					<div>
-						<img src={Price2} alt="Digital menu prices" />
-					</div>
-				</div>
+				<Prices />
 				<div className="min-h-screen bg-[#FFF] p-3">
 					<div>
 						<h2>QrCode menu service includes</h2>
