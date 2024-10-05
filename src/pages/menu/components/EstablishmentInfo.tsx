@@ -42,30 +42,39 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 				)}
 			</Space>
 			<br />
+
 			<Text>{description}</Text>
 			<br />
-			<a href={addressLink + ''} target='_blank'>
-				<Space>
-					<EnvironmentOutlined />
-					<Text>{address}</Text>
-				</Space>
-			</a>
 
-			<br />
+			{address && (
+				<>
+					<a href={addressLink + ''} target='_blank'>
+						<Space>
+							<EnvironmentOutlined />
+							<Text>{address}</Text>
+						</Space>
+					</a>
+					<br />
+				</>
+			)}
 			<Space>
-				<a href={'tel:' + phone}>
-					<Space>
-						<PhoneOutlined />
-						<Text>{format.phone(phone + '')}</Text>
-					</Space>
-				</a>
+				{phone && (
+					<a href={'tel:' + phone}>
+						<Space>
+							<PhoneOutlined />
+							<Text>{format.phone(phone + '')}</Text>
+						</Space>
+					</a>
+				)}
 
-				<a href={'https://wa.me/1' + whatsapp} target='_blank'>
-					<Space>
-						<WhatsAppOutlined style={{ color: '#128C7E' }} />
-						<Text>{format.phone(whatsapp + '')}</Text>
-					</Space>
-				</a>
+				{whatsapp && (
+					<a href={'https://wa.me/1' + whatsapp} target='_blank'>
+						<Space>
+							<WhatsAppOutlined style={{ color: '#128C7E' }} />
+							<Text>{format.phone(whatsapp + '')}</Text>
+						</Space>
+					</a>
+				)}
 			</Space>
 		</>
 	);
