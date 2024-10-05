@@ -41,8 +41,11 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 		form.resetFields();
 		setVariants([]);
 
-		if (extra) {
-			form.setFieldsValue(extra);
+		if (extra?.$id) {
+			form.setFieldsValue({
+				...extra,
+				price: extra.prices[0].price
+			});
 		}
 
 		if (extra?.prices && extra.prices.length > 1) {
