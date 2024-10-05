@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 
 const { Text } = Typography;
 
-export const MenuFooter = () => (
+export const MenuFooter = ({ domain }: { domain: string; }) => (
 	<footer
 		style={{
 			display: 'flex',
@@ -17,13 +17,13 @@ export const MenuFooter = () => (
 		<Button
 			icon={<EditOutlined style={{ fontSize: 24 }} />}
 			text='Editar Menú'
-			to='/'
+			to={`/m/${domain}`}
 		/>
 
 		<Button
 			icon={<QrcodeOutlined style={{ fontSize: 24 }} />}
 			text='Código QR'
-			to='/'
+			to={`/qr/${domain}`}
 		/>
 
 		<Button
@@ -41,7 +41,10 @@ interface ButtonProps {
 }
 
 const Button = ({ text, icon, to }: ButtonProps) => (
-	<Link to={to} style={{ textAlign: 'center', cursor: 'pointer' }}>
+	<Link
+		to={to}
+		style={{ textAlign: 'center', cursor: 'pointer' }}
+	>
 		{icon}
 		<br />
 		<Text>{text}</Text>

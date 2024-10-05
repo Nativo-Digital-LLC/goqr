@@ -184,7 +184,7 @@ export default function MenuPage() {
 				</div>
 
 				{isEditable && (
-					<MenuFooter />
+					<MenuFooter domain={establishmentUrl!} />
 				)}
 			</div>
 

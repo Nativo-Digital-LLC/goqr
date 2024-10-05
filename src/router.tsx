@@ -7,6 +7,7 @@ import MenuPage from "./pages/menu";
 import DashboardPage from "./pages/dashboard";
 import VerifyEmailPage from "./pages/verify-email";
 import NotFoundPage from "./pages/404";
+import QrPage from "./pages/menu/qr";
 
 const router = createBrowserRouter([
 	{
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
 	{
 		path: "/m/:establishmentUrl",
 		element: <MenuPage />,
+	},
+	{
+		path: "/qr/:establishmentUrl",
+		element: <QrPage />,
 	},
 	{
 		path: "*",
