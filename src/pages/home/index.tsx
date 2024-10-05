@@ -6,10 +6,8 @@ import {
 	Price1,
 	Price2,
 } from "../../constants/LandingImages";
-import Information from "./components/Information";
 
-import Navigation from "./components/Navigation";
-import Welcome from "./components/Welcome";
+import { Navigation, Welcome, Information } from "./screens";
 
 export default function HomePage() {
 	return (
