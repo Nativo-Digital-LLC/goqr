@@ -6,10 +6,10 @@ import {
 } from '@ant-design/icons';
 import { Button } from 'antd';
 
-import { useDeleteSubcategory, useUpdateSubcategoryOrder } from '../hooks/useSubcategories';
-import { ModalOpener$ } from '../utils/helpers';
-import { ModalName } from '../types/Modals';
-import { SubcategoryProps } from '../types/Subcategory';
+import { useDeleteSubcategory, useUpdateSubcategoryOrder } from '../../../hooks/useSubcategories';
+import { ModalOpener$ } from '../../../utils/helpers';
+import { ModalName } from '../../../types/Modals';
+import { SubcategoryProps } from '../../../types/Subcategory';
 
 interface SubcategoryCardProps {
 	subcategory: SubcategoryProps;

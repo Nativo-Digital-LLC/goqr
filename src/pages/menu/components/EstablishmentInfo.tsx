@@ -6,9 +6,9 @@ import {
 	WhatsAppOutlined
 } from '@ant-design/icons';
 
-import { format, ModalOpener$ } from '../utils/helpers';
-import { ModalName } from '../types/Modals';
-import { EstablishmentProps } from '../types/Establishment';
+import { format, ModalOpener$ } from '../../../utils/helpers';
+import { ModalName } from '../../../types/Modals';
+import { EstablishmentProps } from '../../../types/Establishment';
 
 const { Title, Text } = Typography;
 

@@ -2,10 +2,10 @@ import { Fragment } from 'react';
 import { Button, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { SubcategoryProps } from '../types/Subcategory';
+import { SubcategoryProps } from '../../../types/Subcategory';
 import { SubcategoryCard } from './SubcategoryCard';
-import { ModalOpener$ } from '../utils/helpers';
-import { ModalName } from '../types/Modals';
+import { ModalOpener$ } from '../../../utils/helpers';
+import { ModalName } from '../../../types/Modals';
 
 const { Text } = Typography;
 

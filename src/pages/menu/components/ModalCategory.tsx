@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Form, Modal, Input } from 'antd';
 
-import { useModalVisible } from '../hooks/useModal';
-import { ModalName } from '../types/Modals';
-import { useSaveCategory } from '../hooks/useCategories';
+import { useModalVisible } from '../../../hooks/useModal';
+import { ModalName } from '../../../types/Modals';
+import { useSaveCategory } from '../../../hooks/useCategories';
 
 interface ExtraType {
 	id?: string;

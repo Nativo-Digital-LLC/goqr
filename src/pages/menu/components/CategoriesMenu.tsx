@@ -7,10 +7,10 @@ import {
 	PlusOutlined
 } from '@ant-design/icons';
 
-import { CategoryProps } from '../types/Category';
-import { ModalOpener$ } from '../utils/helpers';
-import { ModalName } from '../types/Modals';
-import { useDeleteCategory, useUpdateCategoryOrder } from '../hooks/useCategories';
+import { CategoryProps } from '../../../types/Category';
+import { ModalOpener$ } from '../../../utils/helpers';
+import { ModalName } from '../../../types/Modals';
+import { useDeleteCategory, useUpdateCategoryOrder } from '../../../hooks/useCategories';
 
 const { Text } = Typography;
 

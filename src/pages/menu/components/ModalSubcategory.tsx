@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { Button, Form, Input, Modal, Upload } from 'antd';
 import { FileImageOutlined } from '@ant-design/icons';
 
-import { useModalVisible } from '../hooks/useModal';
-import { ModalName } from '../types/Modals';
-import { SubcategoryProps } from '../types/Subcategory';
-import { useSaveSubcategory } from '../hooks/useSubcategories';
+import { useModalVisible } from '../../../hooks/useModal';
+import { ModalName } from '../../../types/Modals';
+import { SubcategoryProps } from '../../../types/Subcategory';
+import { useSaveSubcategory } from '../../../hooks/useSubcategories';
 
 type ExtraType = Partial<SubcategoryProps> & { categoryId: string; };
 
