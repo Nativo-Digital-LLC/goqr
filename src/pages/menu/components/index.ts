@@ -7,3 +7,4 @@ export { SubcategoriesList } from './SubcategoriesList';
 export { ProductsList } from './ProductsList';
 export { SubcategoryCard } from './SubcategoryCard';
 export { ModalSubcategory } from './ModalSubcategory';
+export { ProductCard } from './ProductCard'

@@ -15,7 +15,10 @@ export async function getAllProducts(establishmentId: string) {
 		]
 	);
 
-	return documents as unknown as ProductProps[];
+	return documents.map(({ prices, ...rest }) => ({
+		prices: JSON.parse(prices),
+		...rest
+	})) as unknown as ProductProps[];
 }
 
 export async function createProduct({ photo, ...data }: Partial<ProductProps> & { photo: File }) {
@@ -27,6 +30,7 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		ID.unique(),
 		{
 			...data,
+			prices: JSON.stringify(data.prices),
 			photoUrl
 		}
 	);
@@ -37,23 +41,28 @@ export async function updateProduct(id: string,  {photo, ...data }: Partial<Prod
 		? await uploadFile(photo)
 		: undefined;
 
+	const prices = (data.prices)
+		? JSON.stringify(data.prices)
+		: undefined;
+
 	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Products,
 		id,
 		{
 			...data,
-			photoUrl
+			photoUrl,
+			prices
 		}
 	);
 }
 
-export async function changeProductOrder(establishmentId: string, id: string, dir: 'up' | 'down') {
+export async function changeProductOrder(subcategoryId: string, id: string, dir: 'up' | 'down') {
 	const { documents } = await db.listDocuments(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Products,
 		[
-			Query.equal('establishmentId', establishmentId),
+			Query.equal('subcategoryId', subcategoryId),
 			Query.isNull('deletedAt')
 		]
 	);
@@ -88,13 +97,13 @@ export async function changeProductOrder(establishmentId: string, id: string, di
 	});
 
 	if (!productInNewPosition) {
-		console.error('No se encontro la subcategoria adyacente');
+		console.error('No se encontró el producto');
 		return;
 	}
 
 	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Subcategories,
+		Collection.Products,
 		productInNewPosition.$id,
 		{
 			order: product.order

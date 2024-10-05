@@ -5,7 +5,7 @@ export interface ProductProps {
 	prices: {
 		label?: string;
 		price: number;
-	};
+	}[];
 	order: number;
 	establishmentId: string;
 	categoryId: string;

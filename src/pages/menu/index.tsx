@@ -141,20 +141,23 @@ export default function MenuPage() {
 					<br />
 
 					{!selected.subcategoryId && (
-						<input
-							placeholder='Buscar'
-							style={{
-								border: 'none',
-								backgroundColor: 'rgba(0, 0, 0, 0.1)',
-								width: '100%',
-								padding: '10px 20px',
-								borderRadius: 30,
-								fontSize: 14
-							}}
-						/>
+						<>
+							<input
+								placeholder='Buscar'
+								style={{
+									border: 'none',
+									backgroundColor: 'rgba(0, 0, 0, 0.1)',
+									width: '100%',
+									padding: '10px 20px',
+									borderRadius: 30,
+									fontSize: 14
+								}}
+							/>
+							<br />
+							<br />
+						</>
+
 					)}
-					<br />
-					<br />
 
 					<SubcategoriesList
 						subcategories={selectedCategory?.subcategories || []}
@@ -170,7 +173,18 @@ export default function MenuPage() {
 					/>
 
 					<ProductsList
-						// show={}
+						show={!!selected.subcategoryId}
+						color={establishment.mainHexColor}
+						establishmentId={establishment.$id}
+						categoryId={selected.categoryId + ''}
+						subcategoryId={selected.subcategoryId + ''}
+						subcategoryName={
+							selectedCategory
+								?.subcategories
+								?.find(({ $id }) => $id === selected.subcategoryId)
+								?.name + ''
+						}
+						isEditable={isEditable}
 					/>
 
 					<Row justify='center'>

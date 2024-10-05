@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
 import { ProductProps } from '../types/Product';
-import { createProduct, getAllProducts, updateProduct } from '../services/products';
+import {
+	changeProductOrder,
+	createProduct,
+	deleteProduct,
+	getAllProducts,
+	updateProduct
+} from '../services/products';
 
 type UseGetAllProductsType = [
 	ProductProps[],
@@ -76,10 +82,68 @@ export const useSaveProduct = (): UseSaveProductType => {
 	return [handleSave, loading, error];
 }
 
-export const useChangeProductOrder = () => {
+type UseChangeProductOrderType = [
+	(
+		subcategoryId: string,
+		id: string,
+		dir: 'up' | 'down',
+		onDone?: () => void
+	) => void,
+	boolean,
+	AppwriteException | null
+];
 
+export const useChangeProductOrder = (): UseChangeProductOrderType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleUpdate(
+		subcategoryId: string,
+		id: string,
+		dir: 'up' | 'down',
+		onDone?: () => void
+	) {
+		try {
+			setLoading(true);
+			setError(null);
+			await changeProductOrder(
+				subcategoryId,
+				id,
+				dir
+			);
+			onDone?.();
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleUpdate, loading, error];
 }
 
-export const useDeleteProduct = () => {
+type UseDeleteProductType = [
+	(id: string, onDone?: () => void) => void,
+	boolean,
+	AppwriteException | null
+];
 
+export const useDeleteProduct = (): UseDeleteProductType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleDelete(id: string, onDone?: () => void) {
+		try {
+			setLoading(true);
+			setError(null);
+			await deleteProduct(id);
+			onDone?.();
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleDelete, loading, error];
 }

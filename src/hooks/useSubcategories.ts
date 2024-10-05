@@ -93,7 +93,7 @@ export const useUpdateSubcategoryOrder = (): UseChangeSubcategoryOrderType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleDelete(
+	async function handleUpdate(
 		categoryId: string,
 		id: string,
 		dir: 'up' | 'down',
@@ -115,5 +115,5 @@ export const useUpdateSubcategoryOrder = (): UseChangeSubcategoryOrderType => {
 		}
 	}
 
-	return [handleDelete, loading, error];
+	return [handleUpdate, loading, error];
 }
