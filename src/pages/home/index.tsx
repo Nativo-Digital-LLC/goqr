@@ -3,10 +3,10 @@ import {
 	Benefits2,
 	Benefits3,
 	Benefits4,
-	MenuExample1Jpg,
 	Price1,
 	Price2,
 } from "../../constants/LandingImages";
+import Information from "./components/Information";
 
 import Navigation from "./components/Navigation";
 import Welcome from "./components/Welcome";
@@ -17,37 +17,7 @@ export default function HomePage() {
 			<Navigation />
 			<div>
 				<Welcome />
-				<div className="min-h-screen bg-[#FFF] p-3 z-[3] relative">
-					<div>
-						<h2>QrCode menu</h2>
-					</div>
-					<div>
-						<div>
-							<div></div>
-							<img src={MenuExample1Jpg} alt="Qr menu design" />
-						</div>
-						<div>
-							<p>
-								Our menu service includes a whole range of
-								functions for the restaurant, cafe or bar.
-							</p>
-							<p>
-								For your guests - this is a modern, easy to use
-								QR code menu.
-							</p>
-							<p>
-								For you - this is an digital platform built
-								around your QR code menu for improving a quality
-								of customer service and increasing sales.
-							</p>
-							<p>
-								No purchasing expensive terminals for you and no
-								application installation on your guests phones
-								needed for our digital menu to work.
-							</p>
-						</div>
-					</div>
-				</div>
+				<Information />
 				<div className="min-h-screen bg-[#FDE8DB] p-3">
 					<div>
 						<h2>QrCode menu benefits</h2>
