@@ -10,6 +10,7 @@ export async function getAllProducts(establishmentId: string) {
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Products,
 		[
+			Query.limit(5000),
 			Query.equal('establishmentId', establishmentId),
 			Query.isNull('deletedAt')
 		]
