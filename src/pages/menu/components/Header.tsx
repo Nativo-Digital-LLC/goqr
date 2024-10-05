@@ -1,9 +1,14 @@
+import { CloseOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import { Link } from "react-router-dom";
+
 interface HeaderProps {
 	bannerUrl?: string;
 	logoUrl?: string;
+	isEditable: boolean;
 }
 
-export const MenuHeader = ({ bannerUrl, logoUrl }: HeaderProps) => {
+export const MenuHeader = ({ bannerUrl, logoUrl, isEditable }: HeaderProps) => {
 	return (
 		<header
 			style={{
@@ -14,9 +19,24 @@ export const MenuHeader = ({ bannerUrl, logoUrl }: HeaderProps) => {
 				backgroundSize: 'cover',
 				display: 'flex',
 				justifyContent: 'center',
-				alignItems: 'center'
+				alignItems: 'center',
+				position: 'relative'
 			}}
 		>
+			{isEditable && (
+				<Link to='/dashboard'>
+					<Button
+						icon={<CloseOutlined />}
+						shape='circle'
+						style={{
+							position: 'absolute',
+							left: 20,
+							top: 20
+						}}
+					/>
+				</Link>
+			)}
+
 			{logoUrl && (
 				<img
 					src={logoUrl!}

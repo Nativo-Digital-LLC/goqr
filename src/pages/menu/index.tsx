@@ -108,6 +108,7 @@ export default function MenuPage() {
 				<MenuHeader
 					bannerUrl={establishment.bannerUrl ?? undefined}
 					logoUrl={establishment.logoUrl ?? undefined}
+					isEditable={isEditable}
 				/>
 				<div
 					style={{
