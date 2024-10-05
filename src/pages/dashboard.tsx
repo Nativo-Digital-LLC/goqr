@@ -7,12 +7,14 @@ import { ModalEstablishment } from '../components';
 import { ModalOpener$ } from '../utils/helpers';
 import { ModalName } from '../types/Modals';
 import { useSessionStore } from '../store/session';
+import { useLogout } from '../hooks/useAuth';
 
 const { Text } = Typography;
 
 export default function DashboardPage() {
 	const session = useSessionStore(({ session }) => session);
 	const [establishments, , , reload] = useGetEstablishmentsByUserId(session?.userId);
+	const [logout, closingSession] = useLogout();
 
 	return (
 		<div style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
@@ -69,6 +71,15 @@ export default function DashboardPage() {
 					</Col>
 				</Row>
 			</div>
+			<br />
+			<br />
+
+			<Button
+				onClick={() => logout(() => location.href = '/')}
+				loading={closingSession}
+			>
+				Salir
+			</Button>
 
 			<ModalEstablishment
 				onFinish={() => reload(`${session?.userId}`)}
