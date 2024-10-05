@@ -3,7 +3,7 @@ interface HeaderProps {
 	logoUrl?: string;
 }
 
-export const Header = ({ bannerUrl, logoUrl }: HeaderProps) => {
+export const MenuHeader = ({ bannerUrl, logoUrl }: HeaderProps) => {
 	return (
 		<header
 			style={{

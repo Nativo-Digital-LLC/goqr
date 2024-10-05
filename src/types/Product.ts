@@ -7,6 +7,10 @@ export interface ProductProps {
 		price: number;
 	};
 	order: number;
+	establishmentId: string;
+	categoryId: string;
+	subcategoryId: string;
+	photoUrl: string;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string | null;

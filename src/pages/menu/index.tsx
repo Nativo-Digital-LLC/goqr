@@ -2,17 +2,19 @@ import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Row, Typography } from 'antd';
 
-import { useGetEstablishmentByDomain } from '../hooks/useEstablishments';
+import { useGetEstablishmentByDomain } from '../../hooks/useEstablishments';
 import {
-	Header,
-	CategoriesMenu,
-	EstablishmentInfo,
 	ModalCategory,
-	ModalEstablishment,
-	SubcategoriesList
-} from '../components';
-import { useSessionStore } from '../store/session';
-import { ModalSubcategory } from '../components/ModalSubcategory';
+	SubcategoriesList,
+	ProductsList,
+	ModalSubcategory,
+	MenuFooter,
+	MenuHeader,
+	EstablishmentInfo,
+	CategoriesMenu
+} from './components';
+import { useSessionStore } from '../../store/session';
+import { ModalEstablishment } from '../../components';
 
 const { Text } = Typography;
 
@@ -92,8 +94,18 @@ export default function MenuPage() {
 
 	return (
 		<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-			<div style={{ maxWidth: 560, margin: '0 auto', height: '100vh', backgroundColor: '#FFF' }}>
-				<Header
+			<div
+				style={{
+					maxWidth: 560,
+					margin: '0 auto',
+					height: '100vh',
+					backgroundColor: '#FFF',
+					display: 'flex',
+					flexDirection: 'column',
+
+				}}
+			>
+				<MenuHeader
 					bannerUrl={establishment.bannerUrl ?? undefined}
 					logoUrl={establishment.logoUrl ?? undefined}
 				/>
@@ -102,7 +114,7 @@ export default function MenuPage() {
 						borderRadius: 30,
 						marginTop: -30,
 						width: '100%',
-						height: 'calc(100vh - 132px)',
+						flex: 1,
 						zIndex: 100,
 						backgroundColor: '#FFF',
 						padding: 20,
@@ -157,6 +169,10 @@ export default function MenuPage() {
 						onPress={(id) => handleUrlChanges('subcategoryId', id)}
 					/>
 
+					<ProductsList
+						// show={}
+					/>
+
 					<Row justify='center'>
 						<a
 							href='https://goqr.com.do'
@@ -166,6 +182,10 @@ export default function MenuPage() {
 						</a>
 					</Row>
 				</div>
+
+				{isEditable && (
+					<MenuFooter />
+				)}
 			</div>
 
 			<ModalCategory
