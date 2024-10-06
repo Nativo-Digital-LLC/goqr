@@ -16,6 +16,10 @@ export default function DashboardPage() {
 	const [establishments, , , reload] = useGetEstablishmentsByUserId(session?.userId);
 	const [logout, closingSession] = useLogout();
 
+	if (!session) {
+		return location.href = '/login';
+	}
+
 	return (
 		<div style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
 			<h2>Establecmimientos</h2>

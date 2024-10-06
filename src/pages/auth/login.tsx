@@ -1,4 +1,5 @@
-import { Button, Form, Input } from "antd";
+import { useEffect } from "react";
+import { Alert, Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import { useLogin } from "../../hooks/useAuth";
@@ -6,10 +7,19 @@ import { useLogin } from "../../hooks/useAuth";
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
 
 import HomeContainer from "../containers/HomeContainer";
+import { useSessionStore } from "../../store/session";
+import { AuthErrorType } from "../../types/Error";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
-	const [login, loading] = useLogin();
+	const session = useSessionStore(({ session }) => session);
+	const [login, loading, error] = useLogin();
+
+	useEffect(() => {
+		if (session) {
+			navigate("/dashboard");
+		}
+	}, [session, navigate]);
 
 	return (
 		<HomeContainer isAuth>
@@ -31,7 +41,11 @@ export default function LoginPage() {
 							<Form.Item
 								label="Correo Electrónico"
 								name="email"
-								required
+								validateTrigger='onBlur'
+								rules={[
+									{ required: true, message: 'Ingresa tu correo electrónico' },
+									{ type: 'email', message: 'Correo inválido' }
+								]}
 								className="font-[500]"
 							>
 								<Input
@@ -45,12 +59,23 @@ export default function LoginPage() {
 							<Form.Item
 								label="Contraseña"
 								name="password"
-								required
+								rules={[
+									{
+										required: true,
+										message: 'Ingresa tu contraseña'
+									},
+									{
+										min: 8,
+										message: 'Tu contraseña debe tener almenos 8 caracteres'
+									}
+								]}
+								validateTrigger='onBlur'
 								className="font-[500]"
 							>
 								<Input.Password
 									className="bg-[--field] font-[400]"
 									size="large"
+									minLength={8}
 								/>
 							</Form.Item>
 							<Button
@@ -61,6 +86,19 @@ export default function LoginPage() {
 							>
 								Acceder
 							</Button>
+
+							{error && (
+								<Alert
+									style={{ marginTop: 20 }}
+									type={(error.type === AuthErrorType.InvalidCredentials) ? 'warning' : 'error'}
+									message={(error.type === AuthErrorType.InvalidCredentials)
+										? 'Correo o contraseña incorrecta'
+										: 'Algo salió mal 😓, por favor intentalo más tarde'
+									}
+									showIcon
+								/>
+							)}
+
 							<div className="flex items-center my-[10px]">
 								<div className="h-[1px] bg-[--border] w-full" />
 								<span className="text-[--border] pb-[3px] mx-[10px]">
