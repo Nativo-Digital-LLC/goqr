@@ -1,18 +1,16 @@
+import HomeContainer from "../containers/HomeContainer";
 import {
-	Navigation,
 	Welcome,
 	Information,
 	Benefits,
 	Prices,
 	Services,
 	FAQ,
-	Footer,
 } from "./sections";
 
 export default function HomePage() {
 	return (
-		<div className="landing-page">
-			<Navigation />
+		<HomeContainer>
 			<Welcome />
 			<Information />
 			<Benefits />
@@ -21,9 +19,8 @@ export default function HomePage() {
 				<div className="max-w-[890px]">
 					<Services />
 					<FAQ />
-					<Footer />
 				</div>
 			</div>
-		</div>
+		</HomeContainer>
 	);
 }
