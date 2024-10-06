@@ -87,7 +87,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 				}}
 			>
 				<Row gutter={20}>
-					<Col span={12}>
+					<Col xs={24} sm={12}>
 						<Form.Item
 							label='Nombre'
 							name='name'
@@ -205,7 +205,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col span={12}>
+					<Col xs={24} sm={12}>
 						<Form.Item
 							label='Teléfono'
 							name='phone'
