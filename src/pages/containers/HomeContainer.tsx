@@ -60,7 +60,7 @@ export default function HomeContainer({
 						<div className="flex flex-col items-end text-[15px] md:text-[17px]">
 							<a href="/">Contacts</a>
 							<a
-								href="/"
+								href="mailto:contacto@goqr.com.do"
 								className="flex justify-center items-center"
 							>
 								<svg
@@ -91,9 +91,9 @@ export default function HomeContainer({
 									</g>
 								</svg>
 								<b className="text-[--secondary] font-[500]">
-									hello
+									contacto
 								</b>
-								@oddmenu.com
+								@goqr.com.do
 							</a>
 						</div>
 					</div>
