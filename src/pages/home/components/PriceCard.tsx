@@ -9,7 +9,7 @@ export default function PriceCard(props: PriceCardProps) {
 
 	return (
 		<div
-			className={`${defaultStyles} pt-[20px] pb-[30px] mb-[20px] shadow-md shadow-[#00000030] rounded-[25px] flex flex-col justify-between items-center`}
+			className={`${defaultStyles} pt-[20px] pb-[30px] mb-[20px] shadow-md shadow-[#00000030] rounded-[25px] flex flex-col justify-between items-center sm:mb-[0px]`}
 		>
 			<div>
 				<div className="mb-[20px]">
@@ -27,7 +27,7 @@ export default function PriceCard(props: PriceCardProps) {
 					</span>
 				</div>
 			</div>
-			<div className="font-[500] text-[10px]">
+			<div className="font-[500] text-[10px] text-center">
 				<div>
 					<span>{disclaimer}</span>
 				</div>

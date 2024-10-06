@@ -10,9 +10,9 @@ export default function Services() {
 				</h2>
 			</div>
 			<div>
-				<ul>
+				<ul className="sm:flex sm:flex-wrap sm:columns-2 sm:justify-between sm:[&>*:nth-child(odd)]:mr-[10px] sm:[&>*:nth-child(even)]:ml-[10px]">
 					{services.map((item, index) => (
-						<div className="mb-[20px] flex">
+						<div className="mb-[20px] sm:flex sm:flex-[40%]">
 							<img
 								src={dot}
 								alt={`dot-${index}`}

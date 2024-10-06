@@ -1,4 +1,4 @@
-import faqs from "../constants/FAQs";
+import faq from "../constants/FAQ";
 
 export default function FAQ() {
 	return (
@@ -8,9 +8,12 @@ export default function FAQ() {
 					QRCode menu FAQ
 				</h2>
 			</div>
-			<div>
-				{faqs.map((item, index) => (
-					<div key={index} className="mb-[35px]">
+			<div className="sm:flex sm:flex-wrap sm:columns-2 sm:justify-between sm:[&>*:nth-child(odd)]:mr-[10px] sm:[&>*:nth-child(even)]:ml-[10px]">
+				{faq.map((item, index) => (
+					<div
+						key={index}
+						className="mb-[35px] sm:flex sm:flex-[40%]"
+					>
 						<a
 							className="leading-[30px] underline underline-offset-[5px] decoration-[#00000050] decoration-dotted hover:no-underline"
 							href="/"

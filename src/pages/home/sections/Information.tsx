@@ -8,18 +8,18 @@ export default function Information() {
 					QrCode menu
 				</h2>
 			</div>
-			<div className="flex flex-col-reverse justify-center items-center">
+			<div className="flex flex-col-reverse justify-center items-center sm:flex-row sm:pt-[20px]">
 				<div className="rounded-[52px] border-[7px] border-[#E2E3E4] shadow-xl shadow-[#00000020]">
 					<div className="relative flex justify-center  rounded-[46px] border-[10px] border-[--text] overflow-hidden">
 						<div className="z-1 absolute w-[120px] h-[30px] bg-[--text] rounded-[100px] translate-y-[-12px]" />
 						<img
 							src={MenuExample1Jpg}
 							alt="Qr menu design"
-							className="w-[300px] rounded-[35px]"
+							className="w-[300px] rounded-[35px] "
 						/>
 					</div>
 				</div>
-				<div className="text-justify text-[18px] font-[400]">
+				<div className="text-justify text-[18px] font-[400] sm:ml-[40px] sm:w-[50%]">
 					<p className="mb-[30px]">
 						Our menu service includes a whole range of functions for
 						the restaurant, cafe or bar.
