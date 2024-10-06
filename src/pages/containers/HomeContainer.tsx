@@ -3,17 +3,20 @@ import { Link } from "react-router-dom";
 
 interface HomeContainerProps {
 	children: ReactNode;
-	isAuth?: boolean;
+	navBackgroundColor?: string;
+	footerBackgroundColor?: string;
 }
 
-export default function HomeContainer({
-	children,
-	isAuth,
-}: HomeContainerProps) {
+export default function HomeContainer(props: HomeContainerProps) {
+	const { children, navBackgroundColor, footerBackgroundColor } = props;
 	return (
-		<div className={`landing-page ${isAuth && "bg-[--primary]"}`}>
+		<div className={`landing-page`}>
 			{/* NAVIGATION */}
-			<div className="md:relative md:z-[2] py-4 bg-[--primary] flex justify-center">
+			<div
+				className={`md:relative md:z-[2] py-4 flex justify-center ${
+					navBackgroundColor ? navBackgroundColor : "bg-[--primary]"
+				}`}
+			>
 				<div className="flex justify-between max-w-[890px] w-full px-[20px]">
 					<a
 						href="/"
@@ -37,7 +40,11 @@ export default function HomeContainer({
 			<div className="flex-grow flex flex-col">{children}</div>
 			{/* FOOTER */}
 			<div
-				className={`${isAuth && "bg-[--primary]"} flex justify-center`}
+				className={`${
+					footerBackgroundColor
+						? footerBackgroundColor
+						: "bg-[--primary]"
+				} flex justify-center`}
 			>
 				<div className="max-w-[890px] w-full">
 					<div className="flex justify-between items-center px-[20px] pb-[40px]">
