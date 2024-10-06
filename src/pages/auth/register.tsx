@@ -31,7 +31,7 @@ export default function RegisterPage() {
 							<Form.Item
 								label="Nombre"
 								name="name"
-								required
+								rules={[{ required: true, message: 'Ingresa tu nombre' }]}
 								className="font-[500]"
 							>
 								<Input
@@ -44,7 +44,17 @@ export default function RegisterPage() {
 							<Form.Item
 								label="Correo Electrónico"
 								name="email"
-								required
+								rules={[
+									{
+										required: true,
+										message:
+											"Ingresa tu correo electrónico",
+									},
+									{
+										type: "email",
+										message: "Correo inválido",
+									},
+								]}
 								className="font-[500]"
 							>
 								<Input
@@ -58,11 +68,15 @@ export default function RegisterPage() {
 							<Form.Item
 								label="Contraseña"
 								name="password"
-								required
+								rules={[
+									{ required: true, message: 'Ingresa una contraseña' },
+									{ min: 8, message: 'La contraseña debe tener 8 caracteres o mas' }
+								]}
+								validateTrigger='onBlur'
 								className="font-[500]"
 							>
 								<Input.Password
-									placeholder="6 caracteres o más"
+									placeholder="8 caracteres o más"
 									className="bg-[--field] font-[400]"
 									size="large"
 								/>
@@ -70,7 +84,7 @@ export default function RegisterPage() {
 							<Form.Item
 								name="accepted"
 								valuePropName="checked"
-								required
+								rules={[{ required: true, message: 'Debes aceptar los términos y condiciones para crear una cuenta' }]}
 								className="mt-[30px]"
 							>
 								<Checkbox className="text-[14px] font-[500]">
