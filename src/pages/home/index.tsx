@@ -6,7 +6,7 @@ import {
 	Prices,
 	Services,
 	FAQ,
-} from "./screens";
+} from "./sections";
 
 export default function HomePage() {
 	return (
