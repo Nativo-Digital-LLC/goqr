@@ -1,15 +1,26 @@
-import { Button, Checkbox, Form, Input } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Alert, Button, Checkbox, Form, Input } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useRegister } from "../../hooks/useAuth";
+import { useHandleOAuth2Session, useRegister } from "../../hooks/useAuth";
 
 import HomeContainer from "../containers/HomeContainer";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
+import { authWithGoogle } from "../../services/auth";
+import { useMemo } from "react";
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const status = useMemo(() => {
+		const params = new URLSearchParams(location.search);
+		const status = params.get('status');
+
+		return status as 'success' | 'failed' | undefined;
+	}, [location]);
+
 	const [register, loading] = useRegister();
+	const [loadingOauth2, oauth2Error] = useHandleOAuth2Session(status);
 
 	return (
 		<HomeContainer defaultBackgroundColor="--primary">
@@ -128,6 +139,8 @@ export default function RegisterPage() {
 							<Button
 								type="primary"
 								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+								onClick={() => authWithGoogle('register')}
+								loading={loadingOauth2}
 							>
 								<img
 									className="h-[20px] w-[20px]"
@@ -136,6 +149,13 @@ export default function RegisterPage() {
 								/>
 								Registrarse con Google
 							</Button>
+							{oauth2Error && typeof oauth2Error === 'string' && (
+								<Alert
+									message={oauth2Error}
+									type="error"
+									showIcon
+								/>
+							)}
 
 							<p className="text-[12px] text-center mt-[30px]">
 								Podrás encontrar nuestros Términos de Servicio

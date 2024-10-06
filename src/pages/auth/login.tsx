@@ -1,19 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Alert, Button, Form, Input } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { useLogin } from "../../hooks/useAuth";
+import { useHandleOAuth2Session, useLogin } from "../../hooks/useAuth";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
 
 import HomeContainer from "../containers/HomeContainer";
 import { useSessionStore } from "../../store/session";
 import { AuthErrorType } from "../../types/Error";
+import { authWithGoogle } from "../../services/auth";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const status = useMemo(() => {
+		const params = new URLSearchParams(location.search);
+		const status = params.get('status');
+
+		return status as 'success' | 'failed' | undefined;
+	}, [location]);
+
 	const session = useSessionStore(({ session }) => session);
 	const [login, loading, error] = useLogin();
+	const [loadingOauth2, oauth2Error] = useHandleOAuth2Session(status);
 
 	useEffect(() => {
 		if (session) {
@@ -124,6 +134,8 @@ export default function LoginPage() {
 							<Button
 								type="primary"
 								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+								onClick={() => authWithGoogle('login')}
+								loading={loadingOauth2}
 							>
 								<img
 									className="h-[20px] w-[20px]"
@@ -132,6 +144,13 @@ export default function LoginPage() {
 								/>
 								Iniciar con Google
 							</Button>
+							{oauth2Error && typeof oauth2Error === 'string' && (
+								<Alert
+									message={oauth2Error}
+									type="error"
+									showIcon
+								/>
+							)}
 						</Form>
 					</div>
 				</div>

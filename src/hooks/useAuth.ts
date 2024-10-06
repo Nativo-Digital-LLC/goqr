@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
 import {
 	createAccount,
+	getCurrentSession,
 	login,
 	logout,
 	// sendVerificationEmail
@@ -97,6 +98,47 @@ export const useLogin = (): UseLoginType => {
 	}
 
 	return [handleLogin, loading, error];
+}
+
+type UseHandleOAuth2SessionType = [
+	boolean,
+	AppwriteException | string | null
+];
+
+export const useHandleOAuth2Session = (status?: 'success' | 'failed'): UseHandleOAuth2SessionType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | string | null>(null);
+	const setSession = useSessionStore(({ setSession }) => setSession);
+
+	useEffect(() => {
+		if (status) {
+			handleChange(status);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status]);
+
+	async function handleChange(status: 'success' | 'failed') {
+		try {
+			if (status === 'failed') {
+				return setError('No se pudo iniciar sesion, por favor intentalo mas tarde');
+			}
+
+			setLoading(true);
+			const session = await getCurrentSession();
+			if (!session) {
+				return;
+			}
+
+			setSession(session);
+			location.href = '/dashboard';
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [loading, error];
 }
 
 type UseLogoutType = [
