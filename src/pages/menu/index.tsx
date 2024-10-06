@@ -1,6 +1,13 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Row, Typography } from 'antd';
+import {
+	InfiniteHits,
+	InstantSearch,
+	SearchBox,
+	Configure
+} from 'react-instantsearch';
+import 'instantsearch.css/themes/satellite.css';
 
 import { useGetEstablishmentByDomain } from '../../hooks/useEstablishments';
 import {
@@ -11,10 +18,13 @@ import {
 	MenuFooter,
 	MenuHeader,
 	EstablishmentInfo,
-	CategoriesMenu
+	CategoriesMenu,
+	ProductCard
 } from './components';
 import { useSessionStore } from '../../store/session';
 import { ModalEstablishment } from '../../components';
+import searchClient from '../../utils/search';
+import { ProductProps } from '../../types/Product';
 
 const { Text } = Typography;
 
@@ -25,6 +35,8 @@ export default function MenuPage() {
 	const navigate = useNavigate();
 
 	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
+	const [search, setSearch] = useState('');
+
 	const isEditable = useMemo(() => {
 		return establishment && session && session.userId === establishment.userId || false;
 	}, [session, establishment]);
@@ -92,127 +104,144 @@ export default function MenuPage() {
 		navigate(`${location.pathname}?${params.toString()}`);
 	}
 
-	return (
-		<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-			<div
-				style={{
-					maxWidth: 560,
-					margin: '0 auto',
-					height: '100vh',
-					backgroundColor: '#FFF',
-					display: 'flex',
-					flexDirection: 'column',
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function handleSearchInput({ target }: any) {
+		setSearch(target.value)
+	}
 
-				}}
-			>
-				<MenuHeader
-					bannerUrl={establishment.bannerUrl ?? undefined}
-					logoUrl={establishment.logoUrl ?? undefined}
-					isEditable={isEditable}
-				/>
+	return (
+		<InstantSearch
+			indexName='products'
+			searchClient={searchClient}
+		>
+			<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
 				<div
 					style={{
-						borderRadius: 30,
-						marginTop: -30,
-						width: '100%',
-						flex: 1,
-						zIndex: 100,
+						maxWidth: 560,
+						margin: '0 auto',
+						height: '100vh',
 						backgroundColor: '#FFF',
-						padding: 20,
-						overflowY: 'scroll',
+						display: 'flex',
+						flexDirection: 'column',
+
 					}}
-					className='hide-scrollbar-y'
 				>
-					<EstablishmentInfo
-						establishment={establishment}
+					<MenuHeader
+						bannerUrl={establishment.bannerUrl ?? undefined}
+						logoUrl={establishment.logoUrl ?? undefined}
 						isEditable={isEditable}
 					/>
-					<br />
-					<br />
-
-					<CategoriesMenu
-						categories={establishment.categories}
-						selectedCategoryId={selected.categoryId ?? undefined}
-						color={establishment.mainHexColor}
-						onSelect={(id) => handleUrlChanges('categoryId', id, true)}
-						onChange={() => reload(establishmentUrl!)}
-						establishmentId={establishment.$id}
-						isEditable={isEditable}
-					/>
-					<br />
-
-					{/* {!selected.subcategoryId && (
-						<>
-							<input
-								placeholder='Buscar'
-								style={{
-									border: 'none',
-									backgroundColor: 'rgba(0, 0, 0, 0.1)',
-									width: '100%',
-									padding: '10px 20px',
-									borderRadius: 30,
-									fontSize: 14
-								}}
-							/>
-							<br />
-							<br />
-						</>
-					)} */}
-
-					<SubcategoriesList
-						subcategories={selectedCategory?.subcategories || []}
-						mainColor={establishment.mainHexColor}
-						isEditable={isEditable}
-						category={{
-							name: selectedCategory?.name || '',
-							id: selectedCategory?.$id || ''
+					<div
+						style={{
+							borderRadius: 30,
+							marginTop: -30,
+							width: '100%',
+							flex: 1,
+							zIndex: 100,
+							backgroundColor: '#FFF',
+							padding: 20,
+							overflowY: 'scroll',
 						}}
-						show={!selected.subcategoryId}
-						onChange={() => reload(establishmentUrl!)}
-						onPress={(id) => handleUrlChanges('subcategoryId', id)}
-					/>
+						className='hide-scrollbar-y'
+					>
+						<EstablishmentInfo
+							establishment={establishment}
+							isEditable={isEditable}
+						/>
+						<br />
+						<br />
 
-					<ProductsList
-						show={!!selected.subcategoryId}
-						color={establishment.mainHexColor}
-						establishmentId={establishment.$id}
-						categoryId={selected.categoryId + ''}
-						subcategoryId={selected.subcategoryId + ''}
-						subcategoryName={
-							selectedCategory
-								?.subcategories
-								?.find(({ $id }) => $id === selected.subcategoryId)
-								?.name + ''
-						}
-						isEditable={isEditable}
-					/>
+						<CategoriesMenu
+							categories={establishment.categories}
+							selectedCategoryId={selected.categoryId ?? undefined}
+							color={establishment.mainHexColor}
+							onSelect={(id) => handleUrlChanges('categoryId', id, true)}
+							onChange={() => reload(establishmentUrl!)}
+							establishmentId={establishment.$id}
+							isEditable={isEditable}
+						/>
+						<br />
 
-					<Row justify='center'>
-						<a
-							href='https://goqr.com.do'
-							target='_blank'
-						>
-							<Text>goqr.com.do</Text>
-						</a>
-					</Row>
+						<SearchBox
+							onChangeCapture={handleSearchInput}
+							onResetCapture={() => setSearch('')}
+						/>
+						{search.length > 0 && (
+							<>
+								<InfiniteHits
+									hitComponent={({ hit }) => (
+										<ProductCard
+											data={hit as unknown as ProductProps}
+											color={establishment.mainHexColor}
+											preview
+											isEditable={false}
+											showMoveUp={false}
+											showMoveDown={false}
+											onChange={() => null}
+										/>
+									)}
+								/>
+								<Configure
+									filters={`establishmentId="${establishment.$id}"`}
+								/>
+							</>
+						)}
+
+						<SubcategoriesList
+							subcategories={selectedCategory?.subcategories || []}
+							mainColor={establishment.mainHexColor}
+							isEditable={isEditable}
+							category={{
+								name: selectedCategory?.name || '',
+								id: selectedCategory?.$id || ''
+							}}
+							show={!selected.subcategoryId && search.length === 0}
+							onChange={() => reload(establishmentUrl!)}
+							onPress={(id) => handleUrlChanges('subcategoryId', id)}
+						/>
+
+						<ProductsList
+							show={!!selected.subcategoryId && search.length === 0}
+							color={establishment.mainHexColor}
+							establishmentId={establishment.$id}
+							categoryId={selected.categoryId + ''}
+							subcategoryId={selected.subcategoryId + ''}
+							subcategoryName={
+								selectedCategory
+									?.subcategories
+									?.find(({ $id }) => $id === selected.subcategoryId)
+									?.name + ''
+							}
+							isEditable={isEditable}
+						/>
+
+						<Row justify='center'>
+							<a
+								href='https://goqr.com.do'
+								target='_blank'
+							>
+								<Text>goqr.com.do</Text>
+							</a>
+						</Row>
+					</div>
+
+					{isEditable && (
+						<MenuFooter domain={establishmentUrl!} />
+					)}
 				</div>
 
-				{isEditable && (
-					<MenuFooter domain={establishmentUrl!} />
-				)}
+				<ModalCategory
+					onFinish={() => reload(establishmentUrl!)}
+				/>
+
+				<ModalEstablishment
+					onFinish={() => reload(establishmentUrl!)}
+				/>
+
+				<ModalSubcategory
+					onFinish={() => reload(establishmentUrl!)}
+				/>
 			</div>
-
-			<ModalCategory
-				onFinish={() => reload(establishmentUrl!)}
-			/>
-
-			<ModalEstablishment
-				onFinish={() => reload(establishmentUrl!)}
-			/>
-
-			<ModalSubcategory
-				onFinish={() => reload(establishmentUrl!)}
-			/>
-		</div>
+		</InstantSearch>
 	);
 }

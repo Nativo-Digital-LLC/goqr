@@ -31,3 +31,26 @@
 .hide-scrollbar-y::-webkit-scrollbar {
 	display: none;
 }
+
+.ais-InfiniteHits-loadPrevious,
+.ais-InfiniteHits-loadMore {
+	display: none !important;
+}
+
+.ais-InfiniteHits-item {
+	padding: 0 !important;
+	margin-bottom: 20px !important;
+	box-shadow: none !important;
+}
+
+.ais-SearchBox-input {
+	box-shadow: none !important;
+	border: none !important;
+	background-color: rgba(0, 0, 0, 0.05) !important;
+	border-radius: 30px !important;
+	font-size: 14px !important;
+}
+
+.ais-SearchBox {
+	margin-bottom: 20px !important;
+}

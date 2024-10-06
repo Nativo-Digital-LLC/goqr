@@ -5,6 +5,11 @@ import { Collection } from '../constants/Collections';
 import { ProductProps } from '../types/Product';
 import { uploadFile } from '../utils/helpers';
 
+const {
+	VITE_APP_MEILI_SEARCH_HOST,
+	VITE_APP_MEILI_SEARCH_KEY
+} = import.meta.env;
+
 export async function getAllProducts(establishmentId: string) {
 	const { documents } = await db.listDocuments(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
@@ -25,7 +30,7 @@ export async function getAllProducts(establishmentId: string) {
 export async function createProduct({ photo, ...data }: Partial<ProductProps> & { photo: File }) {
 	const photoUrl = await uploadFile(photo);
 
-	await db.createDocument(
+	const { $id } = await db.createDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Products,
 		ID.unique(),
@@ -35,6 +40,18 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 			photoUrl
 		}
 	);
+
+	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
+		},
+		body: JSON.stringify({
+			...data,
+			$id
+		})
+	});
 }
 
 export async function updateProduct(id: string,  {photo, ...data }: Partial<ProductProps> & { photo?: File }) {
@@ -56,6 +73,18 @@ export async function updateProduct(id: string,  {photo, ...data }: Partial<Prod
 			prices
 		}
 	);
+
+	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id&csvDelimiter=,', {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
+		},
+		body: JSON.stringify([{
+			...data,
+			$id: id
+		}])
+	});
 }
 
 export async function changeProductOrder(subcategoryId: string, id: string, dir: 'up' | 'down') {
@@ -121,4 +150,12 @@ export async function deleteProduct(id: string) {
 			deletedAt: new Date()
 		}
 	);
+
+	await await fetch(`${VITE_APP_MEILI_SEARCH_HOST}/indexes/products/documents/${id}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
+		}
+	});
 }
