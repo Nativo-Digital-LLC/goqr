@@ -16,11 +16,11 @@ const { Title, Text } = Typography;
 interface ProductCardProps {
 	data: ProductProps;
 	color: string;
-	preview: boolean;
-	isEditable: boolean;
-	showMoveUp: boolean;
-	showMoveDown: boolean;
-	onChange: () => void;
+	preview?: boolean;
+	isEditable?: boolean;
+	showMoveUp?: boolean;
+	showMoveDown?: boolean;
+	onChange?: () => void;
 }
 
 export const ProductCard = (props: ProductCardProps) => {

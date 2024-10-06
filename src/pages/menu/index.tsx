@@ -175,10 +175,6 @@ export default function MenuPage() {
 											data={hit as unknown as ProductProps}
 											color={establishment.mainHexColor}
 											preview
-											isEditable={false}
-											showMoveUp={false}
-											showMoveDown={false}
-											onChange={() => null}
 										/>
 									)}
 								/>
