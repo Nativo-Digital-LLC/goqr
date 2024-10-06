@@ -23,7 +23,7 @@ export default function LoginPage() {
 
 	return (
 		<HomeContainer isAuth>
-			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px]">
+			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px] px-[10px]">
 				<div className="max-w-[450px] w-full">
 					<div className="p-[30px] bg-[--tertiary] rounded-[15px] shadow-md shadow-[#00000030]">
 						<h1 className="text-center text-[24px] font-[700] mb-[25px]">
@@ -41,10 +41,17 @@ export default function LoginPage() {
 							<Form.Item
 								label="Correo Electrónico"
 								name="email"
-								validateTrigger='onBlur'
+								validateTrigger="onBlur"
 								rules={[
-									{ required: true, message: 'Ingresa tu correo electrónico' },
-									{ type: 'email', message: 'Correo inválido' }
+									{
+										required: true,
+										message:
+											"Ingresa tu correo electrónico",
+									},
+									{
+										type: "email",
+										message: "Correo inválido",
+									},
 								]}
 								className="font-[500]"
 							>
@@ -62,14 +69,15 @@ export default function LoginPage() {
 								rules={[
 									{
 										required: true,
-										message: 'Ingresa tu contraseña'
+										message: "Ingresa tu contraseña",
 									},
 									{
 										min: 8,
-										message: 'Tu contraseña debe tener almenos 8 caracteres'
-									}
+										message:
+											"Tu contraseña debe tener almenos 8 caracteres",
+									},
 								]}
-								validateTrigger='onBlur'
+								validateTrigger="onBlur"
 								className="font-[500]"
 							>
 								<Input.Password
@@ -82,7 +90,7 @@ export default function LoginPage() {
 								type="primary"
 								htmlType="submit"
 								loading={loading}
-								className="h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+								className="mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
 							>
 								Acceder
 							</Button>
@@ -90,10 +98,17 @@ export default function LoginPage() {
 							{error && (
 								<Alert
 									style={{ marginTop: 20 }}
-									type={(error.type === AuthErrorType.InvalidCredentials) ? 'warning' : 'error'}
-									message={(error.type === AuthErrorType.InvalidCredentials)
-										? 'Correo o contraseña incorrecta'
-										: 'Algo salió mal 😓, por favor intentalo más tarde'
+									type={
+										error.type ===
+										AuthErrorType.InvalidCredentials
+											? "warning"
+											: "error"
+									}
+									message={
+										error.type ===
+										AuthErrorType.InvalidCredentials
+											? "Correo o contraseña incorrecta"
+											: "Algo salió mal 😓, por favor intentalo más tarde"
 									}
 									showIcon
 								/>
