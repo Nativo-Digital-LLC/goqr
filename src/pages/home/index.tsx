@@ -5,6 +5,7 @@ import {
 	Benefits,
 	Prices,
 	Services,
+	FAQ,
 } from "./screens";
 
 export default function HomePage() {
@@ -17,79 +18,7 @@ export default function HomePage() {
 				<Benefits />
 				<Prices />
 				<Services />
-				<div className="min-h-screen bg-[#FFF] p-3">
-					<div>
-						<h2>QRCode menu FAQ</h2>
-					</div>
-					<div>
-						<div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											I already have menus made of paper,
-											why is your digital menu better?
-										</span>
-									</button>
-								</h3>
-							</div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											I already have a QR code menu with a
-											PDF file, how is your digital menu
-											different from this?
-										</span>
-									</button>
-								</h3>
-							</div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											Do I have to call or to message you
-											every time when I want to change
-											something at my QR code menu?
-										</span>
-									</button>
-								</h3>
-							</div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											Where can I see what your QR code
-											menu looks like?
-										</span>
-									</button>
-								</h3>
-							</div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											Is it possible to try your digital
-											menu for free first?
-										</span>
-									</button>
-								</h3>
-							</div>
-							<div>
-								<h3>
-									<button>
-										<span>
-											I want to change the name of my
-											restaurant, cafe or bar, but I don’t
-											want to print new QR codes for the
-											menu, what should I do?
-										</span>
-									</button>
-								</h3>
-							</div>
-						</div>
-					</div>
-				</div>
+				<FAQ />
 			</div>
 			<div>
 				<div>
