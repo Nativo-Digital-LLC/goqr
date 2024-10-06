@@ -13,7 +13,7 @@ export default function LoginPage() {
 
 	return (
 		<HomeContainer isAuth>
-			<div className="w-full flex flex-col items-center pt-[40px]">
+			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px]">
 				<div className="max-w-[450px] w-full">
 					<div className="p-[30px] bg-[--tertiary] rounded-[15px] shadow-md shadow-[#00000030]">
 						<h1 className="text-center text-[24px] font-[700] mb-[25px]">
