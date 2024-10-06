@@ -3,14 +3,18 @@ import { Link } from "react-router-dom";
 
 interface HomeContainerProps {
 	children: ReactNode;
+	isAuth?: boolean;
 }
 
-export default function HomeContainer({ children }: HomeContainerProps) {
+export default function HomeContainer({
+	children,
+	isAuth,
+}: HomeContainerProps) {
 	return (
-		<div className="landing-page">
+		<div className={`landing-page ${isAuth && "bg-[--primary]"}`}>
 			{/* NAVIGATION */}
-			<div className="md:relative md:z-[2] py-4 px-[25px] bg-[--primary] flex justify-center">
-				<div className="flex justify-between max-w-[890px] w-full">
+			<div className="md:relative md:z-[2] py-4 bg-[--primary] flex justify-center">
+				<div className="flex justify-between max-w-[890px] w-full px-[20px]">
 					<a
 						href="/"
 						className={`text-[25px] relative before:content-[''] before:absolute before:bg-[--secondary] before:h-[7px] before:w-[75px] before:z-[1] before:bottom-[7px] before:left-[-3px]`}
@@ -30,11 +34,13 @@ export default function HomeContainer({ children }: HomeContainerProps) {
 					</div>
 				</div>
 			</div>
-			{children}
+			<div className="flex-grow flex">{children}</div>
 			{/* FOOTER */}
-			<div className="flex justify-center">
+			<div
+				className={`${isAuth && "bg-[--primary]"} flex justify-center`}
+			>
 				<div className="max-w-[890px] w-full">
-					<div className="flex justify-between items-center px-[20px] pb-[30px]">
+					<div className="flex justify-between items-center px-[20px] pb-[40px]">
 						<div className="flex flex-col justify-between">
 							<a
 								href="/"

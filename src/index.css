@@ -7,6 +7,8 @@
 	--secondary: #ff9a76;
 	--tertiary: #ffffff;
 	--text: #4c4c4c;
+	--field: #f3f3f3;
+	--border: #00000020;
 }
 
 * {
@@ -16,10 +18,11 @@
 }
 
 .landing-page {
-	color: var(--text);
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
+	min-height: 100vh;
+	color: var(--text);
+	position: relative;
 }
 
 .hide-scrollbar-y {
