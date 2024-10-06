@@ -141,7 +141,7 @@ export default function MenuPage() {
 					/>
 					<br />
 
-					{!selected.subcategoryId && (
+					{/* {!selected.subcategoryId && (
 						<>
 							<input
 								placeholder='Buscar'
@@ -157,8 +157,7 @@ export default function MenuPage() {
 							<br />
 							<br />
 						</>
-
-					)}
+					)} */}
 
 					<SubcategoriesList
 						subcategories={selectedCategory?.subcategories || []}
