@@ -98,6 +98,7 @@ export const ProductCard = (props: ProductCardProps) => {
 				}}
 				wrapperStyle={{
 					borderRadius: 15,
+					width: '100%',
 					overflow: 'hidden',
 				}}
 				preview={preview}
