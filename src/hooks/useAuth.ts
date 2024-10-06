@@ -108,12 +108,14 @@ type UseLogoutType = [
 export const useLogout = (): UseLogoutType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
+	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleLogout(onDone?: () => void) {
 		try {
 			setLoading(true);
 			setError(null);
 			await logout();
+			setSession(null);
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException)
