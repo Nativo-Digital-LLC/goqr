@@ -171,6 +171,7 @@ export default function MenuPage() {
 								<InfiniteHits
 									hitComponent={({ hit }) => (
 										<ProductCard
+											key={hit.$id}
 											data={hit as unknown as ProductProps}
 											color={establishment.mainHexColor}
 											preview
