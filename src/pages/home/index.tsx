@@ -1,4 +1,11 @@
-import { Navigation, Welcome, Information, Benefits, Prices } from "./screens";
+import {
+	Navigation,
+	Welcome,
+	Information,
+	Benefits,
+	Prices,
+	Services,
+} from "./screens";
 
 export default function HomePage() {
 	return (
@@ -9,58 +16,7 @@ export default function HomePage() {
 				<Information />
 				<Benefits />
 				<Prices />
-				<div className="min-h-screen bg-[#FFF] p-3">
-					<div>
-						<h2>QrCode menu service includes</h2>
-					</div>
-					<div>
-						<ul>
-							<li>
-								An access to your menu by the link (for social
-								networks, your website or google maps)
-							</li>
-							<li>
-								An access to your menu by QR code (for placement
-								on tables, windows, showcases, doors etc.)
-							</li>
-							<li>
-								QR code menu with unlimited amount of categories
-								and items
-							</li>
-							<li>
-								Both a mobile and a desktop version of the menu
-							</li>
-							<li>Unlimited amount of viewings for your menu</li>
-							<li>An ability to remotely edit your menu</li>
-							<li>
-								An ability to add employees to manage your menu
-							</li>
-							<li>
-								An ability to add several places into your
-								profile, to easily manage a chain of restaurants
-							</li>
-							<li>
-								An ability to hide menu positions with one click
-							</li>
-							<li>"Temporary unavailable" feature</li>
-							<li>"Old price/New Price" feature</li>
-							<li>
-								An ability to create a multi language QR code
-								menu
-							</li>
-							<li>
-								Unlimited photos and description loading for
-								your QR code menu
-							</li>
-							<li>
-								Additional restaurant information feature
-								(Address, Phone number, Map, Wi-Fi password)
-							</li>
-							<li>QR code generator for your menu</li>
-							<li>Unlimited number of QR code scans</li>
-						</ul>
-					</div>
-				</div>
+				<Services />
 				<div className="min-h-screen bg-[#FFF] p-3">
 					<div>
 						<h2>QRCode menu FAQ</h2>
