@@ -49,6 +49,7 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		},
 		body: JSON.stringify({
 			...data,
+			photoUrl,
 			$id
 		})
 	});
@@ -82,6 +83,7 @@ export async function updateProduct(id: string,  {photo, ...data }: Partial<Prod
 		},
 		body: JSON.stringify([{
 			...data,
+			...(photoUrl && { photoUrl }),
 			$id: id
 		}])
 	});
