@@ -34,7 +34,7 @@ export default function HomeContainer({
 					</div>
 				</div>
 			</div>
-			<div className="flex-grow flex">{children}</div>
+			<div className="flex-grow flex flex-col">{children}</div>
 			{/* FOOTER */}
 			<div
 				className={`${isAuth && "bg-[--primary]"} flex justify-center`}
