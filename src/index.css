@@ -25,6 +25,23 @@
 	position: relative;
 }
 
+.landing-page .ant-checkbox-checked .ant-checkbox-inner {
+	background-color: var(--secondary) !important;
+	border-color: var(--secondary) !important;
+}
+
+.landing-page
+	:where(.css-dev-only-do-not-override-5wsri9).ant-checkbox-wrapper:not(
+		.ant-checkbox-wrapper-disabled
+	):hover
+	.ant-checkbox-inner,
+:where(.css-dev-only-do-not-override-5wsri9).ant-checkbox:not(
+		.ant-checkbox-disabled
+	):hover
+	.ant-checkbox-inner {
+	border-color: var(--secondary);
+}
+
 .hide-scrollbar-y {
 	scrollbar-width: none !important;
 }
