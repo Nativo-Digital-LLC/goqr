@@ -19,7 +19,6 @@
 	color: var(--text);
 	display: flex;
 	flex-direction: column;
-	min-width: 100vw;
 	overflow: hidden;
 }
 

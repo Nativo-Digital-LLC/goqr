@@ -4,9 +4,11 @@ export default function BenefitCard(props: BenefitCardProps) {
 	const { title, description, image, alt } = props;
 
 	return (
-		<div className="relative bg-[--tertiary] flex justify-between items-center px-[30px] py-[20px] rounded-[6px] shadow-md shadow-[#00000020] mt-[40px]">
+		<div className="sm:max-w-[650px] relative bg-[--tertiary] flex justify-between items-center px-[30px] pt-[20px] pb-[30px] rounded-[6px] shadow-md shadow-[#00000020] mt-[40px]">
 			<div className="z-[1] mr-[32px] sm:w-[60%]">
-				<h3 className="text-[22px] font-[700] mb-[20px]">{title}</h3>
+				<h3 className="sm:text-[25px] text-[22px] font-[700] mb-[10px] leading-[28px]">
+					{title}
+				</h3>
 				<div>
 					{description.map((item, index) => (
 						<span className="block mb-[15px]" key={index}>

@@ -8,7 +8,7 @@ export default function Footer() {
 				>
 					<b className="z-[2] relative">GoQr</b>
 				</a>
-				<div className="flex flex-col text-[11px]">
+				<div className="flex flex-col text-[11px] md:text-[14px]">
 					<a href="/" className="my-[10px]">
 						Terms of Service
 					</a>
@@ -17,7 +17,7 @@ export default function Footer() {
 					</span>
 				</div>
 			</div>
-			<div className="flex flex-col items-end text-[15px]">
+			<div className="flex flex-col items-end text-[15px] md:text-[17px]">
 				<a href="/">Contacts</a>
 				<a href="/" className="flex justify-center items-center">
 					<svg
