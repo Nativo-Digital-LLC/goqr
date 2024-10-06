@@ -10,7 +10,7 @@ import {
 
 export default function HomePage() {
 	return (
-		<HomeContainer>
+		<HomeContainer defaultBackgroundColor="--tertiary">
 			<Welcome />
 			<Information />
 			<Benefits />

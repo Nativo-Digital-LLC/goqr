@@ -9,7 +9,7 @@ interface HomeContainerProps {
 }
 
 export default function HomeContainer(props: HomeContainerProps) {
-	const { children, defaultBackgroundColor } = props;
+	const { children, defaultBackgroundColor, navBackgroundColor } = props;
 	return (
 		<div
 			className={`landing-page bg-[${
@@ -19,8 +19,8 @@ export default function HomeContainer(props: HomeContainerProps) {
 			{/* NAVIGATION */}
 			<div
 				className={`md:relative md:z-[2] py-4 flex justify-center ${
-					defaultBackgroundColor
-						? "bg-[" + defaultBackgroundColor + "]"
+					navBackgroundColor
+						? "bg-[" + navBackgroundColor + "]"
 						: "bg-[--primary]"
 				}`}
 			>
