@@ -2,10 +2,7 @@ import HomeContainer from "./containers/HomeContainer";
 
 export default function NotFoundPage() {
 	return (
-		<HomeContainer
-			navBackgroundColor="--tertiary"
-			footerBackgroundColor="--tertiary"
-		>
+		<HomeContainer defaultBackgroundColor="--tertiary">
 			<div className="flex flex-col justify-center items-center flex-1">
 				<div className="bg-[--tertiary] w-full flex-grow flex flex-col mt-[50px] items-center">
 					<h1 className="md:text-[100px] text-[60px] font-[700]">

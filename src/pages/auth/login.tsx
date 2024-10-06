@@ -22,7 +22,7 @@ export default function LoginPage() {
 	}, [session, navigate]);
 
 	return (
-		<HomeContainer isAuth>
+		<HomeContainer defaultBackgroundColor="--primary">
 			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px] px-[10px]">
 				<div className="max-w-[450px] w-full">
 					<div className="p-[30px] bg-[--tertiary] rounded-[15px] shadow-md shadow-[#00000030]">

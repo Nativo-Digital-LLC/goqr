@@ -5,16 +5,23 @@ interface HomeContainerProps {
 	children: ReactNode;
 	navBackgroundColor?: string;
 	footerBackgroundColor?: string;
+	defaultBackgroundColor?: string;
 }
 
 export default function HomeContainer(props: HomeContainerProps) {
-	const { children, navBackgroundColor, footerBackgroundColor } = props;
+	const { children, defaultBackgroundColor } = props;
 	return (
-		<div className={`landing-page`}>
+		<div
+			className={`landing-page bg-[${
+				defaultBackgroundColor ? defaultBackgroundColor : "--primary"
+			}]`}
+		>
 			{/* NAVIGATION */}
 			<div
 				className={`md:relative md:z-[2] py-4 flex justify-center ${
-					navBackgroundColor ? navBackgroundColor : "bg-[--primary]"
+					defaultBackgroundColor
+						? "bg-[" + defaultBackgroundColor + "]"
+						: "bg-[--primary]"
 				}`}
 			>
 				<div className="flex justify-between max-w-[890px] w-full px-[20px]">
@@ -37,12 +44,12 @@ export default function HomeContainer(props: HomeContainerProps) {
 					</div>
 				</div>
 			</div>
-			<div className="flex-grow flex flex-col">{children}</div>
+			<div className={`flex-grow flex flex-col`}>{children}</div>
 			{/* FOOTER */}
 			<div
 				className={`${
-					footerBackgroundColor
-						? footerBackgroundColor
+					defaultBackgroundColor
+						? "bg-[" + defaultBackgroundColor + "]"
 						: "bg-[--primary]"
 				} flex justify-center`}
 			>

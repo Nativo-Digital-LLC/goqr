@@ -12,7 +12,7 @@ export default function RegisterPage() {
 	const [register, loading] = useRegister();
 
 	return (
-		<HomeContainer isAuth>
+		<HomeContainer defaultBackgroundColor="--primary">
 			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px] px-[10px]">
 				<div className="max-w-[450px] w-full">
 					<div className="p-[30px] bg-[--tertiary] rounded-[15px] shadow-md shadow-[#00000030]">
@@ -31,7 +31,12 @@ export default function RegisterPage() {
 							<Form.Item
 								label="Nombre"
 								name="name"
-								rules={[{ required: true, message: 'Ingresa tu nombre' }]}
+								rules={[
+									{
+										required: true,
+										message: "Ingresa tu nombre",
+									},
+								]}
 								className="font-[500]"
 							>
 								<Input
@@ -69,10 +74,17 @@ export default function RegisterPage() {
 								label="Contraseña"
 								name="password"
 								rules={[
-									{ required: true, message: 'Ingresa una contraseña' },
-									{ min: 8, message: 'La contraseña debe tener 8 caracteres o mas' }
+									{
+										required: true,
+										message: "Ingresa una contraseña",
+									},
+									{
+										min: 8,
+										message:
+											"La contraseña debe tener 8 caracteres o mas",
+									},
 								]}
-								validateTrigger='onBlur'
+								validateTrigger="onBlur"
 								className="font-[500]"
 							>
 								<Input.Password
@@ -84,7 +96,13 @@ export default function RegisterPage() {
 							<Form.Item
 								name="accepted"
 								valuePropName="checked"
-								rules={[{ required: true, message: 'Debes aceptar los términos y condiciones para crear una cuenta' }]}
+								rules={[
+									{
+										required: true,
+										message:
+											"Debes aceptar los términos y condiciones para crear una cuenta",
+									},
+								]}
 								className="mt-[30px]"
 							>
 								<Checkbox className="text-[14px] font-[500]">
