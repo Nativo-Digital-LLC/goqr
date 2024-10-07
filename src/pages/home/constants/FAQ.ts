@@ -1,10 +1,9 @@
 const faq = [
-	"I already have menus made of paper, why is your digital menu better?",
-	"I already have a QR code menu with a PDF file, how is your digital menu different from this?",
-	"Do I have to call or to message yo uevery time when I want to change something at my QR code menu?",
-	"Where can I see what your QR code menu looks like?",
-	"Is it possible to try your digital menu for free first?",
-	"I want to change the name of my restaurant, cafe or bar, but I don’t want to print new QR codes for the menu, what should I do?",
+	"Ya tengo menús hechos en papel, ¿por qué es mejor tu menú digital?",
+	"Ya tengo un menú en código QR con un archivo PDF, ¿en qué se diferencia tu menú digital de este?",
+	"¿Tengo que llamarte o enviarte un mensaje cada vez que quiero cambiar algo en el menú de mi código QR?",
+	"¿Dónde puedo ver cómo se ve su menú de código QR?",
+	"¿Es posible probar primero tu menú digital gratis?"
 ];
 
 export default faq;
