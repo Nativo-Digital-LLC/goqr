@@ -63,12 +63,12 @@ export default function HomeContainer(props: HomeContainerProps) {
 								<b className="z-[2] relative">GoQr</b>
 							</Link>
 							<div className="flex flex-col text-[11px] md:text-[14px]">
-								<Link to="/terms" className="my-[10px]">
+								<Link to="/terms" className="my-[4px]">
 									Terminos del servicio
 								</Link>
-								<span className="opacity-[0.5]">
-									© 2024 All rights reserved
-								</span>
+								<Link to="/privacy-policies" className="my-[4px]">
+									Políticas de privacidad
+								</Link>
 							</div>
 						</div>
 						<div className="flex flex-col items-end text-[15px] md:text-[17px]">
