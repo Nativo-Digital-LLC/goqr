@@ -2,7 +2,10 @@ import HomeContainer from "./containers/HomeContainer";
 
 export default function TermsPage() {
 	return (
-		<HomeContainer defaultBackgroundColor="--primary">
+		<HomeContainer
+			defaultBackgroundColor="--tertiary"
+			navBackgroundColor="--tertiary"
+		>
 			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px] px-[10px]">
 				<div className="max-w-[890px] w-full">
 					<h1 className="text-center text-[25px] font-[700] mb-[30px]">
