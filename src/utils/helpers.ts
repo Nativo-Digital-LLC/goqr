@@ -133,7 +133,8 @@ export async function uploadFile(file: File) {
 
 	const url = await storage.getFilePreview(
 		import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-		$id
+		$id,
+		720
 	);
 
 	return url;
