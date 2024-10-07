@@ -13,7 +13,7 @@ export default function PriceCard(props: PriceCardProps) {
 			className={`${defaultStyles} pt-[20px] pb-[30px] mb-[20px] shadow-md shadow-[#00000030] rounded-[25px] flex flex-col justify-between items-center sm:mb-[0px]`}
 		>
 			<div>
-				<div className="mb-[20px]">
+				<div className="mb-[20px] text-center">
 					<span className="font-[700] text-[12px]">{title}</span>
 				</div>
 				<div className="flex justify-center items-center">
@@ -24,11 +24,11 @@ export default function PriceCard(props: PriceCardProps) {
 								: "text-[--secondary]"
 						} font-[500] text-[25px] flex items-center`}
 					>
-						$<b className="text-[65px]">
-							{(price > 1000)
-								? Math.round(price / 1000) + 'K'
-								: price
-							}
+						$
+						<b className="text-[65px]">
+							{price > 1000
+								? Math.round(price / 1000) + "K"
+								: price}
 						</b>
 					</span>
 				</div>
