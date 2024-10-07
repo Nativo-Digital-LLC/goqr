@@ -129,30 +129,26 @@ export default function RegisterPage() {
 							>
 								Crear Cuenta
 							</Button>
-							{import.meta.env.DEV && (
-								<>
-									<div className="flex items-center my-[10px]">
-										<div className="h-[1px] bg-[--border] w-full" />
-										<span className="text-[--border] pb-[3px] mx-[10px]">
-											o
-										</span>
-										<div className="h-[1px] bg-[--border] w-full" />
-									</div>
-									<Button
-										type="primary"
-										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-										onClick={() => authWithGoogle('register')}
-										loading={loadingOauth2}
-									>
-										<img
-											className="h-[20px] w-[20px]"
-											src={GoogleIcon}
-											alt="Sign in with google"
-										/>
-										Registrarse con Google
-									</Button>
-								</>
-							)}
+							<div className="flex items-center my-[10px]">
+								<div className="h-[1px] bg-[--border] w-full" />
+								<span className="text-[--border] pb-[3px] mx-[10px]">
+									o
+								</span>
+								<div className="h-[1px] bg-[--border] w-full" />
+							</div>
+							<Button
+								type="primary"
+								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+								onClick={() => authWithGoogle('register')}
+								loading={loadingOauth2}
+							>
+								<img
+									className="h-[20px] w-[20px]"
+									src={GoogleIcon}
+									alt="Sign in with google"
+								/>
+								Registrarse con Google
+							</Button>
 							{oauth2Error && typeof oauth2Error === 'string' && (
 								<Alert
 									message={oauth2Error}
