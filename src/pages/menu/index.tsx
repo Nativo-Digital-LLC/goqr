@@ -79,10 +79,12 @@ export default function MenuPage() {
 	useEffect(() => {
 		if (selected.subcategoryId) {
 			const div = document.getElementById('main_container');
-			div!.scrollTo({
-				top: 200,
-				behavior: 'smooth'
-			});
+			if (div) {
+				div.scrollTo({
+					top: 200,
+					behavior: 'smooth'
+				});
+			}
 		}
 	}, [selected?.subcategoryId]);
 

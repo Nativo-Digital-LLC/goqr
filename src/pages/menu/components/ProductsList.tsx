@@ -1,4 +1,4 @@
-import { useMemo, Fragment } from 'react';
+import { useMemo, Fragment, useEffect } from 'react';
 import { Button, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -37,6 +37,13 @@ export const ProductsList = (props: ProductsListProps) => {
 			.filter((product) => product.subcategoryId === subcategoryId)
 			.sort((a, b) => a.order - b.order);
 	}, [allProducts, categoryId, subcategoryId]);
+
+	useEffect(() => {
+		for(const product of allProducts) {
+			const img = new Image();
+			img.src = product.photoUrl;
+		}
+	}, [allProducts]);
 
 	if (!show) {
 		return <></>;
