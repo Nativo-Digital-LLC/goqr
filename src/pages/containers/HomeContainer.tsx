@@ -25,12 +25,12 @@ export default function HomeContainer(props: HomeContainerProps) {
 				}`}
 			>
 				<div className="flex justify-between max-w-[890px] w-full px-[20px]">
-					<a
-						href="/"
+					<Link
+						to="/"
 						className={`text-[25px] relative before:content-[''] before:absolute before:bg-[--secondary] before:h-[7px] before:w-[75px] before:z-[1] before:bottom-[7px] before:left-[-3px]`}
 					>
 						<b className="z-[2] relative">GoQr</b>
-					</a>
+					</Link>
 					<div className="items-center flex">
 						<Link to="/login" className="mx-5">
 							Ingresar
@@ -56,12 +56,12 @@ export default function HomeContainer(props: HomeContainerProps) {
 				<div className="max-w-[890px] w-full">
 					<div className="flex justify-between items-center px-[20px] pb-[40px]">
 						<div className="flex flex-col justify-between">
-							<a
-								href="/"
+							<Link
+								to="/"
 								className={`text-[25px] relative before:content-[''] before:absolute before:bg-[--secondary] before:h-[7px] before:w-[75px] before:z-[1] before:bottom-[7px] before:left-[-3px]`}
 							>
 								<b className="z-[2] relative">GoQr</b>
-							</a>
+							</Link>
 							<div className="flex flex-col text-[11px] md:text-[14px]">
 								<Link to="/terms" className="my-[10px]">
 									Terminos del servicio
@@ -72,7 +72,7 @@ export default function HomeContainer(props: HomeContainerProps) {
 							</div>
 						</div>
 						<div className="flex flex-col items-end text-[15px] md:text-[17px]">
-							<a href="/">Contacto</a>
+							<span>Contacto</span>
 							<a
 								href="mailto:contacto@goqr.com.do"
 								className="flex justify-center items-center"

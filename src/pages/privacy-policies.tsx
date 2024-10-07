@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import HomeContainer from "./containers/HomeContainer";
 
 export default function PrivacyPoliciesPage() {
@@ -10,7 +12,7 @@ export default function PrivacyPoliciesPage() {
 
 					<h4>1. Información General</h4>
 					<p>
-						GoQR <a href="https://goqr.com.do">(https://goqr.com.do)</a> se compromete a proteger la privacidad de sus usuarios. Esta política de privacidad describe cómo recopilamos, utilizamos y protegemos la información personal que los usuarios proporcionan al usar nuestro servicio.
+						GoQR <Link to="https://goqr.com.do">(https://goqr.com.do)</Link> se compromete a proteger la privacidad de sus usuarios. Esta política de privacidad describe cómo recopilamos, utilizamos y protegemos la información personal que los usuarios proporcionan al usar nuestro servicio.
 					</p>
 					<br />
 

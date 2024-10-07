@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import HomeContainer from "./containers/HomeContainer";
 
 export default function NotFoundPage() {
@@ -14,12 +16,12 @@ export default function NotFoundPage() {
 					<p className="md:text-[22px] text-[18px]">
 						Página no encontrada
 					</p>
-					<a
-						href="/"
+					<Link
+						to="/"
 						className="mt-[40px] underline underline-offset-[4px] decoration-[3px] decoration-[--secondary] font-[500]"
 					>
 						Volver al incio
-					</a>
+					</Link>
 				</div>
 			</div>
 		</HomeContainer>
