@@ -165,7 +165,7 @@ export default function RegisterPage() {
 								Podrás encontrar nuestros Términos de Servicio
 								en este{" "}
 								<Link
-									to="/"
+									to="/terms"
 									className="text-[--secondary] hover:text-[--secondary]"
 								>
 									enlace

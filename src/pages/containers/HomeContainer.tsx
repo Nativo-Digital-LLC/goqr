@@ -63,9 +63,9 @@ export default function HomeContainer(props: HomeContainerProps) {
 								<b className="z-[2] relative">GoQr</b>
 							</a>
 							<div className="flex flex-col text-[11px] md:text-[14px]">
-								<a href="/" className="my-[10px]">
+								<Link to="/terms" className="my-[10px]">
 									Terminos del servicio
-								</a>
+								</Link>
 								<span className="opacity-[0.5]">
 									© 2024 All rights reserved
 								</span>

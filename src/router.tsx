@@ -8,11 +8,21 @@ import DashboardPage from "./pages/dashboard";
 import VerifyEmailPage from "./pages/verify-email";
 import NotFoundPage from "./pages/404";
 import QrPage from "./pages/menu/qr";
+import TermsPage from "./pages/terms";
+import PrivacyPoliciesPage from "./pages/privacy-policies";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <HomePage />,
+	},
+	{
+		path: "/terms",
+		element: <TermsPage />
+	},
+	{
+		path: 'privacy-policies',
+		element: <PrivacyPoliciesPage />
 	},
 	{
 		path: "/login",
