@@ -76,6 +76,16 @@ export default function MenuPage() {
 		handleUrlChanges('categoryId', category.$id);
 	}, [establishment]);
 
+	useEffect(() => {
+		if (selected.subcategoryId) {
+			const div = document.getElementById('main_container');
+			div!.scrollTo({
+				top: 200,
+				behavior: 'smooth'
+			});
+		}
+	}, [selected?.subcategoryId]);
+
 	if (error) {
 		return <p>Error, {JSON.stringify(error, null, 4)}</p>
 	}
@@ -122,8 +132,7 @@ export default function MenuPage() {
 						height: '100vh',
 						backgroundColor: '#FFF',
 						display: 'flex',
-						flexDirection: 'column',
-
+						flexDirection: 'column'
 					}}
 				>
 					<MenuHeader
@@ -143,6 +152,7 @@ export default function MenuPage() {
 							overflowY: 'scroll',
 						}}
 						className='hide-scrollbar-y'
+						id='main_container'
 					>
 						<EstablishmentInfo
 							establishment={establishment}

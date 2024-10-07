@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, ScrollRestoration } from "react-router-dom";
 
 interface HomeContainerProps {
 	children: ReactNode;
@@ -113,6 +113,8 @@ export default function HomeContainer(props: HomeContainerProps) {
 					</div>
 				</div>
 			</div>
+
+			<ScrollRestoration />
 		</div>
 	);
 }
