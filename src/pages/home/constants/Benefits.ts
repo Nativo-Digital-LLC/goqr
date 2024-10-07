@@ -1,6 +1,6 @@
 import {
 	Benefits1,
-	Benefits2,
+	// Benefits2,
 	Benefits3,
 	Benefits4,
 } from "../../../constants/LandingImages";
@@ -9,36 +9,36 @@ import { BenefitCardProps } from "../types/Benefit";
 
 const benefits: BenefitCardProps[] = [
 	{
-		title: "Enhancing Customer Experience",
+		title: "Mejorar la experiencia del cliente",
 		description: [
-			"Working with digital menu is easier. Loading of the menu is faster. There is more useful information in digital menu.",
+			"Trabajar con menú digital es más fácil. La carga del menú es más rápida. Hay más información útil en el menú digital.",
 		],
 		image: Benefits1,
 		alt: "QR code menu, enhancing customer experience",
 	},
+	// {
+	// 	title: "Atraer nuevos clientes",
+	// 	description: [
+	// 		"Los huéspedes pueden dejar sus comentarios directamente desde el menú del código QR. Cuantas más reseñas, más huéspedes nuevos provienen de las reseñas.",
+	// 		"Convenient menu language switch - more guests-foreigners.",
+	// 	],
+	// 	image: Benefits2,
+	// 	alt: "QR code menu, attracting new customers",
+	// },
 	{
-		title: "Attracting new customers",
+		title: "El menú con código QR aumenta las ventas",
 		description: [
-			"Guests are able to leave their reviews directly from the QR code menu. The more reviews - the more new guests are coming from reviews.",
-			"Convenient menu language switch - more guests-foreigners.",
-		],
-		image: Benefits2,
-		alt: "QR code menu, attracting new customers",
-	},
-	{
-		title: "QR code menu increases sales",
-		description: [
-			"Digital QR code menu sells more. Photos increases the appetite - the appetite increases the average check.",
-			"Making an order becomes easier. Less time to wonder, more spontaneous purchases - higher average check.",
+			"El menú con código QR digital vende más. Las fotos aumentan el apetito: el apetito aumenta el cheque promedio.",
+			"Hacer un pedido se vuelve más fácil. Menos tiempo para preguntarse, más compras espontáneas y mayor cheque promedio.",
 		],
 		image: Benefits3,
 		alt: "QR code menu, increases sales",
 	},
 	{
-		title: "Saving business resources",
+		title: "Ahorrar recursos",
 		description: [
-			"Our QR code menu is easy to edit. Higher relevance of the menu, less time and money spent on updating the menu.",
-			"Our QR menu works right away. No need to install applications, buy terminals, wait for confirmation etc.",
+			"Nuestro menú de códigos QR es fácil de editar. Mayor relevancia del menú, menos tiempo y dinero gastado en actualizar el menú.",
+			"Nuestro menú QR funciona de inmediato. No es necesario instalar aplicaciones, comprar terminales, esperar confirmación, etc.",
 		],
 		image: Benefits4,
 		alt: "QR code menu, enhancing customer experience",

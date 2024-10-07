@@ -33,13 +33,13 @@ export default function HomeContainer(props: HomeContainerProps) {
 					</a>
 					<div className="items-center flex">
 						<Link to="/login" className="mx-5">
-							Login
+							Ingresar
 						</Link>
 						<Link
 							to="/register"
 							className="bg-[--secondary] px-4 py-[6px] rounded-[7px] text-[--tertiary]"
 						>
-							Create menu
+							Crear menú
 						</Link>
 					</div>
 				</div>
@@ -64,7 +64,7 @@ export default function HomeContainer(props: HomeContainerProps) {
 							</a>
 							<div className="flex flex-col text-[11px] md:text-[14px]">
 								<a href="/" className="my-[10px]">
-									Terms of Service
+									Terminos del servicio
 								</a>
 								<span className="opacity-[0.5]">
 									© 2024 All rights reserved
@@ -72,7 +72,7 @@ export default function HomeContainer(props: HomeContainerProps) {
 							</div>
 						</div>
 						<div className="flex flex-col items-end text-[15px] md:text-[17px]">
-							<a href="/">Contacts</a>
+							<a href="/">Contacto</a>
 							<a
 								href="mailto:contacto@goqr.com.do"
 								className="flex justify-center items-center"

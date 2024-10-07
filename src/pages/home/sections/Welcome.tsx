@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	MenuExample1Jpg,
 	MenuExample1Webp,
@@ -10,18 +11,18 @@ export default function Welcome() {
 		<div className="md:h-screen md:px-[20px] h-auto bg-[--primary] py-4 px-[50px] flex justify-center">
 			<div className="md:flex md:justify-between md:items-center max-w-[890px]">
 				<div className="md:max-h-full md:items-start md:text-left max-h-[200px] text-center mb-[100px] flex justify-center items-center flex-col">
-					<h1 className="md:text-[43px] md:max-w-[350px] sm:text-[40px] sm:max-w-[300px] max-w-[270px] text-[35px] leading-none font-[500] mb-[50px]">
+					<h1 className="md:text-[43px] md:max-w-[350px] sm:text-[40px] sm:max-w-[300px] max-w-[270px] text-[35px] leading-none font-[500] mb-[50px] whitespace-nowrap">
 						<b className="text-[--secondary] block">
-							QR Code Menu,
+							Tu Menú QR,
 						</b>
-						{"\nthat works for you"}
+						Sin complicaciones
 					</h1>
-					<a
-						href="/"
+					<Link
+						to="/register"
 						className="bg-[--secondary] px-4 py-[4px] rounded-[7px] text-[--tertiary] text-[19px] font-[500]"
 					>
-						Create menu
-					</a>
+						Crear menú
+					</Link>
 				</div>
 				<div className="flex max-h-[200px] md:w-[50%] md:max-h-full">
 					<div className="rotate-[-4deg] translate-y-[-30px] z-[2] shadow-slate-600 drop-shadow-lg">

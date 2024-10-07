@@ -6,7 +6,7 @@ export default function Information() {
 			<div className="max-w-[890px]">
 				<div className="text-center">
 					<h2 className="md:text-[35px] sm:text-[30px] text-[25px] font-[700] mb-[40px]">
-						QrCode menu
+						GoQR Menú
 					</h2>
 				</div>
 				<div className="flex flex-col-reverse justify-center items-center sm:flex-row sm:pt-[20px]">
@@ -22,22 +22,16 @@ export default function Information() {
 					</div>
 					<div className="text-justify text-[18px] font-[400] sm:ml-[60px] md:ml-[13%] max-w-[480]">
 						<p className="mb-[30px]">
-							Our menu service includes a whole range of functions
-							for the restaurant, cafe or bar.
+							Nuestro servicio de menú incluye toda una gama de funciones para el restaurante, cafetería o bar.
 						</p>
 						<p className="mb-[30px]">
-							For your guests - this is a modern, easy to use QR
-							code menu.
+							Para sus invitados: este es un menú de código QR moderno y fácil de usar.
 						</p>
 						<p className="mb-[30px]">
-							For you - this is an digital platform built around
-							your QR code menu for improving a quality of
-							customer service and increasing sales.
+							Para usted, esta es una plataforma digital construida alrededor de su menú de códigos QR para mejorar la calidad del servicio al cliente y aumentar las ventas.
 						</p>
 						<p className="mb-[30px]">
-							No purchasing expensive terminals for you and no
-							application installation on your guests phones
-							needed for our digital menu to work.
+							No es necesario comprar terminales costosas ni instalar aplicaciones en los teléfonos de sus invitados para que nuestro menú digital funcione.
 						</p>
 					</div>
 				</div>

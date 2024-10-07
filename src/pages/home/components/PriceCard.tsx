@@ -1,3 +1,4 @@
+import { format } from "../../../utils/helpers";
 import { PriceCardProps } from "../types/Prices";
 
 export default function PriceCard(props: PriceCardProps) {
@@ -23,7 +24,12 @@ export default function PriceCard(props: PriceCardProps) {
 								: "text-[--secondary]"
 						} font-[500] text-[25px] flex items-center`}
 					>
-						$<b className="text-[65px]">{price}</b>
+						$<b className="text-[65px]">
+							{(price > 1000)
+								? Math.round(price / 1000) + 'K'
+								: price
+							}
+						</b>
 					</span>
 				</div>
 			</div>
@@ -32,7 +38,7 @@ export default function PriceCard(props: PriceCardProps) {
 					<span>{disclaimer}</span>
 				</div>
 				<div>
-					<span>Total amount is ${total}</span>
+					<span>Monto total ${format.cash(total)}</span>
 				</div>
 			</div>
 		</div>

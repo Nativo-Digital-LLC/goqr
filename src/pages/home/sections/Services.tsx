@@ -6,7 +6,7 @@ export default function Services() {
 		<div className="md:py-[80px] h-auto bg-[--tertiary] py-[40px] pt px-[20px] relative z-[3]">
 			<div className="text-center">
 				<h2 className="md:text-[35px] sm:text-[30px] text-[25px] font-[700] mb-[40px]">
-					QrCode menu service includes
+					¿Que incluye GoQR?
 				</h2>
 			</div>
 			<div>

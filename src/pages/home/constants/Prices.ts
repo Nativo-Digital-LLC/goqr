@@ -2,24 +2,24 @@ import { PriceCardProps } from "../types/Prices";
 
 const prices: PriceCardProps[] = [
 	{
-		title: "If paid monthly",
-		price: 10,
-		disclaimer: "Charged every month",
-		total: 10,
+		title: "Si pagas 1 mes",
+		price: 300,
+		disclaimer: "Facturado cada mes",
+		total: 300,
 		selected: false,
 	},
 	{
-		title: "If paid every 6 months",
-		price: 9.6,
-		disclaimer: "Charged every 6 months",
-		total: 57.6,
+		title: "Si pagas 1 año",
+		price: 210,
+		disclaimer: "Facturado cada 12 meses",
+		total: 2520,
 		selected: true,
 	},
 	{
-		title: "If paid annually",
-		price: 9,
-		disclaimer: "Charged every 12 months",
-		total: 108,
+		title: "Si pagas de por vida",
+		price: 9000,
+		disclaimer: "Un unico cargo",
+		total: 9000,
 		selected: false,
 	},
 ];
