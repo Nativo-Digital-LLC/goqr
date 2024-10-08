@@ -9,7 +9,6 @@ import GoogleIcon from "../../assets/images/icons/google-icon.svg";
 import HomeContainer from "../containers/HomeContainer";
 import { useSessionStore } from "../../store/session";
 import { AuthErrorType } from "../../types/Error";
-import { authWithGoogle } from "../../services/auth";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -22,7 +21,7 @@ export default function LoginPage() {
 	}, [location]);
 
 	const session = useSessionStore(({ session }) => session);
-	const [login, loading, error] = useLogin();
+	const [login, loading, loginType, error] = useLogin();
 	const [loadingOauth2, oauth2Error] = useHandleOAuth2Session(status);
 
 	useEffect(() => {
@@ -43,8 +42,14 @@ export default function LoginPage() {
 							requiredMark={false}
 							layout="vertical"
 							onFinish={({ email, password }) =>
-								login(email, password, () =>
-									navigate("/dashboard")
+								login(
+									'EmailAndPassword',
+									{
+										email,
+										password,
+										page: 'login'
+									},
+									() => navigate("/dashboard")
 								)
 							}
 						>
@@ -99,7 +104,7 @@ export default function LoginPage() {
 							<Button
 								type="primary"
 								htmlType="submit"
-								loading={loading}
+								loading={loading && loginType === 'EmailAndPassword'}
 								className="mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
 							>
 								Acceder
@@ -134,8 +139,8 @@ export default function LoginPage() {
 							<Button
 								type="primary"
 								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-								onClick={() => authWithGoogle('login')}
-								loading={loadingOauth2}
+								onClick={() => login('Google', { page: 'login' })}
+								loading={loadingOauth2 || (loading && loginType === 'Google')}
 							>
 								<img
 									className="h-[20px] w-[20px]"
@@ -149,6 +154,7 @@ export default function LoginPage() {
 								<Alert
 									message={oauth2Error}
 									type="error"
+									style={{ marginTop: 20 }}
 									showIcon
 								/>
 							)}

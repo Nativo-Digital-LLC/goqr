@@ -34,11 +34,31 @@ export async function authWithGoogle(path: 'login' | 'register') {
 	);
 }
 
+export async function authWithApple(path: 'login' | 'register') {
+	const host = (import.meta.env.DEV)
+		? 'http://localhost:5173'
+		: 'https://goqr.com.do';
+
+	await account.createOAuth2Session(
+		OAuthProvider.Google,
+		`${host}/${path}?status=success`,
+		`${host}/${path}?status=failed`
+	);
+}
+
+
 export async function logout() {
 	const session = useSessionStore.getState().session;
-	if (session) {
-		await account.deleteSession(session.$id);
+	if (!session) {
+		return;
 	}
+
+	const { total, sessions } = await account.listSessions();
+	if (total === 0 || !sessions.find(({ $id }) => $id === session.$id)) {
+		return;
+	}
+
+	await account.deleteSession(session.$id);
 }
 
 export async function sendVerificationEmail() {

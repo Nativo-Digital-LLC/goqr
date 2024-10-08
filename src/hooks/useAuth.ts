@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { AppwriteException } from 'appwrite';
 
 import {
+	authWithApple,
+	authWithGoogle,
 	createAccount,
 	getCurrentSession,
 	login,
@@ -61,34 +63,61 @@ export const useRegister = (): UseRegisterType => {
 	return [handleRegister, loading, error];
 }
 
+type LoginType = 'Google' | 'Apple' | 'EmailAndPassword';
+interface LoginParamsProps {
+	email?: string;
+	password?: string;
+	page: 'login' | 'register';
+}
+
 type UseLoginType = [
 	(
-		email: string,
-		password: string,
+		type: LoginType,
+		params?: LoginParamsProps,
 		onDone?: () => void
 	) => void,
 	boolean,
+	LoginType | null,
 	AppwriteException | null
 ];
 
 export const useLogin = (): UseLoginType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
+	const [type, setType] = useState<LoginType | null>(null);
 	const setSession = useSessionStore(({ setSession }) => setSession);
 
-	async function handleLogin(email: string, password: string, onDone?: () => void) {
+	async function handleLogin(
+		type: LoginType,
+		params?: LoginParamsProps,
+		onDone?: () => void
+	) {
 		try {
+			setType(type);
 			setLoading(true);
 			setError(null);
-			const session = await login(
-				email,
-				password
-			);
-			const user = await account.get();
-			setSession({
-				...session,
-				user
-			});
+
+			if (type === 'EmailAndPassword') {
+				const session = await login(
+					params!.email!,
+					params!.password!
+				);
+				const user = await account.get();
+
+				setSession({
+					...session,
+					user
+				});
+			}
+
+			if (type === 'Google') {
+				await authWithGoogle(params!.page);
+			}
+
+			if (type === 'Apple') {
+				await authWithApple(params!.page);
+			}
+
 			onDone?.();
 		} catch (error) {
 			setError(error as AppwriteException)
@@ -97,7 +126,7 @@ export const useLogin = (): UseLoginType => {
 		}
 	}
 
-	return [handleLogin, loading, error];
+	return [handleLogin, loading, type, error];
 }
 
 type UseHandleOAuth2SessionType = [
