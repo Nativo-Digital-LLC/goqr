@@ -11,7 +11,11 @@ export const MenuFooter = ({ domain }: { domain: string; }) => (
 			display: 'flex',
 			justifyContent: 'space-around',
 			alignItems: 'center',
-			padding: '10px 0'
+			padding: '10px 0',
+			position: 'sticky',
+			bottom: 0,
+			zIndex: 100,
+			backgroundColor: '#FFF'
 		}}
 	>
 		<Button

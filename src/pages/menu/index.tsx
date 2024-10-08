@@ -141,7 +141,6 @@ export default function MenuPage() {
 					style={{
 						maxWidth: 560,
 						margin: '0 auto',
-						height: '100vh',
 						backgroundColor: '#FFF',
 						display: 'flex',
 						flexDirection: 'column'
@@ -160,8 +159,7 @@ export default function MenuPage() {
 							flex: 1,
 							zIndex: 100,
 							backgroundColor: '#FFF',
-							padding: 20,
-							overflowY: 'scroll',
+							padding: 20
 						}}
 						className='hide-scrollbar-y'
 						id='main_container'
