@@ -159,7 +159,7 @@ export default function LoginPage() {
 									/>
 									Ingresar con Google
 								</Button>
-								{isAppleDevice && (
+								{isAppleDevice && import.meta.env.DEV && (
 									<Button
 										type="primary"
 										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
