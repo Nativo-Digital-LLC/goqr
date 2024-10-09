@@ -139,3 +139,5 @@ export async function uploadFile(file: File) {
 
 	return url;
 }
+
+export const isAppleDevice = /iPhone|iPad|iPod|Macintosh|MacIntel/.test(navigator.userAgent);

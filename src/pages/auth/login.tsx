@@ -10,6 +10,7 @@ import AppleIcon from "../../assets/images/icons/apple-icon.svg";
 import HomeContainer from "../containers/HomeContainer";
 import { useSessionStore } from "../../store/session";
 import { AuthErrorType } from "../../types/Error";
+import { isAppleDevice } from "../../utils/helpers";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -158,7 +159,7 @@ export default function LoginPage() {
 									/>
 									Ingresar con Google
 								</Button>
-								{import.meta.env.DEV && (
+								{isAppleDevice && (
 									<Button
 										type="primary"
 										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"

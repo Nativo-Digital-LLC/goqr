@@ -1,15 +1,15 @@
+import { useMemo } from "react";
 import { Alert, Button, Checkbox, Form, Input } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useHandleOAuth2Session, useRegister } from "../../hooks/useAuth";
+import { useHandleOAuth2Session, useLogin, useRegister } from "../../hooks/useAuth";
 
 import HomeContainer from "../containers/HomeContainer";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
 import AppleIcon from "../../assets/images/icons/apple-icon.svg";
 
-import { authWithGoogle } from "../../services/auth";
-import { useMemo } from "react";
+import { isAppleDevice } from "../../utils/helpers";
 
 export default function RegisterPage() {
 	const navigate = useNavigate();
@@ -23,6 +23,7 @@ export default function RegisterPage() {
 
 	const [register, loading] = useRegister();
 	const [loadingOauth2, oauth2Error] = useHandleOAuth2Session(status);
+	const [login, loadingLogin, loginType] = useLogin();
 
 	return (
 		<HomeContainer defaultBackgroundColor="--primary">
@@ -142,8 +143,8 @@ export default function RegisterPage() {
 								<Button
 									type="primary"
 									className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-									onClick={() => authWithGoogle("register")}
-									loading={loadingOauth2}
+									onClick={() => login('Google', { page: 'register' })}
+									loading={loginType === 'Google' && (loadingOauth2 || loadingLogin)}
 								>
 									<img
 										className="h-[20px] w-[20px]"
@@ -152,12 +153,12 @@ export default function RegisterPage() {
 									/>
 									Registrarse con Google
 								</Button>
-								{import.meta.env.DEV && (
+								{isAppleDevice && (
 									<Button
 										type="primary"
 										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-										// onClick={() => authWithGoogle("register")}
-										loading={loadingOauth2}
+										onClick={() => login("Apple", { page: "register" })}
+										loading={loginType === 'Apple' && (loadingOauth2 || loadingLogin)}
 									>
 										<img
 											className="w-[14px]"

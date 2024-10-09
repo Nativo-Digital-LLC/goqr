@@ -40,7 +40,7 @@ export async function authWithApple(path: 'login' | 'register') {
 		: 'https://goqr.com.do';
 
 	await account.createOAuth2Session(
-		OAuthProvider.Google,
+		OAuthProvider.Apple,
 		`${host}/${path}?status=success`,
 		`${host}/${path}?status=failed`
 	);
