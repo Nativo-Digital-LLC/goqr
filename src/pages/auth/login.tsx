@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useHandleOAuth2Session, useLogin } from "../../hooks/useAuth";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
+import AppleIcon from "../../assets/images/icons/apple-icon.svg";
 
 import HomeContainer from "../containers/HomeContainer";
 import { useSessionStore } from "../../store/session";
@@ -15,9 +16,9 @@ export default function LoginPage() {
 	const location = useLocation();
 	const status = useMemo(() => {
 		const params = new URLSearchParams(location.search);
-		const status = params.get('status');
+		const status = params.get("status");
 
-		return status as 'success' | 'failed' | undefined;
+		return status as "success" | "failed" | undefined;
 	}, [location]);
 
 	const session = useSessionStore(({ session }) => session);
@@ -43,11 +44,11 @@ export default function LoginPage() {
 							layout="vertical"
 							onFinish={({ email, password }) =>
 								login(
-									'EmailAndPassword',
+									"EmailAndPassword",
 									{
 										email,
 										password,
-										page: 'login'
+										page: "login",
 									},
 									() => navigate("/dashboard")
 								)
@@ -104,7 +105,9 @@ export default function LoginPage() {
 							<Button
 								type="primary"
 								htmlType="submit"
-								loading={loading && loginType === 'EmailAndPassword'}
+								loading={
+									loading && loginType === "EmailAndPassword"
+								}
 								className="mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
 							>
 								Acceder
@@ -136,21 +139,48 @@ export default function LoginPage() {
 								</span>
 								<div className="h-[1px] bg-[--border] w-full" />
 							</div>
-							<Button
-								type="primary"
-								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-								onClick={() => login('Google', { page: 'login' })}
-								loading={loadingOauth2 || (loading && loginType === 'Google')}
-							>
-								<img
-									className="h-[20px] w-[20px]"
-									src={GoogleIcon}
-									alt="Sign in with google"
-								/>
-								Iniciar con Google
-							</Button>
+							<div className="flex justify-between items-center gap-3">
+								<Button
+									type="primary"
+									className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+									onClick={() =>
+										login("Google", { page: "login" })
+									}
+									loading={
+										loadingOauth2 ||
+										(loading && loginType === "Google")
+									}
+								>
+									<img
+										className="h-[20px] w-[20px]"
+										src={GoogleIcon}
+										alt="Sign in with google"
+									/>
+									Ingresar con Google
+								</Button>
+								{import.meta.env.DEV && (
+									<Button
+										type="primary"
+										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+										onClick={() =>
+											login("Apple", { page: "login" })
+										}
+										loading={
+											loadingOauth2 ||
+											(loading && loginType === "Apple")
+										}
+									>
+										<img
+											className="w-[14px]"
+											src={AppleIcon}
+											alt="Sign in with apple"
+										/>
+										Ingresar con Apple
+									</Button>
+								)}
+							</div>
 
-							{oauth2Error && typeof oauth2Error === 'string' && (
+							{oauth2Error && typeof oauth2Error === "string" && (
 								<Alert
 									message={oauth2Error}
 									type="error"

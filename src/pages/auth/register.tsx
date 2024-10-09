@@ -6,6 +6,8 @@ import { useHandleOAuth2Session, useRegister } from "../../hooks/useAuth";
 import HomeContainer from "../containers/HomeContainer";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
+import AppleIcon from "../../assets/images/icons/apple-icon.svg";
+
 import { authWithGoogle } from "../../services/auth";
 import { useMemo } from "react";
 
@@ -14,9 +16,9 @@ export default function RegisterPage() {
 	const location = useLocation();
 	const status = useMemo(() => {
 		const params = new URLSearchParams(location.search);
-		const status = params.get('status');
+		const status = params.get("status");
 
-		return status as 'success' | 'failed' | undefined;
+		return status as "success" | "failed" | undefined;
 	}, [location]);
 
 	const [register, loading] = useRegister();
@@ -136,20 +138,37 @@ export default function RegisterPage() {
 								</span>
 								<div className="h-[1px] bg-[--border] w-full" />
 							</div>
-							<Button
-								type="primary"
-								className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-								onClick={() => authWithGoogle('register')}
-								loading={loadingOauth2}
-							>
-								<img
-									className="h-[20px] w-[20px]"
-									src={GoogleIcon}
-									alt="Sign in with google"
-								/>
-								Registrarse con Google
-							</Button>
-							{oauth2Error && typeof oauth2Error === 'string' && (
+							<div className="flex justify-between items-center gap-3">
+								<Button
+									type="primary"
+									className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+									onClick={() => authWithGoogle("register")}
+									loading={loadingOauth2}
+								>
+									<img
+										className="h-[20px] w-[20px]"
+										src={GoogleIcon}
+										alt="Sign up with google"
+									/>
+									Registrarse con Google
+								</Button>
+								{import.meta.env.DEV && (
+									<Button
+										type="primary"
+										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+										// onClick={() => authWithGoogle("register")}
+										loading={loadingOauth2}
+									>
+										<img
+											className="w-[14px]"
+											src={AppleIcon}
+											alt="Sign up with apple"
+										/>
+										Registrarse con Apple
+									</Button>
+								)}
+							</div>
+							{oauth2Error && typeof oauth2Error === "string" && (
 								<Alert
 									message={oauth2Error}
 									type="error"
