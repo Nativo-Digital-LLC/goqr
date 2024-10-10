@@ -58,6 +58,11 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 						id: ID.unique()
 					}))
 			);
+
+			extra.prices.forEach(({ label, price }, index) => {
+				form.setFieldValue(`variants[${index}].label`, label);
+				form.setFieldValue(`variants[${index}].price`, price);
+			});
 		}
 	}, [visible, extra, form]);
 
