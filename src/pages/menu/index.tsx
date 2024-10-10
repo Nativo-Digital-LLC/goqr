@@ -72,18 +72,6 @@ export default function MenuPage() {
 		if (category) {
 			handleUrlChanges('categoryId', category.$id);
 		}
-
-		const images = establishment
-			.categories
-			.map(({ subcategories }) => subcategories)
-			.flat()
-			.map(({ photoUrl }) => photoUrl)
-			.filter((image) => image !== null);
-
-		for(const image of images) {
-			const img = new Image();
-			img.src = image;
-		}
 	}, [establishment]);
 
 	useEffect(() => {
