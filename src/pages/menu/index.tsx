@@ -185,6 +185,7 @@ export default function MenuPage() {
 						<SearchBox
 							onChangeCapture={handleSearchInput}
 							onResetCapture={() => setSearch('')}
+							placeholder='Buscar'
 						/>
 						{search.length > 0 && (
 							<>
