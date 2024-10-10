@@ -189,7 +189,6 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 				<Form.Item
 					name='description'
 					label='Descripción'
-					rules={[{ required: true, message: 'Escriba una descripción' }]}
 				>
 					<Input.TextArea rows={4} />
 				</Form.Item>

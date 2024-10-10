@@ -104,7 +104,7 @@ export const ProductCard = (props: ProductCardProps) => {
 				preview={preview}
 			/>
 			<Title level={5} style={{ marginBottom: 0 }}>{data.name}</Title>
-			<Text>{data.description}</Text>
+			<Text>{data?.description}</Text>
 			{data.prices.length === 1 && (
 				<Title
 					level={4}
