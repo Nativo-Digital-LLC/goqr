@@ -8,7 +8,10 @@ import {
 
 import { ProductProps } from '../../../types/Product';
 import { format, ModalOpener$ } from '../../../utils/helpers';
-import { useChangeProductOrder, useDeleteProduct } from '../../../hooks/useProducts';
+import {
+	// useChangeProductOrder,
+	useDeleteProduct
+} from '../../../hooks/useProducts';
 import { ModalName } from '../../../types/Modals';
 
 const { Title, Text } = Typography;
@@ -34,7 +37,7 @@ export const ProductCard = (props: ProductCardProps) => {
 		onChange
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
-	const [changeOrder, changingOrder] = useChangeProductOrder();
+	// const [changeOrder, changingOrder] = useChangeProductOrder();
 
 	return (
 		<div style={{ position: 'relative' }}>
@@ -55,8 +58,8 @@ export const ProductCard = (props: ProductCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretUpOutlined />}
-							loading={changingOrder}
-							onClick={() => changeOrder(data.subcategoryId, data.$id, 'up', onChange)}
+							// loading={changingOrder}
+							// onClick={() => changeOrder(data.subcategoryId, data.$id, 'up', onChange)}
 						/>
 					)}
 
@@ -64,8 +67,8 @@ export const ProductCard = (props: ProductCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretDownOutlined />}
-							loading={changingOrder}
-							onClick={() => changeOrder(data.subcategoryId, data.$id, 'down', onChange)}
+							// loading={changingOrder}
+							// onClick={() => changeOrder(data.subcategoryId, data.$id, 'down', onChange)}
 						/>
 					)}
 
