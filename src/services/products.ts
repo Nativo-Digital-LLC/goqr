@@ -75,7 +75,7 @@ export async function updateProduct(id: string,  {photo, ...data }: Partial<Prod
 		}
 	);
 
-	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id&csvDelimiter=,', {
+	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id', {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
