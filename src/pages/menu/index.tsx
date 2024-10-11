@@ -131,7 +131,8 @@ export default function MenuPage() {
 						margin: '0 auto',
 						backgroundColor: '#FFF',
 						display: 'flex',
-						flexDirection: 'column'
+						flexDirection: 'column',
+						minHeight: '100vh'
 					}}
 				>
 					<MenuHeader
