@@ -13,6 +13,7 @@ interface SaveCategoryParams {
 	establishmentId: string;
 	name: string;
 	order?: number;
+	enableSubcategories?: boolean;
 }
 
 type UseSaveCategoryType = [
@@ -30,12 +31,13 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 			setLoading(true);
 			setError(null);
 			if (params.id) {
-				await updateCategoryName(params.id, params.name);
+				await updateCategoryName(params.id, params.name, params?.enableSubcategories);
 			} else {
 				await createCategory(
 					params.establishmentId,
 					params.name,
-					params.order!
+					params.order!,
+					params.enableSubcategories
 				);
 			}
 

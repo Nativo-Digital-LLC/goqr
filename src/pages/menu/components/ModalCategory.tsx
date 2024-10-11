@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Form, Modal, Input } from 'antd';
+import { Form, Modal, Input, Switch } from 'antd';
 
 import { useModalVisible } from '../../../hooks/useModal';
 import { ModalName } from '../../../types/Modals';
@@ -39,10 +39,11 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 			<Form
 				layout='vertical'
 				form={form}
-				onFinish={({ name }) => {
+				onFinish={({ name, enableSubcategories }) => {
 					const data = {
 						name,
 						establishmentId: extra!.establishmentId,
+						enableSubcategories,
 						id: extra?.id,
 						order: extra?.order
 					};
@@ -59,6 +60,12 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 					rules={[{ required: true, message: 'Ingrese un nombre' }]}
 				>
 					<Input autoFocus />
+				</Form.Item>
+				<Form.Item
+					label='Mostrar Categorías'
+					name='enableSubcategories'
+				>
+					<Switch defaultChecked={true} />
 				</Form.Item>
 			</Form>
 		</Modal>

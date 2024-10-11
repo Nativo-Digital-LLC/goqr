@@ -4,7 +4,7 @@ import { db } from '../utils/appwrite';
 import { Collection } from '../constants/Collections';
 import { EstablishmentProps } from '../types/Establishment';
 
-export async function createCategory(establishmentId: string, name: string, order: number) {
+export async function createCategory(establishmentId: string, name: string, order: number, enableSubcategories?: boolean) {
 	const { categories } = await db.getDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Establishments,
@@ -30,7 +30,7 @@ export async function createCategory(establishmentId: string, name: string, orde
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
 		ID.unique(),
-		{ name, order }
+		{ name, order, enableSubcategories }
 	);
 
 	await db.updateDocument(
@@ -69,12 +69,12 @@ export async function deleteCategory(id: string, establishmentId: string) {
 	);
 }
 
-export async function updateCategoryName(id: string, name: string) {
+export async function updateCategoryName(id: string, name: string, enableSubcategories?: boolean) {
 	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
 		id,
-		{ name }
+		{ name, enableSubcategories }
 	);
 }
 

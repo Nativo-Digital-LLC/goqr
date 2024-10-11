@@ -171,11 +171,14 @@ export default function MenuPage() {
 						/>
 						<br />
 
-						<SearchBox
-							onChangeCapture={handleSearchInput}
-							onResetCapture={() => setSearch('')}
-							placeholder='Buscar'
-						/>
+						{!isEditable && (
+							<SearchBox
+								onChangeCapture={handleSearchInput}
+								onResetCapture={() => setSearch('')}
+								placeholder='Buscar'
+							/>
+						)}
+
 						{search.length > 0 && (
 							<>
 								<InfiniteHits
@@ -202,22 +205,28 @@ export default function MenuPage() {
 								name: selectedCategory?.name || '',
 								id: selectedCategory?.$id || ''
 							}}
-							show={!selected.subcategoryId && search.length === 0}
+							show={(
+								!selected.subcategoryId &&
+								search.length === 0 &&
+								!!selectedCategory?.enableSubcategories
+							)}
 							onChange={() => reload(establishmentUrl!)}
 							onPress={(id) => handleUrlChanges('subcategoryId', id)}
 						/>
 
 						<ProductsList
-							show={!!selected.subcategoryId && search.length === 0}
+							show={(!!selected.subcategoryId || !selectedCategory?.enableSubcategories) && search.length === 0}
 							color={establishment.mainHexColor}
 							establishmentId={establishment.$id}
 							categoryId={selected.categoryId + ''}
 							subcategoryId={selected.subcategoryId + ''}
-							subcategoryName={
-								selectedCategory
-									?.subcategories
-									?.find(({ $id }) => $id === selected.subcategoryId)
-									?.name + ''
+							title={
+								(selectedCategory?.enableSubcategories)
+									? selectedCategory
+										?.subcategories
+										?.find(({ $id }) => $id === selected.subcategoryId)
+										?.name + ''
+									: selectedCategory?.name + ''
 							}
 							isEditable={isEditable}
 						/>

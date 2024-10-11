@@ -15,8 +15,8 @@ interface ProductsListProps {
 	color: string;
 	establishmentId: string;
 	categoryId: string;
-	subcategoryId: string;
-	subcategoryName: string;
+	subcategoryId?: string;
+	title: string;
 	isEditable: boolean;
 }
 
@@ -27,7 +27,7 @@ export const ProductsList = (props: ProductsListProps) => {
 		establishmentId,
 		categoryId,
 		subcategoryId,
-		subcategoryName,
+		title,
 		isEditable
 	} = props;
 	const [allProducts, , , reload] = useGetAllProducts(establishmentId);
@@ -52,7 +52,7 @@ export const ProductsList = (props: ProductsListProps) => {
 			}}
 		>
 			<Title style={{ textAlign: 'center' }} level={5}>
-				{subcategoryName}
+				{title}
 			</Title>
 
 			{isEditable && (

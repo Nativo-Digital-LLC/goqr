@@ -9,7 +9,7 @@ export interface ProductProps {
 	order: number;
 	establishmentId: string;
 	categoryId: string;
-	subcategoryId: string;
+	subcategoryId: string | null;
 	photoUrl: string;
 	$createdAt: string;
 	$updatedAt: string;
