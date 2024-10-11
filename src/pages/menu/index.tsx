@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Row, Typography } from 'antd';
+import { Row, Spin, Typography } from 'antd';
 import {
 	InfiniteHits,
 	InstantSearch,
@@ -25,6 +25,7 @@ import { useSessionStore } from '../../store/session';
 import { ModalEstablishment } from '../../components';
 import searchClient from '../../utils/search';
 import { ProductProps } from '../../types/Product';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -119,11 +120,30 @@ export default function MenuPage() {
 		setSearch(target.value)
 	}
 
+	if (loading) {
+		return (
+			<div
+				style={{
+					backgroundColor: 'rgba(0, 0, 0, 0.05)',
+					height: '100vh',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center'
+				}}
+			>
+				<Spin indicator={<LoadingOutlined style={{ fontSize: 80 }} />} />
+			</div>
+		);
+	}
+
 	return (
 		<InstantSearch
 			indexName='products'
 			searchClient={searchClient}
 		>
+			<Configure
+				filters={`establishmentId="${establishment.$id}"`}
+			/>
 			<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
 				<div
 					style={{
@@ -180,21 +200,16 @@ export default function MenuPage() {
 						)}
 
 						{search.length > 0 && (
-							<>
-								<InfiniteHits
-									hitComponent={({ hit }) => (
-										<ProductCard
-											key={hit.$id}
-											data={hit as unknown as ProductProps}
-											color={establishment.mainHexColor}
-											preview
-										/>
-									)}
-								/>
-								<Configure
-									filters={`establishmentId="${establishment.$id}"`}
-								/>
-							</>
+							<InfiniteHits
+								hitComponent={({ hit }) => (
+									<ProductCard
+										key={hit.$id}
+										data={hit as unknown as ProductProps}
+										color={establishment.mainHexColor}
+										preview
+									/>
+								)}
+							/>
 						)}
 
 						<SubcategoriesList
