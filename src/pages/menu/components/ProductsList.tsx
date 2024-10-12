@@ -15,7 +15,7 @@ interface ProductsListProps {
 	color: string;
 	establishmentId: string;
 	categoryId: string;
-	subcategoryId?: string;
+	subcategoryId: string | null;
 	title: string;
 	isEditable: boolean;
 }

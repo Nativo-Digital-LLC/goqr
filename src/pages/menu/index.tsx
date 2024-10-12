@@ -234,7 +234,7 @@ export default function MenuPage() {
 							color={establishment.mainHexColor}
 							establishmentId={establishment.$id}
 							categoryId={selected.categoryId + ''}
-							subcategoryId={selected.subcategoryId + ''}
+							subcategoryId={selected.subcategoryId || null}
 							title={
 								(selectedCategory?.enableSubcategories)
 									? selectedCategory

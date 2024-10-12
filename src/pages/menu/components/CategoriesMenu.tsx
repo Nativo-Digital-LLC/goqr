@@ -139,7 +139,8 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											extra: {
 												id: category.$id,
 												establishmentId,
-												name: category.name
+												name: category.name,
+												enableSubcategories: category.enableSubcategories
 											}
 										})}
 									/>

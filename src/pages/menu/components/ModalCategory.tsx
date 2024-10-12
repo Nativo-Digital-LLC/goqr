@@ -25,8 +25,7 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 			form.setFieldsValue({
 				name: extra.name,
 				enableSubcategories: extra.enableSubcategories!
-			})
-			form.setFieldValue('name', extra.name);
+			});
 		}
 	}, [visible, form, extra]);
 
