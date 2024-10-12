@@ -10,6 +10,7 @@ interface ExtraType {
 	order?: number;
 	establishmentId: string;
 	name?: string;
+	enableSubcategories?: string;
 }
 
 export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
@@ -21,6 +22,10 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 		form.resetFields();
 
 		if (extra?.name) {
+			form.setFieldsValue({
+				name: extra.name,
+				enableSubcategories: extra.enableSubcategories!
+			})
 			form.setFieldValue('name', extra.name);
 		}
 	}, [visible, form, extra]);
