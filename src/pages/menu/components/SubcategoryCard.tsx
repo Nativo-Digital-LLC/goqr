@@ -52,6 +52,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 				overflow: 'hidden',
 				cursor: 'pointer',
 				marginBottom: 20,
+				padding: 10
 			}}
 			className='subcategory-card'
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,7 +71,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 					zIndex: 10
 				}}
 			/>
-			<span style={{ zIndex: 20 }}>{subcategory.name}</span>
+			<span style={{ zIndex: 20, textAlign: 'center' }}>{subcategory.name}</span>
 
 			{isEditable && (
 				<div
