@@ -25,7 +25,7 @@ export default function DashboardPage() {
 			<h2>Establecimientos</h2>
 			<br />
 			<div>
-				<Row gutter={20}>
+				<Row gutter={[20, 20]}>
 					{establishments.map(({ $id, name, domain }) => (
 						<Col
 							xs={24}
