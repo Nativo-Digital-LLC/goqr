@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
 	return (
 		<div style={{ maxWidth: 900, margin: '0 auto', padding: 20 }}>
-			<h2>Establecmimientos</h2>
+			<h2>Establecimientos</h2>
 			<br />
 			<div>
 				<Row gutter={20}>
