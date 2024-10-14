@@ -42,6 +42,26 @@
 	border-color: var(--secondary);
 }
 
+.panel-expand {
+	transition: all 200ms ease-in-out;
+}
+
+/* mechanism */
+
+.panel-expand {
+	display: grid;
+	grid-template-rows: 0fr;
+}
+
+.panel-expanded {
+	display: grid;
+	grid-template-rows: 1fr;
+}
+
+.panel-expand-content {
+	overflow: hidden;
+}
+
 .hide-scrollbar-y {
 	scrollbar-width: none !important;
 }

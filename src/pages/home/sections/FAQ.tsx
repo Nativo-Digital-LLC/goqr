@@ -1,3 +1,4 @@
+import FAQItem from "../components/FAQItem";
 import faq from "../constants/FAQ";
 
 export default function FAQ() {
@@ -10,17 +11,7 @@ export default function FAQ() {
 			</div>
 			<div className="sm:flex sm:flex-wrap sm:columns-2 sm:justify-between sm:[&>*:nth-child(odd)]:mr-[10px] sm:[&>*:nth-child(even)]:ml-[10px]">
 				{faq.map((item, index) => (
-					<div
-						key={index}
-						className="mb-[35px] sm:flex sm:flex-[40%]"
-					>
-						<a
-							className="md:text-[18px] sm:text-[17px] leading-[30px] underline underline-offset-[5px] decoration-[#00000050] decoration-dotted hover:no-underline"
-							href="/"
-						>
-							{item}
-						</a>
-					</div>
+					<FAQItem key={index} {...item} />
 				))}
 			</div>
 		</div>
