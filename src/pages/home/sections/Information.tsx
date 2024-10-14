@@ -22,16 +22,23 @@ export default function Information() {
 					</div>
 					<div className="text-justify text-[18px] font-[400] sm:ml-[60px] md:ml-[13%] max-w-[480]">
 						<p className="mb-[30px]">
-							Nuestro servicio de menú incluye toda una gama de funciones para el restaurante, cafetería o bar.
+							Nuestro servicio de menú incluye toda una gama de
+							funciones para el restaurante, cafetería o bar.
 						</p>
 						<p className="mb-[30px]">
-							Para sus invitados: este es un menú de código QR moderno y fácil de usar.
+							Para sus invitados: este es un menú de código QR
+							moderno y fácil de usar.
 						</p>
 						<p className="mb-[30px]">
-							Para usted, esta es una plataforma digital construida alrededor de su menú de códigos QR para mejorar la calidad del servicio al cliente y aumentar las ventas.
+							Para usted, esta es una plataforma digital
+							construida alrededor de su menú de códigos QR para
+							mejorar la calidad del servicio al cliente y
+							aumentar las ventas.
 						</p>
 						<p className="mb-[30px]">
-							No es necesario comprar terminales costosas ni instalar aplicaciones en los teléfonos de sus invitados para que nuestro menú digital funcione.
+							No es necesario comprar terminales costosas ni
+							instalar aplicaciones en los teléfonos de sus
+							invitados para que nuestro menú digital funcione.
 						</p>
 					</div>
 				</div>

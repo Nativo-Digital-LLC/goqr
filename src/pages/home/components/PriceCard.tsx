@@ -14,7 +14,13 @@ export default function PriceCard(props: PriceCardProps) {
 		>
 			<div>
 				<div className="mb-[20px] text-center">
-					<span className="font-[700] text-[12px]">{title}</span>
+					<span
+						className={`font-[700] text-[12px] ${
+							selected && "text-white"
+						}`}
+					>
+						{title}
+					</span>
 				</div>
 				<div className="flex justify-center items-center">
 					<span
@@ -33,7 +39,11 @@ export default function PriceCard(props: PriceCardProps) {
 					</span>
 				</div>
 			</div>
-			<div className="font-[500] text-[10px] text-center">
+			<div
+				className={`font-[500] text-[10px] text-center ${
+					selected && "text-white"
+				}`}
+			>
 				<div>
 					<span>{disclaimer}</span>
 				</div>

@@ -7,7 +7,7 @@ import prices from "../constants/Prices";
 
 export default function Prices() {
 	return (
-		<div className="md:pb-[80px] h-auto bg-[--primary] pb-[40px] px-[20px] relative z-[3] pt-[20px] flex justify-center">
+		<div className="md:pb-[40px] h-auto bg-[--primary] pb-[40px] px-[20px] relative z-[3] pt-[20px] flex justify-center">
 			<div className="max-w-[890px] relative w-full">
 				<div className="flex flex-col justify-center items-center">
 					<h2 className="md:text-[35px] sm:text-[30px] text-[25px] font-[700] mb-[40px] relative z-[2]">
@@ -22,12 +22,12 @@ export default function Prices() {
 							/>
 						))}
 					</div>
-					<div className="mb-[20px] sm:mb-[40px]">
+					<div className="mb-[0] sm:mb-[0]">
 						<span className="font-[500] text-[10px]">
 							ITBIS Incluido
 						</span>
 					</div>
-					<div className="sm:max-w-[500px] relative z-[2] bg-[--tertiary] p-[25px] rounded-[20px] shadow-md shadow-[#00000030] flex flex-col justify-center items-center">
+					{/* <div className="sm:max-w-[500px] relative z-[2] bg-[--tertiary] p-[25px] rounded-[20px] shadow-md shadow-[#00000030] flex flex-col justify-center items-center">
 						<h3 className="text-[22px] font-[700] mb-[20px]">
 							Prueba GoQR por 1 mes totalmente <u>gratis</u>
 						</h3>
@@ -43,16 +43,16 @@ export default function Prices() {
 						>
 							Pruebalo Gratis!
 						</Link>
-					</div>
+					</div> */}
 				</div>
-				<div className="hidden sm:block sm:w-full">
+				{/* <div className="hidden sm:block sm:w-full">
 					<div className="absolute bottom-[110px] left-[-30px]">
 						<img src={PriceImage1} alt="QR code menu for free" />
 					</div>
 					<div className="absolute top-[50px] right-[-40px]">
 						<img src={PriceImage2} alt="Digital menu prices" />
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

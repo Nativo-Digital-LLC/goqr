@@ -25,10 +25,7 @@ export default function HomeContainer(props: HomeContainerProps) {
 				}`}
 			>
 				<div className="flex justify-between max-w-[890px] w-full px-[20px]">
-					<Link
-						to="/"
-						className={`text-[25px] relative before:content-[''] before:absolute before:bg-[--secondary] before:h-[7px] before:w-[75px] before:z-[1] before:bottom-[7px] before:left-[-3px]`}
-					>
+					<Link to="/" className={`text-[25px]`}>
 						<b className="z-[2] relative">GoQr</b>
 					</Link>
 					<div className="items-center flex">
@@ -56,17 +53,17 @@ export default function HomeContainer(props: HomeContainerProps) {
 				<div className="max-w-[890px] w-full">
 					<div className="flex justify-between items-center px-[20px] pb-[40px]">
 						<div className="flex flex-col justify-between">
-							<Link
-								to="/"
-								className={`text-[25px] relative before:content-[''] before:absolute before:bg-[--secondary] before:h-[7px] before:w-[75px] before:z-[1] before:bottom-[7px] before:left-[-3px]`}
-							>
+							<Link to="/" className={`text-[25px]`}>
 								<b className="z-[2] relative">GoQr</b>
 							</Link>
 							<div className="flex flex-col text-[11px] md:text-[14px]">
 								<Link to="/terms" className="my-[4px]">
 									Terminos del servicio
 								</Link>
-								<Link to="/privacy-policies" className="my-[4px]">
+								<Link
+									to="/privacy-policies"
+									className="my-[4px]"
+								>
 									Políticas de privacidad
 								</Link>
 							</div>

@@ -12,7 +12,7 @@ export default function HomePage() {
 	return (
 		<HomeContainer defaultBackgroundColor="--tertiary">
 			<Welcome />
-			<Information />
+			{/* <Information /> */}
 			<Benefits />
 			<Prices />
 			<div className="flex justify-center">

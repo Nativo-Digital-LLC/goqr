@@ -9,7 +9,7 @@ export default function FAQ() {
 					Preguntas frecuentes
 				</h2>
 			</div>
-			<div className="sm:flex sm:flex-wrap sm:columns-2 sm:justify-between sm:[&>*:nth-child(odd)]:mr-[10px] sm:[&>*:nth-child(even)]:ml-[10px]">
+			<div className="mb-[20pxs]">
 				{faq.map((item, index) => (
 					<FAQItem key={index} {...item} />
 				))}
