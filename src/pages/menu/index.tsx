@@ -62,6 +62,11 @@ export default function MenuPage() {
 	useEffect(() => {
 		const params = new URLSearchParams(location.search);
 		const categoryId = params.get('categoryId');
+
+		if (establishment) {
+			document.title = `${establishment.name} | GoQR`;
+		}
+
 		if (!establishment || establishment.categories.length === 0 || categoryId) {
 			return;
 		}
@@ -73,6 +78,7 @@ export default function MenuPage() {
 		if (category) {
 			handleUrlChanges('categoryId', category.$id);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [establishment]);
 
 	useEffect(() => {
