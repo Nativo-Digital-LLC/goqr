@@ -1,7 +1,7 @@
 import HomeContainer from "../containers/HomeContainer";
 import {
 	Welcome,
-	Information,
+	// Information,
 	Benefits,
 	Prices,
 	Services,

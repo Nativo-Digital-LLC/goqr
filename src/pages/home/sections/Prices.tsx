@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import PriceImage1 from "../../../assets/images/prices/price-1.svg";
-import PriceImage2 from "../../../assets/images/prices/price-2.svg";
+// import { Link } from "react-router-dom";
+// import PriceImage1 from "../../../assets/images/prices/price-1.svg";
+// import PriceImage2 from "../../../assets/images/prices/price-2.svg";
 
 import PriceCard from "../components/PriceCard";
 import prices from "../constants/Prices";

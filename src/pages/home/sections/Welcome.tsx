@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import {
-	MenuExample1Jpg,
-	MenuExample1Webp,
-	MenuExample2Jpg,
-	MenuExample2Webp,
-} from "../../../constants/LandingImages";
+// import {
+// 	MenuExample1Jpg,
+// 	MenuExample1Webp,
+// 	MenuExample2Jpg,
+// 	MenuExample2Webp,
+// } from "../../../constants/LandingImages";
 
 export default function Welcome() {
 	return (
