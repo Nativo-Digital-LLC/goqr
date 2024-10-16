@@ -12,7 +12,7 @@ export default function Services() {
 			<div>
 				<ul className="sm:flex sm:flex-wrap sm:columns-2 sm:justify-between sm:[&>*:nth-child(odd)]:mr-[10px] sm:[&>*:nth-child(even)]:ml-[10px]">
 					{services.map((item, index) => (
-						<div className="mb-[20px] flex sm:flex-[40%]">
+						<div className="mb-[20px] flex sm:flex-[40%]" key={'service-' + index}>
 							<img
 								src={dot}
 								alt={`dot-${index}`}
