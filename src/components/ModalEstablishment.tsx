@@ -246,6 +246,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 										size='middle'
 										defaultFormat='hex'
 										showText
+										disabledAlpha
 									/>
 								</Form.Item>
 							</Col>
