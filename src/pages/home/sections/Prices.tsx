@@ -7,7 +7,7 @@ import prices from "../constants/Prices";
 
 export default function Prices() {
 	return (
-		<div className="md:pb-[40px] h-auto bg-[--primary] pb-[40px] px-[20px] relative z-[3] pt-[20px] flex justify-center">
+		<div className="md:pb-[40px] h-auto bg-[--primary] pb-[40px] px-[20px] relative z-[3] pt-[20px] flex justify-center" id="pricing">
 			<div className="max-w-[890px] relative w-full">
 				<div className="flex flex-col justify-center items-center">
 					<h2 className="md:text-[35px] sm:text-[30px] text-[25px] font-[700] mb-[40px] relative z-[2]">
