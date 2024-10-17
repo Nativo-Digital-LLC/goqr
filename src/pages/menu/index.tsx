@@ -162,7 +162,7 @@ export default function MenuPage() {
 					}}
 				>
 					<MenuHeader
-						bannerUrl={establishment.bannerUrl ?? undefined}
+						bannerUrl={establishment.bannerUrl ?? 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67110f2e001cdb14cd8e/view?project=66f768e4001537551adf'}
 						logoUrl={establishment.logoUrl ?? undefined}
 						isEditable={isEditable}
 					/>
