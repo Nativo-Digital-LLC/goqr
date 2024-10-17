@@ -10,6 +10,58 @@ import {
 import { uploadFile } from '../utils/helpers';
 
 export async function createEstablishment(params: CreateEstablishmentParams) {
+	const subcategoriesIds = [
+		ID.unique(),
+		ID.unique()
+	];
+
+	await Promise.all([
+		db.createDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Subcategories,
+			subcategoriesIds[0],
+			{
+				name: 'Bebidas Calientes',
+				order: 1,
+				photoUrl: 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/6711133900038fe1c875/view?project=66f768e4001537551adf'
+			}
+		),
+		db.createDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Subcategories,
+			subcategoriesIds[1],
+			{
+				name: 'Bebidas Frías',
+				order: 2,
+				photoUrl: 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67111318000a6a9abd47/view?project=66f768e4001537551adf'
+			}
+		)
+	]);
+
+	const categories = await Promise.all([
+		db.createDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Categories,
+			ID.unique(),
+			{
+				name: 'Bebidas',
+				order: 1,
+				subcategories: subcategoriesIds,
+				enableSubcategories: true
+			}
+		),
+		db.createDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Categories,
+			ID.unique(),
+			{
+				name: 'Desayunos',
+				order: 2,
+				enableSubcategories: false
+			}
+		)
+	]);
+
 	const bannerUrl = (params.banner)
 		? await uploadFile(params.banner)
 		: undefined;
@@ -36,7 +88,8 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			mainHexColor: params.color,
 			rnc: params.rnc,
 			companyName: params.companyName,
-			requiresTaxReceipt: params.requiresTaxReceipt
+			requiresTaxReceipt: params.requiresTaxReceipt,
+			categories: categories.map(({ $id }) => $id)
 		}
 	);
 }
