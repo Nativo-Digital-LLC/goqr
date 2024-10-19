@@ -40,6 +40,7 @@ export interface CreateEstablishmentParams {
 	companyName?: string;
 	logo?: File;
 	banner?: File;
+	paymentFrequency: PaymentFrequency;
 }
 
 export interface TaxPayerProps {

@@ -7,7 +7,7 @@ import {
 	EstablishmentProps,
 	TaxPayerProps
 } from '../types/Establishment';
-import { uploadFile } from '../utils/helpers';
+import { sendConversionEvent, uploadFile } from '../utils/helpers';
 
 export async function createEstablishment(params: CreateEstablishmentParams) {
 	const subcategoriesIds = [
@@ -92,6 +92,8 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			categories: categories.map(({ $id }) => $id)
 		}
 	);
+
+	sendConversionEvent(params.paymentFrequency);
 }
 
 export async function updateEstablishment(id: string, { banner, logo, ...rest }: Partial<CreateEstablishmentParams>) {

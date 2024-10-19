@@ -3,6 +3,7 @@ import { ID } from 'appwrite';
 
 import { ModalName } from '../types/Modals';
 import { storage } from './appwrite';
+import { PaymentFrequency } from '../types/Bill';
 
 export const ModalOpener$ = new Subject<{ name: ModalName; extra?: unknown; }>();
 
@@ -141,3 +142,32 @@ export async function uploadFile(file: File) {
 }
 
 export const isAppleDevice = /iPhone|iPad|iPod|Macintosh|MacIntel/.test(navigator.userAgent);
+
+export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt = 1) {
+	if (attempt === 5) {
+		return;
+	}
+
+	if (window.dataLayer === undefined) {
+		return setTimeout(() => {
+			sendConversionEvent(paymentFrequency, attempt + 1);
+		}, 3000);
+	}
+
+	const value = {
+		[PaymentFrequency.Annual]: 2500,
+		[PaymentFrequency.Monthly]: 300,
+		[PaymentFrequency.Never]: 9000
+	};
+
+	// eslint-disable-next-line prefer-rest-params
+	function gtag(){window.dataLayer.push(arguments);}
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
+	gtag('event', 'conversion', {
+		'send_to': 'AW-16641087460/Pl7cCMeyrt8ZEOSvi_89',
+		'value': value[paymentFrequency],
+		'currency': 'DOP',
+		'transaction_id': ''
+	});
+}
