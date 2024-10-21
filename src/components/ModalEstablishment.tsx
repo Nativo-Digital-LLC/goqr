@@ -190,15 +190,30 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 							<Select
 								options={[
 									{
-										label: 'Mensual',
+										label: (
+											<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+												<Text>Mensual</Text>
+												<Text>$ 300</Text>
+											</div>
+										),
 										value: PaymentFrequency.Monthly
 									},
 									{
-										label: 'Anual',
+										label: (
+											<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+												<Text>Anual</Text>
+												<Text>$ 2,500</Text>
+											</div>
+										),
 										value: PaymentFrequency.Annual
 									},
 									{
-										label: 'Pago Único',
+										label: (
+											<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+												<Text>Pago Único</Text>
+												<Text>$ 9,000</Text>
+											</div>
+										),
 										value: PaymentFrequency.Never
 									}
 								]}
