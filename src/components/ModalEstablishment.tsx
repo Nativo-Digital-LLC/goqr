@@ -9,7 +9,9 @@ import {
 	Button,
 	ColorPicker,
 	Switch,
-	Select
+	Select,
+	Typography,
+	InputNumber
 } from 'antd';
 import { FileImageOutlined } from '@ant-design/icons';
 
@@ -20,6 +22,8 @@ import { PaymentFrequency, PaymentMethod } from '../types/Bill';
 import { useSaveEstablishment } from '../hooks/useEstablishments';
 import { useSessionStore } from '../store/session';
 import { EstablishmentProps } from '../types/Establishment';
+
+const { Text } = Typography;
 
 export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 	const session = useSessionStore(({ session }) => session);
@@ -103,10 +107,25 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 								required: !extra,
 								message: 'Elige tu URL'
 							}]}
+							tooltip='Escribe una URL única para tu negocio. Será parte del enlace que podrás compartir con tus clientes.'
 						>
 							<Input
 								prefix='goqr.com.do/m/'
 								disabled={!!extra}
+								onInput={(event) => {
+									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+									// @ts-expect-error
+									const value = event.target.value;
+									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+									// @ts-expect-error
+									event.target.value = value
+										.toLowerCase()
+										.normalize("NFD")
+										.replace(/\s+/g, "-")
+										.replace(/-+/g, "-")
+										.replace(/[\u0300-\u036f]/g, "")
+										.replace(/[^a-z0-9\s-]/g, "");
+								}}
 							/>
 						</Form.Item>
 
