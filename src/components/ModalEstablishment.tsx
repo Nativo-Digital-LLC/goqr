@@ -224,18 +224,24 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 						<Form.Item
 							label='Teléfono'
 							name='phone'
+							rules={[{ type: 'number' }]}
 						>
-							<Input
+							<InputNumber
 								onKeyDown={avoidNotNumerics}
+								style={{ width: '100%' }}
+								maxLength={10}
 							/>
 						</Form.Item>
 
 						<Form.Item
 							label='WhatsApp'
 							name='whatsapp'
+							rules={[{ type: 'number' }]}
 						>
-							<Input
+							<InputNumber
 								onKeyDown={avoidNotNumerics}
+								style={{ width: '100%' }}
+								maxLength={10}
 							/>
 						</Form.Item>
 
