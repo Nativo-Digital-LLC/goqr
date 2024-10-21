@@ -120,8 +120,10 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 						<Form.Item
 							label='Enlace Google Maps'
 							name='addressLink'
+							rules={[{ type: 'url', message: 'URL inválida' }]}
+							tooltip='Ingresa el enlace de Google Maps de tu negocio (copia el enlace desde ‘Compartir’ en Google Maps).'
 						>
-							<Input type='url' />
+							<Input />
 						</Form.Item>
 
 						<Row gutter={20}>
