@@ -40,7 +40,12 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 		form.resetFields();
 
 		if (extra) {
-			form.setFieldsValue(extra);
+			form.setFieldsValue({
+				...extra,
+				...(extra?.phone && {
+					phone: Number(extra.phone)
+				})
+			});
 		}
 	}, [visible, form, extra]);
 
