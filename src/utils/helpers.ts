@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { ID } from 'appwrite';
+import { UploadFile } from 'antd';
 
 import { ModalName } from '../types/Modals';
 import { storage } from './appwrite';
@@ -170,4 +171,24 @@ export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt 
 		'currency': 'DOP',
 		'transaction_id': ''
 	});
+}
+
+export function maxFileSizeRule() {
+	return {
+		validator(_: unknown, value: { file: UploadFile }) {
+			const maxFileSizeInMb = 30;
+			const maxFileSize = maxFileSizeInMb * 1024 * 1024;
+			if (!value?.file?.size) {
+				return Promise.resolve();
+			}
+
+			if (value.file.size <= maxFileSize) {
+				return Promise.resolve();
+			}
+
+			return Promise.reject(
+				new Error(`El archivo excede el tamaño máximo permitido de 30 MB. Por favor, selecciona un archivo más pequeño.`)
+			);
+		}
+	}
 }

@@ -6,6 +6,7 @@ import { useModalVisible } from '../../../hooks/useModal';
 import { ModalName } from '../../../types/Modals';
 import { SubcategoryProps } from '../../../types/Subcategory';
 import { useSaveSubcategory } from '../../../hooks/useSubcategories';
+import { maxFileSizeRule } from '../../../utils/helpers';
 
 type ExtraType = Partial<SubcategoryProps> & { categoryId: string; };
 
@@ -64,12 +65,13 @@ export const ModalSubcategory = ({ onFinish }: { onFinish: () => void }) => {
 				<Form.Item
 					label='Imagen'
 					name='photo'
-					rules={[{ required: !extra?.$id }]}
+					rules={[{ required: !extra?.$id }, maxFileSizeRule]}
 				>
 					<Upload
 						accept='image/*'
 						multiple={false}
 						beforeUpload={() => false}
+						maxCount={1}
 					>
 						<Button
 							icon={<FileImageOutlined />}

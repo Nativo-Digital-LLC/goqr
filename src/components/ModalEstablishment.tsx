@@ -17,7 +17,7 @@ import { FileImageOutlined } from '@ant-design/icons';
 
 import { useModalVisible } from '../hooks/useModal';
 import { ModalName } from '../types/Modals';
-import { avoidNotNumerics } from '../utils/helpers';
+import { avoidNotNumerics, maxFileSizeRule } from '../utils/helpers';
 import { PaymentFrequency, PaymentMethod } from '../types/Bill';
 import { useSaveEstablishment } from '../hooks/useEstablishments';
 import { useSessionStore } from '../store/session';
@@ -75,7 +75,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 							description: data.description,
 							address: data.address,
 							addressLink: data.addressLink,
-							phone: data.phone,
+							phone: (data.phone) ? data.phone.toString() : undefined,
 							whatsapp: data.whatsapp,
 							requiresTaxReceipt: data.requiresTaxReceipt,
 							rnc: data.rnc,
@@ -150,11 +150,13 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 								<Form.Item
 									label='Logo'
 									name='logo'
+									rules={[maxFileSizeRule]}
 								>
 									<Upload
 										accept='image/*'
 										multiple={false}
 										beforeUpload={() => false}
+										maxCount={1}
 									>
 										<Button
 											icon={<FileImageOutlined />}
@@ -168,11 +170,13 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 								<Form.Item
 									label='Banner'
 									name='banner'
+									rules={[maxFileSizeRule]}
 								>
 									<Upload
 										accept='image/*'
 										multiple={false}
 										beforeUpload={() => false}
+										maxCount={1}
 									>
 										<Button
 											icon={<FileImageOutlined />}

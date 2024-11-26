@@ -17,7 +17,7 @@ import { useModalVisible } from '../../../hooks/useModal';
 import { ModalName } from '../../../types/Modals';
 import { ProductProps } from '../../../types/Product';
 import { useSaveProduct } from '../../../hooks/useProducts';
-import { avoidNotNumerics } from '../../../utils/helpers';
+import { avoidNotNumerics, maxFileSizeRule } from '../../../utils/helpers';
 
 const { Dragger } = Upload;
 
@@ -201,7 +201,7 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 				<Form.Item
 					label='Foto'
 					name='photo'
-					rules={[{ required: !extra?.$id, message: 'Falta la foto' }]}
+					rules={[{ required: !extra?.$id, message: 'Falta la foto' }, maxFileSizeRule]}
 				>
 					<Dragger
 						name='photo'
