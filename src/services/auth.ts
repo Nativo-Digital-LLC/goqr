@@ -46,7 +46,6 @@ export async function authWithApple(path: 'login' | 'register') {
 	);
 }
 
-
 export async function logout() {
 	const session = useSessionStore.getState().session;
 	if (!session) {

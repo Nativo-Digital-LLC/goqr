@@ -120,7 +120,7 @@ export const useLogin = (): UseLoginType => {
 
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException)
+			setError(error as AppwriteException);
 		} finally {
 			setLoading(false);
 		}

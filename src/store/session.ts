@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { SessionProps, SessionStoreProps } from '../types/Session';
+import { getCurrentSession } from '../services/auth';
 
 export const useSessionStore = create<SessionStoreProps>((set) => ({
 	session: JSON.parse(localStorage.getItem('session') || 'null'),
@@ -17,3 +18,13 @@ export const useSessionStore = create<SessionStoreProps>((set) => ({
 		}
 	}
 }));
+
+(async () => {
+	const { session, setSession } = useSessionStore.getState();
+	if (session) {
+		return;
+	}
+
+	const currentSession = await getCurrentSession();
+	setSession(currentSession);
+})();
