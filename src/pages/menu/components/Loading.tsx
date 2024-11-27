@@ -1,8 +1,6 @@
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import PandorasIntro from '../../assets/pandora-intro.mp4';
-
 export const Loading = ({ showPandoraIntro }: { showPandoraIntro?: boolean; }) => {
 	if (showPandoraIntro) {
 		return (
@@ -22,7 +20,7 @@ export const Loading = ({ showPandoraIntro }: { showPandoraIntro?: boolean; }) =
 					muted
 					loop
 					playsInline
-					src={PandorasIntro}
+					src='/pandora-intro.mp4'
 				/>
 			</div>
 		);

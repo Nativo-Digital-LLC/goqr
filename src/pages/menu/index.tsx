@@ -39,7 +39,10 @@ export default function MenuPage() {
 	const showIntro = useShowIntro();
 
 	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
-	useFDADisclaimer(session, establishment?.showFoodAllergyAndRiskDisclaimer);
+	useFDADisclaimer(
+		session,
+		establishment?.showFoodAllergyAndRiskDisclaimer && !showIntro
+	);
 	const [search, setSearch] = useState('');
 
 	const isEditable = useMemo(() => {
