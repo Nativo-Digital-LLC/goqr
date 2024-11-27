@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Row, Spin, Typography } from 'antd';
+import { Row, Typography } from 'antd';
 import {
 	InfiniteHits,
 	InstantSearch,
@@ -19,13 +19,14 @@ import {
 	MenuHeader,
 	EstablishmentInfo,
 	CategoriesMenu,
-	ProductCard
+	ProductCard,
+	Loading
 } from './components';
 import { useSessionStore } from '../../store/session';
 import { ModalEstablishment } from '../../components';
 import searchClient from '../../utils/search';
 import { ProductProps } from '../../types/Product';
-import { LoadingOutlined } from '@ant-design/icons';
+import { useShowIntro } from '../../hooks/useShowIntro';
 import { useFDADisclaimer } from '../../hooks/useFDADisclaimer';
 
 const { Text } = Typography;
@@ -44,6 +45,7 @@ export default function MenuPage() {
 	const isEditable = useMemo(() => {
 		return establishment && session && session.userId === establishment.userId || false;
 	}, [session, establishment]);
+
 	const selected = useMemo(() => {
 		const params = new URLSearchParams(location.search);
 		const categoryId = params.get('categoryId');
@@ -129,19 +131,11 @@ export default function MenuPage() {
 		setSearch(target.value)
 	}
 
-	if (loading) {
+	if (loading || (showIntro && location.pathname.includes('pandora'))) {
 		return (
-			<div
-				style={{
-					backgroundColor: 'rgba(0, 0, 0, 0.05)',
-					height: '100vh',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}
-			>
-				<Spin indicator={<LoadingOutlined style={{ fontSize: 80 }} />} />
-			</div>
+			<Loading
+				showPandoraIntro={location.pathname.includes('pandora')}
+			/>
 		);
 	}
 
