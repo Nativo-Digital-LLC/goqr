@@ -20,6 +20,7 @@ export interface EstablishmentProps {
 	companyName: string | null;
 	paymentMethod: PaymentMethod;
 	paymentFrequency: PaymentFrequency;
+	showFoodAllergyAndRiskDisclaimer: boolean;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string;

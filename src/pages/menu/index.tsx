@@ -26,6 +26,7 @@ import { ModalEstablishment } from '../../components';
 import searchClient from '../../utils/search';
 import { ProductProps } from '../../types/Product';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useFDADisclaimer } from '../../hooks/useFDADisclaimer';
 
 const { Text } = Typography;
 
@@ -34,8 +35,10 @@ export default function MenuPage() {
 	const session = useSessionStore(({ session }) => session);
 	const location = useLocation();
 	const navigate = useNavigate();
+	const showIntro = useShowIntro();
 
 	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
+	useFDADisclaimer(session, establishment?.showFoodAllergyAndRiskDisclaimer);
 	const [search, setSearch] = useState('');
 
 	const isEditable = useMemo(() => {
