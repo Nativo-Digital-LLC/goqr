@@ -16,6 +16,8 @@ import { ModalName } from '../../../types/Modals';
 
 const { Title, Text } = Typography;
 
+const PandorasBoxId = '67466c610004d4e7c5bf';
+
 interface ProductCardProps {
 	data: ProductProps;
 	color: string;
@@ -108,7 +110,7 @@ export const ProductCard = (props: ProductCardProps) => {
 			/>
 			<Title level={5} style={{ marginBottom: 0 }}>{data.name}</Title>
 			<Text>{data?.description}</Text>
-			{data.prices.length === 1 && (
+			{data.prices.length === 1 && data.$id !== PandorasBoxId && (
 				<Title
 					level={4}
 					style={{ margin: 0, color }}
