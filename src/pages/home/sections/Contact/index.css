@@ -1,0 +1,25 @@
+.contact-container {
+	background-color: var(--primary);
+	padding-bottom: 40px;
+}
+
+.contact-container .contact-card {
+	height: 220px;
+	width: 60%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #fff;
+	border-radius: 20px;
+	border: 1px solid var(--text);
+	padding: 20px 60px;
+	font-size: 17px;
+	font-weight: 300;
+}
+
+.contact-container .contact-card b {
+	font-weight: 700;
+	text-decoration: underline;
+	font-size: 20px;
+}

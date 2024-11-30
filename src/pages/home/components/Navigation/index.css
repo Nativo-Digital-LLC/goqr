@@ -1,0 +1,21 @@
+.navigation-container {
+	height: 67px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.navigation-container > ul {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    letter-spacing: 1px;
+}
+
+.navigation-container > ul > li {
+	margin: 0 15px
+}
+
+.navigation-container > ul > li:hover {
+	border-bottom: 2px solid var(--text);
+}

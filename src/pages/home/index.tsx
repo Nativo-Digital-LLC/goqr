@@ -1,26 +1,50 @@
-import HomeContainer from "../containers/HomeContainer";
+import { Bar, Footer, Navigation } from "./components";
+
 import {
 	Welcome,
 	// Information,
 	Benefits,
 	Prices,
 	Services,
-	FAQ,
+	FAQs,
+	Information,
+	Functionality,
+	Contact,
 } from "./sections";
+
+import "./index.css";
 
 export default function HomePage() {
 	return (
-		<HomeContainer defaultBackgroundColor="--tertiary">
+		<div
+			className="home-container overflow-y-auto"
+			onLoad={(e) => {
+				const elements =
+					e.currentTarget.getElementsByClassName("faqs-container");
+				if (elements.length === 0) return;
+
+				const divElement = elements[0];
+				console.log(divElement.getBoundingClientRect().bottom);
+			}}
+		>
+			<Navigation />
 			<Welcome />
-			{/* <Information /> */}
-			<Benefits />
+			<Bar />
+			<Information />
+			<Functionality />
+			<Bar />
 			<Prices />
+			<FAQs />
+			<Bar />
+			<Contact />
+			<Footer />
+			{/*
+			<Benefits />
 			<div className="flex justify-center">
 				<div className="max-w-[890px]">
 					<Services />
-					<FAQ />
 				</div>
-			</div>
-		</HomeContainer>
+			</div> */}
+		</div>
 	);
 }

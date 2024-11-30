@@ -1,0 +1,40 @@
+:root {
+	--primary: #EFE9DB;
+	--secondary: #61b7ba;
+	--tertiary: #FC9761;
+	--text: #4c4c4c;
+	--field: #f3f3f3;
+	--border: #00000020;
+}
+
+.home-container {
+	display: flex;
+	min-height: 100vh;
+	color: var(--text);
+	background-color: var(--primary);
+	flex-direction: column;
+	align-items: center;
+	font-family: "Lexend";
+}
+
+.home-container .section-parent {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	overflow: hidden;
+}
+
+.home-container .section-child {
+	max-width: 890px;
+	padding: 60px 40px 30px 40px;
+}
+
+.home-container h2.title {
+	font-size: 36px;
+	font-weight: 700;
+	margin-bottom: 40px;
+	letter-spacing: 5px;
+}

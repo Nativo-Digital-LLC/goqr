@@ -1,0 +1,29 @@
+.faqs-container-secondary {
+	background-color: var(--secondary);
+}
+
+.faqs-container-tertiary {
+	background-color: var(--tertiary);
+}
+
+.faqs-container .faqs-card {
+	background-color: var(--primary);
+	margin-bottom: 40px;
+	border-radius: 20px;
+	box-shadow: 2px 3px 5px #00000040;
+	padding: 30px 50px;
+	text-align: left;
+	width: 80%;
+	border: 1px solid;
+}
+
+.faqs-container .faqs-card span {
+	font-weight: 700;
+	font-size: 20px;
+}
+
+.faqs-container .faqs-card p {
+	margin-top: 10px;
+	font-weight: 300;
+	font-size: 18px;
+}

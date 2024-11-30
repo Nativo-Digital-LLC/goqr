@@ -1,0 +1,14 @@
+.information-container {
+	background-color: var(--primary);
+}
+
+.information-container p {
+	font-weight: 250;
+	font-size: 22px;
+	text-align: left;
+	letter-spacing: 2px;
+}
+
+.information-container p b {
+	font-weight: 700;
+}

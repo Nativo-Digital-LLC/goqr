@@ -1,5 +1,5 @@
 import FAQItem from "../components/FAQItem";
-import faq from "../constants/FAQ";
+import faq from "../constants/Questions";
 
 export default function FAQ() {
 	return (

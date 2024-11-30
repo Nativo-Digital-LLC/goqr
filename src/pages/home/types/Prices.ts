@@ -1,6 +1,6 @@
 export interface PriceCardProps {
 	title: string;
-	price: number;
+	price: string;
 	disclaimer: string;
 	total: number;
 	selected: boolean;
