@@ -30,7 +30,7 @@ export default function RegisterPage() {
 	const [login, loadingLogin, loginType] = useLogin();
 
 	return (
-		<HomeContainer url="register">
+		<HomeContainer>
 			<div className="section-parent bg-[var(--secondary)]">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">

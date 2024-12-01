@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function Prices() {
 	return (
-		<div className="section-parent prices-container">
+		<div className="section-parent prices-container" id="prices">
 			<div className="section-child">
 				<h2 className="title text-[var(--primary)]">
 					¿Cuáles son los precios?

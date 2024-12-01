@@ -13,7 +13,7 @@ import {
 
 export default function HomePage() {
 	return (
-		<HomeContainer url="home">
+		<HomeContainer>
 			<Welcome />
 			<Bar />
 			<Information />

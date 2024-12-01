@@ -29,7 +29,7 @@ export default function FAQs() {
 
 	return (
 		<div
-			className={`section-parent faqs-container ${bgColor} transition-all ease-in-out duration-500 overflow-hidden`}
+			id="faq" className={`section-parent faqs-container ${bgColor} transition-all ease-in-out duration-500 overflow-hidden`}
 		>
 			<div className="section-child relative">
 				<h2 className="title text-[var(--primary)]">
