@@ -3,9 +3,18 @@
 	padding: 20px 30px;
 	align-items: stretch !important;
 	justify-content: flex-start !important;
-	transition: all ease-in-out 200ms;
-	width: 100%;
+	transition: all ease-in-out 100ms !important;
 	display: flex;
+	position: sticky;
+	width: 100%;
+	background-color: var(--primary);
+	z-index: 99;
+	box-shadow: 0 1px 5px var(--text);
+	top: -67px !important;
+}
+
+.navigation-container-sticky {
+	top: 0px !important;
 }
 
 .navigation-container ul {
@@ -41,6 +50,7 @@
 
 .navigation-container-active {
 	height: 160px;
+	top: 0px !important;
 }
 
 @media screen and (max-width: 480px) {
