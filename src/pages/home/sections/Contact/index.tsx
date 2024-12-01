@@ -5,7 +5,7 @@ import "./index.css";
 
 export default function Contact() {
 	return (
-		<div className="section-parent contact-container z-[2]">
+		<div className="section-parent contact-container z-[2]" id="contact">
 			<div className="section-child">
 				<h2 className="title">Contáctanos</h2>
 				<div className="relative flex justify-center items-center">

@@ -12,10 +12,10 @@ interface HomeContainerProps {
 }
 
 export default function HomeContainer(props: HomeContainerProps) {
-	const { children, url } = props;
+	const { children } = props;
 	return (
 		<div className="home-container">
-			<Navigation url={url ?? ""} />
+			<Navigation />
 			{children}
 			<Footer />
 			<ScrollRestoration />

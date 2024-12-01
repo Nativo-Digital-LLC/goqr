@@ -35,7 +35,7 @@ export default function LoginPage() {
 	}, [session, navigate]);
 
 	return (
-		<HomeContainer url="login">
+		<HomeContainer>
 			<div className="section-parent bg-[var(--secondary)]">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">

@@ -4,7 +4,7 @@ import "./index.css";
 
 export default function Information() {
 	return (
-		<div className="information-container section-parent">
+		<div className="information-container section-parent" id="information">
 			<div className="section-child flex justify-center items-center flex-col">
 				<h2 className="title">¿Qué es?</h2>
 				<p className="mb-[50px]">
