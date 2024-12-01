@@ -1,4 +1,4 @@
-import MockupImg from "../../../../assets/images/landing/mockup.png";
+import MockupImg from "../../../../assets/images/landing/mockup2.png";
 
 import "./index.css";
 
@@ -6,8 +6,8 @@ export default function Welcome() {
 	return (
 		<div className="welcome-container section-parent">
 			<div className="section-child flex flex-col justify-center items-center">
-				<h1 className="">
-					<span className="text-[var(--primary)]" >GoQR</span>
+				<h1>
+					<span className="text-[var(--primary)]">GoQR</span>
 					<span className="w-[250px]">Menú Digital</span>
 				</h1>
 				<button>

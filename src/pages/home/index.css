@@ -1,7 +1,7 @@
 :root {
-	--primary: #EFE9DB;
+	--primary: #efe9db;
 	--secondary: #61b7ba;
-	--tertiary: #FC9761;
+	--tertiary: #fc9761;
 	--text: #4c4c4c;
 	--field: #f3f3f3;
 	--border: #00000020;
@@ -37,4 +37,26 @@
 	font-weight: 700;
 	margin-bottom: 40px;
 	letter-spacing: 5px;
+}
+
+@media screen and (max-width: 480px) {
+	.home-container .section-child {
+		padding: 50px 20px 30px 20px;
+	}
+
+	.home-container h2.title {
+		font-size: 28px;
+		margin-bottom: 20px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.home-container .section-child {
+		padding: 50px 25px 30px 25px;
+	}
+
+	.home-container h2.title {
+		font-size: 30px;
+		margin-bottom: 20px;
+	}
 }

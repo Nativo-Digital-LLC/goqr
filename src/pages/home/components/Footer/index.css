@@ -1,10 +1,5 @@
 .footer-container {
 	height: 100px;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	width: 100%;
-	max-width: 890px;
 }
 
 .footer-container a {
@@ -14,4 +9,20 @@
 
 .footer-container a:hover {
 	border-bottom: 1px solid var(--text);
+}
+
+@media screen and (max-width: 600px) {
+	.footer-container h3 {
+		font-size: 30px;
+		letter-spacing: 1px;
+	}
+
+	.footer-container span {
+		font-size: 10px;
+	}
+
+	.footer-container a {
+		font-size: 12px;
+		height: 20px;
+	}
 }

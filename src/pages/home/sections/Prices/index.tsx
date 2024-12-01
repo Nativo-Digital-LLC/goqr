@@ -11,10 +11,12 @@ export default function Prices() {
 				<h2 className="title text-[var(--primary)]">
 					¿Cuáles son los precios?
 				</h2>
-				<div className="flex justify-center items-center mb-[15px]">
+				<div className="prices-cards flex justify-center items-center mb-[15px]">
 					{prices.map((item, index) => (
 						<div className="price-card" key={index}>
-							<span>{item.title}</span>
+							<span className="price-card-title">
+								{item.title}
+							</span>
 							<div className="flex flex-col items-center">
 								<span className="!font-[600] !text-[21px]">
 									DOP
@@ -38,7 +40,7 @@ export default function Prices() {
 					<div className="free-trial-card">
 						<h3>¡Prueba Gratis!</h3>
 						<p>
-							{`Puedes probar GoQR de manera gratuita\n\rdurante un
+							{`Puedes probar GoQR de manera gratuita durante un
 							mes. No tienes que agregar\nninguna información de
 							pago`}
 						</p>

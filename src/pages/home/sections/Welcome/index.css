@@ -1,6 +1,6 @@
 .welcome-container {
 	background-color: var(--secondary);
-    height: 850px;
+	overflow: hidden;
 }
 
 .welcome-container h1 {
@@ -14,19 +14,19 @@
 }
 
 .welcome-container button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--primary);
-    height: 60px;
-    width: 250px;
-    margin-top: 40px;
-    font-size: 18px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--primary);
+	height: 60px;
+	width: 250px;
+	margin-top: 40px;
+	font-size: 18px;
 }
 
 .welcome-container img {
-    width: 600px;
-    margin-top: 50px;
-    margin-bottom: -60px;
-    bottom: 0;
+	width: 600px;
+	margin-top: 50px;
+	margin-bottom: -60px;
+	bottom: 0;
 }

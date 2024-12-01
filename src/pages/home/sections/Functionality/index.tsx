@@ -8,15 +8,15 @@ import "./index.css";
 export default function Functionality() {
 	return (
 		<div className="functionality-container section-parent">
-			<div className="section-child flex flex-col items-center mb-[-30px]">
+			<div className="section-child flex flex-col items-center mb-[-30px] mt-[-30px]">
 				<h2 className="title">¿Cómo funciona?</h2>
-				<div className="flex justify-center items-center">
+				<div className="flex justify-center items-center functionality-card">
 					<img
 						src={FunctionalityPhone}
 						alt="Functionality Phone"
-						className="w-[250px]"
+						className="w-[200px]"
 					/>
-					<div className="w-[400px] ml-[40px] text-right">
+					<div className="w-[50%] ml-[40px] text-right">
 						<h3>Escanea el código QR</h3>
 						<p className="!text-right">
 							Usa la cámara de tu teléfono o una app para escanear
@@ -28,10 +28,10 @@ export default function Functionality() {
 				<img
 					src={WigglyArrow}
 					alt="Wiggly Arrow Right"
-					className="w-[250px] my-[-50px]"
+					className="w-[250px] my-[-70px] wiggly-arrow"
 				/>
-				<div className="flex justify-center items-center">
-					<div className="w-[400px] mr-[40px] text-left">
+				<div className="functionality-card flex justify-center items-center">
+					<div className="w-[50%] mr-[40px] text-left">
 						<h3>Explora el menú digital</h3>
 						<p>
 							Visualiza el menú completo del restaurante
@@ -48,15 +48,15 @@ export default function Functionality() {
 				<img
 					src={WigglyArrow}
 					alt="Wiggly Arrow Left"
-					className="w-[250px] my-[-50px] scale-x-[-1]"
+					className="w-[250px] my-[-70px] scale-x-[-1] wiggly-arrow"
 				/>
-				<div className="flex justify-center items-center">
+				<div className="functionality-card flex justify-center items-center">
 					<img
 						src={FunctionalityGirl}
 						alt="Functionality Girl"
 						className="w-[300px]"
 					/>
-					<div className="w-[400px] ml-[40px] text-right">
+					<div className="w-[50%] ml-[40px] text-right">
 						<h3>Haz tu pedido al mesero</h3>
 						<p className="!text-right">
 							Una vez que tengas decidido qué ordenar,

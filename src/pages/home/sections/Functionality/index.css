@@ -18,3 +18,60 @@
 .functionality-container p b {
 	font-weight: 700;
 }
+
+@media screen and (max-width: 480) {
+	.functionality-container {
+		margin-top: 20px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.functionality-container img {
+		display: none;
+	}
+
+	.functionality-container .functionality-card div {
+		width: 100% !important;
+		text-align: center;
+		margin: 0 !important;
+		margin-bottom: 30px !important;
+		margin-top: 10px !important;
+	}
+
+	.functionality-container .functionality-card div h3 {
+		font-size: 20px;
+		font-weight: 400;
+		margin-bottom: 15px;
+	}
+
+	.functionality-container .functionality-card div p {
+		text-align: justify !important;
+		hyphens: auto;
+		font-size: 18px !important;
+	}
+}
+
+@media screen and (min-width: 601px) and (max-width: 768px) {
+	.functionality-container .functionality-card {
+		margin-top: 20px;
+	}
+
+	.functionality-container .functionality-card img {
+		width: 230px;
+	}
+
+	.functionality-container .functionality-card div h3 {
+		font-size: 24px;
+		margin-bottom: 15px;
+	}
+
+	.functionality-container .functionality-card div p {
+		font-size: 18px !important;
+	}
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+	.functionality-container .functionality-card div p {
+		font-size: 20px !important;
+	}
+}

@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 
 import Questions from "../../constants/Questions";
 
+import QuestionCloud from "../../../../assets/images/landing/question-cloud.png";
+import QuestionGirl from "../../../../assets/images/landing/question-girl.png";
+
 import "./index.css";
 
 export default function FAQs() {
 	const [bgColor, setBgColor] = useState("faqs-container-secondary");
 
 	const handleNavigation = () => {
-		const y = 4700;
+		const containerMiddle = 4700;
 		setBgColor(
-			y > window.scrollY
+			containerMiddle > window.scrollY
 				? "faqs-container-secondary"
 				: "faqs-container-tertiary"
 		);
@@ -25,14 +28,28 @@ export default function FAQs() {
 	}, []);
 
 	return (
-		<div className={`section-parent faqs-container ${bgColor} transition-all ease-in-out duration-500`}>
-			<div className="section-child">
+		<div
+			className={`section-parent faqs-container ${bgColor} transition-all ease-in-out duration-500 overflow-hidden`}
+		>
+			<div className="section-child relative">
 				<h2 className="title text-[var(--primary)]">
 					Preguntas frecuentes
 				</h2>
-				{Questions.map((item, index) => (
-					<Question {...item} key={index} />
-				))}
+				<img
+					src={QuestionCloud}
+					alt="Question cloud"
+					className="w-[500px] absolute left-[-200px] z-[1]"
+				/>
+				<img
+					src={QuestionGirl}
+					alt="Question girl"
+					className="w-[350px] absolute right-[-220px] bottom-[-20px]"
+				/>
+				<div className="z-[2] relative">
+					{Questions.map((item, index) => (
+						<Question {...item} key={index} />
+					))}
+				</div>
 			</div>
 		</div>
 	);

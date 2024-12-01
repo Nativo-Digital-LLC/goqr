@@ -5,7 +5,7 @@ import "./index.css";
 
 export default function Contact() {
 	return (
-		<div className="section-parent contact-container">
+		<div className="section-parent contact-container z-[2]">
 			<div className="section-child">
 				<h2 className="title">Contáctanos</h2>
 				<div className="relative flex justify-center items-center">
@@ -21,12 +21,12 @@ export default function Contact() {
 						<img
 							src={StraightArrow}
 							alt="Straight Arrow Right"
-							className="w-[140px] mr-[130px] absolute bottom-[23px] left-[-20px]"
+							className="w-[140px] mr-[130px] absolute bottom-[23px] left-[-20px] straight-arrow"
 						/>
 						<img
 							src={StraightArrow}
 							alt="Straight Arrow Left"
-							className="scale-x-[-1] w-[140px] ml-[130px] absolute bottom-[23px] right-[-20px]"
+							className="scale-x-[-1] w-[140px] ml-[130px] absolute bottom-[23px] right-[-20px] straight-arrow"
 						/>
 					</div>
 				</div>

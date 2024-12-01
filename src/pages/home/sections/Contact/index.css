@@ -23,3 +23,80 @@
 	text-decoration: underline;
 	font-size: 20px;
 }
+
+@media screen and (max-width: 600px) {
+	.contact-container {
+		padding-bottom: 0px;
+	}
+
+	.contact-container .contact-card {
+		height: auto;
+		width: 100%;
+		font-size: 14px;
+		padding: 30px 0px;
+	}
+
+	.contact-container .contact-card p {
+		width: 80% !important;
+	}
+	.contact-container .contact-card a {
+		margin-top: 15px;
+	}
+
+	.contact-container .contact-card b {
+		font-size: 16px;
+		width: auto !important;
+	}
+
+	.contact-container img {
+		display: none;
+	}
+}
+
+@media screen and (min-width: 601px) and (max-width: 768px) {
+	.contact-container {
+		padding-bottom: 10px;
+	}
+
+	.contact-container .contact-card {
+		height: auto;
+		width: 80%;
+		font-size: 17px;
+		padding: 30px 0px;
+	}
+
+	.contact-container .contact-card p {
+		width: 80% !important;
+	}
+	.contact-container .contact-card a {
+		margin-top: 15px;
+	}
+
+	.contact-container .contact-card b {
+		font-size: 20px;
+		width: auto !important;
+	}
+
+	.contact-container img {
+		bottom: 18px;
+		width: 120px;
+	}
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+	.contact-container .contact-card {
+	}
+
+	.contact-container .contact-card p {
+	}
+	.contact-container .contact-card a {
+	}
+
+	.contact-container .contact-card b {
+	}
+
+	.contact-container img {
+		bottom: 25px;
+		width: 120px;
+	}
+}

@@ -5,7 +5,7 @@ import "./index.css";
 export default function Information() {
 	return (
 		<div className="information-container section-parent">
-			<div className="section-child">
+			<div className="section-child flex justify-center items-center flex-col">
 				<h2 className="title">¿Qué es?</h2>
 				<p className="mb-[50px]">
 					Nuestro servicio ofrece a los restaurantes una herramienta
