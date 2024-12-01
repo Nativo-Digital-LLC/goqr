@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 
 import "./index.css";
 
-export default function Navigation() {
+export default function Navigation({ url }: { url: string }) {
 	const [isOpen, setIsOpen] = useState(false);
+
+	const selectedClass = "border-b-[2px] border-b-[var(--text)] font-[800]";
 
 	return (
 		<div
@@ -13,17 +15,17 @@ export default function Navigation() {
 			}`}
 		>
 			<ul>
-				<li>
-					<Link to="">Inicio</Link>
+				<li className={`${url == "home" && selectedClass}`}>
+					<Link to="/">Inicio</Link>
 				</li>
-				<li>
+				{/* <li>
 					<Link to="">Blog</Link>
+				</li> */}
+				<li className={`${url == "register" && selectedClass}`}>
+					<Link to="/register">Crea tu menú</Link>
 				</li>
-				<li>
-					<Link to="">Crea tu menú</Link>
-				</li>
-				<li>
-					<Link to="">Ingresar </Link>
+				<li className={`${url == "login" && selectedClass}`}>
+					<Link to="/login">Ingresar </Link>
 				</li>
 			</ul>
 			<button

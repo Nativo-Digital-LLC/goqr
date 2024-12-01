@@ -1,4 +1,6 @@
-import { Bar, Footer, Navigation } from "./components";
+import HomeContainer from "../containers/HomeContainer";
+
+import { Bar } from "./components";
 
 import {
 	Welcome,
@@ -9,12 +11,9 @@ import {
 	Contact,
 } from "./sections";
 
-import "./index.css";
-
 export default function HomePage() {
 	return (
-		<div className="home-container">
-			<Navigation />
+		<HomeContainer url="home">
 			<Welcome />
 			<Bar />
 			<Information />
@@ -24,7 +23,6 @@ export default function HomePage() {
 			<FAQs />
 			<Bar />
 			<Contact />
-			<Footer />
-		</div>
+		</HomeContainer>
 	);
 }
