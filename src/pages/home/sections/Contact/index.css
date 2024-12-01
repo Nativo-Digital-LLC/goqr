@@ -84,17 +84,6 @@
 }
 
 @media screen and (min-width: 769px) and (max-width: 1024px) {
-	.contact-container .contact-card {
-	}
-
-	.contact-container .contact-card p {
-	}
-	.contact-container .contact-card a {
-	}
-
-	.contact-container .contact-card b {
-	}
-
 	.contact-container img {
 		bottom: 25px;
 		width: 120px;
