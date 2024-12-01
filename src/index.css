@@ -13,11 +13,6 @@
 	box-sizing: border-box;
 }
 
-.landing-page .ant-checkbox-checked .ant-checkbox-inner {
-	background-color: var(--secondary) !important;
-	border-color: var(--secondary) !important;
-}
-
 .landing-page
 	:where(.css-dev-only-do-not-override-5wsri9).ant-checkbox-wrapper:not(
 		.ant-checkbox-wrapper-disabled
@@ -28,26 +23,6 @@
 	):hover
 	.ant-checkbox-inner {
 	border-color: var(--secondary);
-}
-
-.panel-expand {
-	transition: all 200ms ease-in-out;
-}
-
-/* mechanism */
-
-.panel-expand {
-	display: grid;
-	grid-template-rows: 0fr;
-}
-
-.panel-expanded {
-	display: grid;
-	grid-template-rows: 1fr;
-}
-
-.panel-expand-content {
-	overflow: hidden;
 }
 
 .hide-scrollbar-y {
