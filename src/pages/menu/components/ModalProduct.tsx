@@ -207,7 +207,7 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 						name='photo'
 						multiple={false}
 						maxCount={1}
-						accept='image/*'
+						accept='.jpg,.jpeg,.png'
 						beforeUpload={() => false}
 					>
 						<p className='ant-upload-drag-icon'>
