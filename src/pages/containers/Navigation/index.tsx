@@ -10,7 +10,7 @@ export default function Navigation({ url }: { url: string }) {
 
 	return (
 		<div
-			className={`navigation-container section-parent ${
+			className={`navigation-container ${
 				isOpen && "navigation-container-active"
 			}`}
 		>

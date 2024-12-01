@@ -13,6 +13,7 @@
 	color: var(--text);
 	background-color: var(--primary);
 	flex-direction: column;
+	justify-content: space-between;
 	align-items: center;
 	font-family: "Lexend";
 }
@@ -25,6 +26,7 @@
 	align-items: center;
 	text-align: center;
 	overflow: hidden;
+	flex: 1 !important;
 }
 
 .home-container .section-child {

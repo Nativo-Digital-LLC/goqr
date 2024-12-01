@@ -8,14 +8,14 @@ import "./index.css";
 
 interface HomeContainerProps {
 	children: ReactNode;
-	url: string;
+	url?: string;
 }
 
 export default function HomeContainer(props: HomeContainerProps) {
 	const { children, url } = props;
 	return (
 		<div className="home-container">
-			<Navigation url={url} />
+			<Navigation url={url ?? ""} />
 			{children}
 			<Footer />
 			<ScrollRestoration />

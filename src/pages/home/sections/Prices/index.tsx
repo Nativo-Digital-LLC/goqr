@@ -3,6 +3,7 @@ import prices from "../../constants/Prices";
 import oldGuy from "../../../../assets/images/landing/old-guy.png";
 
 import "./index.css";
+import { Link } from "react-router-dom";
 
 export default function Prices() {
 	return (
@@ -44,8 +45,10 @@ export default function Prices() {
 							mes. No tienes que agregar\nninguna información de
 							pago`}
 						</p>
-						<button>
-							<span>¡Empieza aquí!</span>
+						<button className="hover:scale-150 transition-all duration-200">
+							<Link to="/register">
+								<span>¡Empieza aquí!</span>
+							</Link>
 						</button>
 					</div>
 				</div>

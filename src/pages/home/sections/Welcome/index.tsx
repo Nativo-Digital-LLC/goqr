@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import MockupImg from "../../../../assets/images/landing/mockup2.png";
 
 import "./index.css";
@@ -10,8 +11,10 @@ export default function Welcome() {
 					<span className="text-[var(--primary)]">GoQR</span>
 					<span className="w-[250px]">Menú Digital</span>
 				</h1>
-				<button>
-					<span>¡Empieza aquí!</span>
+				<button className="hover:scale-150 transition-all duration-200">
+					<Link to="/register">
+						<span>¡Empieza aquí!</span>
+					</Link>
 				</button>
 				<img src={MockupImg} alt="Mockup Image" />
 			</div>

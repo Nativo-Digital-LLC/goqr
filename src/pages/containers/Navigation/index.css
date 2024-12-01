@@ -4,6 +4,8 @@
 	align-items: stretch !important;
 	justify-content: flex-start !important;
 	transition: all ease-in-out 200ms;
+	width: 100%;
+	display: flex;
 }
 
 .navigation-container ul {
@@ -93,5 +95,15 @@
 	.navigation-container-active .navigation-menu-bars div:nth-child(3) {
 		rotate: 45deg;
 		transform: translateX(-4px) translateY(5px);
+	}
+}
+
+@media screen and (min-width: 481px) {
+	.navigation-container {
+		justify-content: center !important;
+	}
+
+	.navigation-container-active {
+		height: 67px;
 	}
 }
