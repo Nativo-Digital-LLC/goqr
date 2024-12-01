@@ -3,8 +3,10 @@ import {
 	EditOutlined,
 	EnvironmentOutlined,
 	PhoneOutlined,
+	StarOutlined,
 	WhatsAppOutlined
 } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 
 import { format, ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
@@ -18,6 +20,8 @@ interface EstablishmentInfoProps {
 }
 
 export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentInfoProps) => {
+	const location = useLocation();
+
 	const {
 		name,
 		description,
@@ -27,7 +31,7 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 		addressLink
 	} = establishment;
 	return (
-		<>
+		<Space direction='vertical' size='small'>
 			<Space>
 				<Title level={3} style={{ margin: 0 }}>{name}</Title>
 				{isEditable && (
@@ -41,25 +45,20 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 					/>
 				)}
 			</Space>
-			<br />
 
-			<Text>{description}</Text>
-			<br />
+			<Text style={{ opacity: 0.7 }}>{description}</Text>
 
 			{address && (
-				<>
-					<a href={addressLink + ''} target='_blank'>
-						<Space>
-							<EnvironmentOutlined />
-							<Text>{address}</Text>
-						</Space>
-					</a>
-					<br />
-				</>
+				<a href={addressLink + ''} target='_blank' style={{ opacity: 0.7 }}>
+					<Space>
+						<EnvironmentOutlined />
+						<Text>{address}</Text>
+					</Space>
+				</a>
 			)}
 			<Space>
 				{phone && (
-					<a href={'tel:' + phone}>
+					<a href={'tel:' + phone} style={{ opacity: 0.7 }}>
 						<Space>
 							<PhoneOutlined />
 							<Text>{format.phone(phone + '')}</Text>
@@ -68,7 +67,7 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 				)}
 
 				{whatsapp && (
-					<a href={'https://wa.me/1' + whatsapp} target='_blank'>
+					<a href={'https://wa.me/1' + whatsapp} target='_blank' style={{ opacity: 0.7 }}>
 						<Space>
 							<WhatsAppOutlined style={{ color: '#128C7E' }} />
 							<Text>{format.phone(whatsapp + '')}</Text>
@@ -76,6 +75,19 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 					</a>
 				)}
 			</Space>
-		</>
+
+			{location.pathname.includes('pandora') && (
+				<a
+					href='https://search.google.com/local/writereview?placeid=ChIJedOsv5mzHIwRRIpW55r0Jf4'
+					target='_blank'
+					style={{ margin: '10px 0' }}
+				>
+					<Space>
+						<StarOutlined style={{ color: '#e0d206' }} />
+						<Text>Déjanos tu reseña</Text>
+					</Space>
+				</a>
+			)}
+		</Space>
 	);
 }
