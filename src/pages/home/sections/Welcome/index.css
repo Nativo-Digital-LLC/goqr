@@ -1,0 +1,32 @@
+.welcome-container {
+	background-color: var(--secondary);
+	overflow: hidden;
+}
+
+.welcome-container h1 {
+	letter-spacing: 3px;
+	font-size: 50px;
+	font-weight: 900;
+}
+
+.welcome-container span {
+	display: block;
+}
+
+.welcome-container button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--primary);
+	height: 60px;
+	width: 250px;
+	margin-top: 40px;
+	font-size: 18px;
+}
+
+.welcome-container img {
+	width: 600px;
+	margin-top: 50px;
+	margin-bottom: -60px;
+	bottom: 0;
+}

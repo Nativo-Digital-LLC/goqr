@@ -1,0 +1,27 @@
+.information-container {
+	background-color: var(--primary);
+}
+
+.information-container p {
+	font-weight: 250;
+	font-size: 22px;
+	text-align: justify !important;
+	hyphens: auto;
+	letter-spacing: 2px;
+}
+
+.information-container p b {
+	font-weight: 700;
+}
+
+@media screen and (max-width: 600px) {
+	.information-container p {
+		font-size: 18px !important;
+	}
+}
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+	.information-container p {
+		font-size: 20px !important;
+	}
+}

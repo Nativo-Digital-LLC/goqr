@@ -2,32 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--primary: #ffffff;
-	--secondary: #76adff;
-	--tertiary: #ffffff;
-	--text: #4c4c4c;
-	--field: #f3f3f3;
-	--border: #00000020;
+@font-face {
+	font-family: "Lexend";
+	src: url("./assets/fonts/Lexend.ttf");
 }
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-}
-
-.landing-page {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	color: var(--text);
-	position: relative;
-}
-
-.landing-page .ant-checkbox-checked .ant-checkbox-inner {
-	background-color: var(--secondary) !important;
-	border-color: var(--secondary) !important;
 }
 
 .landing-page
@@ -40,26 +23,6 @@
 	):hover
 	.ant-checkbox-inner {
 	border-color: var(--secondary);
-}
-
-.panel-expand {
-	transition: all 200ms ease-in-out;
-}
-
-/* mechanism */
-
-.panel-expand {
-	display: grid;
-	grid-template-rows: 0fr;
-}
-
-.panel-expanded {
-	display: grid;
-	grid-template-rows: 1fr;
-}
-
-.panel-expand-content {
-	overflow: hidden;
 }
 
 .hide-scrollbar-y {

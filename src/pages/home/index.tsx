@@ -1,26 +1,28 @@
 import HomeContainer from "../containers/HomeContainer";
+
+import { Bar } from "./components";
+
 import {
 	Welcome,
-	// Information,
-	Benefits,
 	Prices,
-	Services,
-	FAQ,
+	FAQs,
+	Information,
+	Functionality,
+	Contact,
 } from "./sections";
 
 export default function HomePage() {
 	return (
-		<HomeContainer defaultBackgroundColor="--tertiary">
+		<HomeContainer url="home">
 			<Welcome />
-			{/* <Information /> */}
-			<Benefits />
+			<Bar />
+			<Information />
+			<Functionality />
+			<Bar />
 			<Prices />
-			<div className="flex justify-center">
-				<div className="max-w-[890px]">
-					<Services />
-					<FAQ />
-				</div>
-			</div>
+			<FAQs />
+			<Bar />
+			<Contact />
 		</HomeContainer>
 	);
 }

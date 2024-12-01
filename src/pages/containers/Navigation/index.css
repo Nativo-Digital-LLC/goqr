@@ -1,0 +1,109 @@
+.navigation-container {
+	height: 67px;
+	padding: 20px 30px;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	transition: all ease-in-out 200ms;
+	width: 100%;
+	display: flex;
+}
+
+.navigation-container ul {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	letter-spacing: 1px;
+	height: 25px;
+	transition: all ease-in-out 200ms;
+}
+
+.navigation-container ul li {
+	margin: 0 15px;
+}
+
+.navigation-container ul li:hover {
+	border-bottom: 2px solid var(--text);
+}
+
+.navigation-container .navigation-menu-bars {
+	display: none !important;
+	height: 25px;
+	width: 25px;
+	transition: all ease-in-out 200ms;
+}
+
+.navigation-container .navigation-menu-bars div {
+	transition: all ease-in-out 200ms;
+	height: 3px;
+	width: 25px;
+	background-color: var(--text);
+}
+
+.navigation-container-active {
+	height: 160px;
+}
+
+@media screen and (max-width: 480px) {
+	.navigation-container {
+		flex-direction: row !important;
+		justify-content: flex-end !important;
+	}
+
+	.navigation-container .navigation-menu-bars {
+		display: flex !important;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.navigation-container ul {
+		display: none;
+	}
+
+	.navigation-container-active ul {
+		display: flex !important;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		height: 100%;
+		width: 100%;
+	}
+
+	.navigation-container-active ul li {
+		margin-bottom: 20px;
+	}
+
+	.navigation-container-active .navigation-menu-bars {
+		flex-direction: row !important;
+		display: flex !important;
+	}
+
+	.navigation-container-active .navigation-menu-bars div {
+		height: 25px;
+		width: 3px;
+	}
+
+	.navigation-container-active .navigation-menu-bars div:nth-child(1) {
+		rotate: -45deg;
+		transform: translateX(3.5px) translateY(4.5px);
+	}
+
+	.navigation-container-active .navigation-menu-bars div:nth-child(2) {
+		display: none;
+	}
+
+	.navigation-container-active .navigation-menu-bars div:nth-child(3) {
+		rotate: 45deg;
+		transform: translateX(-4px) translateY(5px);
+	}
+}
+
+@media screen and (min-width: 481px) {
+	.navigation-container {
+		justify-content: center !important;
+	}
+
+	.navigation-container-active {
+		height: 67px;
+	}
+}

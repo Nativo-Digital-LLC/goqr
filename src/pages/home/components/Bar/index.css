@@ -1,0 +1,42 @@
+@media screen and (max-width: 480px) {
+	.bar-container {
+		padding: 25px !important;
+	}
+
+	.bar-container p {
+		font-size: 12px;
+		letter-spacing: 1px;
+		text-align: center;
+	}
+}
+
+@media screen and (min-width: 481px) and (max-width: 600px) {
+	.bar-container {
+		padding: 25px !important;
+	}
+
+	.bar-container p {
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+	}
+}
+
+@media screen and (min-width: 601px) and (max-width: 768px) {
+	.bar-container {
+		padding: 15px !important;
+	}
+
+	.bar-container p {
+		font-size: 14px;
+		letter-spacing: 1px;
+		text-align: center;
+	}
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+	.bar-container p {
+		letter-spacing: 1px;
+		text-align: center;
+	}
+}

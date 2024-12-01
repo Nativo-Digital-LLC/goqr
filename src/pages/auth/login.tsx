@@ -1,16 +1,18 @@
-import { useEffect, useMemo } from "react";
-import { Alert, Button, Form, Input } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Alert, Button, Form, Input } from "antd";
+import { useEffect, useMemo } from "react";
 
 import { useHandleOAuth2Session, useLogin } from "../../hooks/useAuth";
+
+import { useSessionStore } from "../../store/session";
+import { AuthErrorType } from "../../types/Error";
+
+import { isAppleDevice } from "../../utils/helpers";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
 import AppleIcon from "../../assets/images/icons/apple-icon.svg";
 
 import HomeContainer from "../containers/HomeContainer";
-import { useSessionStore } from "../../store/session";
-import { AuthErrorType } from "../../types/Error";
-import { isAppleDevice } from "../../utils/helpers";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -33,163 +35,172 @@ export default function LoginPage() {
 	}, [session, navigate]);
 
 	return (
-		<HomeContainer defaultBackgroundColor="--primary">
-			<div className="w-full flex flex-col items-center pt-[40px] mb-[10px] px-[10px]">
-				<div className="max-w-[450px] w-full">
-					<div className="p-[30px] bg-[--tertiary] rounded-[15px] shadow-md shadow-[#00000030]">
-						<h1 className="text-center text-[24px] font-[700] mb-[25px]">
-							Iniciar Sesión
-						</h1>
-						<Form
-							requiredMark={false}
-							layout="vertical"
-							onFinish={({ email, password }) =>
-								login(
-									"EmailAndPassword",
-									{
-										email,
-										password,
-										page: "login",
-									},
-									() => navigate("/dashboard")
-								)
-							}
-						>
-							<Form.Item
-								label="Correo Electrónico"
-								name="email"
-								validateTrigger="onBlur"
-								rules={[
-									{
-										required: true,
-										message:
-											"Ingresa tu correo electrónico",
-									},
-									{
-										type: "email",
-										message: "Correo inválido",
-									},
-								]}
-								className="font-[500]"
-							>
-								<Input
-									placeholder="test@example.com"
-									type="email"
-									className="bg-[--field] font-[400]"
-									size="large"
-								/>
-							</Form.Item>
-
-							<Form.Item
-								label="Contraseña"
-								name="password"
-								rules={[
-									{
-										required: true,
-										message: "Ingresa tu contraseña",
-									},
-									{
-										min: 8,
-										message:
-											"Tu contraseña debe tener almenos 8 caracteres",
-									},
-								]}
-								validateTrigger="onBlur"
-								className="font-[500]"
-							>
-								<Input.Password
-									className="bg-[--field] font-[400]"
-									size="large"
-									minLength={8}
-								/>
-							</Form.Item>
-							<Button
-								type="primary"
-								htmlType="submit"
-								loading={
-									loading && loginType === "EmailAndPassword"
+		<HomeContainer url="login">
+			<div className="section-parent bg-[var(--secondary)]">
+				<div className="w-full flex flex-col items-center p-[20px]">
+					<div className="max-w-[450px] w-full">
+						<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
+							<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+								Iniciar Sesión
+							</h1>
+							<Form
+								requiredMark={false}
+								layout="vertical"
+								onFinish={({ email, password }) =>
+									login(
+										"EmailAndPassword",
+										{
+											email,
+											password,
+											page: "login",
+										},
+										() => navigate("/dashboard")
+									)
 								}
-								className="mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
 							>
-								Acceder
-							</Button>
+								<Form.Item
+									label="Correo Electrónico"
+									name="email"
+									validateTrigger="onBlur"
+									rules={[
+										{
+											required: true,
+											message:
+												"Ingresa tu correo electrónico",
+										},
+										{
+											type: "email",
+											message: "Correo inválido",
+										},
+									]}
+									className="font-[500]"
+								>
+									<Input
+										placeholder="test@example.com"
+										type="email"
+										className="bg-[--field] font-[400] border border-[var(--text)]"
+										size="large"
+									/>
+								</Form.Item>
 
-							{error && (
-								<Alert
-									style={{ marginTop: 20 }}
-									type={
-										error.type ===
-										AuthErrorType.InvalidCredentials
-											? "warning"
-											: "error"
-									}
-									message={
-										error.type ===
-										AuthErrorType.InvalidCredentials
-											? "Correo o contraseña incorrecta"
-											: "Algo salió mal 😓, por favor intentalo más tarde"
-									}
-									showIcon
-								/>
-							)}
-
-							<div className="flex items-center my-[10px]">
-								<div className="h-[1px] bg-[--border] w-full" />
-								<span className="text-[--border] pb-[3px] mx-[10px]">
-									o
-								</span>
-								<div className="h-[1px] bg-[--border] w-full" />
-							</div>
-							<div className="flex justify-between items-center gap-3">
+								<Form.Item
+									label="Contraseña"
+									name="password"
+									rules={[
+										{
+											required: true,
+											message: "Ingresa tu contraseña",
+										},
+										{
+											min: 8,
+											message:
+												"Tu contraseña debe tener almenos 8 caracteres",
+										},
+									]}
+									validateTrigger="onBlur"
+									className="font-[500]"
+								>
+									<Input.Password
+										className="bg-[--field] font-[400] border border-[var(--text)]"
+										size="large"
+										minLength={8}
+									/>
+								</Form.Item>
 								<Button
 									type="primary"
-									className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
-									onClick={() =>
-										login("Google", { page: "login" })
-									}
+									htmlType="submit"
 									loading={
-										loadingOauth2 ||
-										(loading && loginType === "Google")
+										loading &&
+										loginType === "EmailAndPassword"
 									}
+									className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
 								>
-									<img
-										className="h-[20px] w-[20px]"
-										src={GoogleIcon}
-										alt="Sign in with google"
-									/>
-									Ingresar con Google
+									Acceder
 								</Button>
-								{isAppleDevice && import.meta.env.DEV && (
+
+								{error && (
+									<Alert
+										style={{ marginTop: 20 }}
+										type={
+											error.type ===
+											AuthErrorType.InvalidCredentials
+												? "warning"
+												: "error"
+										}
+										message={
+											error.type ===
+											AuthErrorType.InvalidCredentials
+												? "Correo o contraseña incorrecta"
+												: "Algo salió mal 😓, por favor intentalo más tarde"
+										}
+										showIcon
+									/>
+								)}
+
+								<div className="flex items-center my-[10px]">
+									<div className="h-[1px] bg-[--border] w-full" />
+									<span className="text-[--border] pb-[3px] mx-[10px]">
+										o
+									</span>
+									<div className="h-[1px] bg-[--border] w-full" />
+								</div>
+								<div className="flex justify-between items-center gap-3">
 									<Button
 										type="primary"
-										className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+										className="border border-[var(--text)] h-[38px] rounded-[8px] w-full bg-[#FFF] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
 										onClick={() =>
-											login("Apple", { page: "login" })
+											login("Google", {
+												page: "login",
+											})
 										}
 										loading={
 											loadingOauth2 ||
-											(loading && loginType === "Apple")
+											(loading && loginType === "Google")
 										}
 									>
 										<img
-											className="w-[14px]"
-											src={AppleIcon}
-											alt="Sign in with apple"
+											className="h-[20px] w-[20px]"
+											src={GoogleIcon}
+											alt="Sign in with google"
 										/>
-										Ingresar con Apple
+										Ingresar con Google
 									</Button>
-								)}
-							</div>
+									{isAppleDevice && import.meta.env.DEV && (
+										<Button
+											type="primary"
+											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
+											onClick={() =>
+												login("Apple", {
+													page: "login",
+												})
+											}
+											loading={
+												loadingOauth2 ||
+												(loading &&
+													loginType === "Apple")
+											}
+										>
+											<img
+												className="w-[14px]"
+												src={AppleIcon}
+												alt="Sign in with apple"
+											/>
+											Ingresar con Apple
+										</Button>
+									)}
+								</div>
 
-							{oauth2Error && typeof oauth2Error === "string" && (
-								<Alert
-									message={oauth2Error}
-									type="error"
-									style={{ marginTop: 20 }}
-									showIcon
-								/>
-							)}
-						</Form>
+								{oauth2Error &&
+									typeof oauth2Error === "string" && (
+										<Alert
+											message={oauth2Error}
+											type="error"
+											style={{ marginTop: 20 }}
+											showIcon
+										/>
+									)}
+							</Form>
+						</div>
 					</div>
 				</div>
 			</div>
