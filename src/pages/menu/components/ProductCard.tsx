@@ -1,7 +1,7 @@
 import { Button, Image, Typography } from 'antd';
 import {
-	CaretDownOutlined,
-	CaretUpOutlined,
+	// CaretDownOutlined,
+	// CaretUpOutlined,
 	DeleteOutlined,
 	EditOutlined
 } from '@ant-design/icons';
@@ -34,8 +34,8 @@ export const ProductCard = (props: ProductCardProps) => {
 		color,
 		preview,
 		isEditable,
-		showMoveDown,
-		showMoveUp,
+		// showMoveDown,
+		// showMoveUp,
 		onChange
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
@@ -56,14 +56,16 @@ export const ProductCard = (props: ProductCardProps) => {
 						display: 'flex'
 					}}
 				>
+					{/*
 					{showMoveUp && (
 						<Button
 							type='text'
 							icon={<CaretUpOutlined />}
-							// loading={changingOrder}
-							// onClick={() => changeOrder(data.subcategoryId, data.$id, 'up', onChange)}
+							loading={changingOrder}
+							onClick={() => changeOrder(data.subcategoryId, data.$id, 'up', onChange)}
 						/>
 					)}
+
 
 					{showMoveDown && (
 						<Button
@@ -73,6 +75,7 @@ export const ProductCard = (props: ProductCardProps) => {
 							// onClick={() => changeOrder(data.subcategoryId, data.$id, 'down', onChange)}
 						/>
 					)}
+					*/}
 
 					<Button
 						type='text'
