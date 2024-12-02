@@ -25,23 +25,12 @@ export const useLanguageStore = create<LanguageStoreProps>((set) => ({
 }));
 
 (async () => {
+	const { setLang } = useLanguageStore.getState();
 	const lang = localStorage.getItem('lang') as Lang | null;
 	if (lang) {
-		const { setLang } = useLanguageStore.getState();
 		setLang(lang);
 		return;
 	}
 
-	const navLang = navigator.language || navigator.languages[0];
-	if (navLang && navLang.includes('es')) {
-		const { setLang } = useLanguageStore.getState();
-		setLang('es');
-		return;
-	}
-
-	if (navLang && navLang.includes('en')) {
-		const { setLang } = useLanguageStore.getState();
-		setLang('en');
-		return;
-	}
+	setLang('es');
 })();
