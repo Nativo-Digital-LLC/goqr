@@ -28,6 +28,7 @@ import searchClient from '../../utils/search';
 import { ProductProps } from '../../types/Product';
 import { useShowIntro } from '../../hooks/useShowIntro';
 import { useFDADisclaimer } from '../../hooks/useFDADisclaimer';
+import { useLanguageStore } from '../../store/language';
 
 const { Text } = Typography;
 
@@ -37,6 +38,7 @@ export default function MenuPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const showIntro = useShowIntro();
+	const dictionary = useLanguageStore(({ dictionary }) => dictionary);
 
 	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
 	useFDADisclaimer(
@@ -201,7 +203,7 @@ export default function MenuPage() {
 							<SearchBox
 								onChangeCapture={handleSearchInput}
 								onResetCapture={() => setSearch('')}
-								placeholder='Buscar'
+								placeholder={dictionary.menu.search}
 							/>
 						)}
 

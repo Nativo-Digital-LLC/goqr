@@ -21,6 +21,7 @@ export interface EstablishmentProps {
 	paymentMethod: PaymentMethod;
 	paymentFrequency: PaymentFrequency;
 	showFoodAllergyAndRiskDisclaimer: boolean;
+	enableMultiLanguage: boolean;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string;

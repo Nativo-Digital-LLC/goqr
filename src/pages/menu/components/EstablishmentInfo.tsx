@@ -1,4 +1,4 @@
-import { Button, Space, Typography } from 'antd';
+import { Button, Row, Space, Typography } from 'antd';
 import {
 	EditOutlined,
 	EnvironmentOutlined,
@@ -11,6 +11,8 @@ import { useLocation } from 'react-router-dom';
 import { format, ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
 import { EstablishmentProps } from '../../../types/Establishment';
+import { ToggleLanguageButton } from './ToggleLanguageButton';
+import { useLanguageStore } from '../../../store/language';
 
 const { Title, Text } = Typography;
 
@@ -21,6 +23,7 @@ interface EstablishmentInfoProps {
 
 export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentInfoProps) => {
 	const location = useLocation();
+	const dictionary = useLanguageStore(({ dictionary }) => dictionary);
 
 	const {
 		name,
@@ -28,23 +31,30 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 		address,
 		phone,
 		whatsapp,
-		addressLink
+		addressLink,
+		enableMultiLanguage
 	} = establishment;
 	return (
-		<Space direction='vertical' size='small'>
-			<Space>
-				<Title level={3} style={{ margin: 0 }}>{name}</Title>
-				{isEditable && (
-					<Button
-						type='text'
-						icon={<EditOutlined />}
-						onClick={() => ModalOpener$.next({
-							name: ModalName.Establishment,
-							extra: establishment
-						})}
-					/>
+		<Space direction='vertical' size='small' style={{ width: '100%' }}>
+			<Row justify='space-between'>
+				<Space>
+					<Title level={3} style={{ margin: 0 }}>{name}</Title>
+					{isEditable && (
+						<Button
+							type='text'
+							icon={<EditOutlined />}
+							onClick={() => ModalOpener$.next({
+								name: ModalName.Establishment,
+								extra: establishment
+							})}
+						/>
+					)}
+				</Space>
+
+				{enableMultiLanguage && !isEditable && (
+					<ToggleLanguageButton />
 				)}
-			</Space>
+			</Row>
 
 			<Text style={{ opacity: 0.7 }}>{description}</Text>
 
@@ -84,7 +94,7 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 				>
 					<Space>
 						<StarOutlined style={{ color: '#e0d206' }} />
-						<Text>Déjanos tu reseña</Text>
+						<Text>{dictionary.menu.establishment.leaveReview}</Text>
 					</Space>
 				</a>
 			)}
