@@ -29,9 +29,10 @@ interface VariantProps {
 
 interface ModalProductProps {
 	onFinish: () => void;
+	enableEnglishVersion: boolean;
 }
 
-export const ModalProduct = ({ onFinish }: ModalProductProps) => {
+export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductProps) => {
 	const [visible, close, extra] = useModalVisible<ProductProps>(ModalName.Products);
 	const [save, saving] = useSaveProduct();
 	const [variants, setVariants] = useState<VariantProps[]>([]);
@@ -108,8 +109,10 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 								? data.photo.file
 								: undefined,
 							prices: prices as { label: string; price: number }[],
-							name: data.name,
-							description: data.description,
+							es_name: data.es_name,
+							en_name: data.en_name,
+							es_description: data.es_description,
+							en_description: data.en_description,
 							order: extra?.order,
 							establishmentId: extra?.establishmentId,
 							categoryId: extra?.categoryId,
@@ -123,12 +126,22 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 				}}
 			>
 				<Form.Item
-					name='name'
-					label='Nombre'
+					name='es_name'
+					label={`Nombre${enableEnglishVersion ? ' (español)' : ''}`}
 					rules={[{ required: true, message: 'Introduzca un nombre' }]}
 				>
 					<Input />
 				</Form.Item>
+
+				{enableEnglishVersion && (
+					<Form.Item
+						name='en_name'
+						label={`Nombre${enableEnglishVersion ? ' (ingles)' : ''}`}
+						rules={[{ required: true, message: 'Introduzca un nombre' }]}
+					>
+						<Input />
+					</Form.Item>
+				)}
 
 				{variants.length === 0 && (
 					<Form.Item
@@ -192,11 +205,20 @@ export const ModalProduct = ({ onFinish }: ModalProductProps) => {
 				<br />
 
 				<Form.Item
-					name='description'
-					label='Descripción'
+					name='es_description'
+					label={`Descripción${enableEnglishVersion ? ' (español)' : ''}`}
 				>
 					<Input.TextArea rows={4} />
 				</Form.Item>
+
+				{enableEnglishVersion && (
+					<Form.Item
+						name='en_description'
+						label={`Descripción${enableEnglishVersion ? ' (ingles)' : ''}`}
+					>
+						<Input.TextArea rows={4} />
+					</Form.Item>
+				)}
 
 				<Form.Item
 					label='Foto'

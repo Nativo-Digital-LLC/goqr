@@ -13,6 +13,7 @@ import {
 	useDeleteProduct
 } from '../../../hooks/useProducts';
 import { ModalName } from '../../../types/Modals';
+import { useLanguageStore } from '../../../store/language';
 
 const { Title, Text } = Typography;
 
@@ -40,6 +41,7 @@ export const ProductCard = (props: ProductCardProps) => {
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
 	// const [changeOrder, changingOrder] = useChangeProductOrder();
+	const lang = useLanguageStore(({ lang }) => lang);
 
 	return (
 		<div style={{ position: 'relative' }}>
@@ -111,8 +113,14 @@ export const ProductCard = (props: ProductCardProps) => {
 				}}
 				preview={preview}
 			/>
-			<Title level={5} style={{ marginBottom: 0 }}>{data.name}</Title>
-			<Text>{data?.description}</Text>
+			<Title level={5} style={{ marginBottom: 0 }}>
+				{lang === 'es' && data.es_name}
+				{lang === 'en' && data.en_name}
+			</Title>
+			<Text>
+				{lang === 'es' && data.es_description}
+				{lang === 'en' && data.en_description}
+			</Text>
 			{data.prices.length === 1 && data.$id !== PandorasBoxId && (
 				<Title
 					level={4}

@@ -18,6 +18,7 @@ interface ProductsListProps {
 	subcategoryId: string | null;
 	title: string;
 	isEditable: boolean;
+	enableMultiLanguage?: boolean;
 }
 
 export const ProductsList = (props: ProductsListProps) => {
@@ -28,7 +29,8 @@ export const ProductsList = (props: ProductsListProps) => {
 		categoryId,
 		subcategoryId,
 		title,
-		isEditable
+		isEditable,
+		enableMultiLanguage
 	} = props;
 	const [allProducts, , , reload] = useGetAllProducts(establishmentId);
 	const products = useMemo(() => {
@@ -113,6 +115,7 @@ export const ProductsList = (props: ProductsListProps) => {
 
 			<ModalProduct
 				onFinish={() => reload(establishmentId)}
+				enableEnglishVersion={enableMultiLanguage || false}
 			/>
 		</div>
 	);

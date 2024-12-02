@@ -1,7 +1,9 @@
 export interface ProductProps {
 	$id: string;
-	name: string;
-	description: string;
+	es_name: string;
+	en_name: string;
+	es_description: string;
+	en_description: string;
 	prices: {
 		label?: string;
 		price: number;
