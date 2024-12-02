@@ -44,7 +44,7 @@ export const ProductCard = (props: ProductCardProps) => {
 	const lang = useLanguageStore(({ lang }) => lang);
 
 	return (
-		<div style={{ position: 'relative' }}>
+		<div style={{ position: 'relative', width: '100%' }}>
 			{isEditable && (
 				<div
 					style={{
