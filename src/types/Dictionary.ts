@@ -6,3 +6,5 @@ export interface DictionaryProps {
 		search: string;
 	};
 }
+
+export type Lang = 'es' | 'en';

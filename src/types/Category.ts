@@ -2,7 +2,8 @@ import { SubcategoryProps } from './Subcategory';
 
 export interface CategoryProps {
 	$id: string;
-	name: string;
+	es_name: string;
+	en_name: string;
 	order: number;
 	enableSubcategories: boolean;
 	subcategories: SubcategoryProps[];

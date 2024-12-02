@@ -117,7 +117,6 @@ export async function updateEstablishment(id: string, { banner, logo, ...rest }:
 	);
 }
 
-
 export async function getEstablishmentByDomain(domain: string) {
 	const { total, documents } = await db
 		.listDocuments(

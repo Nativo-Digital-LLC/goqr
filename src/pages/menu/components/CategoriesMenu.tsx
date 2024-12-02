@@ -11,6 +11,7 @@ import { CategoryProps } from '../../../types/Category';
 import { ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
 import { useDeleteCategory, useUpdateCategoryOrder } from '../../../hooks/useCategories';
+import { useLanguageStore } from '../../../store/language';
 
 const { Text } = Typography;
 
@@ -36,6 +37,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 	} = props;
 	const [_delete, deleting] = useDeleteCategory();
 	const [updateOrder, updatingOrder] = useUpdateCategoryOrder();
+	const lang = useLanguageStore(({ lang }) => lang);
 
 	return (
 		<div
@@ -99,7 +101,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 								}}
 								onClick={() => onSelect(category.$id)}
 							>
-								{category.name}
+								{category[lang + '_name' as 'es_name' | 'en_name']}
 							</Button>
 
 							{isEditable && (
@@ -139,7 +141,8 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											extra: {
 												id: category.$id,
 												establishmentId,
-												name: category.name,
+												es_name: category.es_name,
+												en_name: category.en_name,
 												enableSubcategories: category.enableSubcategories
 											}
 										})}
@@ -150,7 +153,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 										title='¿Eliminar menú?'
 										description={(
 											<Space direction='vertical'>
-												<Text>Se eliminará "{category.name}"</Text>
+												<Text>Se eliminará "{category[lang + '_name' as 'es_name' | 'en_name']}"</Text>
 												<Text type='danger'>junto con todas sus categorías!</Text>
 											</Space>
 										)}

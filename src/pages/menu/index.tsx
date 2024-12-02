@@ -38,7 +38,7 @@ export default function MenuPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const showIntro = useShowIntro();
-	const dictionary = useLanguageStore(({ dictionary }) => dictionary);
+	const { dictionary, lang } = useLanguageStore((store) => store);
 
 	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
 	useFDADisclaimer(
@@ -61,6 +61,7 @@ export default function MenuPage() {
 			subcategoryId
 		}
 	}, [location]);
+
 	const selectedCategory = useMemo(() => {
 		if (!selected.categoryId || !establishment || establishment.categories.length === 0) {
 			return null;
@@ -168,6 +169,7 @@ export default function MenuPage() {
 						logoUrl={establishment.logoUrl ?? undefined}
 						isEditable={isEditable}
 					/>
+
 					<div
 						style={{
 							borderRadius: 30,
@@ -225,7 +227,7 @@ export default function MenuPage() {
 							mainColor={establishment.mainHexColor}
 							isEditable={isEditable}
 							category={{
-								name: selectedCategory?.name || '',
+								name: selectedCategory ? selectedCategory[lang + '_name' as 'es_name' | 'en_name'] : '',
 								id: selectedCategory?.$id || ''
 							}}
 							show={(
@@ -249,7 +251,7 @@ export default function MenuPage() {
 										?.subcategories
 										?.find(({ $id }) => $id === selected.subcategoryId)
 										?.name + ''
-									: selectedCategory?.name + ''
+									: selectedCategory ? selectedCategory[lang + '_name' as 'es_name' | 'en_name'] : ''
 							}
 							isEditable={isEditable}
 						/>
@@ -271,6 +273,7 @@ export default function MenuPage() {
 
 				<ModalCategory
 					onFinish={() => reload(establishmentUrl!)}
+					enableEnglishVersion={establishment?.enableMultiLanguage}
 				/>
 
 				<ModalEstablishment

@@ -4,7 +4,15 @@ import { db } from '../utils/appwrite';
 import { Collection } from '../constants/Collections';
 import { EstablishmentProps } from '../types/Establishment';
 
-export async function createCategory(establishmentId: string, name: string, order: number, enableSubcategories?: boolean) {
+interface CreateCategoryParams {
+	establishmentId: string;
+	es_name: string;
+	en_name?: string | null;
+	order: number;
+	enableSubcategories?: boolean;
+}
+
+export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }:  CreateCategoryParams) {
 	const { categories } = await db.getDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Establishments,
@@ -30,7 +38,7 @@ export async function createCategory(establishmentId: string, name: string, orde
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
 		ID.unique(),
-		{ name, order, enableSubcategories }
+		{ es_name, en_name, order, enableSubcategories }
 	);
 
 	await db.updateDocument(
@@ -69,12 +77,19 @@ export async function deleteCategory(id: string, establishmentId: string) {
 	);
 }
 
-export async function updateCategoryName(id: string, name: string, enableSubcategories?: boolean) {
+interface UpdateCategoryNameParams {
+	id: string;
+	es_name: string;
+	en_name?: string | null;
+	enableSubcategories?: boolean;
+}
+
+export async function updateCategoryName({ id, es_name, en_name = null, enableSubcategories }: UpdateCategoryNameParams) {
 	await db.updateDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
 		id,
-		{ name, enableSubcategories }
+		{ es_name, en_name, enableSubcategories }
 	);
 }
 

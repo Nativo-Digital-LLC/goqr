@@ -11,7 +11,8 @@ import {
 interface SaveCategoryParams {
 	id?: string;
 	establishmentId: string;
-	name: string;
+	es_name: string;
+	en_name: string;
 	order?: number;
 	enableSubcategories?: boolean;
 }
@@ -30,15 +31,30 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 		try {
 			setLoading(true);
 			setError(null);
-			if (params.id) {
-				await updateCategoryName(params.id, params.name, params?.enableSubcategories);
+
+			const {
+				establishmentId,
+				es_name,
+				en_name,
+				enableSubcategories,
+				order
+			} = params;
+
+			if (params?.id) {
+				await updateCategoryName({
+					id: params.id,
+					es_name,
+					en_name,
+					enableSubcategories
+				});
 			} else {
-				await createCategory(
-					params.establishmentId,
-					params.name,
-					params.order!,
-					params.enableSubcategories
-				);
+				await createCategory({
+					establishmentId,
+					en_name,
+					es_name,
+					order: order!,
+					enableSubcategories
+				});
 			}
 
 			onDone?.();

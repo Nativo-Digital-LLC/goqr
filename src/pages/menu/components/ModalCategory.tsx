@@ -9,11 +9,17 @@ interface ExtraType {
 	id?: string;
 	order?: number;
 	establishmentId: string;
-	name?: string;
+	es_name?: string;
+	en_name?: string;
 	enableSubcategories?: string;
 }
 
-export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
+interface ModalCategoryProps {
+	onFinish: () => void;
+	enableEnglishVersion: boolean;
+}
+
+export const ModalCategory = ({ onFinish, enableEnglishVersion }: ModalCategoryProps) => {
 	const [visible, close, extra] = useModalVisible<ExtraType>(ModalName.Category);
 	const [save, saving] = useSaveCategory();
 	const [form] = Form.useForm();
@@ -21,9 +27,10 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 	useEffect(() => {
 		form.resetFields();
 
-		if (extra?.name) {
+		if (extra?.es_name) {
 			form.setFieldsValue({
-				name: extra.name,
+				es_name: extra.es_name,
+				en_name: extra?.en_name,
 				enableSubcategories: extra.enableSubcategories!
 			});
 		}
@@ -33,7 +40,7 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 		<Modal
 			open={visible}
 			onCancel={close}
-			title={extra?.name ? 'Modificar Menú': 'Nuevo Menú'}
+			title={extra?.es_name ? 'Modificar Menú': 'Nuevo Menú'}
 			width={300}
 			okText='Guardar'
 			cancelText='Cerrar'
@@ -43,9 +50,10 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 			<Form
 				layout='vertical'
 				form={form}
-				onFinish={({ name, enableSubcategories }) => {
+				onFinish={({ en_name, es_name, enableSubcategories }) => {
 					const data = {
-						name,
+						en_name,
+						es_name,
 						establishmentId: extra!.establishmentId,
 						enableSubcategories,
 						id: extra?.id,
@@ -59,12 +67,21 @@ export const ModalCategory = ({ onFinish }: { onFinish: () => void }) => {
 				}}
 			>
 				<Form.Item
-					label='Nombre del menú'
-					name='name'
+					label={`Nombre del menú${enableEnglishVersion ? ' (español)' : ''}`}
+					name='es_name'
 					rules={[{ required: true, message: 'Ingrese un nombre' }]}
 				>
 					<Input autoFocus />
 				</Form.Item>
+				{
+					<Form.Item
+						label={`Nombre del menú${enableEnglishVersion ? ' (ingles)' : ''}`}
+						name='en_name'
+						rules={[{ required: true, message: 'Ingrese un nombre' }]}
+					>
+						<Input />
+					</Form.Item>
+				}
 				<Form.Item
 					label='Mostrar Categorías'
 					name='enableSubcategories'

@@ -2,15 +2,13 @@ import { create } from 'zustand';
 
 import en from '../locale/en';
 import es from '../locale/es';
-import { DictionaryProps } from '../types/Dictionary';
+import { DictionaryProps, Lang } from '../types/Dictionary';
 
 interface LanguageStoreProps {
 	lang: Lang;
 	setLang: (lang: Lang) => void;
 	dictionary: DictionaryProps;
 }
-
-type Lang = 'es' | 'en';
 
 export const useLanguageStore = create<LanguageStoreProps>((set) => ({
 	lang: 'es',
