@@ -5,7 +5,15 @@ import { CategoryProps } from '../types/Category';
 import { db } from '../utils/appwrite';
 import { uploadFile } from '../utils/helpers';
 
-export async function createSubcategory(categoryId: string, name: string, order: number, photo: File) {
+interface CreateSubcategoryParams {
+	categoryId: string;
+	es_name: string;
+	en_name?: string | null;
+	order: number;
+	photo: File;
+}
+
+export async function createSubcategory({ categoryId, es_name, en_name = null, order, photo }: CreateSubcategoryParams) {
 	const { subcategories } = await db.getDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Categories,
@@ -34,7 +42,8 @@ export async function createSubcategory(categoryId: string, name: string, order:
 		Collection.Subcategories,
 		ID.unique(),
 		{
-			name,
+			es_name,
+			en_name,
 			order,
 			photoUrl
 		}
@@ -50,7 +59,14 @@ export async function createSubcategory(categoryId: string, name: string, order:
 	);
 }
 
-export async function updateSubcategory(id: string, name?: string, photo?: File) {
+interface UpdateSubcategoryParams {
+	id: string;
+	en_name?: string;
+	es_name?: string;
+	photo?: File;
+}
+
+export async function updateSubcategory({ id, es_name, en_name, photo }: UpdateSubcategoryParams) {
 	const photoUrl = (photo)
 		? await uploadFile(photo)
 		: undefined;
@@ -59,7 +75,7 @@ export async function updateSubcategory(id: string, name?: string, photo?: File)
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Subcategories,
 		id,
-		{ name, photoUrl }
+		{ en_name, es_name, photoUrl }
 	);
 }
 

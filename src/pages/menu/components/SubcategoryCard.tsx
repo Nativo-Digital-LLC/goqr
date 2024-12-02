@@ -10,6 +10,7 @@ import { useDeleteSubcategory, useUpdateSubcategoryOrder } from '../../../hooks/
 import { ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
 import { SubcategoryProps } from '../../../types/Subcategory';
+import { useLanguageStore } from '../../../store/language';
 
 interface SubcategoryCardProps {
 	subcategory: SubcategoryProps;
@@ -33,6 +34,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 	} = props;
 	const [_delete, deleting] = useDeleteSubcategory();
 	const [updateOrder, updatingOrder] = useUpdateSubcategoryOrder();
+	const lang = useLanguageStore(({ lang }) => lang);
 
 	return (
 		<div
@@ -71,7 +73,10 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 					zIndex: 10
 				}}
 			/>
-			<span style={{ zIndex: 20, textAlign: 'center' }}>{subcategory.name}</span>
+			<span style={{ zIndex: 20, textAlign: 'center' }}>
+				{lang === 'es' && subcategory.es_name}
+				{lang === 'en' && subcategory.en_name}
+			</span>
 
 			{isEditable && (
 				<div

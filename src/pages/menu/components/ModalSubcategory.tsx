@@ -10,7 +10,12 @@ import { maxFileSizeRule } from '../../../utils/helpers';
 
 type ExtraType = Partial<SubcategoryProps> & { categoryId: string; };
 
-export const ModalSubcategory = ({ onFinish }: { onFinish: () => void }) => {
+interface ModalSubcategoryProps {
+	onFinish: () => void;
+	enableEnglishVersion: boolean;
+}
+
+export const ModalSubcategory = ({ onFinish, enableEnglishVersion }: ModalSubcategoryProps) => {
 	const [visible, close, extra] = useModalVisible<ExtraType>(ModalName.Subcategory)
 	const [save, saving] = useSaveSubcategory();
 	const [form] = Form.useForm();
@@ -39,11 +44,12 @@ export const ModalSubcategory = ({ onFinish }: { onFinish: () => void }) => {
 			<Form
 				layout='vertical'
 				form={form}
-				onFinish={({ name, photo }) => {
+				onFinish={({ es_name, en_name, photo }) => {
 					const data = {
 						id: extra?.$id,
 						categoryId: extra!.categoryId,
-						name,
+						en_name,
+						es_name,
 						photo: photo?.file,
 						order: extra?.order
 					};
@@ -55,12 +61,22 @@ export const ModalSubcategory = ({ onFinish }: { onFinish: () => void }) => {
 				}}
 			>
 				<Form.Item
-					label='Nombre'
-					name='name'
+					label={`Nombre${enableEnglishVersion ? ' (español)' : ''}`}
+					name='es_name'
 					rules={[{ required: true, message: 'Escribe un nombre' }]}
 				>
-					<Input />
+					<Input autoFocus />
 				</Form.Item>
+
+				{enableEnglishVersion && (
+					<Form.Item
+						label={`Nombre${enableEnglishVersion ? ' (ingles)' : ''}`}
+						name='en_name'
+						rules={[{ required: true, message: 'Escribe un nombre' }]}
+					>
+						<Input />
+					</Form.Item>
+				)}
 
 				<Form.Item
 					label='Imagen'

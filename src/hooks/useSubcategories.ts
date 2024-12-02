@@ -11,7 +11,8 @@ import {
 interface SaveSubcategoryParams {
 	id?: string;
 	categoryId: string;
-	name: string;
+	es_name: string;
+	en_name?: string;
 	photo?: File;
 	order?: number;
 }
@@ -30,15 +31,29 @@ export const useSaveSubcategory = (): UseSaveSubcategoryType => {
 		try {
 			setLoading(true);
 			setError(null);
-			if (params.id) {
-				await updateSubcategory(params.id, params?.name, params?.photo);
+			const {
+				categoryId,
+				es_name,
+				en_name,
+				photo,
+				order
+			} = params;
+
+			if (params?.id) {
+				await updateSubcategory({
+					id: params.id,
+					es_name,
+					en_name,
+					photo
+				});
 			} else {
-				await createSubcategory(
-					params.categoryId,
-					params.name,
-					params.order!,
-					params.photo!
-				);
+				await createSubcategory({
+					categoryId,
+					es_name,
+					en_name,
+					order: order!,
+					photo: photo!
+				});
 			}
 
 			onDone?.();

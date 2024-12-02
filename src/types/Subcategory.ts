@@ -1,6 +1,7 @@
 export interface SubcategoryProps {
 	$id: string;
-	name: string;
+	es_name: string;
+	en_name: string;
 	photoUrl: string | null;
 	order: number;
 	$createdAt: string;

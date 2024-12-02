@@ -70,6 +70,22 @@ export default function MenuPage() {
 		return establishment.categories.find(({ $id }) => $id === selected.categoryId) || null
 	}, [establishment, selected.categoryId]);
 
+	const productsListTitle = useMemo(() => {
+		if (selectedCategory?.enableSubcategories) {
+			const subcategory = selectedCategory
+				?.subcategories
+				?.find(({ $id }) => $id === selected.subcategoryId);
+
+			return (lang === 'es') ? subcategory?.es_name || '' : subcategory?.en_name || '';
+		}
+
+		if (selectedCategory) {
+			return selectedCategory[lang + '_name' as 'es_name' | 'en_name'];
+		}
+
+		return '';
+	}, [lang, selectedCategory, selected]);
+
 	useEffect(() => {
 		const params = new URLSearchParams(location.search);
 		const categoryId = params.get('categoryId');
@@ -245,14 +261,7 @@ export default function MenuPage() {
 							establishmentId={establishment.$id}
 							categoryId={selected.categoryId + ''}
 							subcategoryId={selected.subcategoryId || null}
-							title={
-								(selectedCategory?.enableSubcategories)
-									? selectedCategory
-										?.subcategories
-										?.find(({ $id }) => $id === selected.subcategoryId)
-										?.name + ''
-									: selectedCategory ? selectedCategory[lang + '_name' as 'es_name' | 'en_name'] : ''
-							}
+							title={productsListTitle}
 							isEditable={isEditable}
 						/>
 
@@ -282,6 +291,7 @@ export default function MenuPage() {
 
 				<ModalSubcategory
 					onFinish={() => reload(establishmentUrl!)}
+					enableEnglishVersion={establishment?.enableMultiLanguage}
 				/>
 			</div>
 		</InstantSearch>
