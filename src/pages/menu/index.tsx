@@ -20,7 +20,7 @@ import {
 	EstablishmentInfo,
 	CategoriesMenu,
 	ProductCard,
-	// Loading
+	Loading
 } from './components';
 import { useSessionStore } from '../../store/session';
 import { ModalEstablishment } from '../../components';
@@ -29,45 +29,10 @@ import { ProductProps } from '../../types/Product';
 import { useShowIntro } from '../../hooks/useShowIntro';
 import { useFDADisclaimer } from '../../hooks/useFDADisclaimer';
 import { useLanguageStore } from '../../store/language';
-// import { Collection } from '../../constants/Collections';
-// import { db } from '../../utils/appwrite';
-// import { Query } from 'appwrite';
 
 const { Text } = Typography;
 
 export default function MenuPage() {
-	useEffect(() => {
-		/*
-		(async () => {
-			const { documents, total } = await db
-				.listDocuments(
-					import.meta.env.VITE_APP_WRITE_DB_ID,
-					Collection.Products,
-					[
-						Query.limit(10000),
-						Query.isNull('es_name')
-					]
-				);
-
-			console.log(total);
-
-			await Promise.all(documents.map(({ $id, name, description }) => {
-				return db.updateDocument(
-					import.meta.env.VITE_APP_WRITE_DB_ID,
-					Collection.Products,
-					$id,
-					{
-						es_name: name,
-						es_description: description
-					}
-				);
-			}));
-
-			alert('Terminó');
-		})();
-		*/
-	}, []);
-
 	const { establishmentUrl } = useParams();
 	const session = useSessionStore(({ session }) => session);
 	const location = useLocation();
@@ -188,13 +153,13 @@ export default function MenuPage() {
 		setSearch(target.value)
 	}
 
-	// if (loading || (showIntro && location.pathname.includes('pandora'))) {
-	// 	return (
-	// 		<Loading
-	// 			showPandoraIntro={location.pathname.includes('pandora')}
-	// 		/>
-	// 	);
-	// }
+	if (loading || (showIntro && location.pathname.includes('pandora'))) {
+		return (
+			<Loading
+				showPandoraIntro={location.pathname.includes('pandora')}
+			/>
+		);
+	}
 
 	return (
 		<InstantSearch
