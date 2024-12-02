@@ -98,12 +98,12 @@ export default function MenuPage() {
 			return;
 		}
 
-		const category = establishment
+		const categories = establishment
 			.categories
-			.find(({ order }) => order === 1);
+			.sort((a, b) => a.order - b.order);
 
-		if (category) {
-			handleUrlChanges('categoryId', category.$id);
+		if (categories.length > 0) {
+			handleUrlChanges('categoryId', categories[0].$id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [establishment]);
