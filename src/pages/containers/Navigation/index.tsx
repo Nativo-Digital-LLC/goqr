@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import "./index.css";
 
@@ -7,6 +7,8 @@ export default function Navigation() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [y, setY] = useState(window.scrollY);
 	const [isSticky, setIsSticky] = useState(false);
+
+	const location = useLocation();
 
 	const handleNavigation = useCallback(
 		(e: Event) => {
@@ -35,6 +37,10 @@ export default function Navigation() {
 			window.removeEventListener("resize", handleResize);
 		};
 	}, [handleNavigation]);
+
+	useEffect(() => {
+		setIsOpen(false);
+	}, [location]);
 
 	return (
 		<div
