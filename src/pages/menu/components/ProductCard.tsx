@@ -126,7 +126,7 @@ export const ProductCard = (props: ProductCardProps) => {
 					level={4}
 					style={{ margin: 0, color }}
 				>
-					${format.cash(data.prices[0].price)}
+					${format.cash(data.prices[0].price, 2)}
 				</Title>
 			)}
 			{data.prices.length > 1 && data.prices.map(({ price, label }, index) => (
@@ -143,7 +143,7 @@ export const ProductCard = (props: ProductCardProps) => {
 						level={4}
 						style={{ margin: 0, color }}
 					>
-						${format.cash(price)}
+						${format.cash(price, 2)}
 					</Title>
 				</div>
 			))}
