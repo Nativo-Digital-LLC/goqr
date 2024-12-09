@@ -150,7 +150,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 						rules={[{ required: true, message: 'Introduzca un precio' }]}
 					>
 						<InputNumber
-							onKeyDown={avoidNotNumerics}
+							onKeyDown={(event) => avoidNotNumerics(event, 2)}
 							style={{ width: '100%' }}
 						/>
 					</Form.Item>
@@ -179,7 +179,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 										<InputNumber
 											defaultValue={price}
 											style={{ width: '100%' }}
-											onKeyDown={avoidNotNumerics}
+											onKeyDown={(event) => avoidNotNumerics(event, 2)}
 										/>
 									</Form.Item>
 
