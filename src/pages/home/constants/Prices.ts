@@ -17,9 +17,9 @@ const prices: PriceCardProps[] = [
 	},
 	{
 		title: "Si pagas de por vida",
-		price: "9K",
+		price: "11K",
 		disclaimer: "Un único cargo",
-		total: 9000,
+		total: 11000,
 		selected: false,
 	},
 ];
