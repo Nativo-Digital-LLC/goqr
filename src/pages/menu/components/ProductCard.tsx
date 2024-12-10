@@ -41,7 +41,7 @@ export const ProductCard = (props: ProductCardProps) => {
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
 	// const [changeOrder, changingOrder] = useChangeProductOrder();
-	const lang = useLanguageStore(({ lang }) => lang);
+	const { lang, dictionary } = useLanguageStore((store) => store);
 
 	return (
 		<div style={{ position: 'relative', width: '100%' }}>
@@ -126,7 +126,10 @@ export const ProductCard = (props: ProductCardProps) => {
 					level={4}
 					style={{ margin: 0, color }}
 				>
-					${format.cash(data.prices[0].price, 2)}
+					{(data.prices[0].price === 0)
+						? dictionary.menu.product.price.free
+						: '$' + format.cash(data.prices[0].price, 2)
+					}
 				</Title>
 			)}
 			{data.prices.length > 1 && data.prices.map(({ price, label }, index) => (
@@ -143,7 +146,10 @@ export const ProductCard = (props: ProductCardProps) => {
 						level={4}
 						style={{ margin: 0, color }}
 					>
-						${format.cash(price, 2)}
+						{(price === 0)
+							? dictionary.menu.product.price.free
+							: '$' + format.cash(price, 2)
+						}
 					</Title>
 				</div>
 			))}

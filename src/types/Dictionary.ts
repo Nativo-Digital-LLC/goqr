@@ -4,6 +4,11 @@ export interface DictionaryProps {
 			leaveReview: string;
 		};
 		search: string;
+		product: {
+			price: {
+				free: string;
+			}
+		}
 	};
 }
 

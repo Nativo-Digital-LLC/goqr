@@ -5,7 +5,12 @@ const dictionary: DictionaryProps = {
 		establishment: {
 			leaveReview: 'Leave us your review'
 		},
-		search: 'Search'
+		search: 'Search',
+		product: {
+			price: {
+				free: 'Free'
+			}
+		}
 	}
 }
 
