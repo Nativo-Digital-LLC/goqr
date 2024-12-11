@@ -21,7 +21,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			Collection.Subcategories,
 			subcategoriesIds[0],
 			{
-				name: 'Bebidas Calientes',
+				es_name: 'Bebidas Calientes',
 				order: 1,
 				photoUrl: 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/6711133900038fe1c875/view?project=66f768e4001537551adf'
 			}
@@ -31,7 +31,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			Collection.Subcategories,
 			subcategoriesIds[1],
 			{
-				name: 'Bebidas Frías',
+				es_name: 'Bebidas Frías',
 				order: 2,
 				photoUrl: 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67111318000a6a9abd47/view?project=66f768e4001537551adf'
 			}
@@ -44,7 +44,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			Collection.Categories,
 			ID.unique(),
 			{
-				name: 'Bebidas',
+				es_name: 'Bebidas',
 				order: 1,
 				subcategories: subcategoriesIds,
 				enableSubcategories: true
@@ -55,7 +55,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			Collection.Categories,
 			ID.unique(),
 			{
-				name: 'Desayunos',
+				es_name: 'Desayunos',
 				order: 2,
 				enableSubcategories: false
 			}
