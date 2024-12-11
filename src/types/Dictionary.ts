@@ -8,7 +8,8 @@ export interface DictionaryProps {
 			price: {
 				free: string;
 			}
-		}
+		},
+		foodAllergyAndRiskDisclaimer: string;
 	};
 }
 
