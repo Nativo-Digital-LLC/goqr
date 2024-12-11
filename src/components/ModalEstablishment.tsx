@@ -243,7 +243,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 										label: (
 											<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 												<Text>Pago Único</Text>
-												<Text>$ 9,000</Text>
+												<Text>$ 11,000</Text>
 											</div>
 										),
 										value: PaymentFrequency.Never
