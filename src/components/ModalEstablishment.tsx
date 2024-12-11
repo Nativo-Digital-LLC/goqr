@@ -81,7 +81,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 							address: data.address,
 							addressLink: data.addressLink,
 							phone: (data.phone) ? data.phone.toString() : undefined,
-							whatsapp: data.whatsapp,
+							whatsapp: (data.whatsapp) ? data.whatsapp.toString() : undefined,
 							requiresTaxReceipt: data.requiresTaxReceipt,
 							rnc: data.rnc,
 							companyName: data.companyName,
