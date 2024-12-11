@@ -43,6 +43,7 @@ export interface CreateEstablishmentParams {
 	logo?: File;
 	banner?: File;
 	paymentFrequency: PaymentFrequency;
+	paymentMethod: PaymentMethod;
 }
 
 export interface TaxPayerProps {

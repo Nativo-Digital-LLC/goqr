@@ -86,7 +86,9 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 							rnc: data.rnc,
 							companyName: data.companyName,
 							logo: data.logo?.file,
-							banner: data.banner?.file
+							banner: data.banner?.file,
+							paymentMethod: data.paymentMethod,
+							paymentFrequency: data.paymentFrequency
 						},
 						() => {
 							onFinish();
