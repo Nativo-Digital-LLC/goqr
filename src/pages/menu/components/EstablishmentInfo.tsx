@@ -34,6 +34,7 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 		addressLink,
 		enableMultiLanguage
 	} = establishment;
+
 	return (
 		<Space direction='vertical' size='small' style={{ width: '100%' }}>
 			<Row justify='space-between'>
@@ -52,7 +53,12 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 				</Space>
 
 				{enableMultiLanguage && !isEditable && (
-					<ToggleLanguageButton />
+					<ToggleLanguageButton
+						esFlag={(establishment.domain === 'la-roca-restaurant')
+							? 'dom'
+							: undefined
+						}
+					/>
 				)}
 			</Row>
 
