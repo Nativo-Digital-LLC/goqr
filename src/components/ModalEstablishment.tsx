@@ -44,6 +44,9 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 				...extra,
 				...(extra?.phone && {
 					phone: Number(extra.phone)
+				}),
+				...(extra?.whatsapp && {
+					whatsapp: Number(extra.whatsapp)
 				})
 			});
 		}
