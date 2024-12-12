@@ -85,7 +85,7 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			addressLink: params.addressLink,
 			phone: params.phone,
 			whatsapp: params.whatsapp,
-			mainHexColor: params.color,
+			mainHexColor: params.mainHexColor,
 			rnc: params.rnc,
 			companyName: params.companyName,
 			requiresTaxReceipt: params.requiresTaxReceipt,

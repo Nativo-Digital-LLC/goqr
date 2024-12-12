@@ -69,7 +69,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 				layout='vertical'
 				form={form}
 				onFinish={(data) => {
-					const color = (data.mainHexColor.toHexString)
+					const mainHexColor = (data.mainHexColor.toHexString)
 						? data.mainHexColor.toHexString()
 						: undefined;
 
@@ -77,7 +77,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 						{
 							id: extra?.$id,
 							userId: `${session?.userId}`,
-							color,
+							mainHexColor,
 							name: data.name,
 							domain: data.domain,
 							description: data.description,

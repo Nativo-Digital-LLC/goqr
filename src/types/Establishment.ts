@@ -29,7 +29,7 @@ export interface EstablishmentProps {
 
 export interface CreateEstablishmentParams {
 	userId: string;
-	color: string;
+	mainHexColor: string;
 	name: string;
 	domain: string;
 	description: string;
