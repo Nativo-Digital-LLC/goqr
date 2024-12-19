@@ -11,6 +11,7 @@ export interface EstablishmentProps {
 	address: string;
 	domain: string;
 	addressLink: string | null;
+	googlePlaceId: string | null;
 	phone: string | null;
 	whatsapp: string | null;
 	mainHexColor: string;

@@ -6,7 +6,6 @@ import {
 	StarOutlined,
 	WhatsAppOutlined
 } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
 
 import { format, ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
@@ -22,7 +21,6 @@ interface EstablishmentInfoProps {
 }
 
 export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentInfoProps) => {
-	const location = useLocation();
 	const dictionary = useLanguageStore(({ dictionary }) => dictionary);
 
 	const {
@@ -32,7 +30,8 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 		phone,
 		whatsapp,
 		addressLink,
-		enableMultiLanguage
+		enableMultiLanguage,
+		googlePlaceId
 	} = establishment;
 
 	return (
@@ -92,9 +91,9 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 				)}
 			</Space>
 
-			{location.pathname.includes('pandora') && (
+			{googlePlaceId && (
 				<a
-					href='https://search.google.com/local/writereview?placeid=ChIJedOsv5mzHIwRRIpW55r0Jf4'
+					href={`https://search.google.com/local/writereview?placeid=${googlePlaceId}`}
 					target='_blank'
 					style={{ margin: '10px 0' }}
 				>
