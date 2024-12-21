@@ -27,8 +27,10 @@ export async function getAllProducts(establishmentId: string) {
 	})) as unknown as ProductProps[];
 }
 
-export async function createProduct({ photo, ...data }: Partial<ProductProps> & { photo: File }) {
-	const photoUrl = await uploadFile(photo);
+export async function createProduct({ photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
+	const photoUrl = (photo)
+		? await uploadFile(photo)
+		: null;
 
 	const { $id } = await db.createDocument(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
@@ -55,10 +57,15 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 	});
 }
 
-export async function updateProduct(id: string,  {photo, ...data }: Partial<ProductProps> & { photo?: File }) {
-	const photoUrl = (photo)
-		? await uploadFile(photo)
-		: undefined;
+export async function updateProduct(id: string,  {photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
+	let photoUrl = undefined;
+	if (photo) {
+		photoUrl = await uploadFile(photo);
+	}
+
+	if (photo === null) {
+		photoUrl = null;
+	}
 
 	const prices = (data.prices)
 		? JSON.stringify(data.prices)

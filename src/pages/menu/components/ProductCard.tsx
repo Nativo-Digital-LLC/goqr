@@ -100,19 +100,21 @@ export const ProductCard = (props: ProductCardProps) => {
 				</div>
 			)}
 
-			<Image
-				src={data.photoUrl}
-				style={{
-					height: 250,
-					objectFit: 'cover'
-				}}
-				wrapperStyle={{
-					borderRadius: 15,
-					width: '100%',
-					overflow: 'hidden',
-				}}
-				preview={preview}
-			/>
+			{data?.photoUrl && (
+				<Image
+					src={data.photoUrl}
+					style={{
+						height: 250,
+						objectFit: 'cover'
+					}}
+					wrapperStyle={{
+						borderRadius: 15,
+						width: '100%',
+						overflow: 'hidden',
+					}}
+					preview={preview}
+				/>
+			)}
 			<Title level={5} style={{ marginBottom: 0 }}>
 				{lang === 'es' && data.es_name}
 				{lang === 'en' && data.en_name}

@@ -12,7 +12,7 @@ export interface ProductProps {
 	establishmentId: string;
 	categoryId: string;
 	subcategoryId: string | null;
-	photoUrl: string;
+	photoUrl: string | null;
 	status: ProductStatus;
 	$createdAt: string;
 	$updatedAt: string;

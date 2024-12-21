@@ -47,7 +47,7 @@ export const useGetAllProducts = (establishmentId?: string): UseGetAllProductsTy
 
 type UseSaveProductType = [
 	(
-		data: Partial<ProductProps> & { photo: File },
+		data: Partial<ProductProps> & { photo?: File | null },
 		onDone?: () => void
 	) => void,
 	boolean,
@@ -59,7 +59,7 @@ export const useSaveProduct = (): UseSaveProductType => {
 	const [error, setError] = useState<AppwriteException | null>(null);
 
 	async function handleSave(
-		{ $id, ...data }: Partial<ProductProps> & { photo: File },
+		{ $id, ...data }: Partial<ProductProps> & { photo?: File | null },
 		onDone?: () => void
 	) {
 		try {

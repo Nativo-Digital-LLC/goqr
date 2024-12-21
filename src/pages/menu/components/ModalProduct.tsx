@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
 	Button,
+	Card,
 	Col,
 	Form,
 	Input,
@@ -11,12 +12,12 @@ import {
 	Space,
 	Upload
 } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { DeleteOutlined, InboxOutlined } from '@ant-design/icons';
 import { ID } from 'appwrite';
 
 import { useModalVisible } from '../../../hooks/useModal';
 import { ModalName } from '../../../types/Modals';
-import { ProductProps } from '../../../types/Product';
+import { ProductProps, ProductStatus } from '../../../types/Product';
 import { useSaveProduct } from '../../../hooks/useProducts';
 import { avoidNotNumerics, maxFileSizeRule } from '../../../utils/helpers';
 
@@ -37,17 +38,21 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 	const [visible, close, extra] = useModalVisible<ProductProps>(ModalName.Products);
 	const [save, saving] = useSaveProduct();
 	const [variants, setVariants] = useState<VariantProps[]>([]);
+	const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string | null>(null);
 	const [form] = Form.useForm();
 
 	useEffect(() => {
 		form.resetFields();
 		setVariants([]);
+		setCurrentPhotoUrl(null);
 
 		if (extra?.$id) {
 			form.setFieldsValue({
 				...extra,
 				price: extra.prices[0].price
 			});
+
+			setCurrentPhotoUrl(extra.photoUrl);
 		}
 
 		if (extra?.prices && extra.prices.length > 1) {
@@ -103,12 +108,19 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 						}
 					}
 
+					let photo: File | null | undefined = undefined;
+					if (data?.photo) {
+						photo = data.photo.file as File;
+					}
+
+					if (data?.photo === null) {
+						photo = null;
+					}
+
 					save(
 						{
 							$id: extra?.$id,
-							photo: (data?.photo)
-								? data.photo.file
-								: undefined,
+							photo,
 							prices: prices as { label: string; price: number }[],
 							es_name: data.es_name,
 							en_name: data.en_name,
@@ -225,20 +237,47 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 				<Form.Item
 					label='Foto'
 					name='photo'
-					rules={[{ required: !extra?.$id, message: 'Falta la foto' }, maxFileSizeRule]}
+					rules={[maxFileSizeRule]}
 				>
-					<Dragger
-						name='photo'
-						multiple={false}
-						maxCount={1}
-						accept='.jpg,.jpeg,.png'
-						beforeUpload={() => false}
-					>
-						<p className='ant-upload-drag-icon'>
-							<InboxOutlined />
-						</p>
-						<p className='ant-upload-text'>Click o arrastra tu foto en esta area</p>
-					</Dragger>
+					{currentPhotoUrl && (
+						<Card
+							cover={<img src={currentPhotoUrl} />}
+							styles={{
+								body: {
+									padding: 0
+								}
+							}}
+							actions={[
+								<Button
+									onClick={() => {
+										setCurrentPhotoUrl(null);
+										form.setFieldsValue({ photo: null });
+									}}
+									size='small'
+									icon={<DeleteOutlined />}
+								>
+									Eliminar
+								</Button>
+							]}
+						/>
+					)}
+
+					{!currentPhotoUrl && (
+						<Dragger
+							name='photo'
+							multiple={false}
+							maxCount={1}
+							accept='.jpg,.jpeg,.png'
+							beforeUpload={() => false}
+						>
+							<p className='ant-upload-drag-icon'>
+								<InboxOutlined />
+							</p>
+							<p className='ant-upload-text'>Click o arrastra tu foto en esta area</p>
+						</Dragger>
+					)}
+				</Form.Item>
+
 				<Form.Item
 					name='status'
 					label='Estado'
