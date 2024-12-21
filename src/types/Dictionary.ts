@@ -9,6 +9,7 @@ export interface DictionaryProps {
 				free: string;
 			},
 			notAvailable: string;
+			bestSeller: string;
 		},
 		foodAllergyAndRiskDisclaimer: string;
 	};

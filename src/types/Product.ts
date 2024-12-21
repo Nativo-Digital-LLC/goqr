@@ -13,6 +13,7 @@ export interface ProductProps {
 	categoryId: string;
 	subcategoryId: string | null;
 	photoUrl: string | null;
+	bestSeller: boolean;
 	status: ProductStatus;
 	$createdAt: string;
 	$updatedAt: string;

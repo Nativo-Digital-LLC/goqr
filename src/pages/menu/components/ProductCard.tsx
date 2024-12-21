@@ -1,4 +1,4 @@
-import { Button, Image, Typography } from 'antd';
+import { Tag, Button, Image, Typography, Space } from 'antd';
 import {
 	// CaretDownOutlined,
 	// CaretUpOutlined,
@@ -6,7 +6,7 @@ import {
 	EditOutlined
 } from '@ant-design/icons';
 
-import { ProductProps } from '../../../types/Product';
+import { ProductProps, ProductStatus } from '../../../types/Product';
 import { format, ModalOpener$ } from '../../../utils/helpers';
 import {
 	// useChangeProductOrder,
@@ -44,7 +44,7 @@ export const ProductCard = (props: ProductCardProps) => {
 	const { lang, dictionary } = useLanguageStore((store) => store);
 
 	return (
-		<div style={{ position: 'relative', width: '100%' }}>
+		<div style={{ position: 'relative', width: '100%', marginBottom: isEditable ? 0 : 15 }}>
 			{isEditable && (
 				<div
 					style={{
@@ -115,6 +115,21 @@ export const ProductCard = (props: ProductCardProps) => {
 					preview={preview}
 				/>
 			)}
+
+			<Space>
+				{data.status === ProductStatus.NotAvailable && (
+					<Tag color='#F50' >
+						{dictionary.menu.product.notAvailable}
+					</Tag>
+				)}
+
+				{data.bestSeller && (
+					<Tag color='#87d068' >
+						{dictionary.menu.product.bestSeller}
+					</Tag>
+				)}
+			</Space>
+
 			<Title level={5} style={{ marginBottom: 0 }}>
 				{lang === 'es' && data.es_name}
 				{lang === 'en' && data.en_name}

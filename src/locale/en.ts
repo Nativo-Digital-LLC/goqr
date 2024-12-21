@@ -11,6 +11,7 @@ const dictionary: DictionaryProps = {
 				free: 'Free'
 			},
 			notAvailable: 'Not available',
+			bestSeller: 'Best Seller'
 		},
 		foodAllergyAndRiskDisclaimer: 'If you have a food allergy, please speak to any member of our staff. The FDA warns that consuming raw or undercooked meats, poultry, shellfish, or eggs increases the risk of foodborne illness.'
 	}

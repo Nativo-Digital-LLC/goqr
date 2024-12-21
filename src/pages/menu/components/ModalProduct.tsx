@@ -10,6 +10,7 @@ import {
 	Row,
 	Select,
 	Space,
+	Switch,
 	Upload
 } from 'antd';
 import { DeleteOutlined, InboxOutlined } from '@ant-design/icons';
@@ -131,6 +132,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 							categoryId: extra?.categoryId,
 							subcategoryId: extra?.subcategoryId,
 							status: data.status,
+							bestSeller: data.bestSeller
 						},
 						() => {
 							close();
@@ -217,6 +219,14 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 				</Button>
 				<br />
 				<br />
+
+				<Form.Item
+					label='Más vendido'
+					name='bestSeller'
+					valuePropName='checked'
+				>
+					<Switch defaultChecked={false} />
+				</Form.Item>
 
 				<Form.Item
 					name='es_description'
