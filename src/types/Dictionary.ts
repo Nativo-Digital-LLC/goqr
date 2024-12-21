@@ -7,7 +7,8 @@ export interface DictionaryProps {
 		product: {
 			price: {
 				free: string;
-			}
+			},
+			notAvailable: string;
 		},
 		foodAllergyAndRiskDisclaimer: string;
 	};

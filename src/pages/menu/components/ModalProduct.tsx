@@ -7,6 +7,7 @@ import {
 	InputNumber,
 	Modal,
 	Row,
+	Select,
 	Space,
 	Upload
 } from 'antd';
@@ -117,6 +118,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 							establishmentId: extra?.establishmentId,
 							categoryId: extra?.categoryId,
 							subcategoryId: extra?.subcategoryId,
+							status: data.status,
 						},
 						() => {
 							close();
@@ -237,6 +239,29 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 						</p>
 						<p className='ant-upload-text'>Click o arrastra tu foto en esta area</p>
 					</Dragger>
+				<Form.Item
+					name='status'
+					label='Estado'
+					tooltip='Al seleccionar la opcion `No disponible`, el producto seguirá siendo visualizado por tus clientes pero con la etiqueta `No disponible`'
+					initialValue={ProductStatus.Visible}
+				>
+					<Select
+						options={[
+							{
+								label: 'Visible',
+								value: ProductStatus.Visible
+							},
+							{
+								label: 'Oculto',
+								value: ProductStatus.Hidden
+							},
+							{
+								label: 'No Disponible',
+								value: ProductStatus.NotAvailable,
+							}
+						]}
+
+					/>
 				</Form.Item>
 
 				<Row justify='end'>

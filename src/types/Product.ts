@@ -13,7 +13,14 @@ export interface ProductProps {
 	categoryId: string;
 	subcategoryId: string | null;
 	photoUrl: string;
+	status: ProductStatus;
 	$createdAt: string;
 	$updatedAt: string;
 	deletedAt: string | null;
+}
+
+export enum ProductStatus {
+	Visible = 'VISIBLE',
+	Hidden = 'HIDDEN',
+	NotAvailable = 'NOT_AVAILABLE'
 }
