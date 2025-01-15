@@ -73,7 +73,7 @@ export const ModalCategory = ({ onFinish, enableEnglishVersion }: ModalCategoryP
 				>
 					<Input autoFocus />
 				</Form.Item>
-				{
+				{enableEnglishVersion && (
 					<Form.Item
 						label={`Nombre del menú${enableEnglishVersion ? ' (ingles)' : ''}`}
 						name='en_name'
@@ -81,7 +81,7 @@ export const ModalCategory = ({ onFinish, enableEnglishVersion }: ModalCategoryP
 					>
 						<Input />
 					</Form.Item>
-				}
+				)}
 				<Form.Item
 					label='Mostrar Categorías'
 					name='enableSubcategories'
