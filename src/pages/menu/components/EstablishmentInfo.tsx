@@ -71,25 +71,28 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 					</Space>
 				</a>
 			)}
-			<Space>
-				{phone && (
-					<a href={'tel:' + phone} style={{ opacity: 0.7 }}>
-						<Space>
-							<PhoneOutlined />
-							<Text>{format.phone(phone + '')}</Text>
-						</Space>
-					</a>
-				)}
 
-				{whatsapp && (
-					<a href={'https://wa.me/1' + whatsapp} target='_blank' style={{ opacity: 0.7 }}>
-						<Space>
-							<WhatsAppOutlined style={{ color: '#128C7E' }} />
-							<Text>{format.phone(whatsapp + '')}</Text>
-						</Space>
-					</a>
-				)}
-			</Space>
+			{(phone || whatsapp) && (
+				<Space>
+					{phone && (
+						<a href={'tel:' + phone} style={{ opacity: 0.7 }}>
+							<Space>
+								<PhoneOutlined />
+								<Text>{format.phone(phone + '')}</Text>
+							</Space>
+						</a>
+					)}
+
+					{whatsapp && (
+						<a href={'https://wa.me/1' + whatsapp} target='_blank' style={{ opacity: 0.7 }}>
+							<Space>
+								<WhatsAppOutlined style={{ color: '#128C7E' }} />
+								<Text>{format.phone(whatsapp + '')}</Text>
+							</Space>
+						</a>
+					)}
+				</Space>
+			)}
 
 			{googlePlaceId && (
 				<a
