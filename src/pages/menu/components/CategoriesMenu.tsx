@@ -100,6 +100,9 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 									cursor: 'pointer'
 								}}
 								onClick={() => onSelect(category.$id)}
+								data-umami-event='Category'
+								data-umami-event-id={category.$id}
+								data-umami-event-name={category.es_name}
 							>
 								{category[lang + '_name' as 'es_name' | 'en_name']}
 							</Button>
