@@ -163,7 +163,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 									rules={[maxFileSizeRule]}
 								>
 									<Upload
-										accept='image/*'
+										accept='image/png, image/jpeg, image/jpg'
 										multiple={false}
 										beforeUpload={() => false}
 										maxCount={1}
@@ -183,7 +183,7 @@ export const ModalEstablishment = ({ onFinish }: { onFinish: () => void }) => {
 									rules={[maxFileSizeRule]}
 								>
 									<Upload
-										accept='image/*'
+										accept='image/png, image/jpeg, image/jpg'
 										multiple={false}
 										beforeUpload={() => false}
 										maxCount={1}

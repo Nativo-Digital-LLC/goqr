@@ -84,7 +84,7 @@ export const ModalSubcategory = ({ onFinish, enableEnglishVersion }: ModalSubcat
 					rules={[{ required: !extra?.$id }, maxFileSizeRule]}
 				>
 					<Upload
-						accept='image/*'
+						accept='image/png, image/jpeg, image/jpg'
 						multiple={false}
 						beforeUpload={() => false}
 						maxCount={1}
