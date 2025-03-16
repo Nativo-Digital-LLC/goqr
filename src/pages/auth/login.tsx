@@ -76,7 +76,7 @@ export default function LoginPage() {
 									className="font-[500]"
 								>
 									<Input
-										placeholder="test@example.com"
+										placeholder="jhon@gmail.com"
 										type="email"
 										className="bg-[--field] font-[400] border border-[var(--text)]"
 										size="large"
@@ -165,7 +165,7 @@ export default function LoginPage() {
 										/>
 										Ingresar con Google
 									</Button>
-									{isAppleDevice && import.meta.env.DEV && (
+									{isAppleDevice && (
 										<Button
 											type="primary"
 											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"

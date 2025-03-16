@@ -84,7 +84,7 @@ export default function RegisterPage() {
 									<Input
 										type="email"
 										size="large"
-										placeholder="test@example.com"
+										placeholder="jhon@gmail.com"
 										className="bg-[--field] font-[400] border border-[var(--text)]"
 									/>
 								</Form.Item>
@@ -165,7 +165,7 @@ export default function RegisterPage() {
 										/>
 										Registrarse con Google
 									</Button>
-									{isAppleDevice && import.meta.env.DEV && (
+									{isAppleDevice && (
 										<Button
 											type="primary"
 											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
