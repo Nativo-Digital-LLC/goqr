@@ -1,7 +1,7 @@
 {
 	"name": "goqr",
 	"private": true,
-	"version": "0.1.22",
+	"version": "0.2.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -12,8 +12,10 @@
 	"dependencies": {
 		"@ant-design/icons": "^5.5.1",
 		"@meilisearch/instant-meilisearch": "^0.20.1",
+		"@sentry/react": "^9.5.0",
 		"antd": "^5.21.1",
 		"appwrite": "^15.0.0",
+		"dayjs": "^1.11.13",
 		"instantsearch.css": "^8.5.1",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
