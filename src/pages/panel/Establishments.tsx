@@ -20,6 +20,7 @@ import { PaymentFrequency, PaymentMethod } from "../../types/Bill";
 import { useSaveEstablishment } from "../../hooks/useEstablishments";
 import { useSessionStore } from "../../store/session";
 import { EstablishmentProps } from "../../types/Establishment";
+import { useErrorHandler } from "../../hooks/useError";
 
 const { Text } = Typography;
 
@@ -41,9 +42,7 @@ export function Establishments() {
 	const [form] = Form.useForm();
 
 	const [save, saving, error] = useSaveEstablishment();
-	if (error) {
-		console.error(error);
-	}
+	useErrorHandler(error);
 
 	useEffect(() => {
 		form.resetFields();
