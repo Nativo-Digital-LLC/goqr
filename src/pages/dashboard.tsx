@@ -1,11 +1,8 @@
 import { Button, Card, Col, Row, Space, Typography } from "antd";
 import { AppstoreAddOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useGetEstablishmentsByUserId } from "../hooks/useEstablishments";
-import { ModalEstablishment } from "../components";
-import { ModalOpener$ } from "../utils/helpers";
-import { ModalName } from "../types/Modals";
 import { useSessionStore } from "../store/session";
 import { useLogout } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
@@ -14,26 +11,38 @@ import { account } from "../utils/appwrite";
 const { Text } = Typography;
 
 export default function DashboardPage() {
+	const navigate = useNavigate();
 	const [loadingSession, setLoadingSession] = useState(true);
 
 	const { session, setSession } = useSessionStore((session) => session);
-	const [establishments, , , reload] = useGetEstablishmentsByUserId(
-		session?.userId
-	);
+	const [establishments, loadingEstablishments] =
+		useGetEstablishmentsByUserId(session?.userId);
 	const [logout, closingSession] = useLogout();
 
 	useEffect(() => {
 		const id = session?.$id ?? "";
 		account
 			.getSession(id)
-			.then(() => setLoadingSession(false))
+			.then(() => {
+				setLoadingSession(false);
+			})
 			.catch(() => {
 				setSession(null);
-				location.href = "/login";
+				navigate("/login");
 			});
-	}, [session, setSession]);
+	}, [session, setSession, navigate]);
 
-	if (loadingSession) return "";
+	// Temp solution - Pending refactor
+	useEffect(() => {
+		if (loadingEstablishments) return;
+
+		if (establishments.length === 0)
+			navigate("/panel/establishments", {
+				state: { props: { disableReturn: true } },
+			});
+	}, [establishments, loadingEstablishments, navigate]);
+
+	if (loadingSession || loadingEstablishments) return "";
 
 	return (
 		<div style={{ maxWidth: 900, margin: "0 auto", padding: 20 }}>
@@ -72,11 +81,7 @@ export default function DashboardPage() {
 								alignItems: "center",
 								justifyContent: "center",
 							}}
-							onClick={() =>
-								ModalOpener$.next({
-									name: ModalName.Establishment,
-								})
-							}
+							onClick={() => navigate("/panel/establishments")}
 							hoverable
 						>
 							<AppstoreAddOutlined
@@ -97,8 +102,6 @@ export default function DashboardPage() {
 			>
 				Salir
 			</Button>
-
-			<ModalEstablishment onFinish={() => reload(`${session?.userId}`)} />
 		</div>
 	);
 }

@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { AppwriteException } from 'appwrite';
+import { useEffect, useState } from "react";
+import { AppwriteException } from "appwrite";
 
 import {
 	CreateEstablishmentParams,
 	EstablishmentProps,
-	TaxPayerProps
-} from '../types/Establishment';
+	TaxPayerProps,
+} from "../types/Establishment";
 import {
 	createEstablishment,
 	getEstablishmentByDomain,
 	getEstablishmentsByUserId,
 	getTaxInformation,
-	updateEstablishment
-} from '../services/establishments';
+	updateEstablishment,
+} from "../services/establishments";
 
 type UseGetEstablishmentByDomainType = [
 	EstablishmentProps | null,
@@ -21,8 +21,11 @@ type UseGetEstablishmentByDomainType = [
 	(domain: string) => void
 ];
 
-export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmentByDomainType => {
-	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
+export const useGetEstablishmentByDomain = (
+	domain?: string
+): UseGetEstablishmentByDomainType => {
+	const [establishment, setEstablishment] =
+		useState<EstablishmentProps | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
@@ -46,7 +49,7 @@ export const useGetEstablishmentByDomain = (domain?: string): UseGetEstablishmen
 	}
 
 	return [establishment, loading, error, load];
-}
+};
 
 type UseGetEstablishmentsByUserIdType = [
 	EstablishmentProps[],
@@ -55,22 +58,23 @@ type UseGetEstablishmentsByUserIdType = [
 	(userId: string) => void
 ];
 
-export const useGetEstablishmentsByUserId = (userId?: string): UseGetEstablishmentsByUserIdType => {
-	const [establishments, setEstablishments] = useState<EstablishmentProps[]>([]);
-	const [loading, setLoading] = useState(false);
+export const useGetEstablishmentsByUserId = (
+	userId?: string
+): UseGetEstablishmentsByUserIdType => {
+	const [establishments, setEstablishments] = useState<EstablishmentProps[]>(
+		[]
+	);
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
 	useEffect(() => {
-		if (!userId) {
-			return;
-		}
+		if (!userId) return;
 
 		load(userId);
 	}, [userId]);
 
 	async function load(userId: string) {
 		try {
-			setLoading(true);
 			setError(null);
 			const data = await getEstablishmentsByUserId(userId);
 			setEstablishments(data);
@@ -82,9 +86,11 @@ export const useGetEstablishmentsByUserId = (userId?: string): UseGetEstablishme
 	}
 
 	return [establishments, loading, error, load];
-}
+};
 
-type SaveEstablishmentParams = Partial<CreateEstablishmentParams> & { id?: string; };
+type SaveEstablishmentParams = Partial<CreateEstablishmentParams> & {
+	id?: string;
+};
 
 type UseSaveEstablishmentType = [
 	(params: SaveEstablishmentParams, onDone?: () => void) => void,
@@ -92,12 +98,14 @@ type UseSaveEstablishmentType = [
 	AppwriteException | null
 ];
 
-
 export const useSaveEstablishment = (): UseSaveEstablishmentType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<AppwriteException | null>(null);
 
-	async function handleSave({ id, ...rest }: SaveEstablishmentParams, onDone?: () => void) {
+	async function handleSave(
+		{ id, ...rest }: SaveEstablishmentParams,
+		onDone?: () => void
+	) {
 		try {
 			setLoading(true);
 			setError(null);
@@ -115,7 +123,7 @@ export const useSaveEstablishment = (): UseSaveEstablishmentType => {
 	}
 
 	return [handleSave, loading, error];
-}
+};
 
 type UseGetTaxPayerInfoType = [
 	(rnc: string) => void,
@@ -135,11 +143,14 @@ export const useGetTaxPayerInfo = (): UseGetTaxPayerInfoType => {
 			setError(null);
 			const data = await getTaxInformation(rnc);
 			if (!data) {
-				return setError('RNC no encontrado');
+				return setError("RNC no encontrado");
 			}
 
-			if (data?.status.name !== 'ACTIVO' && data?.status.name !== 'NORMAL') {
-				return setError('RNC ' + data?.status.name);
+			if (
+				data?.status.name !== "ACTIVO" &&
+				data?.status.name !== "NORMAL"
+			) {
+				return setError("RNC " + data?.status.name);
 			}
 
 			setTaxpayer(data);
@@ -151,4 +162,4 @@ export const useGetTaxPayerInfo = (): UseGetTaxPayerInfoType => {
 	}
 
 	return [load, taxpayer, loading, error];
-}
+};

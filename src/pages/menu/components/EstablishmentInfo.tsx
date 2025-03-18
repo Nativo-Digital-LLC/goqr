@@ -1,17 +1,17 @@
-import { Button, Row, Space, Typography } from 'antd';
+import { Button, Row, Space, Typography } from "antd";
 import {
 	EditOutlined,
 	EnvironmentOutlined,
 	PhoneOutlined,
 	StarOutlined,
-	WhatsAppOutlined
-} from '@ant-design/icons';
+	WhatsAppOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
-import { format, ModalOpener$ } from '../../../utils/helpers';
-import { ModalName } from '../../../types/Modals';
-import { EstablishmentProps } from '../../../types/Establishment';
-import { ToggleLanguageButton } from './ToggleLanguageButton';
-import { useLanguageStore } from '../../../store/language';
+import { format } from "../../../utils/helpers";
+import { EstablishmentProps } from "../../../types/Establishment";
+import { ToggleLanguageButton } from "./ToggleLanguageButton";
+import { useLanguageStore } from "../../../store/language";
 
 const { Title, Text } = Typography;
 
@@ -20,7 +20,11 @@ interface EstablishmentInfoProps {
 	isEditable: boolean;
 }
 
-export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentInfoProps) => {
+export const EstablishmentInfo = ({
+	establishment,
+	isEditable,
+}: EstablishmentInfoProps) => {
+	const navigate = useNavigate();
 	const dictionary = useLanguageStore(({ dictionary }) => dictionary);
 
 	const {
@@ -31,31 +35,37 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 		whatsapp,
 		addressLink,
 		enableMultiLanguage,
-		googlePlaceId
+		googlePlaceId,
 	} = establishment;
 
 	return (
-		<Space direction='vertical' size='small' style={{ width: '100%' }}>
-			<Row justify='space-between'>
+		<Space direction="vertical" size="small" style={{ width: "100%" }}>
+			<Row justify="space-between">
 				<Space>
-					<Title level={3} style={{ margin: 0 }}>{name}</Title>
+					<Title level={3} style={{ margin: 0 }}>
+						{name}
+					</Title>
 					{isEditable && (
 						<Button
-							type='text'
+							type="text"
 							icon={<EditOutlined />}
-							onClick={() => ModalOpener$.next({
-								name: ModalName.Establishment,
-								extra: establishment
-							})}
+							onClick={() =>
+								navigate("/panel/establishments", {
+									state: {
+										establishment,
+									},
+								})
+							}
 						/>
 					)}
 				</Space>
 
 				{enableMultiLanguage && !isEditable && (
 					<ToggleLanguageButton
-						esFlag={(establishment.domain === 'la-roca-restaurant')
-							? 'dom'
-							: undefined
+						esFlag={
+							establishment.domain === "la-roca-restaurant"
+								? "dom"
+								: undefined
 						}
 					/>
 				)}
@@ -64,7 +74,11 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 			<Text style={{ opacity: 0.7 }}>{description}</Text>
 
 			{address && (
-				<a href={addressLink + ''} target='_blank' style={{ opacity: 0.7 }}>
+				<a
+					href={addressLink + ""}
+					target="_blank"
+					style={{ opacity: 0.7 }}
+				>
 					<Space>
 						<EnvironmentOutlined />
 						<Text>{address}</Text>
@@ -75,19 +89,25 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 			{(phone || whatsapp) && (
 				<Space>
 					{phone && (
-						<a href={'tel:' + phone} style={{ opacity: 0.7 }}>
+						<a href={"tel:" + phone} style={{ opacity: 0.7 }}>
 							<Space>
 								<PhoneOutlined />
-								<Text>{format.phone(phone + '')}</Text>
+								<Text>{format.phone(phone + "")}</Text>
 							</Space>
 						</a>
 					)}
 
 					{whatsapp && (
-						<a href={'https://wa.me/1' + whatsapp} target='_blank' style={{ opacity: 0.7 }}>
+						<a
+							href={"https://wa.me/1" + whatsapp}
+							target="_blank"
+							style={{ opacity: 0.7 }}
+						>
 							<Space>
-								<WhatsAppOutlined style={{ color: '#128C7E' }} />
-								<Text>{format.phone(whatsapp + '')}</Text>
+								<WhatsAppOutlined
+									style={{ color: "#128C7E" }}
+								/>
+								<Text>{format.phone(whatsapp + "")}</Text>
 							</Space>
 						</a>
 					)}
@@ -97,15 +117,15 @@ export const EstablishmentInfo = ({ establishment, isEditable }: EstablishmentIn
 			{googlePlaceId && (
 				<a
 					href={`https://search.google.com/local/writereview?placeid=${googlePlaceId}`}
-					target='_blank'
-					style={{ margin: '10px 0' }}
+					target="_blank"
+					style={{ margin: "10px 0" }}
 				>
 					<Space>
-						<StarOutlined style={{ color: '#e0d206' }} />
+						<StarOutlined style={{ color: "#e0d206" }} />
 						<Text>{dictionary.menu.establishment.leaveReview}</Text>
 					</Space>
 				</a>
 			)}
 		</Space>
 	);
-}
+};

@@ -1,1 +1,0 @@
-export { ModalEstablishment } from './ModalEstablishment';

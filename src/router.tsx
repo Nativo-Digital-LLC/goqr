@@ -10,6 +10,7 @@ import NotFoundPage from "./pages/404";
 import QrPage from "./pages/menu/qr";
 import TermsPage from "./pages/terms";
 import PrivacyPoliciesPage from "./pages/privacy-policies";
+import { Establishments } from "./pages/panel/Establishments";
 
 const router = createBrowserRouter([
 	{
@@ -18,11 +19,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/terms",
-		element: <TermsPage />
+		element: <TermsPage />,
 	},
 	{
-		path: '/privacy-policies',
-		element: <PrivacyPoliciesPage />
+		path: "/privacy-policies",
+		element: <PrivacyPoliciesPage />,
 	},
 	{
 		path: "/login",
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
 	{
 		path: "/dashboard",
 		element: <DashboardPage />,
+	},
+	{
+		path: "/panel/establishments",
+		element: <Establishments />,
 	},
 	{
 		path: "/verify",

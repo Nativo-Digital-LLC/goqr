@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Row, Typography } from 'antd';
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Row, Typography } from "antd";
 import {
 	InfiniteHits,
 	InstantSearch,
 	SearchBox,
-	Configure
-} from 'react-instantsearch';
-import 'instantsearch.css/themes/satellite.css';
+	Configure,
+} from "react-instantsearch";
+import "instantsearch.css/themes/satellite.css";
 
-import { useGetEstablishmentByDomain } from '../../hooks/useEstablishments';
+import { useGetEstablishmentByDomain } from "../../hooks/useEstablishments";
 import {
 	ModalCategory,
 	SubcategoriesList,
@@ -20,15 +20,14 @@ import {
 	EstablishmentInfo,
 	CategoriesMenu,
 	ProductCard,
-	Loading
-} from './components';
-import { useSessionStore } from '../../store/session';
-import { ModalEstablishment } from '../../components';
-import searchClient from '../../utils/search';
-import { ProductProps } from '../../types/Product';
-import { useShowIntro } from '../../hooks/useShowIntro';
-import { useFDADisclaimer } from '../../hooks/useFDADisclaimer';
-import { useLanguageStore } from '../../store/language';
+	Loading,
+} from "./components";
+import { useSessionStore } from "../../store/session";
+import searchClient from "../../utils/search";
+import { ProductProps } from "../../types/Product";
+import { useShowIntro } from "../../hooks/useShowIntro";
+import { useFDADisclaimer } from "../../hooks/useFDADisclaimer";
+import { useLanguageStore } from "../../store/language";
 
 const { Text } = Typography;
 
@@ -40,88 +39,108 @@ export default function MenuPage() {
 	const showIntro = useShowIntro();
 	const { dictionary, lang } = useLanguageStore((store) => store);
 
-	const [establishment, loading, error, reload] = useGetEstablishmentByDomain(establishmentUrl);
+	const [establishment, loading, error, reload] =
+		useGetEstablishmentByDomain(establishmentUrl);
 	useFDADisclaimer(
 		session,
 		establishment?.showFoodAllergyAndRiskDisclaimer && !showIntro
 	);
-	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState("");
 
 	const isEditable = useMemo(() => {
-		return establishment && session && session.userId === establishment.userId || false;
+		return (
+			(establishment &&
+				session &&
+				session.userId === establishment.userId) ||
+			false
+		);
 	}, [session, establishment]);
 
 	const selected = useMemo(() => {
 		const params = new URLSearchParams(location.search);
-		const categoryId = params.get('categoryId');
-		const subcategoryId = params.get('subcategoryId');
+		const categoryId = params.get("categoryId");
+		const subcategoryId = params.get("subcategoryId");
 
 		return {
 			categoryId,
-			subcategoryId
-		}
+			subcategoryId,
+		};
 	}, [location]);
 
 	const selectedCategory = useMemo(() => {
-		if (!selected.categoryId || !establishment || establishment.categories.length === 0) {
+		if (
+			!selected.categoryId ||
+			!establishment ||
+			establishment.categories.length === 0
+		) {
 			return null;
 		}
 
-		return establishment.categories.find(({ $id }) => $id === selected.categoryId) || null
+		return (
+			establishment.categories.find(
+				({ $id }) => $id === selected.categoryId
+			) || null
+		);
 	}, [establishment, selected.categoryId]);
 
 	const productsListTitle = useMemo(() => {
 		if (selectedCategory?.enableSubcategories) {
-			const subcategory = selectedCategory
-				?.subcategories
-				?.find(({ $id }) => $id === selected.subcategoryId);
+			const subcategory = selectedCategory?.subcategories?.find(
+				({ $id }) => $id === selected.subcategoryId
+			);
 
-			return (lang === 'es') ? subcategory?.es_name || '' : subcategory?.en_name || '';
+			return lang === "es"
+				? subcategory?.es_name || ""
+				: subcategory?.en_name || "";
 		}
 
 		if (selectedCategory) {
-			return selectedCategory[lang + '_name' as 'es_name' | 'en_name'];
+			return selectedCategory[(lang + "_name") as "es_name" | "en_name"];
 		}
 
-		return '';
+		return "";
 	}, [lang, selectedCategory, selected]);
 
 	useEffect(() => {
 		const params = new URLSearchParams(location.search);
-		const categoryId = params.get('categoryId');
+		const categoryId = params.get("categoryId");
 
 		if (establishment) {
 			document.title = `${establishment.name} | GoQR`;
 		}
 
-		if (!establishment || establishment.categories.length === 0 || categoryId) {
+		if (
+			!establishment ||
+			establishment.categories.length === 0 ||
+			categoryId
+		) {
 			return;
 		}
 
-		const categories = establishment
-			.categories
-			.sort((a, b) => a.order - b.order);
+		const categories = establishment.categories.sort(
+			(a, b) => a.order - b.order
+		);
 
 		if (categories.length > 0) {
-			handleUrlChanges('categoryId', categories[0].$id);
+			handleUrlChanges("categoryId", categories[0].$id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [establishment]);
 
 	useEffect(() => {
 		if (selected.subcategoryId) {
-			const div = document.getElementById('main_container');
+			const div = document.getElementById("main_container");
 			if (div) {
 				div.scrollTo({
 					top: 200,
-					behavior: 'smooth'
+					behavior: "smooth",
 				});
 			}
 		}
 	}, [selected?.subcategoryId]);
 
 	if (error) {
-		return <p>Error, {JSON.stringify(error, null, 4)}</p>
+		return <p>Error, {JSON.stringify(error, null, 4)}</p>;
 	}
 
 	if (loading && !establishment) {
@@ -135,9 +154,7 @@ export default function MenuPage() {
 	function handleUrlChanges(key: string, value: string, reset = false) {
 		const params = new URLSearchParams(location.search);
 		if (reset) {
-			const keys = Object.keys(
-				Object.fromEntries(params.entries())
-			);
+			const keys = Object.keys(Object.fromEntries(params.entries()));
 
 			for (const key of keys) {
 				params.delete(key);
@@ -150,38 +167,34 @@ export default function MenuPage() {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function handleSearchInput({ target }: any) {
-		setSearch(target.value)
+		setSearch(target.value);
 	}
 
-	if (loading || (showIntro && location.pathname.includes('pandora'))) {
+	if (loading || (showIntro && location.pathname.includes("pandora"))) {
 		return (
-			<Loading
-				showPandoraIntro={location.pathname.includes('pandora')}
-			/>
+			<Loading showPandoraIntro={location.pathname.includes("pandora")} />
 		);
 	}
 
 	return (
-		<InstantSearch
-			indexName='products'
-			searchClient={searchClient}
-		>
-			<Configure
-				filters={`establishmentId="${establishment.$id}"`}
-			/>
-			<div style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
+		<InstantSearch indexName="products" searchClient={searchClient}>
+			<Configure filters={`establishmentId="${establishment.$id}"`} />
+			<div style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
 				<div
 					style={{
 						maxWidth: 560,
-						margin: '0 auto',
-						backgroundColor: '#FFF',
-						display: 'flex',
-						flexDirection: 'column',
-						minHeight: '100vh'
+						margin: "0 auto",
+						backgroundColor: "#FFF",
+						display: "flex",
+						flexDirection: "column",
+						minHeight: "100vh",
 					}}
 				>
 					<MenuHeader
-						bannerUrl={establishment.bannerUrl ?? 'https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67110f2e001cdb14cd8e/view?project=66f768e4001537551adf'}
+						bannerUrl={
+							establishment.bannerUrl ??
+							"https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67110f2e001cdb14cd8e/view?project=66f768e4001537551adf"
+						}
 						logoUrl={establishment.logoUrl ?? undefined}
 						isEditable={isEditable}
 					/>
@@ -190,14 +203,14 @@ export default function MenuPage() {
 						style={{
 							borderRadius: 30,
 							marginTop: -30,
-							width: '100%',
+							width: "100%",
 							flex: 1,
 							zIndex: 100,
-							backgroundColor: '#FFF',
-							padding: 20
+							backgroundColor: "#FFF",
+							padding: 20,
 						}}
-						className='hide-scrollbar-y'
-						id='main_container'
+						className="hide-scrollbar-y"
+						id="main_container"
 					>
 						<EstablishmentInfo
 							establishment={establishment}
@@ -208,9 +221,13 @@ export default function MenuPage() {
 
 						<CategoriesMenu
 							categories={establishment.categories}
-							selectedCategoryId={selected.categoryId ?? undefined}
+							selectedCategoryId={
+								selected.categoryId ?? undefined
+							}
 							color={establishment.mainHexColor}
-							onSelect={(id) => handleUrlChanges('categoryId', id, true)}
+							onSelect={(id) =>
+								handleUrlChanges("categoryId", id, true)
+							}
 							onChange={() => reload(establishmentUrl!)}
 							establishmentId={establishment.$id}
 							isEditable={isEditable}
@@ -220,7 +237,7 @@ export default function MenuPage() {
 						{!isEditable && (
 							<SearchBox
 								onChangeCapture={handleSearchInput}
-								onResetCapture={() => setSearch('')}
+								onResetCapture={() => setSearch("")}
 								placeholder={dictionary.menu.search}
 							/>
 						)}
@@ -239,55 +256,62 @@ export default function MenuPage() {
 						)}
 
 						<SubcategoriesList
-							subcategories={selectedCategory?.subcategories || []}
+							subcategories={
+								selectedCategory?.subcategories || []
+							}
 							mainColor={establishment.mainHexColor}
 							isEditable={isEditable}
 							category={{
-								name: selectedCategory ? selectedCategory[lang + '_name' as 'es_name' | 'en_name'] : '',
-								id: selectedCategory?.$id || ''
+								name: selectedCategory
+									? selectedCategory[
+											(lang + "_name") as
+												| "es_name"
+												| "en_name"
+									  ]
+									: "",
+								id: selectedCategory?.$id || "",
 							}}
-							show={(
+							show={
 								!selected.subcategoryId &&
 								search.length === 0 &&
 								!!selectedCategory?.enableSubcategories
-							)}
+							}
 							onChange={() => reload(establishmentUrl!)}
-							onPress={(id) => handleUrlChanges('subcategoryId', id)}
+							onPress={(id) =>
+								handleUrlChanges("subcategoryId", id)
+							}
 						/>
 
 						<ProductsList
-							show={(!!selected.subcategoryId || !selectedCategory?.enableSubcategories) && search.length === 0}
+							show={
+								(!!selected.subcategoryId ||
+									!selectedCategory?.enableSubcategories) &&
+								search.length === 0
+							}
 							color={establishment.mainHexColor}
 							establishmentId={establishment.$id}
-							categoryId={selected.categoryId + ''}
+							categoryId={selected.categoryId + ""}
 							subcategoryId={selected.subcategoryId || null}
 							title={productsListTitle}
 							isEditable={isEditable}
-							enableMultiLanguage={establishment?.enableMultiLanguage}
+							enableMultiLanguage={
+								establishment?.enableMultiLanguage
+							}
 						/>
 
-						<Row justify='center'>
-							<a
-								href='https://goqr.com.do'
-								target='_blank'
-							>
+						<Row justify="center">
+							<a href="https://goqr.com.do" target="_blank">
 								<Text>goqr.com.do</Text>
 							</a>
 						</Row>
 					</div>
 
-					{isEditable && (
-						<MenuFooter domain={establishmentUrl!} />
-					)}
+					{isEditable && <MenuFooter domain={establishmentUrl!} />}
 				</div>
 
 				<ModalCategory
 					onFinish={() => reload(establishmentUrl!)}
 					enableEnglishVersion={establishment?.enableMultiLanguage}
-				/>
-
-				<ModalEstablishment
-					onFinish={() => reload(establishmentUrl!)}
 				/>
 
 				<ModalSubcategory
