@@ -34,7 +34,6 @@ export function Establishments() {
 	const location = useLocation();
 
 	const props = location.state as EstablishmentsPageProps;
-
 	const establishment = props?.establishment;
 
 	const session = useSessionStore(({ session }) => session);
@@ -70,7 +69,7 @@ export function Establishments() {
 			// title={extra ? "Modificar Local" : "Nuevo Local"}
 		>
 			<h2 className="mb-[28px] text-[22px] font-[500]">
-				{props ? "Modificar Local" : "Nuevo Local"}
+				{establishment ? "Modificar Local" : "Nuevo Local"}
 			</h2>
 			<Form
 				layout="vertical"
@@ -130,7 +129,7 @@ export function Establishments() {
 							name="domain"
 							rules={[
 								{
-									required: !props,
+									required: !establishment,
 									message: "Elige tu URL",
 								},
 							]}
@@ -138,7 +137,7 @@ export function Establishments() {
 						>
 							<Input
 								prefix="goqr.com.do/m/"
-								disabled={!!props}
+								disabled={!!establishment}
 								onInput={(event) => {
 									// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 									// @ts-expect-error
@@ -415,10 +414,10 @@ export function Establishments() {
 							size="large"
 							className="bg-[--tertiary] text-[#FFF] mr-[10px] mt-[5px]"
 						>
-							Guardar
+							{establishment ? 'Guardar' : 'Continuar'}
 						</Button>
 					</Col>
-					{props.disableReturn && (
+					{!props?.disableReturn && (
 						<Col>
 							<Button
 								disabled={saving}

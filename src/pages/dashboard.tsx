@@ -38,7 +38,7 @@ export default function DashboardPage() {
 
 		if (establishments.length === 0)
 			navigate("/panel/establishments", {
-				state: { props: { disableReturn: true } },
+				state: { disableReturn: true },
 			});
 	}, [establishments, loadingEstablishments, navigate]);
 
