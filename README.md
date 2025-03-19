@@ -1,50 +1,90 @@
-# React + TypeScript + Vite
+# GoQR - Sistema de Gestión de Menú Digital
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+GoQR es una aplicación web moderna para la gestión de menús digitales, permitiendo a los restaurantes y establecimientos de comida gestionar sus menús de manera eficiente y ofrecer una experiencia digital a sus clientes.
 
-Currently, two official plugins are available:
+## Tecnologías Principales
+- **Frontend Framework**: React 18
+- **Lenguaje**: TypeScript
+- **Bundler**: Vite
+- **Estilos**: Tailwind CSS
+- **UI Components**: Ant Design
+- **Estado**: Zustand
+- **Backend**: Appwrite
+- **Búsqueda**: Meilisearch
+- **Monitoreo**: Sentry
+- **Routing**: React Router DOM
+- **Notificaciones**: SweetAlert2
+- **Manejo de Fechas**: Day.js
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Requisitos del Sistema
+- Node.js (versión compatible con React 18)
+- npm o yarn
 
-## Expanding the ESLint configuration
+## Instalación
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clonar el repositorio:
+```bash
+git clone [URL_DEL_REPOSITORIO]
+cd goqr
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+2. Instalar dependencias:
+```bash
+npm install
+# o
+yarn install
 ```
+
+3. Configurar variables de entorno:
+Crear un archivo `.env` en la raíz del proyecto con las siguientes variables:
+```
+VITE_APPWRITE_ENDPOINT=
+VITE_APPWRITE_PROJECT_ID=
+VITE_MEILISEARCH_HOST=
+VITE_SENTRY_DSN=
+```
+
+## Scripts Disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo
+- `npm run build`: Compila el proyecto para producción
+- `npm run lint`: Ejecuta el linter
+- `npm run preview`: Previsualiza la versión de producción
+
+## Estructura del Proyecto
+
+```
+goqr/
+├── src/
+│   ├── assets/         # Recursos estáticos
+│   ├── components/     # Componentes reutilizables
+│   ├── pages/         # Páginas de la aplicación
+│   ├── services/      # Servicios y APIs
+│   └── utils/         # Utilidades y helpers
+├── public/            # Archivos públicos
+├── dist/             # Build de producción
+└── [archivos de configuración]
+```
+
+## Características Principales
+- Gestión de menús digitales
+- Sistema de búsqueda en tiempo real
+- Interfaz de usuario moderna y responsiva
+- Gestión de productos y categorías
+- Sistema de autenticación
+- Monitoreo de errores
+- Optimización de rendimiento
+
+## Contribución
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
+
+## Licencia
+Este proyecto está bajo la Licencia [TIPO_DE_LICENCIA] - ver el archivo LICENSE.md para más detalles.
+
+## Contacto
+[INFORMACIÓN_DE_CONTACTO]
