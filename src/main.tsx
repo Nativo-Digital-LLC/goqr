@@ -3,7 +3,10 @@ import { RouterProvider } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
 
 Sentry.init({
-	dsn: import.meta.env.VITE_APP_SENTRY_DSN
+	dsn: import.meta.env.VITE_APP_SENTRY_DSN,
+	ignoreErrors: [
+		'AppwriteException: User (role: guests) missing scope (account)'
+	]
 });
 
 import './index.css'
