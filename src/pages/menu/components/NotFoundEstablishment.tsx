@@ -46,24 +46,6 @@ export const NotFoundEstablishment = () => {
 									dirección URL
 								</span>
 							</li>
-							<li className="flex items-start">
-								<span className="flex-shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
-									•
-								</span>
-								<span>
-									Buscar el establecimiento por su nombre en
-									nuestra página de inicio
-								</span>
-							</li>
-							<li className="flex items-start">
-								<span className="flex-shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
-									•
-								</span>
-								<span>
-									Explorar establecimientos cercanos a tu
-									ubicación
-								</span>
-							</li>
 						</ul>
 					</div>
 

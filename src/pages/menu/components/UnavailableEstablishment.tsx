@@ -51,15 +51,6 @@ export const UnavailableEstablishment = () => {
 									establecimiento si tienes su información
 								</span>
 							</li>
-							<li className="flex items-start">
-								<span className="flex-shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
-									•
-								</span>
-								<span>
-									Explorar otros establecimientos en nuestra
-									plataforma
-								</span>
-							</li>
 						</ul>
 					</div>
 
