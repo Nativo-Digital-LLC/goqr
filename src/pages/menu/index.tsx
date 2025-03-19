@@ -21,6 +21,8 @@ import {
 	CategoriesMenu,
 	ProductCard,
 	Loading,
+	UnavailableEstablishment,
+	NotFoundEstablishment,
 } from "./components";
 import { useSessionStore } from "../../store/session";
 import searchClient from "../../utils/search";
@@ -148,7 +150,11 @@ export default function MenuPage() {
 	}
 
 	if (!establishment) {
-		return <p>No encontrado</p>;
+		return <NotFoundEstablishment />;
+	}
+
+	if (!establishment.isActive) {
+		return <UnavailableEstablishment />;
 	}
 
 	function handleUrlChanges(key: string, value: string, reset = false) {

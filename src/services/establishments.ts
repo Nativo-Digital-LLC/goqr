@@ -89,7 +89,8 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 			rnc: params.rnc,
 			companyName: params.companyName,
 			requiresTaxReceipt: params.requiresTaxReceipt,
-			categories: categories.map(({ $id }) => $id)
+			categories: categories.map(({ $id }) => $id),
+			isActive: true
 		}
 	);
 

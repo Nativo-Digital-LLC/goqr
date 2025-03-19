@@ -10,3 +10,5 @@ export { ModalSubcategory } from './ModalSubcategory';
 export { ProductCard } from './ProductCard'
 export { Loading } from './Loading';
 export { ToggleLanguageButton } from './ToggleLanguageButton';
+export { UnavailableEstablishment } from './UnavailableEstablishment';
+export { NotFoundEstablishment } from './NotFoundEstablishment';
