@@ -12,6 +12,8 @@ import {
 	getCurrentSession,
 	login,
 	logout,
+	resetPasswordWithSecret,
+	sendResetPasswordEmail,
 	sendVerificationEmail
 } from '../services/auth';
 import { account } from '../utils/appwrite';
@@ -310,4 +312,77 @@ export const useVerifyEmail = (): UseVerifyEmailType => {
 	}
 
 	return [status, loading, error, (status) => setStatus(status)];
+}
+
+type UseRequestResetPasswordEmailType = [
+	(email: string, onDone?: () => void) => void,
+	boolean,
+	AppwriteException | null
+];
+
+export const useRequestResetPasswordEmail = (): UseRequestResetPasswordEmailType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleRequest(email: string, onDone?: () => void) {
+		try {
+			setLoading(true);
+			setError(null);
+			await sendResetPasswordEmail(email);
+			onDone?.();
+		} catch (error) {
+			const { code } = error as AppwriteException;
+
+			// Por seguridad, evita indicar al usuario cuando un correo no está registrado
+			if (code === 404) {
+				return onDone?.();
+			}
+
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleRequest, loading, error];
+}
+
+type UseResetPasswordWithSecretType = [
+	(
+		userId: string,
+		secret: string,
+		password: string,
+		onDone?: () => void
+	) => void,
+	boolean,
+	AppwriteException | null
+];
+
+export const useResetPasswordWithSecret = (): UseResetPasswordWithSecretType => {
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<AppwriteException | null>(null);
+
+	async function handleReset(
+		userId: string,
+		secret: string,
+		password: string,
+		onDone?: () => void
+	) {
+		try {
+			setLoading(true);
+			setError(null);
+			await resetPasswordWithSecret(
+				userId,
+				secret,
+				password
+			);
+			onDone?.();
+		} catch (error) {
+			setError(error as AppwriteException);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	return [handleReset, loading, error];
 }

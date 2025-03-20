@@ -81,3 +81,23 @@ export async function getCurrentSession() {
 		user
 	} as SessionProps;
 }
+
+export async function sendResetPasswordEmail(email: string) {
+	const url = (import.meta.env.DEV)
+		? 'http://localhost:5173/change-password-after-request'
+		: 'https://goqr.com.do/change-password-after-request';
+
+	await account.createRecovery(email, url);
+}
+
+export async function resetPasswordWithSecret(
+	userId: string,
+	secret: string,
+	password: string
+) {
+	await account.updateRecovery(
+		userId,
+		secret,
+		password
+	);
+}

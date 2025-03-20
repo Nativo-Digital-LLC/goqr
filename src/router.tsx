@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 
 import HomePage from "./pages/home/index";
 import LoginPage from "./pages/auth/login";
+import RequestResetPasswordPage from "./pages/auth/request-reset-password";
+import ChangePasswordAfterRequestPage from "./pages/auth/change-password-after-request";
 import RegisterPage from "./pages/auth/register";
 import MenuPage from "./pages/menu";
 import DashboardPage from "./pages/dashboard";
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: <LoginPage />,
+	},
+	{
+		path: "/request-reset-password",
+		element: <RequestResetPasswordPage />,
+	},
+	{
+		path: "/change-password-after-request",
+		element: <ChangePasswordAfterRequestPage />,
 	},
 	{
 		path: "/register",

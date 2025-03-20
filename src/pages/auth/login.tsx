@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Alert, Button, Form, Input } from "antd";
 import { useEffect, useMemo } from "react";
 
@@ -106,6 +106,14 @@ export default function LoginPage() {
 										minLength={8}
 									/>
 								</Form.Item>
+								<div className='text-end mb-3'>
+									<Link
+										to='/request-reset-password'
+									>
+										¿Olvidaste tu contraseña?
+									</Link>
+								</div>
+
 								<Button
 									type="primary"
 									htmlType="submit"
