@@ -71,7 +71,26 @@ export const EstablishmentInfo = ({
 				)}
 			</Row>
 
-			<Text style={{ opacity: 0.7 }}>{description}</Text>
+			{description.split('\n').map((item, index) => {
+				const isBold = item.charAt(0) === '*' && item.charAt(item.length - 1);
+				return (
+					<Text
+						style={{
+							opacity: 0.7,
+							...(isBold && {
+								fontWeight: 'bold'
+							})
+						}}
+						key={'description-' + index}
+					>
+						{(isBold)
+							? item.replace(/\*/g, '')
+							: item
+						}
+					</Text>
+				);
+			})}
+			<div style={{ height: 10 }} />
 
 			{address && (
 				<a
