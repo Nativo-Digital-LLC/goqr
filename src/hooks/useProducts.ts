@@ -84,7 +84,8 @@ export const useSaveProduct = (): UseSaveProductType => {
 
 type UseChangeProductOrderType = [
 	(
-		subcategoryId: string,
+		categoryId: string,
+		subcategoryId: string | null,
 		id: string,
 		dir: 'up' | 'down',
 		onDone?: () => void
@@ -98,7 +99,8 @@ export const useChangeProductOrder = (): UseChangeProductOrderType => {
 	const [error, setError] = useState<AppwriteException | null>(null);
 
 	async function handleUpdate(
-		subcategoryId: string,
+		categoryId: string,
+		subcategoryId: string | null,
 		id: string,
 		dir: 'up' | 'down',
 		onDone?: () => void
@@ -107,6 +109,7 @@ export const useChangeProductOrder = (): UseChangeProductOrderType => {
 			setLoading(true);
 			setError(null);
 			await changeProductOrder(
+				categoryId,
 				subcategoryId,
 				id,
 				dir

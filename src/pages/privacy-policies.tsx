@@ -76,7 +76,7 @@ export default function PrivacyPoliciesPage() {
 							</p>
 							<ul className="ml-[18px]">
 								<li className="mb-[5px]">
-									<b className="font-[500]">UepaPay:</b>{" "}
+									<b className="font-[500]">Portal:</b>{" "}
 									Compartimos el correo electrónico y número
 									de WhatsApp para pagos con tarjeta.
 								</li>

@@ -1,7 +1,7 @@
 import { Tag, Button, Image, Typography, Space } from 'antd';
 import {
-	// CaretDownOutlined,
-	// CaretUpOutlined,
+	CaretDownOutlined,
+	CaretUpOutlined,
 	DeleteOutlined,
 	EditOutlined
 } from '@ant-design/icons';
@@ -9,7 +9,7 @@ import {
 import { ProductProps, ProductStatus } from '../../../types/Product';
 import { format, ModalOpener$ } from '../../../utils/helpers';
 import {
-	// useChangeProductOrder,
+	useChangeProductOrder,
 	useDeleteProduct
 } from '../../../hooks/useProducts';
 import { ModalName } from '../../../types/Modals';
@@ -35,12 +35,12 @@ export const ProductCard = (props: ProductCardProps) => {
 		color,
 		preview,
 		isEditable,
-		// showMoveDown,
-		// showMoveUp,
+		showMoveDown,
+		showMoveUp,
 		onChange
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
-	// const [changeOrder, changingOrder] = useChangeProductOrder();
+	const [changeOrder, changingOrder] = useChangeProductOrder();
 	const { lang, dictionary } = useLanguageStore((store) => store);
 
 	return (
@@ -58,13 +58,18 @@ export const ProductCard = (props: ProductCardProps) => {
 						display: 'flex'
 					}}
 				>
-					{/*
 					{showMoveUp && (
 						<Button
 							type='text'
 							icon={<CaretUpOutlined />}
 							loading={changingOrder}
-							onClick={() => changeOrder(data.subcategoryId, data.$id, 'up', onChange)}
+							onClick={() => changeOrder(
+								data.categoryId,
+								data.subcategoryId,
+								data.$id,
+								'up',
+								onChange
+							)}
 						/>
 					)}
 
@@ -73,11 +78,16 @@ export const ProductCard = (props: ProductCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretDownOutlined />}
-							// loading={changingOrder}
-							// onClick={() => changeOrder(data.subcategoryId, data.$id, 'down', onChange)}
+							loading={changingOrder}
+							onClick={() => changeOrder(
+								data.categoryId,
+								data.subcategoryId,
+								data.$id,
+								'down',
+								onChange
+							)}
 						/>
 					)}
-					*/}
 
 					<Button
 						type='text'

@@ -104,12 +104,12 @@ export default function TermsPage() {
 								<li className="mb-[5px]">
 									No recolectamos información de pago
 									directamente; todas las transacciones con
-									tarjeta son procesadas por UepaPay o Stripe.
+									tarjeta son procesadas por Portal.
 								</li>
 								<li className="mb-[5px]">
 									Las opciones de pago disponibles incluyen
 									transferencia bancaria y pagos con tarjeta a
-									través de Stripe o UepaPay.
+									través de Portal.
 								</li>
 							</ul>
 						</div>

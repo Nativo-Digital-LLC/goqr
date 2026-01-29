@@ -57,7 +57,7 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 	});
 }
 
-export async function updateProduct(id: string,  {photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
+export async function updateProduct(id: string, { photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
 	let photoUrl = undefined;
 	if (photo) {
 		photoUrl = await uploadFile(photo);
@@ -96,58 +96,64 @@ export async function updateProduct(id: string,  {photo, ...data }: Partial<Prod
 	});
 }
 
-export async function changeProductOrder(subcategoryId: string, id: string, dir: 'up' | 'down') {
+export async function changeProductOrder(
+	categoryId: string,
+	subcategoryId: string | null,
+	id: string,
+	dir: 'up' | 'down'
+) {
+	const queries = [
+		Query.equal('categoryId', categoryId),
+		Query.isNull('deletedAt'),
+		Query.orderAsc('order')
+	];
+
+	if (subcategoryId !== null) {
+		queries.push(Query.equal('subcategoryId', subcategoryId));
+	}
+
 	const { documents } = await db.listDocuments(
 		import.meta.env.VITE_APP_WRITE_DB_ID,
 		Collection.Products,
-		[
-			Query.equal('subcategoryId', subcategoryId),
-			Query.isNull('deletedAt')
-		]
+		queries
 	);
 
 	const products = documents as unknown as ProductProps[];
 
-	const product = products.find(({ $id }) => $id === id)!;
-	const order = (dir === 'down')
-		? product.order + 1
-		: product.order - 1;
+	const currentIndex = products.findIndex(({ $id }) => $id === id);
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		id,
-		{ order }
-	);
-
-	const order2Find = (dir === 'down')
-		? Math.min(
-			...products
-				.filter(({ order }) => order > product.order)
-				.map(({ order }) => order)
-		)
-		: Math.max(
-			...products
-				.filter(({ order }) => order < product.order)
-				.map(({ order }) => order)
-		);
-	const productInNewPosition = products.find((product) => {
-		return product.order === order2Find
-	});
-
-	if (!productInNewPosition) {
+	if (currentIndex === -1) {
 		console.error('No se encontró el producto');
 		return;
 	}
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		productInNewPosition.$id,
-		{
-			order: product.order
-		}
-	);
+	// Determina el índice del producto con el que intercambiar
+	const targetIndex = dir === 'down' ? currentIndex + 1 : currentIndex - 1;
+
+	// Verifica que el índice objetivo sea válido
+	if (targetIndex < 0 || targetIndex >= products.length) {
+		console.warn('El producto ya está en la primera/última posición');
+		return;
+	}
+
+	const currentProduct = products[currentIndex];
+	const targetProduct = products[targetIndex];
+
+	// Intercambia los valores de order
+	await Promise.all([
+		db.updateDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Products,
+			currentProduct.$id,
+			{ order: targetProduct.order }
+		),
+		db.updateDocument(
+			import.meta.env.VITE_APP_WRITE_DB_ID,
+			Collection.Products,
+			targetProduct.$id,
+			{ order: currentProduct.order }
+		)
+	]);
 }
 
 export async function deleteProduct(id: string) {
