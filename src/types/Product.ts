@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface ProductProps {
 	id: string;
 	es_name: string;
@@ -15,9 +17,9 @@ export interface ProductProps {
 	photoUrl: string | null;
 	bestSeller: boolean;
 	status: ProductStatus;
-	createdAt: string;
-	updatedAt: string;
-	deletedAt: string | null;
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+	deletedAt: Timestamp | null;
 }
 
 export enum ProductStatus {

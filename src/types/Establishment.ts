@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import { PaymentFrequency, PaymentMethod } from './Bill';
 
 export interface EstablishmentProps {
@@ -22,9 +23,9 @@ export interface EstablishmentProps {
 	showFoodAllergyAndRiskDisclaimer: boolean;
 	enableMultiLanguage: boolean;
 	isActive: boolean;
-	createdAt: string;
-	updatedAt: string;
-	deletedAt: string;
+	createdAt: Timestamp;
+	updatedAt: Timestamp;
+	deletedAt: Timestamp | null;
 }
 
 export interface CreateEstablishmentParams {
