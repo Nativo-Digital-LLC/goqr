@@ -81,41 +81,13 @@ export async function updateCategoryName({ establishmentId, id, es_name, en_name
 	});
 }
 
-export async function updateCategoryOrder(establishmentId: string, id: string, dir: 'left' | 'right') {
-	const categoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories');
-	const catSnap = await getDocs(query(categoriesRef));
-	const categories = catSnap.docs.map(doc => doc.data() as CategoryProps);
-
-	if (!categories || categories.length === 0) return;
-
-	const category = categories.find((c) => c.id === id);
-	if (!category) return;
-
-	const currentOrder = category.order;
-	const order = (dir === 'right') ? currentOrder + 1 : currentOrder - 1;
-
-	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), { order });
-
-	const order2Find = (dir === 'right')
-		? Math.min(
-			...categories
-				.filter((c) => c.order > currentOrder)
-				.map((c) => c.order)
-		)
-		: Math.max(
-			...categories
-				.filter((c) => c.order < currentOrder)
-				.map((c) => c.order)
-		);
-
-	const categoryInNewPosition = categories.find((c) => c.order === order2Find);
-
-	if (!categoryInNewPosition) {
-		console.error('No se encontro la categoria adyacente');
-		return;
-	}
-
-	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', categoryInNewPosition.id), {
-		order: currentOrder
-	});
+export async function updateCategoryOrder(establishmentId: string, id: string, dir: 'left' | 'right', neighborId: string) {
+	await Promise.all([
+		updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), {
+			order: increment(dir === 'left' ? -1 : 1)
+		}),
+		updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', neighborId), {
+			order: increment(dir === 'left' ? 1 : -1)
+		})
+	]);
 }

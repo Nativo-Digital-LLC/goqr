@@ -124,7 +124,13 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											type='text'
 											icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
 											loading={updatingOrder}
-											onClick={() => updateOrder(establishmentId, category.id, 'left', onChange)}
+											onClick={() => updateOrder(
+												establishmentId,
+												category.id,
+												'left',
+												categories[index - 1].id,
+												onChange
+											)}
 										/>
 									)}
 
@@ -133,7 +139,13 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											type='text'
 											icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
 											loading={updatingOrder}
-											onClick={() => updateOrder(establishmentId, category.id, 'right', onChange)}
+											onClick={() => updateOrder(
+												establishmentId,
+												category.id,
+												'right',
+												categories[index + 1].id,
+												onChange
+											)}
 										/>
 									)}
 

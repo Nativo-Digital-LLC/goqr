@@ -142,6 +142,7 @@ type UseUpdateCategoryOrderType = [
 		establishmentId: string,
 		id: string,
 		dir: 'left' | 'right',
+		neighborId: string,
 		onDone?: () => void
 	) => void,
 	boolean,
@@ -156,6 +157,7 @@ export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
 		establishmentId: string,
 		id: string,
 		dir: 'left' | 'right',
+		neighborId: string,
 		onDone?: () => void
 	) {
 		try {
@@ -164,7 +166,8 @@ export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
 			await updateCategoryOrder(
 				establishmentId,
 				id,
-				dir
+				dir,
+				neighborId
 			);
 			onDone?.();
 		} catch (error) {
