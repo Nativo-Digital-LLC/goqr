@@ -11,7 +11,7 @@ export default function DashboardLayout() {
 
 	return (
 		<Layout style={{ minHeight: '100vh' }}>
-			<Header style={{ background: '#fff', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}>
+			{/* <Header style={{ background: '#fff', padding: '0 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}>
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					<img src="/icon.svg" alt="Logo" style={{ height: 32, marginRight: 8 }} />
 					<span style={{ fontSize: 18, fontWeight: 'bold' }}>GoQR</span>
@@ -31,9 +31,9 @@ export default function DashboardLayout() {
 						<UserOutlined style={{ fontSize: 18, cursor: 'pointer' }} />
 					</Dropdown>
 				</div>
-			</Header>
+			</Header> */}
 			<Layout>
-				<Sider style={{ background: '#fff' }}>
+				{/* <Sider style={{ background: '#fff' }}>
 					<Menu
 						mode="inline"
 						items={[
@@ -49,7 +49,7 @@ export default function DashboardLayout() {
 							},
 						]}
 					/>
-				</Sider>
+				</Sider> */}
 				<Layout>
 					<Content style={{ padding: 20 }}>
 						<Outlet />
