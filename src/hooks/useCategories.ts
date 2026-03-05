@@ -35,7 +35,10 @@ export const useGetCategories = (establishmentId?: string): UseGetCategoriesType
 		const unsubscribe = onSnapshot(
 			ref,
 			(snapshot) => {
-				setCategories(snapshot.docs.map((doc) => doc.data() as CategoryProps));
+				setCategories(snapshot.docs.map((doc) => ({
+					...doc.data(),
+					id: doc.id
+				} as CategoryProps)));
 				setLoading(false);
 			},
 			setError
