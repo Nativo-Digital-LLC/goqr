@@ -49,6 +49,7 @@ export async function createSubcategory({ es_name, en_name = null, order, catego
 		photoUrl,
 		createdAt: new Date(),
 		updatedAt: new Date(),
+		deletedAt: null
 	}
 	const { id: subcategoryId } = await addDoc(subcategoriesRef, subcategory);
 
