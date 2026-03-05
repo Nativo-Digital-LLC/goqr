@@ -1,8 +1,8 @@
-import { ID } from 'appwrite';
+import { collection, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 
-import { db } from '../utils/appwrite';
+import { db } from '../utils/firebase';
 import { Collection } from '../constants/Collections';
-import { EstablishmentProps } from '../types/Establishment';
+import { CategoryProps } from '../types/Category';
 
 interface CreateCategoryParams {
 	establishmentId: string;
@@ -12,69 +12,41 @@ interface CreateCategoryParams {
 	enableSubcategories?: boolean;
 }
 
-export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }:  CreateCategoryParams) {
-	const { categories } = await db.getDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Establishments,
-		establishmentId
-	) as unknown as EstablishmentProps;
+export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }: CreateCategoryParams) {
+	const categoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories');
+	const catSnap = await getDocs(query(categoriesRef));
+	const categories = catSnap.docs.map(doc => doc.data() as CategoryProps);
 
-	if (order <= Math.max(...categories.map(({ order }) => order))) {
+	const maxOrder = categories.length > 0 ? Math.max(...categories.map(({ order }) => order)) : 0;
+	if (categories.length > 0 && order <= maxOrder) {
 		await Promise.all(
 			categories
 				.filter((category) => category.order >= order)
-				.map(({ order, $id }) => {
-					return db.updateDocument(
-						import.meta.env.VITE_APP_WRITE_DB_ID,
-						Collection.Categories,
-						$id,
-						{ order: order + 1 }
-					);
+				.map((category) => {
+					return updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', category.id), { order: category.order + 1 });
 				})
 		);
 	}
 
-	const { $id } = await db.createDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
-		ID.unique(),
-		{ es_name, en_name, order, enableSubcategories }
-	);
+	const categoryId = crypto.randomUUID();
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Establishments,
-		establishmentId,
-		{
-			categories: categories.map(({ $id }) => $id).concat($id)
-		}
-	);
+	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', categoryId), {
+		id: categoryId,
+		es_name,
+		en_name,
+		order,
+		enableSubcategories,
+		subcategories: [],
+		createdAt: new Date(),
+		updatedAt: new Date()
+	});
 }
 
 export async function deleteCategory(id: string, establishmentId: string) {
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
-		id,
-		{
-			deletedAt: new Date()
-		}
-	);
-
-	const { categories } = await db.getDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Establishments,
-		establishmentId
-	) as unknown as EstablishmentProps;
-
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Establishments,
-		establishmentId,
-		{
-			categories: categories.filter(({ $id }) => $id !== id)
-		}
-	);
+	const ref = doc(db, Collection.Establishments, establishmentId, 'categories', id);
+	await updateDoc(ref, {
+		deletedAt: new Date()
+	});
 }
 
 interface UpdateCategoryNameParams {
@@ -82,62 +54,53 @@ interface UpdateCategoryNameParams {
 	es_name: string;
 	en_name?: string | null;
 	enableSubcategories?: boolean;
+	establishmentId: string;
 }
 
-export async function updateCategoryName({ id, es_name, en_name = null, enableSubcategories }: UpdateCategoryNameParams) {
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
-		id,
-		{ es_name, en_name, enableSubcategories }
-	);
+export async function updateCategoryName({ establishmentId, id, es_name, en_name = null, enableSubcategories }: UpdateCategoryNameParams) {
+	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), {
+		es_name,
+		en_name,
+		enableSubcategories,
+		updatedAt: new Date()
+	});
 }
 
 export async function updateCategoryOrder(establishmentId: string, id: string, dir: 'left' | 'right') {
-	const { categories } = await db.getDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Establishments,
-		establishmentId
-	) as unknown as EstablishmentProps;
+	const categoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories');
+	const catSnap = await getDocs(query(categoriesRef));
+	const categories = catSnap.docs.map(doc => doc.data() as CategoryProps);
 
-	const category = categories.find(({ $id }) => $id === id)!;
-	const order = (dir === 'right')
-		? category.order + 1
-		: category.order - 1;
+	if (!categories || categories.length === 0) return;
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
-		id,
-		{ order }
-	);
+	const category = categories.find((c) => c.id === id);
+	if (!category) return;
+
+	const currentOrder = category.order;
+	const order = (dir === 'right') ? currentOrder + 1 : currentOrder - 1;
+
+	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), { order });
 
 	const order2Find = (dir === 'right')
 		? Math.min(
 			...categories
-				.filter(({ order }) => order > category.order)
-				.map(({ order }) => order)
+				.filter((c) => c.order > currentOrder)
+				.map((c) => c.order)
 		)
 		: Math.max(
 			...categories
-				.filter(({ order }) => order < category.order)
-				.map(({ order }) => order)
+				.filter((c) => c.order < currentOrder)
+				.map((c) => c.order)
 		);
-	const categoryInNewPosition = categories.find((category) => {
-		return category.order === order2Find
-	});
+
+	const categoryInNewPosition = categories.find((c) => c.order === order2Find);
 
 	if (!categoryInNewPosition) {
 		console.error('No se encontro la categoria adyacente');
 		return;
 	}
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Categories,
-		categoryInNewPosition.$id,
-		{
-			order: category.order
-		}
-	);
+	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', categoryInNewPosition.id), {
+		order: currentOrder
+	});
 }

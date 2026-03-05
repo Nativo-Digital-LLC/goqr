@@ -33,8 +33,7 @@ export default function VerifyEmailPage() {
 
 				if (status === 'expired') {
 					return sendVerification(
-						() => changeStatus('resent'),
-						() => changeStatus('verified')
+						() => changeStatus('resent')
 					);
 				}
 

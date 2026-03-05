@@ -1,8 +1,7 @@
 import { PaymentFrequency, PaymentMethod } from './Bill';
-import { CategoryProps } from './Category';
 
 export interface EstablishmentProps {
-	$id: string;
+	id: string;
 	userId: string;
 	name: string;
 	description: string;
@@ -15,7 +14,6 @@ export interface EstablishmentProps {
 	phone: string | null;
 	whatsapp: string | null;
 	mainHexColor: string;
-	categories: CategoryProps[];
 	requiresTaxReceipt: boolean;
 	rnc: string | null;
 	companyName: string | null;
@@ -24,8 +22,8 @@ export interface EstablishmentProps {
 	showFoodAllergyAndRiskDisclaimer: boolean;
 	enableMultiLanguage: boolean;
 	isActive: boolean;
-	$createdAt: string;
-	$updatedAt: string;
+	createdAt: string;
+	updatedAt: string;
 	deletedAt: string;
 }
 

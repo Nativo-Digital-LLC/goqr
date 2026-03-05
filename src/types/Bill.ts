@@ -8,3 +8,17 @@ export enum PaymentFrequency {
 	Annual = 'Annual',
 	Never = 'Never' // Cuando el cliente contrató un plan de por vida
 }
+
+export interface BillProps {
+	id: string;
+	userId: string;
+	orderNumber: string;
+	createdAt: string;
+	updatedAt: string;
+	payedAt: string;
+	isPayed: boolean;
+	amount: number;
+	period: string;
+	paymentUrl: string;
+	billingPeriod: string;
+}

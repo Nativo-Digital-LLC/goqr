@@ -1,103 +1,84 @@
-import { ID, OAuthProvider } from 'appwrite';
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+	signOut,
+	sendEmailVerification,
+	sendPasswordResetEmail,
+	onAuthStateChanged,
+	updateProfile,
+	User
+} from 'firebase/auth';
 
-import { account } from '../utils/appwrite';
-import { useSessionStore } from '../store/session';
+import { auth, googleProvider, appleProvider } from '../utils/firebase';
 import { SessionProps } from '../types/Session';
 
 export async function createAccount(name: string, email: string, password: string) {
-	await account.create(
-		ID.unique(),
-		email,
-		password,
-		name
-	);
+	const { user } = await createUserWithEmailAndPassword(auth, email, password);
+	if (name) {
+		await updateProfile(user, { displayName: name });
+	}
+	await sendEmailVerification(user);
 }
 
 export async function login(email: string, password: string) {
-	const session = await account.createEmailPasswordSession(
-		email,
-		password
-	);
-
-	return session;
+	const { user } = await signInWithEmailAndPassword(auth, email, password);
+	return user;
 }
 
-export async function authWithGoogle(path: 'login' | 'register') {
-	const host = (import.meta.env.DEV)
-		? 'http://localhost:5173'
-		: 'https://goqr.com.do';
-
-	await account.createOAuth2Session(
-		OAuthProvider.Google,
-		`${host}/${path}?status=success`,
-		`${host}/${path}?status=failed`
-	);
+export async function authWithGoogle() {
+	await signInWithPopup(auth, googleProvider);
 }
 
-export async function authWithApple(path: 'login' | 'register') {
-	const host = (import.meta.env.DEV)
-		? 'http://localhost:5173'
-		: 'https://goqr.com.do';
-
-	await account.createOAuth2Session(
-		OAuthProvider.Apple,
-		`${host}/${path}?status=success`,
-		`${host}/${path}?status=failed`
-	);
+export async function authWithApple() {
+	await signInWithPopup(auth, appleProvider);
 }
 
 export async function logout() {
-	const session = useSessionStore.getState().session;
-	if (!session) {
-		return;
-	}
-
-	const { total, sessions } = await account.listSessions();
-	if (total === 0 || !sessions.find(({ $id }) => $id === session.$id)) {
-		return;
-	}
-
-	await account.deleteSession(session.$id);
+	await signOut(auth);
 }
 
 export async function sendVerificationEmail() {
-	await account.createVerification(
-		(import.meta.env.DEV)
-			? 'http://localhost:5173/verify'
-			: 'https://goqr.com.do/verify'
-	);
-}
-
-export async function getCurrentSession() {
-	const { total, sessions } = await account.listSessions();
-	if (total === 0) {
-		return null;
+	if (!auth.currentUser) {
+		return;
 	}
 
-	const session = sessions.find(({ current }) => current);
-	const user = await account.get();
+	await sendEmailVerification(auth.currentUser);
+}
+
+function mapUserToSession(user: User): SessionProps {
 	return {
-		...session,
-		user
-	} as SessionProps;
+		userId: user.uid,
+		user: {
+			uid: user.uid,
+			displayName: user.displayName,
+			email: user.email,
+			emailVerified: user.emailVerified,
+			photoURL: user.photoURL
+		}
+	};
+}
+
+export async function getCurrentSession(): Promise<SessionProps | null> {
+	return new Promise((resolve) => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			unsubscribe();
+			if (!user) {
+				resolve(null);
+				return;
+			}
+
+			resolve(mapUserToSession(user));
+		});
+	});
 }
 
 export async function sendResetPasswordEmail(email: string) {
-	const url = (import.meta.env.DEV)
-		? 'http://localhost:5173/change-password-after-request'
-		: 'https://goqr.com.do/change-password-after-request';
-
-	await account.createRecovery(email, url);
+	await sendPasswordResetEmail(auth, email);
 }
 
-export async function resetPasswordWithSecret(
-	userId: string,
-	secret: string,
-	password: string
-) {
-	await account.updateRecovery(
-		userId,
-		secret,
-		password
-	);
+import { confirmPasswordReset } from 'firebase/auth';
+
+export async function resetPasswordWithSecret(oobCode: string, newPassword: string) {
+	await confirmPasswordReset(auth, oobCode, newPassword);
 }

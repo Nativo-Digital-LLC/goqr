@@ -1,30 +1,15 @@
 export interface SessionProps {
-	$id: string;
-	$createdAt: string;
-	$updatedAt: string;
+	/**
+	 * Identificador de usuario (Firebase UID).
+	 */
 	userId: string;
 	user: {
-		$id: string;
-		$createdAt: string;
-		$updatedAt: string;
-		name: string;
-		hashOptions?: object;
-		status: boolean;
-		labels: string[];
-		email: string;
-		phone: string;
-		emailVerification: boolean;
-		phoneVerification: boolean;
-		mfa: boolean;
-		accessedAt: string;
-	}
-	expire: string;
-	provider: string;
-	providerUid: string;
-	providerAccessToken: string;
-	providerAccessTokenExpiry: string;
-	providerRefreshToken: string;
-	factors: string[];
+		uid: string;
+		displayName: string | null;
+		email: string | null;
+		emailVerified: boolean;
+		photoURL: string | null;
+	};
 }
 
 export interface SessionStoreProps {

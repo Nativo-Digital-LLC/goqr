@@ -1,9 +1,9 @@
 import { Subject } from 'rxjs';
-import { ID } from 'appwrite';
 import { UploadFile } from 'antd';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { ModalName } from '../types/Modals';
-import { storage } from './appwrite';
+import { storage } from './firebase';
 import { PaymentFrequency } from '../types/Bill';
 
 export const ModalOpener$ = new Subject<{ name: ModalName; extra?: unknown; }>();
@@ -18,7 +18,7 @@ export const format = {
 	 * @param rnc `string` *sin guiones*
 	 *
 	 * @example
- 	 * 		format.rnc('130800035');
+	   * 		format.rnc('130800035');
 	 *
 	 * @returns `string` RNC con formato `130-80003-5`
 	 */
@@ -29,7 +29,7 @@ export const format = {
 	 * @param dui numero de cedula *sin guiones*
 	 *
 	 * @example
- 	 * 		format.dui('10225088357');
+	   * 		format.dui('10225088357');
 	 *
 	 * @returns `string` Cedula con formato `102-2508835-7`
 	 */
@@ -40,7 +40,7 @@ export const format = {
 	 * @param phone numero telefonico *sin guiones ni espacios ni parentesis*
 	 *
 	 * @example
- 	 * 		format.phone('8093458812');
+	   * 		format.phone('8093458812');
 	 *
 	 * @returns `string` Numero Telefonico con formato `(809) 345-8812`
 	 */
@@ -52,18 +52,18 @@ export const format = {
 	 * @param decimals `0 | 1 | 2` Cantidad de decimales, Por defecto 0
 	 *
 	 * @example
- 	 * 		format.cash(4623, 2); -> '4,623.00'
- 	 * 		format.cash(4623, 1); -> '4,623.0'
- 	 * 		format.cash(4623);    -> '4,623'
+	   * 		format.cash(4623, 2); -> '4,623.00'
+	   * 		format.cash(4623, 1); -> '4,623.0'
+	   * 		format.cash(4623);    -> '4,623'
 	 *
 	 * @returns Monto con format de moneda `9,000.00`
 	 */
 	cash: (amount: number, decimals = 0, decimalsRequired = false) =>
 		Intl.NumberFormat(
 			'en-US', {
-				minimumFractionDigits: (decimalsRequired || amount % 1 !== 0 ) ? decimals : 0,
-				maximumFractionDigits: decimals
-			}
+			minimumFractionDigits: (decimalsRequired || amount % 1 !== 0) ? decimals : 0,
+			maximumFractionDigits: decimals
+		}
 		).format(amount),
 
 	/**
@@ -105,39 +105,34 @@ export function customFormat(input: string, example: string) {
  * Esta funcion puede ser insertada en un Event Listener de tipo keydown
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function avoidNotNumerics(event: any, decimals = 0){
-	if(['Backspace', 'Delete', 'Tab', 'ArrowRight', 'ArrowLeft', 'Enter'].includes(event.key))
+export function avoidNotNumerics(event: any, decimals = 0) {
+	if (['Backspace', 'Delete', 'Tab', 'ArrowRight', 'ArrowLeft', 'Enter'].includes(event.key))
 		return;
 
-	if(event.key === ' ')
+	if (event.key === ' ')
 		return event.preventDefault();
 
-	if(!decimals && event.key === '.')
+	if (!decimals && event.key === '.')
 		return event.preventDefault();
 
 	const hasPoint = event.target.value.includes('.');
 	const limitDecimals = hasPoint && event.target.value.split('.').pop().length === decimals;
-	if(limitDecimals)
+	if (limitDecimals)
 		return event.preventDefault()
 
 	const isFirstPoint = (event.key === '.' && !event.target.value.includes('.'));
 	const isNumber = !isNaN(Number(event.key));
-	if(!isNumber && !isFirstPoint)
+	if (!isNumber && !isFirstPoint)
 		event.preventDefault();
 }
 
 export async function uploadFile(file: File) {
-	const { $id } = await storage.createFile(
-		import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-		ID.unique(),
-		file
-	);
+	const fileExtension = file.name.split('.').pop();
+	const fileName = `${crypto.randomUUID()}.${fileExtension}`;
+	const storageRef = ref(storage, fileName);
 
-	const url = await storage.getFilePreview(
-		import.meta.env.VITE_APP_WRITE_BUCKET_ID,
-		$id,
-		720
-	);
+	await uploadBytes(storageRef, file);
+	const url = await getDownloadURL(storageRef);
 
 	return url;
 }
@@ -162,7 +157,7 @@ export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt 
 	};
 
 	// eslint-disable-next-line prefer-rest-params
-	function gtag(){window.dataLayer.push(arguments);}
+	function gtag() { window.dataLayer.push(arguments); }
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-expect-error
 	gtag('event', 'conversion', {

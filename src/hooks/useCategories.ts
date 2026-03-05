@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { AppwriteException } from 'appwrite';
+import { useEffect, useState } from 'react';
+import { FirebaseError } from 'firebase/app';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 
 import {
 	createCategory,
@@ -7,6 +8,44 @@ import {
 	updateCategoryName,
 	updateCategoryOrder
 } from '../services/categories';
+import { db } from '../utils/firebase';
+import { CategoryProps } from '../types/Category';
+
+type UseGetCategoriesType = [
+	CategoryProps[],
+	boolean,
+	FirebaseError | null
+];
+
+export const useGetCategories = (establishmentId?: string): UseGetCategoriesType => {
+	const [categories, setCategories] = useState<CategoryProps[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<FirebaseError | null>(null);
+
+	useEffect(() => {
+		if (!establishmentId) {
+			return;
+		}
+
+		const ref = query(
+			collection(db, "establishments", establishmentId, "categories"),
+			where("deletedAt", "==", null),
+			orderBy("order", "asc")
+		);
+		const unsubscribe = onSnapshot(
+			ref,
+			(snapshot) => {
+				setCategories(snapshot.docs.map((doc) => doc.data() as CategoryProps));
+				setLoading(false);
+			},
+			setError
+		);
+
+		return () => unsubscribe();
+	}, [establishmentId]);
+
+	return [categories, loading, error];
+}
 
 interface SaveCategoryParams {
 	id?: string;
@@ -20,12 +59,12 @@ interface SaveCategoryParams {
 type UseSaveCategoryType = [
 	(params: SaveCategoryParams, onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useSaveCategory = (): UseSaveCategoryType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleSave(params: SaveCategoryParams, onDone?: () => void) {
 		try {
@@ -35,13 +74,14 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 			const {
 				establishmentId,
 				es_name,
-				en_name,
-				enableSubcategories,
+				en_name = null,
+				enableSubcategories = true,
 				order
 			} = params;
 
 			if (params?.id) {
 				await updateCategoryName({
+					establishmentId,
 					id: params.id,
 					es_name,
 					en_name,
@@ -59,7 +99,7 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -71,12 +111,12 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 type UseDeleteCategoryType = [
 	(id: string, establishmentId: string, onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useDeleteCategory = (): UseDeleteCategoryType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleDelete(id: string, establishmentId: string, onDone?: () => void) {
 		try {
@@ -85,7 +125,7 @@ export const useDeleteCategory = (): UseDeleteCategoryType => {
 			await deleteCategory(id, establishmentId);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -102,12 +142,12 @@ type UseUpdateCategoryOrderType = [
 		onDone?: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleDelete(
 		establishmentId: string,
@@ -125,7 +165,7 @@ export const useUpdateCategoryOrder = (): UseUpdateCategoryOrderType => {
 			);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}

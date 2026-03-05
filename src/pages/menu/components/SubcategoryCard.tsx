@@ -15,6 +15,7 @@ import { useLanguageStore } from '../../../store/language';
 interface SubcategoryCardProps {
 	subcategory: SubcategoryProps;
 	categoryId: string;
+	establishmentId: string;
 	isEditable: boolean;
 	showMoveUp: boolean;
 	showMoveDown: boolean;
@@ -27,6 +28,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 		subcategory,
 		isEditable,
 		categoryId,
+		establishmentId,
 		showMoveDown,
 		showMoveUp,
 		onPress,
@@ -97,7 +99,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 							type='text'
 							icon={<CaretUpOutlined />}
 							loading={updatingOrder}
-							onClick={() => updateOrder(categoryId, subcategory.$id, 'up', onChange)}
+							onClick={() => updateOrder(establishmentId, categoryId, subcategory.id, 'up', onChange)}
 						/>
 					)}
 
@@ -106,7 +108,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 							type='text'
 							icon={<CaretDownOutlined />}
 							loading={updatingOrder}
-							onClick={() => updateOrder(categoryId, subcategory.$id, 'down', onChange)}
+							onClick={() => updateOrder(establishmentId, categoryId, subcategory.id, 'down', onChange)}
 						/>
 					)}
 
@@ -115,7 +117,11 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 						icon={<EditOutlined />}
 						onClick={() => ModalOpener$.next({
 							name: ModalName.Subcategory,
-							extra: subcategory
+							extra: {
+								...subcategory,
+								categoryId,
+								establishmentId
+							}
 						})}
 					/>
 
@@ -124,8 +130,9 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 						icon={<DeleteOutlined />}
 						loading={deleting}
 						onClick={() => _delete(
-							subcategory.$id,
+							subcategory.id,
 							categoryId,
+							establishmentId,
 							onChange
 						)}
 					/>

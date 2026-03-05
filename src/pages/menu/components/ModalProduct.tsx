@@ -14,7 +14,7 @@ import {
 	Upload
 } from 'antd';
 import { DeleteOutlined, InboxOutlined } from '@ant-design/icons';
-import { ID } from 'appwrite';
+
 
 import { useModalVisible } from '../../../hooks/useModal';
 import { ModalName } from '../../../types/Modals';
@@ -43,34 +43,36 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 	const [form] = Form.useForm();
 
 	useEffect(() => {
-		form.resetFields();
-		setVariants([]);
-		setCurrentPhotoUrl(null);
+		if (visible) {
+			form.resetFields();
+			setVariants([]);
+			setCurrentPhotoUrl(null);
 
-		if (extra?.$id) {
-			form.setFieldsValue({
-				...extra,
-				price: extra.prices[0].price
-			});
+			if (extra?.id) {
+				form.setFieldsValue({
+					...extra,
+					price: extra.prices[0].price
+				});
 
-			setCurrentPhotoUrl(extra.photoUrl);
-		}
+				setCurrentPhotoUrl(extra.photoUrl);
+			}
 
-		if (extra?.prices && extra.prices.length > 1) {
-			setVariants(
-				extra
-					.prices
-					.map(({ price, label }) => ({
-						price,
-						label: label!,
-						id: ID.unique()
-					}))
-			);
+			if (extra?.prices && extra.prices.length > 1) {
+				setVariants(
+					extra
+						.prices
+						.map(({ price, label }) => ({
+							price,
+							label: label!,
+							id: crypto.randomUUID()
+						}))
+				);
 
-			extra.prices.forEach(({ label, price }, index) => {
-				form.setFieldValue(`variants[${index}].label`, label);
-				form.setFieldValue(`variants[${index}].price`, price);
-			});
+				extra.prices.forEach(({ label, price }, index) => {
+					form.setFieldValue(`variants[${index}].label`, label);
+					form.setFieldValue(`variants[${index}].price`, price);
+				});
+			}
 		}
 	}, [visible, extra, form]);
 
@@ -79,7 +81,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 			open={visible}
 			onCancel={close}
 			width={400}
-			title={extra?.$id ? 'Modificar Producto' : 'Nuevo Producto'}
+			title={extra?.id ? 'Modificar Producto' : 'Nuevo Producto'}
 			footer={false}
 			maskClosable={false}
 		>
@@ -120,19 +122,19 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 
 					save(
 						{
-							$id: extra?.$id,
+							id: extra?.id,
 							photo,
 							prices: prices as { label: string; price: number }[],
 							es_name: data.es_name,
-							en_name: data.en_name,
-							es_description: data.es_description,
-							en_description: data.en_description,
+							en_name: data.en_name || null,
+							es_description: data.es_description || null,
+							en_description: data.en_description || null,
 							order: extra?.order,
 							establishmentId: extra?.establishmentId,
 							categoryId: extra?.categoryId,
 							subcategoryId: extra?.subcategoryId,
 							status: data.status,
-							bestSeller: data.bestSeller
+							bestSeller: data.bestSeller || false
 						},
 						() => {
 							close();
@@ -212,7 +214,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 				)}
 
 				<Button
-					onClick={() => setVariants(variants.concat({ id: ID.unique(), label: '', price: 0 }))}
+					onClick={() => setVariants(variants.concat({ id: crypto.randomUUID(), label: '', price: 0 }))}
 					style={{ width: '100%' }}
 				>
 					Agregar Variante

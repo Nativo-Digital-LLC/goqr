@@ -66,7 +66,7 @@ export const ProductCard = (props: ProductCardProps) => {
 							onClick={() => changeOrder(
 								data.categoryId,
 								data.subcategoryId,
-								data.$id,
+								data.id,
 								'up',
 								onChange
 							)}
@@ -82,7 +82,7 @@ export const ProductCard = (props: ProductCardProps) => {
 							onClick={() => changeOrder(
 								data.categoryId,
 								data.subcategoryId,
-								data.$id,
+								data.id,
 								'down',
 								onChange
 							)}
@@ -103,7 +103,7 @@ export const ProductCard = (props: ProductCardProps) => {
 						icon={<DeleteOutlined />}
 						loading={deleting}
 						onClick={() => _delete(
-							data.$id,
+							data.id,
 							onChange
 						)}
 					/>
@@ -148,7 +148,7 @@ export const ProductCard = (props: ProductCardProps) => {
 				{lang === 'es' && data.es_description}
 				{lang === 'en' && data.en_description}
 			</Text>
-			{data.prices.length === 1 && data.$id !== PandorasBoxId && (
+			{data.prices.length === 1 && data.id !== PandorasBoxId && (
 				<Title
 					level={4}
 					style={{ margin: 0, color }}
@@ -161,7 +161,7 @@ export const ProductCard = (props: ProductCardProps) => {
 			)}
 			{data.prices.length > 1 && data.prices.map(({ price, label }, index) => (
 				<div
-					key={`price-` + data.$id + '-' + index}
+					key={`price-` + data.id + '-' + index}
 					style={{
 						display: 'flex',
 						justifyContent: 'space-between',

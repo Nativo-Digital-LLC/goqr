@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { AppwriteException } from "appwrite";
+import { FirebaseError } from "firebase/app";
+import {
+	collection,
+	onSnapshot,
+	query,
+	where
+} from "firebase/firestore";
 
 import {
 	CreateEstablishmentParams,
@@ -8,53 +14,59 @@ import {
 } from "../types/Establishment";
 import {
 	createEstablishment,
-	getEstablishmentByDomain,
 	getEstablishmentsByUserId,
 	getTaxInformation,
 	updateEstablishment,
 } from "../services/establishments";
+import { db } from "../utils/firebase";
 
 type UseGetEstablishmentByDomainType = [
 	EstablishmentProps | null,
 	boolean,
-	AppwriteException | null,
-	(domain: string) => void
+	FirebaseError | null
 ];
 
 export const useGetEstablishmentByDomain = (
 	domain?: string
 ): UseGetEstablishmentByDomainType => {
-	const [establishment, setEstablishment] =
-		useState<EstablishmentProps | null>(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	useEffect(() => {
-		if (domain) {
-			load(domain);
+		if (!domain) {
+			return;
 		}
+
+		const ref = query(
+			collection(db, "establishments"),
+			where("domain", "==", domain)
+		);
+		const unsubscribe = onSnapshot(
+			ref,
+			(snapshot) => {
+				if (snapshot.empty) {
+					setEstablishment(null);
+					setLoading(false);
+					return;
+				}
+
+				setEstablishment(snapshot.docs[0].data() as EstablishmentProps);
+				setLoading(false);
+			},
+			setError
+		);
+
+		return () => unsubscribe();
 	}, [domain]);
 
-	async function load(domain: string) {
-		try {
-			setLoading(true);
-			setError(null);
-			const data = await getEstablishmentByDomain(domain);
-			setEstablishment(data);
-		} catch (error) {
-			setError(error as AppwriteException);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	return [establishment, loading, error, load];
+	return [establishment, loading, error];
 };
 
 type UseGetEstablishmentsByUserIdType = [
 	EstablishmentProps[],
 	boolean,
-	AppwriteException | null,
+	FirebaseError | null,
 	(userId: string) => void
 ];
 
@@ -65,7 +77,7 @@ export const useGetEstablishmentsByUserId = (
 		[]
 	);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	useEffect(() => {
 		if (!userId) return;
@@ -79,7 +91,7 @@ export const useGetEstablishmentsByUserId = (
 			const data = await getEstablishmentsByUserId(userId);
 			setEstablishments(data);
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -95,12 +107,12 @@ type SaveEstablishmentParams = Partial<CreateEstablishmentParams> & {
 type UseSaveEstablishmentType = [
 	(params: SaveEstablishmentParams, onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useSaveEstablishment = (): UseSaveEstablishmentType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleSave(
 		{ id, ...rest }: SaveEstablishmentParams,
@@ -116,7 +128,7 @@ export const useSaveEstablishment = (): UseSaveEstablishmentType => {
 			}
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}

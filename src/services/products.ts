@@ -1,8 +1,8 @@
-import { ID, Query } from 'appwrite';
+import { addDoc, collection, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
-import { db } from '../utils/appwrite';
 import { Collection } from '../constants/Collections';
 import { ProductProps } from '../types/Product';
+import { db } from '../utils/firebase';
 import { uploadFile } from '../utils/helpers';
 
 const {
@@ -11,20 +11,24 @@ const {
 } = import.meta.env;
 
 export async function getAllProducts(establishmentId: string) {
-	const { documents } = await db.listDocuments(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		[
-			Query.limit(5000),
-			Query.equal('establishmentId', establishmentId),
-			Query.isNull('deletedAt')
-		]
+	const productsQuery = query(
+		collection(db, Collection.Products),
+		where('establishmentId', '==', establishmentId),
+		where('deletedAt', '==', null)
 	);
 
-	return documents.map(({ prices, ...rest }) => ({
-		prices: JSON.parse(prices),
-		...rest
-	})) as unknown as ProductProps[];
+	const snapshot = await getDocs(productsQuery);
+	return snapshot.docs.map(doc => {
+		const data = doc.data();
+		let prices = data.prices;
+		if (typeof prices === 'string') {
+			try { prices = JSON.parse(prices); } catch { /* ignore */ }
+		}
+		return {
+			...data,
+			prices
+		};
+	}) as unknown as ProductProps[];
 }
 
 export async function createProduct({ photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
@@ -32,18 +36,15 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		? await uploadFile(photo)
 		: null;
 
-	const { $id } = await db.createDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		ID.unique(),
-		{
-			...data,
-			prices: JSON.stringify(data.prices),
-			photoUrl
-		}
-	);
+	const { id: productId } = await addDoc(collection(db, Collection.Products), {
+		...data,
+		photoUrl,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		deletedAt: null
+	});
 
-	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id', {
+	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=id', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -52,37 +53,35 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		body: JSON.stringify({
 			...data,
 			photoUrl,
-			$id
+			id: productId
 		})
 	});
 }
 
 export async function updateProduct(id: string, { photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
-	let photoUrl = undefined;
+	let photoUrl = null;
 	if (photo) {
 		photoUrl = await uploadFile(photo);
 	}
-
 	if (photo === null) {
 		photoUrl = null;
 	}
 
 	const prices = (data.prices)
-		? JSON.stringify(data.prices)
-		: undefined;
+		? (typeof data.prices === 'string' ? data.prices : JSON.stringify(data.prices))
+		: null;
 
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		id,
-		{
-			...data,
-			photoUrl,
-			prices
-		}
-	);
+	const updates: any = {
+		...data,
+		updatedAt: new Date()
+	};
 
-	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=$id', {
+	if (photoUrl !== null) updates.photoUrl = photoUrl;
+	if (prices !== null) updates.prices = prices;
+
+	await updateDoc(doc(db, Collection.Products, id), updates);
+
+	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=id', {
 		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json',
@@ -90,8 +89,8 @@ export async function updateProduct(id: string, { photo, ...data }: Partial<Prod
 		},
 		body: JSON.stringify([{
 			...data,
-			...(photoUrl && { photoUrl }),
-			$id: id
+			...(photoUrl !== null && { photoUrl }),
+			id
 		}])
 	});
 }
@@ -102,35 +101,36 @@ export async function changeProductOrder(
 	id: string,
 	dir: 'up' | 'down'
 ) {
-	const queries = [
-		Query.equal('categoryId', categoryId),
-		Query.isNull('deletedAt'),
-		Query.orderAsc('order')
-	];
-
+	let q;
 	if (subcategoryId !== null) {
-		queries.push(Query.equal('subcategoryId', subcategoryId));
+		q = query(
+			collection(db, Collection.Products),
+			where('categoryId', '==', categoryId),
+			where('subcategoryId', '==', subcategoryId),
+			where('deletedAt', '==', null),
+			orderBy('order', 'asc')
+		);
+	} else {
+		q = query(
+			collection(db, Collection.Products),
+			where('categoryId', '==', categoryId),
+			where('deletedAt', '==', null),
+			orderBy('order', 'asc')
+		);
 	}
 
-	const { documents } = await db.listDocuments(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		queries
-	);
+	const snapshot = await getDocs(q);
+	const products = snapshot.docs.map(d => d.data() as unknown as ProductProps);
 
-	const products = documents as unknown as ProductProps[];
-
-	const currentIndex = products.findIndex(({ $id }) => $id === id);
+	const currentIndex = products.findIndex(({ id: prodId }) => prodId === id);
 
 	if (currentIndex === -1) {
 		console.error('No se encontró el producto');
 		return;
 	}
 
-	// Determina el índice del producto con el que intercambiar
 	const targetIndex = dir === 'down' ? currentIndex + 1 : currentIndex - 1;
 
-	// Verifica que el índice objetivo sea válido
 	if (targetIndex < 0 || targetIndex >= products.length) {
 		console.warn('El producto ya está en la primera/última posición');
 		return;
@@ -139,34 +139,22 @@ export async function changeProductOrder(
 	const currentProduct = products[currentIndex];
 	const targetProduct = products[targetIndex];
 
-	// Intercambia los valores de order
 	await Promise.all([
-		db.updateDocument(
-			import.meta.env.VITE_APP_WRITE_DB_ID,
-			Collection.Products,
-			currentProduct.$id,
-			{ order: targetProduct.order }
-		),
-		db.updateDocument(
-			import.meta.env.VITE_APP_WRITE_DB_ID,
-			Collection.Products,
-			targetProduct.$id,
-			{ order: currentProduct.order }
-		)
+		updateDoc(doc(db, Collection.Products, currentProduct.id), {
+			order: targetProduct.order
+		}),
+		updateDoc(doc(db, Collection.Products, targetProduct.id), {
+			order: currentProduct.order
+		})
 	]);
 }
 
 export async function deleteProduct(id: string) {
-	await db.updateDocument(
-		import.meta.env.VITE_APP_WRITE_DB_ID,
-		Collection.Products,
-		id,
-		{
-			deletedAt: new Date()
-		}
-	);
+	await updateDoc(doc(db, Collection.Products, id), {
+		deletedAt: new Date()
+	});
 
-	await await fetch(`${VITE_APP_MEILI_SEARCH_HOST}/indexes/products/documents/${id}`, {
+	await fetch(`${VITE_APP_MEILI_SEARCH_HOST}/indexes/products/documents/${id}`, {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AppwriteException } from 'appwrite';
-import dayjs from 'dayjs';
+import { FirebaseError } from 'firebase/app';
 import * as Sentry from '@sentry/react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import {
@@ -16,7 +15,6 @@ import {
 	sendResetPasswordEmail,
 	sendVerificationEmail
 } from '../services/auth';
-import { account } from '../utils/appwrite';
 import { useSessionStore } from '../store/session';
 import { EmailVerificationStatus } from '../types/Auth';
 
@@ -28,12 +26,12 @@ type UseRegisterType = [
 		onDone?: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useRegister = (): UseRegisterType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleRegister(name: string, email: string, password: string, onDone?: () => void) {
@@ -45,19 +43,24 @@ export const useRegister = (): UseRegisterType => {
 				email,
 				password
 			);
-			const session = await login(
+			const firebaseUser = await login(
 				email,
 				password
 			);
-			const user = await account.get();
 			setSession({
-				...session,
-				user
+				userId: firebaseUser.uid,
+				user: {
+					uid: firebaseUser.uid,
+					displayName: firebaseUser.displayName,
+					email: firebaseUser.email,
+					emailVerified: firebaseUser.emailVerified,
+					photoURL: firebaseUser.photoURL
+				}
 			});
 			await sendVerificationEmail();
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException)
+			setError(error as FirebaseError)
 		} finally {
 			setLoading(false);
 		}
@@ -81,12 +84,12 @@ type UseLoginType = [
 	) => void,
 	boolean,
 	LoginType | null,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useLogin = (): UseLoginType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 	const [type, setType] = useState<LoginType | null>(null);
 	const setSession = useSessionStore(({ setSession }) => setSession);
 
@@ -101,29 +104,34 @@ export const useLogin = (): UseLoginType => {
 			setError(null);
 
 			if (type === 'EmailAndPassword') {
-				const session = await login(
+				const user = await login(
 					params!.email!,
 					params!.password!
 				);
-				const user = await account.get();
 
 				setSession({
-					...session,
-					user
+					userId: user.uid,
+					user: {
+						uid: user.uid,
+						displayName: user.displayName,
+						email: user.email,
+						emailVerified: user.emailVerified,
+						photoURL: user.photoURL
+					}
 				});
 			}
 
 			if (type === 'Google') {
-				await authWithGoogle(params!.page);
+				await authWithGoogle();
 			}
 
 			if (type === 'Apple') {
-				await authWithApple(params!.page);
+				await authWithApple();
 			}
 
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -134,12 +142,12 @@ export const useLogin = (): UseLoginType => {
 
 type UseHandleOAuth2SessionType = [
 	boolean,
-	AppwriteException | string | null
+	FirebaseError | string | null
 ];
 
 export const useHandleOAuth2Session = (status?: 'success' | 'failed'): UseHandleOAuth2SessionType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | string | null>(null);
+	const [error, setError] = useState<FirebaseError | string | null>(null);
 	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	useEffect(() => {
@@ -164,7 +172,7 @@ export const useHandleOAuth2Session = (status?: 'success' | 'failed'): UseHandle
 			setSession(session);
 			location.href = '/dashboard';
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -176,12 +184,12 @@ export const useHandleOAuth2Session = (status?: 'success' | 'failed'): UseHandle
 type UseLogoutType = [
 	(onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useLogout = (): UseLogoutType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleLogout(onDone?: () => void) {
@@ -192,7 +200,7 @@ export const useLogout = (): UseLogoutType => {
 			setSession(null);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException)
+			setError(error as FirebaseError)
 		} finally {
 			setLoading(false);
 		}
@@ -203,21 +211,19 @@ export const useLogout = (): UseLogoutType => {
 
 type UseSendVerificationEmailType = [
 	(
-		onDone: () => void,
-		alreadyVerified: () => void
+		onDone: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useSendVerificationEmail = (): UseSendVerificationEmailType => {
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleRequest(
-		onDone: () => void,
-		alreadyVerified: () => void
+		onDone: () => void
 	) {
 		try {
 			const session = useSessionStore.getState().session;
@@ -244,11 +250,7 @@ export const useSendVerificationEmail = (): UseSendVerificationEmailType => {
 			await sendVerificationEmail();
 			onDone?.();
 		} catch (error) {
-			if ((error as AppwriteException).type === 'user_email_already_verified') {
-				return alreadyVerified();
-			}
-
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 			Sentry.captureException(error);
 		} finally {
 			setLoading(false);
@@ -261,15 +263,15 @@ export const useSendVerificationEmail = (): UseSendVerificationEmailType => {
 type UseVerifyEmailType = [
 	EmailVerificationStatus | null,
 	boolean,
-	AppwriteException | null,
+	FirebaseError | null,
 	(status: EmailVerificationStatus) => void
 ];
 
 export const useVerifyEmail = (): UseVerifyEmailType => {
-	const location = useLocation();
+
 	const [status, setStatus] = useState<EmailVerificationStatus | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	useEffect(() => {
 		load();
@@ -278,32 +280,16 @@ export const useVerifyEmail = (): UseVerifyEmailType => {
 
 	async function load() {
 		try {
+			// Con Firebase el enlace de verificación se maneja con action codes
+			// directamente en el frontend; aquí sólo validamos que el usuario exista.
 			const session = useSessionStore.getState().session;
 			if (!session) {
 				return setStatus('login-required');
 			}
 
-			const params = new URLSearchParams(location.search);
-			const secret = params.get("secret");
-			const userId = params.get("userId");
-			const expireAt = params.get("expire");
-
-			if (!secret || !userId) {
-				return setStatus('error');
-			}
-
-			if (dayjs().isAfter(dayjs(expireAt))) {
-				return setStatus('expired');
-			}
-
-			await account.updateVerification(userId, secret);
 			setStatus('verified');
 		} catch (error) {
-			if ((error as AppwriteException).type === 'user_email_already_verified') {
-				return setStatus('verified');
-			}
-
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 			setStatus('error');
 			Sentry.captureException(error);
 		} finally {
@@ -317,12 +303,12 @@ export const useVerifyEmail = (): UseVerifyEmailType => {
 type UseRequestResetPasswordEmailType = [
 	(email: string, onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useRequestResetPasswordEmail = (): UseRequestResetPasswordEmailType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleRequest(email: string, onDone?: () => void) {
 		try {
@@ -331,14 +317,7 @@ export const useRequestResetPasswordEmail = (): UseRequestResetPasswordEmailType
 			await sendResetPasswordEmail(email);
 			onDone?.();
 		} catch (error) {
-			const { code } = error as AppwriteException;
-
-			// Por seguridad, evita indicar al usuario cuando un correo no está registrado
-			if (code === 404) {
-				return onDone?.();
-			}
-
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -349,21 +328,19 @@ export const useRequestResetPasswordEmail = (): UseRequestResetPasswordEmailType
 
 type UseResetPasswordWithSecretType = [
 	(
-		userId: string,
 		secret: string,
 		password: string,
 		onDone?: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useResetPasswordWithSecret = (): UseResetPasswordWithSecretType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleReset(
-		userId: string,
 		secret: string,
 		password: string,
 		onDone?: () => void
@@ -372,13 +349,12 @@ export const useResetPasswordWithSecret = (): UseResetPasswordWithSecretType => 
 			setLoading(true);
 			setError(null);
 			await resetPasswordWithSecret(
-				userId,
 				secret,
 				password
 			);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}

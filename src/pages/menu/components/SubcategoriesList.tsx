@@ -10,6 +10,7 @@ import { ModalName } from '../../../types/Modals';
 const { Text } = Typography;
 
 interface SubcategoriesListProps {
+	establishmentId: string;
 	category: {
 		name: string;
 		id: string;
@@ -27,6 +28,7 @@ export const SubcategoriesList = (props: SubcategoriesListProps) => {
 		isEditable,
 		subcategories,
 		category,
+		establishmentId,
 		show,
 		mainColor,
 		onChange,
@@ -61,7 +63,8 @@ export const SubcategoriesList = (props: SubcategoriesListProps) => {
 							name: ModalName.Subcategory,
 							extra: {
 								order: 1,
-								categoryId: category.id
+								categoryId: category.id,
+								establishmentId
 							}
 						})}
 					/>
@@ -71,16 +74,17 @@ export const SubcategoriesList = (props: SubcategoriesListProps) => {
 			{subcategories
 				?.sort((a, b) => a.order - b.order)
 				?.map((subcategory, index) => {
-					const { $id, order } = subcategory;
+					const { id, order } = subcategory;
 					return (
-						<Fragment key={$id}>
+						<Fragment key={id}>
 							<SubcategoryCard
 								subcategory={subcategory}
 								isEditable={isEditable}
 								categoryId={category.id!}
+								establishmentId={establishmentId}
 								showMoveUp={index > 0}
 								showMoveDown={index < subcategories?.length - 1}
-								onPress={() => onPress($id)}
+								onPress={() => onPress(id)}
 								onChange={onChange}
 							/>
 
@@ -98,7 +102,8 @@ export const SubcategoriesList = (props: SubcategoriesListProps) => {
 										name: ModalName.Subcategory,
 										extra: {
 											order: order + 1,
-											categoryId: category.id
+											categoryId: category.id,
+											establishmentId
 										}
 									})}
 								/>

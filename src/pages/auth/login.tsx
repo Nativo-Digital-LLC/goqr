@@ -5,7 +5,7 @@ import { useEffect, useMemo } from "react";
 import { useHandleOAuth2Session, useLogin } from "../../hooks/useAuth";
 
 import { useSessionStore } from "../../store/session";
-import { AuthErrorType } from "../../types/Error";
+
 
 import { isAppleDevice } from "../../utils/helpers";
 
@@ -130,14 +130,16 @@ export default function LoginPage() {
 									<Alert
 										style={{ marginTop: 20 }}
 										type={
-											error.type ===
-											AuthErrorType.InvalidCredentials
+											error.code === 'auth/invalid-credential' ||
+												error.code === 'auth/user-not-found' ||
+												error.code === 'auth/wrong-password'
 												? "warning"
 												: "error"
 										}
 										message={
-											error.type ===
-											AuthErrorType.InvalidCredentials
+											error.code === 'auth/invalid-credential' ||
+												error.code === 'auth/user-not-found' ||
+												error.code === 'auth/wrong-password'
 												? "Correo o contraseña incorrecta"
 												: "Algo salió mal 😓, por favor intentalo más tarde"
 										}

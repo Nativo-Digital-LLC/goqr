@@ -64,9 +64,10 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 			)}
 			{categories
 				.sort((a, b) => a.order - b.order)
-				.map((category) => (
+				.map((category, index) => (
 					<div
-						key={category.$id}
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						key={category.id || (category as any).$id || index}
 						style={{
 							display: 'flex',
 							gap: 10
@@ -81,16 +82,16 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 							}}
 						>
 							<Button
-								key={category.$id}
+								key={category.id}
 								style={{
 									border: `3px solid ${color}`,
-									background: (selectedCategoryId === category.$id)
+									background: (selectedCategoryId === category.id)
 										? color
 										: 'none',
 									boxShadow: 'none',
 									borderRadius: 20,
 									padding: '4px 16px',
-									color: (selectedCategoryId === category.$id)
+									color: (selectedCategoryId === category.id)
 										? '#FFF'
 										: color,
 									fontSize: 14,
@@ -99,9 +100,9 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 									textWrap: 'nowrap',
 									cursor: 'pointer'
 								}}
-								onClick={() => onSelect(category.$id)}
+								onClick={() => onSelect(category.id)}
 								data-umami-event='Category'
-								data-umami-event-id={category.$id}
+								data-umami-event-id={category.id}
 								data-umami-event-name={category.es_name}
 							>
 								{category[lang + '_name' as 'es_name' | 'en_name']}
@@ -123,7 +124,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											type='text'
 											icon={<CaretLeftOutlined style={{ color: '#FFF' }} />}
 											loading={updatingOrder}
-											onClick={() => updateOrder(establishmentId, category.$id, 'left', onChange)}
+											onClick={() => updateOrder(establishmentId, category.id, 'left', onChange)}
 										/>
 									)}
 
@@ -132,7 +133,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 											type='text'
 											icon={<CaretRightOutlined style={{ color: '#FFF' }} />}
 											loading={updatingOrder}
-											onClick={() => updateOrder(establishmentId, category.$id, 'right', onChange)}
+											onClick={() => updateOrder(establishmentId, category.id, 'right', onChange)}
 										/>
 									)}
 
@@ -142,11 +143,8 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 										onClick={() => ModalOpener$.next({
 											name: ModalName.Category,
 											extra: {
-												id: category.$id,
-												establishmentId,
-												es_name: category.es_name,
-												en_name: category.en_name,
-												enableSubcategories: category.enableSubcategories
+												...category,
+												establishmentId
 											}
 										})}
 									/>
@@ -163,7 +161,7 @@ export const CategoriesMenu = (props: CategoriesMenuProps) => {
 										okText='Si, eliminar'
 										cancelText='No'
 										onConfirm={() => _delete(
-											category.$id,
+											category.id,
 											establishmentId,
 											onChange
 										)}

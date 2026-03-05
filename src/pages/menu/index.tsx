@@ -30,6 +30,8 @@ import { ProductProps } from "../../types/Product";
 import { useShowIntro } from "../../hooks/useShowIntro";
 import { useFDADisclaimer } from "../../hooks/useFDADisclaimer";
 import { useLanguageStore } from "../../store/language";
+import { useGetCategories } from "../../hooks/useCategories";
+import { useGetSubcategories } from "../../hooks/useSubcategories";
 
 const { Text } = Typography;
 
@@ -40,9 +42,25 @@ export default function MenuPage() {
 	const navigate = useNavigate();
 	const showIntro = useShowIntro();
 	const { dictionary, lang } = useLanguageStore((store) => store);
+	const selected = useMemo(() => {
+		const params = new URLSearchParams(location.search);
+		const categoryId = params.get("categoryId");
+		const subcategoryId = params.get("subcategoryId");
 
-	const [establishment, loading, error, reload] =
-		useGetEstablishmentByDomain(establishmentUrl);
+		return {
+			categoryId,
+			subcategoryId,
+		};
+	}, [location]);
+
+	const [establishment, loading, error] = useGetEstablishmentByDomain(establishmentUrl);
+	const [categories, , cerror] = useGetCategories(establishment?.id);
+	const [subcategories, , scerror] = useGetSubcategories(
+		establishment?.id,
+		selected?.categoryId || undefined
+	);
+	console.log(cerror, scerror);
+
 	useFDADisclaimer(
 		session,
 		establishment?.showFoodAllergyAndRiskDisclaimer && !showIntro
@@ -58,37 +76,26 @@ export default function MenuPage() {
 		);
 	}, [session, establishment]);
 
-	const selected = useMemo(() => {
-		const params = new URLSearchParams(location.search);
-		const categoryId = params.get("categoryId");
-		const subcategoryId = params.get("subcategoryId");
-
-		return {
-			categoryId,
-			subcategoryId,
-		};
-	}, [location]);
-
 	const selectedCategory = useMemo(() => {
 		if (
 			!selected.categoryId ||
 			!establishment ||
-			establishment.categories.length === 0
+			categories.length === 0
 		) {
 			return null;
 		}
 
 		return (
-			establishment.categories.find(
-				({ $id }) => $id === selected.categoryId
+			categories.find(
+				({ id }) => id === selected.categoryId
 			) || null
 		);
-	}, [establishment, selected.categoryId]);
+	}, [categories, selected.categoryId]);
 
 	const productsListTitle = useMemo(() => {
 		if (selectedCategory?.enableSubcategories) {
-			const subcategory = selectedCategory?.subcategories?.find(
-				({ $id }) => $id === selected.subcategoryId
+			const subcategory = subcategories?.find(
+				({ id }) => id === selected.subcategoryId
 			);
 
 			return lang === "es"
@@ -113,18 +120,14 @@ export default function MenuPage() {
 
 		if (
 			!establishment ||
-			establishment.categories.length === 0 ||
+			categories.length === 0 ||
 			categoryId
 		) {
 			return;
 		}
 
-		const categories = establishment.categories.sort(
-			(a, b) => a.order - b.order
-		);
-
 		if (categories.length > 0) {
-			handleUrlChanges("categoryId", categories[0].$id);
+			handleUrlChanges("categoryId", categories[0].id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [establishment]);
@@ -184,7 +187,7 @@ export default function MenuPage() {
 
 	return (
 		<InstantSearch indexName="products" searchClient={searchClient}>
-			<Configure filters={`establishmentId="${establishment.$id}"`} />
+			<Configure filters={`establishmentId="${establishment.id}"`} />
 			<div style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}>
 				<div
 					style={{
@@ -199,7 +202,7 @@ export default function MenuPage() {
 					<MenuHeader
 						bannerUrl={
 							establishment.bannerUrl ??
-							"https://appwrite.nd.com.do/v1/storage/buckets/66f768f700019e95e2c8/files/67110f2e001cdb14cd8e/view?project=66f768e4001537551adf"
+							"https://firebasestorage.googleapis.com/v0/b/goqr-do.appspot.com/o/default-banner.png?alt=media"
 						}
 						logoUrl={establishment.logoUrl ?? undefined}
 						isEditable={isEditable}
@@ -226,7 +229,7 @@ export default function MenuPage() {
 						<br />
 
 						<CategoriesMenu
-							categories={establishment.categories}
+							categories={categories}
 							selectedCategoryId={
 								selected.categoryId ?? undefined
 							}
@@ -234,8 +237,8 @@ export default function MenuPage() {
 							onSelect={(id) =>
 								handleUrlChanges("categoryId", id, true)
 							}
-							onChange={() => reload(establishmentUrl!)}
-							establishmentId={establishment.$id}
+							onChange={() => null}
+							establishmentId={establishment.id}
 							isEditable={isEditable}
 						/>
 						<br />
@@ -252,7 +255,7 @@ export default function MenuPage() {
 							<InfiniteHits
 								hitComponent={({ hit }) => (
 									<ProductCard
-										key={hit.$id}
+										key={hit.id}
 										data={hit as unknown as ProductProps}
 										color={establishment.mainHexColor}
 										preview
@@ -262,27 +265,26 @@ export default function MenuPage() {
 						)}
 
 						<SubcategoriesList
-							subcategories={
-								selectedCategory?.subcategories || []
-							}
+							establishmentId={establishment.id}
+							subcategories={subcategories}
 							mainColor={establishment.mainHexColor}
 							isEditable={isEditable}
 							category={{
 								name: selectedCategory
 									? selectedCategory[
-											(lang + "_name") as
-												| "es_name"
-												| "en_name"
-									  ]
+									(lang + "_name") as
+									| "es_name"
+									| "en_name"
+									]
 									: "",
-								id: selectedCategory?.$id || "",
+								id: selectedCategory?.id || "",
 							}}
 							show={
 								!selected.subcategoryId &&
 								search.length === 0 &&
 								!!selectedCategory?.enableSubcategories
 							}
-							onChange={() => reload(establishmentUrl!)}
+							onChange={() => null}
 							onPress={(id) =>
 								handleUrlChanges("subcategoryId", id)
 							}
@@ -295,7 +297,7 @@ export default function MenuPage() {
 								search.length === 0
 							}
 							color={establishment.mainHexColor}
-							establishmentId={establishment.$id}
+							establishmentId={establishment.id}
 							categoryId={selected.categoryId + ""}
 							subcategoryId={selected.subcategoryId || null}
 							title={productsListTitle}
@@ -316,12 +318,12 @@ export default function MenuPage() {
 				</div>
 
 				<ModalCategory
-					onFinish={() => reload(establishmentUrl!)}
+					onFinish={() => null}
 					enableEnglishVersion={establishment?.enableMultiLanguage}
 				/>
 
 				<ModalSubcategory
-					onFinish={() => reload(establishmentUrl!)}
+					onFinish={() => null}
 					enableEnglishVersion={establishment?.enableMultiLanguage}
 				/>
 			</div>

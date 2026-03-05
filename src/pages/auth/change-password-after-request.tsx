@@ -103,7 +103,6 @@ export default function ChangePasswordAfterRequestPage() {
 								requiredMark={false}
 								layout="vertical"
 								onFinish={({ password }) => reset(
-									userId,
 									secret,
 									password,
 									async () => {

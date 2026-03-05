@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppwriteException } from 'appwrite';
+import { FirebaseError } from 'firebase/app';
 
 import { ProductProps } from '../types/Product';
 import {
@@ -9,18 +9,71 @@ import {
 	getAllProducts,
 	updateProduct
 } from '../services/products';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { db } from '../utils/firebase';
+
+type UseListenProductsType = [
+	ProductProps[],
+	boolean,
+	FirebaseError | null
+];
+
+export const useListenProducts = (establishmentId?: string, categoryId?: string, subcategoryId?: string | null): UseListenProductsType => {
+	const [products, setProducts] = useState<ProductProps[]>([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState<FirebaseError | null>(null);
+
+	useEffect(() => {
+		if (!establishmentId || !categoryId) {
+			return;
+		}
+
+		let q = query(
+			collection(
+				db,
+				'products'
+			),
+			where('establishmentId', '==', establishmentId),
+			where('categoryId', '==', categoryId),
+			where('deletedAt', '==', null)
+		);
+
+		if (subcategoryId) {
+			q = query(q, where('subcategoryId', '==', subcategoryId));
+		}
+
+		q = query(q, orderBy('order', 'asc'));
+
+		const unsubscribe = onSnapshot(
+			q,
+			(snapshot) => {
+				const data = snapshot.docs.map((doc) => ({
+					...doc.data(),
+					id: doc.id
+				} as ProductProps));
+				setProducts(data);
+				setLoading(false);
+			},
+			setError
+		);
+
+		return () => unsubscribe();
+	}, [establishmentId, categoryId, subcategoryId]);
+
+	return [products, loading, error];
+}
 
 type UseGetAllProductsType = [
 	ProductProps[],
 	boolean,
-	AppwriteException | null,
+	FirebaseError | null,
 	(establishmentId: string) => void
 ];
 
 export const useGetAllProducts = (establishmentId?: string): UseGetAllProductsType => {
 	const [products, setProducts] = useState<ProductProps[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	useEffect(() => {
 		if (establishmentId) {
@@ -36,7 +89,7 @@ export const useGetAllProducts = (establishmentId?: string): UseGetAllProductsTy
 			const data = await getAllProducts(establishmentId);
 			setProducts(data);
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -51,29 +104,29 @@ type UseSaveProductType = [
 		onDone?: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useSaveProduct = (): UseSaveProductType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleSave(
-		{ $id, ...data }: Partial<ProductProps> & { photo?: File | null },
+		{ id, ...data }: Partial<ProductProps> & { photo?: File | null },
 		onDone?: () => void
 	) {
 		try {
 			setLoading(true);
 			setError(null);
-			if ($id) {
-				await updateProduct($id, data);
+			if (id) {
+				await updateProduct(id, data);
 			} else {
 				await createProduct(data);
 			}
 
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -91,12 +144,12 @@ type UseChangeProductOrderType = [
 		onDone?: () => void
 	) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useChangeProductOrder = (): UseChangeProductOrderType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleUpdate(
 		categoryId: string,
@@ -116,7 +169,7 @@ export const useChangeProductOrder = (): UseChangeProductOrderType => {
 			);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}
@@ -128,12 +181,12 @@ export const useChangeProductOrder = (): UseChangeProductOrderType => {
 type UseDeleteProductType = [
 	(id: string, onDone?: () => void) => void,
 	boolean,
-	AppwriteException | null
+	FirebaseError | null
 ];
 
 export const useDeleteProduct = (): UseDeleteProductType => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<AppwriteException | null>(null);
+	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleDelete(id: string, onDone?: () => void) {
 		try {
@@ -142,7 +195,7 @@ export const useDeleteProduct = (): UseDeleteProductType => {
 			await deleteProduct(id);
 			onDone?.();
 		} catch (error) {
-			setError(error as AppwriteException);
+			setError(error as FirebaseError);
 		} finally {
 			setLoading(false);
 		}

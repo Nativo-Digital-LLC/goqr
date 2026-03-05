@@ -8,7 +8,7 @@ import { SubcategoryProps } from '../../../types/Subcategory';
 import { useSaveSubcategory } from '../../../hooks/useSubcategories';
 import { maxFileSizeRule } from '../../../utils/helpers';
 
-type ExtraType = Partial<SubcategoryProps> & { categoryId: string; };
+type ExtraType = Partial<SubcategoryProps> & { categoryId: string; establishmentId: string; };
 
 interface ModalSubcategoryProps {
 	onFinish: () => void;
@@ -32,7 +32,7 @@ export const ModalSubcategory = ({ onFinish, enableEnglishVersion }: ModalSubcat
 		<Modal
 			open={visible}
 			onCancel={close}
-			title={extra?.$id ? 'Modificar Categoría' : 'Nueva Categoría'}
+			title={extra?.id ? 'Modificar Categoría' : 'Nueva Categoría'}
 			width={300}
 			okText='Guardar'
 			cancelText='Cerrar'
@@ -46,8 +46,9 @@ export const ModalSubcategory = ({ onFinish, enableEnglishVersion }: ModalSubcat
 				form={form}
 				onFinish={({ es_name, en_name, photo }) => {
 					const data = {
-						id: extra?.$id,
+						id: extra?.id,
 						categoryId: extra!.categoryId,
+						establishmentId: extra!.establishmentId,
 						en_name,
 						es_name,
 						photo: photo?.file,
@@ -81,7 +82,7 @@ export const ModalSubcategory = ({ onFinish, enableEnglishVersion }: ModalSubcat
 				<Form.Item
 					label='Imagen'
 					name='photo'
-					rules={[{ required: !extra?.$id }, maxFileSizeRule]}
+					rules={[{ required: !extra?.id }, maxFileSizeRule]}
 				>
 					<Upload
 						accept='image/png, image/jpeg, image/jpg'

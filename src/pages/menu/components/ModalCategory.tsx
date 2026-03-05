@@ -25,14 +25,16 @@ export const ModalCategory = ({ onFinish, enableEnglishVersion }: ModalCategoryP
 	const [form] = Form.useForm();
 
 	useEffect(() => {
-		form.resetFields();
+		if (visible) {
+			form.resetFields();
 
-		if (extra?.es_name) {
-			form.setFieldsValue({
-				es_name: extra.es_name,
-				en_name: extra?.en_name,
-				enableSubcategories: extra.enableSubcategories!
-			});
+			if (extra?.es_name) {
+				form.setFieldsValue({
+					es_name: extra.es_name,
+					en_name: extra?.en_name,
+					enableSubcategories: extra.enableSubcategories!
+				});
+			}
 		}
 	}, [visible, form, extra]);
 
@@ -40,7 +42,7 @@ export const ModalCategory = ({ onFinish, enableEnglishVersion }: ModalCategoryP
 		<Modal
 			open={visible}
 			onCancel={close}
-			title={extra?.es_name ? 'Modificar Menú': 'Nuevo Menú'}
+			title={extra?.es_name ? 'Modificar Menú' : 'Nuevo Menú'}
 			width={300}
 			okText='Guardar'
 			cancelText='Cerrar'

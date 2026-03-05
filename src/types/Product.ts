@@ -1,5 +1,5 @@
 export interface ProductProps {
-	$id: string;
+	id: string;
 	es_name: string;
 	en_name: string;
 	es_description: string;
@@ -15,8 +15,8 @@ export interface ProductProps {
 	photoUrl: string | null;
 	bestSeller: boolean;
 	status: ProductStatus;
-	$createdAt: string;
-	$updatedAt: string;
+	createdAt: string;
+	updatedAt: string;
 	deletedAt: string | null;
 }
 

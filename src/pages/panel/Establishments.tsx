@@ -18,7 +18,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { avoidNotNumerics, maxFileSizeRule } from "../../utils/helpers";
 import { PaymentFrequency, PaymentMethod } from "../../types/Bill";
 import { useSaveEstablishment } from "../../hooks/useEstablishments";
-import { useSessionStore } from "../../store/session";
+
 import { EstablishmentProps } from "../../types/Establishment";
 import { useErrorHandler } from "../../hooks/useError";
 
@@ -36,7 +36,6 @@ export function Establishments() {
 	const props = location.state as EstablishmentsPageProps;
 	const establishment = props?.establishment;
 
-	const session = useSessionStore(({ session }) => session);
 	const [requiresTaxReceipt, setRequiresTaxReceipt] = useState(false);
 	const [form] = Form.useForm();
 
@@ -66,7 +65,7 @@ export function Establishments() {
 	return (
 		<div
 			className="px-20 py-10"
-			// title={extra ? "Modificar Local" : "Nuevo Local"}
+		// title={extra ? "Modificar Local" : "Nuevo Local"}
 		>
 			<h2 className="mb-[28px] text-[22px] font-[500]">
 				{establishment ? "Modificar Local" : "Nuevo Local"}
@@ -77,29 +76,28 @@ export function Establishments() {
 				onFinish={(data) => {
 					const mainHexColor = data.mainHexColor.toHexString
 						? data.mainHexColor.toHexString()
-						: undefined;
+						: null;
 
 					save(
 						{
-							id: establishment?.$id,
-							userId: `${session?.userId}`,
+							id: establishment?.id,
 							mainHexColor,
 							name: data.name,
 							domain: data.domain,
 							description: data.description,
-							address: data.address,
-							addressLink: data.addressLink,
+							address: data.address || null,
+							addressLink: data.addressLink || null,
 							phone: data.phone
 								? data.phone.toString()
-								: undefined,
+								: null,
 							whatsapp: data.whatsapp
 								? data.whatsapp.toString()
-								: undefined,
+								: null,
 							requiresTaxReceipt: data.requiresTaxReceipt,
-							rnc: data.rnc,
-							companyName: data.companyName,
-							logo: data.logo?.file,
-							banner: data.banner?.file,
+							rnc: data.rnc || null,
+							companyName: data.companyName || null,
+							logo: data.logo?.file || null,
+							banner: data.banner?.file || null,
 							paymentMethod: data.paymentMethod,
 							paymentFrequency: data.paymentFrequency,
 						},
