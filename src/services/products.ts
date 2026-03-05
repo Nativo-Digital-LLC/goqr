@@ -4,7 +4,6 @@ import {
 	doc,
 	getDocs,
 	increment,
-	orderBy,
 	query,
 	updateDoc,
 	where
@@ -101,17 +100,12 @@ export async function updateProduct(id: string, { photo, ...data }: Partial<Prod
 		photoUrl = null;
 	}
 
-	const prices = (data.prices)
-		? (typeof data.prices === 'string' ? data.prices : JSON.stringify(data.prices))
-		: null;
-
 	const updates: any = {
 		...data,
 		updatedAt: new Date()
 	};
 
 	if (photoUrl !== null) updates.photoUrl = photoUrl;
-	if (prices !== null) updates.prices = prices;
 
 	await updateDoc(doc(db, Collection.Products, id), updates);
 
