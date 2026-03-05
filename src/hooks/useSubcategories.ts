@@ -42,7 +42,10 @@ export const useGetSubcategories = (establishmentId?: string, categoryId?: strin
 		const unsubscribe = onSnapshot(
 			ref,
 			(snapshot) => {
-				setSubcategories(snapshot.docs.map((doc) => doc.data() as SubcategoryProps));
+				setSubcategories(snapshot.docs.map((doc) => ({
+					...doc.data(),
+					id: doc.id
+				} as SubcategoryProps)));
 				setLoading(false);
 			},
 			setError
@@ -150,6 +153,7 @@ type UseChangeSubcategoryOrderType = [
 		categoryId: string,
 		id: string,
 		dir: 'up' | 'down',
+		neighborId: string,
 		onDone?: () => void
 	) => void,
 	boolean,
@@ -165,6 +169,7 @@ export const useUpdateSubcategoryOrder = (): UseChangeSubcategoryOrderType => {
 		categoryId: string,
 		id: string,
 		dir: 'up' | 'down',
+		neighborId: string,
 		onDone?: () => void
 	) {
 		try {
@@ -174,7 +179,8 @@ export const useUpdateSubcategoryOrder = (): UseChangeSubcategoryOrderType => {
 				establishmentId,
 				categoryId,
 				id,
-				dir
+				dir,
+				neighborId
 			);
 			onDone?.();
 		} catch (error) {

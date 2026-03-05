@@ -6,6 +6,7 @@ import { SubcategoryProps } from '../../../types/Subcategory';
 import { SubcategoryCard } from './SubcategoryCard';
 import { ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
+import { useUpdateSubcategoryOrder } from '../../../hooks/useSubcategories';
 
 const { Text } = Typography;
 
@@ -24,6 +25,8 @@ interface SubcategoriesListProps {
 }
 
 export const SubcategoriesList = (props: SubcategoriesListProps) => {
+	const [updateOrder] = useUpdateSubcategoryOrder();
+
 	const {
 		isEditable,
 		subcategories,
@@ -83,7 +86,23 @@ export const SubcategoriesList = (props: SubcategoriesListProps) => {
 								categoryId={category.id!}
 								establishmentId={establishmentId}
 								showMoveUp={index > 0}
+								onPressMoveUp={() => updateOrder(
+									establishmentId,
+									category.id!,
+									subcategory.id,
+									'up',
+									subcategories[index - 1].id,
+									onChange
+								)}
 								showMoveDown={index < subcategories?.length - 1}
+								onPressMoveDown={() => updateOrder(
+									establishmentId,
+									category.id!,
+									subcategory.id,
+									'down',
+									subcategories[index + 1].id,
+									onChange
+								)}
 								onPress={() => onPress(id)}
 								onChange={onChange}
 							/>

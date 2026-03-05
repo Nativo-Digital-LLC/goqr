@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Button } from 'antd';
 
-import { useDeleteSubcategory, useUpdateSubcategoryOrder } from '../../../hooks/useSubcategories';
+import { useDeleteSubcategory } from '../../../hooks/useSubcategories';
 import { ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
 import { SubcategoryProps } from '../../../types/Subcategory';
@@ -18,7 +18,9 @@ interface SubcategoryCardProps {
 	establishmentId: string;
 	isEditable: boolean;
 	showMoveUp: boolean;
+	onPressMoveUp: () => void;
 	showMoveDown: boolean;
+	onPressMoveDown: () => void;
 	onPress: () => void;
 	onChange: () => void;
 }
@@ -30,12 +32,13 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 		categoryId,
 		establishmentId,
 		showMoveDown,
+		onPressMoveDown,
 		showMoveUp,
+		onPressMoveUp,
 		onPress,
 		onChange
 	} = props;
 	const [_delete, deleting] = useDeleteSubcategory();
-	const [updateOrder, updatingOrder] = useUpdateSubcategoryOrder();
 	const lang = useLanguageStore(({ lang }) => lang);
 
 	return (
@@ -98,8 +101,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretUpOutlined />}
-							loading={updatingOrder}
-							onClick={() => updateOrder(establishmentId, categoryId, subcategory.id, 'up', onChange)}
+							onClick={onPressMoveUp}
 						/>
 					)}
 
@@ -107,8 +109,7 @@ export const SubcategoryCard = (props: SubcategoryCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretDownOutlined />}
-							loading={updatingOrder}
-							onClick={() => updateOrder(establishmentId, categoryId, subcategory.id, 'down', onChange)}
+							onClick={onPressMoveDown}
 						/>
 					)}
 
