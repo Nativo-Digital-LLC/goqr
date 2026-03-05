@@ -1,4 +1,13 @@
-import { addDoc, collection, doc, getDocs, query, updateDoc } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	doc,
+	getDocs,
+	increment,
+	query,
+	updateDoc,
+	where
+} from 'firebase/firestore';
 
 import { db } from '../utils/firebase';
 import { Collection } from '../constants/Collections';
@@ -13,27 +22,8 @@ interface CreateCategoryParams {
 }
 
 export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }: CreateCategoryParams) {
-	const categoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories');
-	const catSnap = await getDocs(query(categoriesRef));
-	const categories = catSnap.docs.map((doc) => ({
-		...doc.data(),
-		id: doc.id
-	} as CategoryProps));
-
-	const maxOrder = categories.length > 0 ? Math.max(...categories.map(({ order }) => order)) : 0;
-	if (categories.length > 0 && order <= maxOrder) {
-		await Promise.all(
-			categories
-				.filter((category) => category.order >= order)
-				.map((category) => {
-					const ref = doc(db, Collection.Establishments, establishmentId, 'categories', category.id);
-					return updateDoc(ref, { order: category.order + 1 });
-				})
-		);
-	}
-
 	const ref = collection(db, Collection.Establishments, establishmentId, 'categories');
-	await addDoc(ref, {
+	const { id } = await addDoc(ref, {
 		es_name,
 		en_name,
 		order,
@@ -42,6 +32,29 @@ export async function createCategory({ es_name, en_name = null, order, establish
 		updatedAt: new Date(),
 		deletedAt: null
 	});
+
+	const categoriesQuery = query(
+		collection(db, Collection.Establishments, establishmentId, 'categories'),
+		where('deletedAt', '==', null),
+		where('order', '>=', order)
+	);
+
+	const snap = await getDocs(categoriesQuery);
+	if (snap.size <= 1) {
+		return;
+	}
+
+	await Promise.all(
+		snap
+			.docs
+			.filter((item) => item.id !== id)
+			.map((item) => {
+				const ref = doc(db, Collection.Establishments, establishmentId, 'categories', item.id);
+				return updateDoc(ref, {
+					order: increment(1)
+				});
+			})
+	);
 }
 
 export async function deleteCategory(id: string, establishmentId: string) {
