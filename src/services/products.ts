@@ -1,4 +1,14 @@
-import { addDoc, collection, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	doc,
+	getDocs,
+	increment,
+	orderBy,
+	query,
+	updateDoc,
+	where
+} from 'firebase/firestore';
 
 import { Collection } from '../constants/Collections';
 import { ProductProps } from '../types/Product';
@@ -56,6 +66,30 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 			id: productId
 		})
 	});
+
+	const productsQuery = query(
+		collection(db, Collection.Products),
+		where('establishmentId', '==', data.establishmentId),
+		where('deletedAt', '==', null),
+		where('order', '>=', data.order)
+	);
+
+	const snap = await getDocs(productsQuery);
+	if (snap.size <= 1) {
+		return;
+	}
+
+	await Promise.all(
+		snap
+			.docs
+			.filter((item) => item.id !== productId)
+			.map((item) => {
+				const ref = doc(db, Collection.Products, item.id);
+				return updateDoc(ref, {
+					order: increment(1)
+				});
+			})
+	);
 }
 
 export async function updateProduct(id: string, { photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
