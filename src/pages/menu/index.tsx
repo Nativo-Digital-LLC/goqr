@@ -54,12 +54,11 @@ export default function MenuPage() {
 	}, [location]);
 
 	const [establishment, loading, error] = useGetEstablishmentByDomain(establishmentUrl);
-	const [categories, , cerror] = useGetCategories(establishment?.id);
-	const [subcategories, , scerror] = useGetSubcategories(
+	const [categories] = useGetCategories(establishment?.id);
+	const [subcategories] = useGetSubcategories(
 		establishment?.id,
 		selected?.categoryId || undefined
 	);
-	console.log(cerror, scerror);
 
 	useFDADisclaimer(
 		session,
@@ -130,7 +129,7 @@ export default function MenuPage() {
 			handleUrlChanges("categoryId", categories[0].id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [establishment]);
+	}, [establishment, categories]);
 
 	useEffect(() => {
 		if (selected.subcategoryId) {
