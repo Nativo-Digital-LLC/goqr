@@ -7,10 +7,10 @@ import { useHandleOAuth2Session, useLogin } from "../../hooks/useAuth";
 import { useSessionStore } from "../../store/session";
 
 
-import { isAppleDevice } from "../../utils/helpers";
+// import { isAppleDevice } from "../../utils/helpers";
 
 import GoogleIcon from "../../assets/images/icons/google-icon.svg";
-import AppleIcon from "../../assets/images/icons/apple-icon.svg";
+// import AppleIcon from "../../assets/images/icons/apple-icon.svg";
 
 import HomeContainer from "../containers/HomeContainer";
 
@@ -175,7 +175,7 @@ export default function LoginPage() {
 										/>
 										Ingresar con Google
 									</Button>
-									{isAppleDevice && (
+									{/* {isAppleDevice && (
 										<Button
 											type="primary"
 											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
@@ -197,7 +197,7 @@ export default function LoginPage() {
 											/>
 											Ingresar con Apple
 										</Button>
-									)}
+									)} */}
 								</div>
 
 								{oauth2Error &&

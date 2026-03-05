@@ -38,7 +38,7 @@ export const ProductsList = (props: ProductsListProps) => {
 		categoryId || undefined,
 		subcategoryId || undefined
 	);
-	const [changeOrder, changingOrder] = useChangeProductOrder();
+	const [changeOrder] = useChangeProductOrder();
 
 	if (!show) {
 		return <></>;

@@ -10,7 +10,7 @@ import {
 } from 'firebase/firestore';
 
 import { Collection } from '../constants/Collections';
-import { SubcategoryProps } from '../types/Subcategory';
+// import { SubcategoryProps } from '../types/Subcategory';
 import { db } from '../utils/firebase';
 import { uploadFile } from '../utils/helpers';
 

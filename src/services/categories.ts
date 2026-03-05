@@ -11,7 +11,7 @@ import {
 
 import { db } from '../utils/firebase';
 import { Collection } from '../constants/Collections';
-import { CategoryProps } from '../types/Category';
+// import { CategoryProps } from '../types/Category';
 
 interface CreateCategoryParams {
 	establishmentId: string;

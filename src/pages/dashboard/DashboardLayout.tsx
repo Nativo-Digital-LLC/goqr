@@ -1,13 +1,24 @@
-import { Layout, Menu, Dropdown } from "antd";
-import { BellOutlined, UserOutlined, MenuOutlined, FileTextOutlined } from "@ant-design/icons";
-import { Link, Outlet } from "react-router-dom";
+import {
+	Layout,
+	// Menu,
+	// Dropdown
+} from "antd";
+// import { BellOutlined, UserOutlined, MenuOutlined, FileTextOutlined } from "@ant-design/icons";
+import {
+	// Link,
+	Outlet
+} from "react-router-dom";
 
-import { useLogout } from "../../hooks/useAuth";
+// import { useLogout } from "../../hooks/useAuth";
 
-const { Header, Content, Sider } = Layout;
+const {
+	// Header,
+	Content,
+	// Sider
+} = Layout;
 
 export default function DashboardLayout() {
-	const [logout] = useLogout();
+	// const [logout] = useLogout();
 
 	return (
 		<Layout style={{ minHeight: '100vh' }}>
