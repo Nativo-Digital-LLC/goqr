@@ -96,55 +96,16 @@ export async function updateProduct(id: string, { photo, ...data }: Partial<Prod
 }
 
 export async function changeProductOrder(
-	categoryId: string,
-	subcategoryId: string | null,
 	id: string,
-	dir: 'up' | 'down'
+	dir: 'up' | 'down',
+	neighborId: string
 ) {
-	let q;
-	if (subcategoryId !== null) {
-		q = query(
-			collection(db, Collection.Products),
-			where('categoryId', '==', categoryId),
-			where('subcategoryId', '==', subcategoryId),
-			where('deletedAt', '==', null),
-			orderBy('order', 'asc')
-		);
-	} else {
-		q = query(
-			collection(db, Collection.Products),
-			where('categoryId', '==', categoryId),
-			where('deletedAt', '==', null),
-			orderBy('order', 'asc')
-		);
-	}
-
-	const snapshot = await getDocs(q);
-	const products = snapshot.docs.map(d => d.data() as unknown as ProductProps);
-
-	const currentIndex = products.findIndex(({ id: prodId }) => prodId === id);
-
-	if (currentIndex === -1) {
-		console.error('No se encontró el producto');
-		return;
-	}
-
-	const targetIndex = dir === 'down' ? currentIndex + 1 : currentIndex - 1;
-
-	if (targetIndex < 0 || targetIndex >= products.length) {
-		console.warn('El producto ya está en la primera/última posición');
-		return;
-	}
-
-	const currentProduct = products[currentIndex];
-	const targetProduct = products[targetIndex];
-
 	await Promise.all([
-		updateDoc(doc(db, Collection.Products, currentProduct.id), {
-			order: targetProduct.order
+		updateDoc(doc(db, Collection.Products, id), {
+			order: increment(dir === 'up' ? -1 : 1)
 		}),
-		updateDoc(doc(db, Collection.Products, targetProduct.id), {
-			order: currentProduct.order
+		updateDoc(doc(db, Collection.Products, neighborId), {
+			order: increment(dir === 'up' ? 1 : -1)
 		})
 	]);
 }

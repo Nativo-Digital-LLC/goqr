@@ -137,10 +137,9 @@ export const useSaveProduct = (): UseSaveProductType => {
 
 type UseChangeProductOrderType = [
 	(
-		categoryId: string,
-		subcategoryId: string | null,
 		id: string,
 		dir: 'up' | 'down',
+		neighborId: string,
 		onDone?: () => void
 	) => void,
 	boolean,
@@ -152,20 +151,18 @@ export const useChangeProductOrder = (): UseChangeProductOrderType => {
 	const [error, setError] = useState<FirebaseError | null>(null);
 
 	async function handleUpdate(
-		categoryId: string,
-		subcategoryId: string | null,
 		id: string,
 		dir: 'up' | 'down',
+		neighborId: string,
 		onDone?: () => void
 	) {
 		try {
 			setLoading(true);
 			setError(null);
 			await changeProductOrder(
-				categoryId,
-				subcategoryId,
 				id,
-				dir
+				dir,
+				neighborId
 			);
 			onDone?.();
 		} catch (error) {

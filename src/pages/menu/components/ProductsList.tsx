@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Button, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { useListenProducts } from '../../../hooks/useProducts';
+import { useChangeProductOrder, useListenProducts } from '../../../hooks/useProducts';
 import { ModalProduct } from './ModalProduct';
 import { ModalOpener$ } from '../../../utils/helpers';
 import { ModalName } from '../../../types/Modals';
@@ -33,12 +33,12 @@ export const ProductsList = (props: ProductsListProps) => {
 		isEditable,
 		enableMultiLanguage
 	} = props;
-	const [products, , error] = useListenProducts(
+	const [products] = useListenProducts(
 		establishmentId,
 		categoryId || undefined,
 		subcategoryId || undefined
 	);
-	console.log(error);
+	const [changeOrder, changingOrder] = useChangeProductOrder();
 
 	if (!show) {
 		return <></>;
@@ -88,7 +88,9 @@ export const ProductsList = (props: ProductsListProps) => {
 							preview={!isEditable}
 							isEditable={isEditable}
 							showMoveUp={index > 0}
+							onPressMoveUp={() => changeOrder(product.id, 'up', products[index - 1].id)}
 							showMoveDown={index < products.length - 1}
+							onPressMoveDown={() => changeOrder(product.id, 'down', products[index + 1].id)}
 							onChange={() => null}
 						/>
 

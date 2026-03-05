@@ -8,10 +8,7 @@ import {
 
 import { ProductProps, ProductStatus } from '../../../types/Product';
 import { format, ModalOpener$ } from '../../../utils/helpers';
-import {
-	useChangeProductOrder,
-	useDeleteProduct
-} from '../../../hooks/useProducts';
+import { useDeleteProduct } from '../../../hooks/useProducts';
 import { ModalName } from '../../../types/Modals';
 import { useLanguageStore } from '../../../store/language';
 
@@ -25,7 +22,9 @@ interface ProductCardProps {
 	preview?: boolean;
 	isEditable?: boolean;
 	showMoveUp?: boolean;
+	onPressMoveUp?: () => void;
 	showMoveDown?: boolean;
+	onPressMoveDown?: () => void;
 	onChange?: () => void;
 }
 
@@ -36,11 +35,12 @@ export const ProductCard = (props: ProductCardProps) => {
 		preview,
 		isEditable,
 		showMoveDown,
+		onPressMoveDown,
 		showMoveUp,
+		onPressMoveUp,
 		onChange
 	} = props;
 	const [_delete, deleting] = useDeleteProduct();
-	const [changeOrder, changingOrder] = useChangeProductOrder();
 	const { lang, dictionary } = useLanguageStore((store) => store);
 
 	return (
@@ -62,14 +62,7 @@ export const ProductCard = (props: ProductCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretUpOutlined />}
-							loading={changingOrder}
-							onClick={() => changeOrder(
-								data.categoryId,
-								data.subcategoryId,
-								data.id,
-								'up',
-								onChange
-							)}
+							onClick={onPressMoveUp}
 						/>
 					)}
 
@@ -78,14 +71,7 @@ export const ProductCard = (props: ProductCardProps) => {
 						<Button
 							type='text'
 							icon={<CaretDownOutlined />}
-							loading={changingOrder}
-							onClick={() => changeOrder(
-								data.categoryId,
-								data.subcategoryId,
-								data.id,
-								'down',
-								onChange
-							)}
+							onClick={onPressMoveDown}
 						/>
 					)}
 
