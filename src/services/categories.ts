@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, query, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, updateDoc } from 'firebase/firestore';
 
 import { db } from '../utils/firebase';
 import { Collection } from '../constants/Collections';
@@ -15,7 +15,10 @@ interface CreateCategoryParams {
 export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }: CreateCategoryParams) {
 	const categoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories');
 	const catSnap = await getDocs(query(categoriesRef));
-	const categories = catSnap.docs.map(doc => doc.data() as CategoryProps);
+	const categories = catSnap.docs.map((doc) => ({
+		...doc.data(),
+		id: doc.id
+	} as CategoryProps));
 
 	const maxOrder = categories.length > 0 ? Math.max(...categories.map(({ order }) => order)) : 0;
 	if (categories.length > 0 && order <= maxOrder) {
@@ -23,22 +26,21 @@ export async function createCategory({ es_name, en_name = null, order, establish
 			categories
 				.filter((category) => category.order >= order)
 				.map((category) => {
-					return updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', category.id), { order: category.order + 1 });
+					const ref = doc(db, Collection.Establishments, establishmentId, 'categories', category.id);
+					return updateDoc(ref, { order: category.order + 1 });
 				})
 		);
 	}
 
-	const categoryId = crypto.randomUUID();
-
-	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', categoryId), {
-		id: categoryId,
+	const ref = collection(db, Collection.Establishments, establishmentId, 'categories');
+	await addDoc(ref, {
 		es_name,
 		en_name,
 		order,
 		enableSubcategories,
-		subcategories: [],
 		createdAt: new Date(),
-		updatedAt: new Date()
+		updatedAt: new Date(),
+		deletedAt: null
 	});
 }
 
