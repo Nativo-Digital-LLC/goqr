@@ -51,7 +51,11 @@ export const useGetEstablishmentByDomain = (
 					return;
 				}
 
-				setEstablishment(snapshot.docs[0].data() as EstablishmentProps);
+				const [doc] = snapshot.docs;
+				setEstablishment({
+					...doc.data(),
+					id: doc.id
+				} as EstablishmentProps);
 				setLoading(false);
 			},
 			setError

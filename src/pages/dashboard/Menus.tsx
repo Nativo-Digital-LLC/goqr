@@ -6,6 +6,7 @@ import { useGetEstablishmentsByUserId } from "../../hooks/useEstablishments";
 import { useSessionStore } from "../../store/session";
 import { useEffect, useState } from "react";
 import { auth } from "../../utils/firebase";
+import { signOut } from "firebase/auth";
 
 const { Text } = Typography;
 
@@ -87,6 +88,23 @@ export default function MenusPage() {
 							<br />
 							<Text strong>Añadir Local</Text>
 						</Card>
+					</Col>
+				</Row>
+				<br />
+
+				<Row gutter={[20, 20]}>
+					<Col span={24}>
+						<Button
+							type="primary"
+							danger
+							onClick={async () => {
+								await signOut(auth);
+								setSession(null);
+								navigate("/login");
+							}}
+						>
+							Cerrar Sesión
+						</Button>
 					</Col>
 				</Row>
 			</div>
