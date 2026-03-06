@@ -96,7 +96,7 @@ export function Establishments() {
 							whatsapp: data.whatsapp
 								? data.whatsapp.toString()
 								: null,
-							requiresTaxReceipt: data.requiresTaxReceipt,
+							requiresTaxReceipt: data.requiresTaxReceipt || false,
 							rnc: data.rnc || null,
 							companyName: data.companyName || null,
 							logo: data.logo?.file || null,
