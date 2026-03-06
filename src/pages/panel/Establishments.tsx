@@ -21,6 +21,7 @@ import { useSaveEstablishment } from "../../hooks/useEstablishments";
 
 import { EstablishmentProps } from "../../types/Establishment";
 import { useErrorHandler } from "../../hooks/useError";
+import { useSessionStore } from "../../store/session";
 
 const { Text } = Typography;
 
@@ -35,6 +36,7 @@ export function Establishments() {
 
 	const props = location.state as EstablishmentsPageProps;
 	const establishment = props?.establishment;
+	const session = useSessionStore(({ session }) => session);
 
 	const [requiresTaxReceipt, setRequiresTaxReceipt] = useState(false);
 	const [form] = Form.useForm();
@@ -81,6 +83,7 @@ export function Establishments() {
 					save(
 						{
 							id: establishment?.id,
+							userId: session?.userId,
 							mainHexColor,
 							name: data.name,
 							domain: data.domain,
