@@ -1,6 +1,17 @@
 import { Timestamp } from 'firebase/firestore';
 import { PaymentFrequency, PaymentMethod } from './Bill';
 
+export interface ScheduleProps {
+	days: string;
+	hours: string;
+}
+
+export interface SocialNetworkProps {
+	platform: string;
+	link: string;
+	displayName?: string;
+}
+
 export interface EstablishmentProps {
 	id: string;
 	userId: string;
@@ -26,6 +37,8 @@ export interface EstablishmentProps {
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 	deletedAt: Timestamp | null;
+	schedules?: ScheduleProps[];
+	socialNetworks?: SocialNetworkProps[];
 }
 
 export interface CreateEstablishmentParams {
@@ -45,6 +58,8 @@ export interface CreateEstablishmentParams {
 	banner?: File;
 	paymentFrequency: PaymentFrequency;
 	paymentMethod: PaymentMethod;
+	schedules?: ScheduleProps[];
+	socialNetworks?: SocialNetworkProps[];
 }
 
 export interface TaxPayerProps {

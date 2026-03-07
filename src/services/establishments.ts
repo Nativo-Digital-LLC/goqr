@@ -45,6 +45,8 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		rnc: params.rnc || null,
 		companyName: params.companyName || null,
 		requiresTaxReceipt: params.requiresTaxReceipt,
+		schedules: params.schedules || [],
+		socialNetworks: params.socialNetworks || [],
 		isActive: true,
 		createdAt: new Date(),
 		updatedAt: new Date(),

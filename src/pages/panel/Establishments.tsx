@@ -11,11 +11,14 @@ import {
 	Select,
 	Typography,
 	InputNumber,
+	Divider,
+	TimePicker,
 } from "antd";
-import { FileImageOutlined } from "@ant-design/icons";
+import { FileImageOutlined, PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
+import dayjs from "dayjs";
 
-import { avoidNotNumerics, maxFileSizeRule } from "../../utils/helpers";
+import { avoidNotNumerics, maxFileSizeRule, getSocialUsername } from "../../utils/helpers";
 import { PaymentFrequency, PaymentMethod } from "../../types/Bill";
 import { useSaveEstablishment } from "../../hooks/useEstablishments";
 
@@ -56,6 +59,27 @@ export function Establishments() {
 				...(establishment?.whatsapp && {
 					whatsapp: Number(establishment.whatsapp),
 				}),
+				schedules: establishment?.schedules?.map((schedule) => {
+					let parsedHours = null;
+					if (schedule.hours) {
+						const parts = schedule.hours.split(" - ");
+						if (parts.length === 2) {
+							const start = dayjs(new Date(`2000/01/01 ${parts[0]}`));
+							const end = dayjs(new Date(`2000/01/01 ${parts[1]}`));
+							if (start.isValid() && end.isValid()) {
+								parsedHours = [start, end];
+							}
+						}
+					}
+					return {
+						days: schedule.days ? schedule.days.split(", ") : [],
+						hours: parsedHours,
+					};
+				}) || [],
+				socialNetworks: establishment?.socialNetworks?.map((social) => ({
+					...social,
+					displayName: social.displayName || getSocialUsername(social.platform, social.link) || undefined,
+				})) || [],
 			});
 		}
 	}, [form, establishment]);
@@ -65,10 +89,7 @@ export function Establishments() {
 	}
 
 	return (
-		<div
-			className="px-20 py-10"
-		// title={extra ? "Modificar Local" : "Nuevo Local"}
-		>
+		<div className="px-20 py-10">
 			<h2 className="mb-[28px] text-[22px] font-[500]">
 				{establishment ? "Modificar Local" : "Nuevo Local"}
 			</h2>
@@ -78,7 +99,7 @@ export function Establishments() {
 				onFinish={(data) => {
 					const mainHexColor = data.mainHexColor.toHexString
 						? data.mainHexColor.toHexString()
-						: null;
+						: establishment?.mainHexColor || null;
 
 					save(
 						{
@@ -103,6 +124,20 @@ export function Establishments() {
 							banner: data.banner?.file || null,
 							paymentMethod: data.paymentMethod,
 							paymentFrequency: data.paymentFrequency,
+							schedules: data.schedules?.map((s: any) => ({
+								days: Array.isArray(s.days) ? s.days.join(", ") : s.days,
+								hours:
+									Array.isArray(s.hours) && s.hours.length === 2
+										? `${s.hours[0].format("h:mm A")} - ${s.hours[1].format(
+											"h:mm A"
+										)}`
+										: s.hours,
+							})) || [],
+							socialNetworks: data.socialNetworks?.map((s: any) => ({
+								platform: s.platform,
+								link: s.link,
+								displayName: s.displayName || null,
+							})) || [],
 						},
 						() => {
 							onFinish();
@@ -406,6 +441,145 @@ export function Establishments() {
 						)}
 					</Col>
 				</Row>
+
+				<Divider>Horarios</Divider>
+				<Form.List name="schedules">
+					{(fields, { add, remove }) => (
+						<>
+							{fields.map(({ key, name, ...restField }) => (
+								<Row key={key} gutter={10} style={{ marginBottom: 16 }}>
+									<Col xs={24} sm={11}>
+										<Form.Item
+											{...restField}
+											label="Días"
+											name={[name, 'days']}
+											rules={[{ required: true, message: 'Selecciona los días' }]}
+											style={{ marginBottom: 0 }}
+										>
+											<Select
+												mode="tags"
+												placeholder="Selecciona días"
+												options={[
+													{ label: 'Lunes', value: 'Lunes' },
+													{ label: 'Martes', value: 'Martes' },
+													{ label: 'Miércoles', value: 'Miércoles' },
+													{ label: 'Jueves', value: 'Jueves' },
+													{ label: 'Viernes', value: 'Viernes' },
+													{ label: 'Sábado', value: 'Sábado' },
+													{ label: 'Domingo', value: 'Domingo' },
+												]}
+											/>
+										</Form.Item>
+									</Col>
+									<Col xs={20} sm={11}>
+										<Form.Item
+											{...restField}
+											label="Horas de Apertura y Cierre"
+											name={[name, 'hours']}
+											rules={[{ required: true, message: 'Selecciona el horario' }]}
+											style={{ marginBottom: 0 }}
+										>
+											<TimePicker.RangePicker
+												use12Hours
+												format="h:mm A"
+												placeholder={['Apertura', 'Cierre']}
+												style={{ width: '100%' }}
+											/>
+										</Form.Item>
+									</Col>
+									<Col xs={4} sm={2} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px' }}>
+										<MinusCircleOutlined onClick={() => remove(name)} style={{ color: 'red', fontSize: '20px' }} />
+									</Col>
+								</Row>
+							))}
+							<Form.Item>
+								<Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+									Agregar Horario
+								</Button>
+							</Form.Item>
+						</>
+					)}
+				</Form.List>
+
+				<Divider>Redes Sociales</Divider>
+				<Form.List name="socialNetworks">
+					{(fields, { add, remove }) => (
+						<>
+							{fields.map(({ key, name, ...restField }) => (
+								<Row key={key} gutter={10} style={{ marginBottom: 16 }}>
+									<Col xs={24} sm={8}>
+										<Form.Item
+											{...restField}
+											label="Plataforma"
+											name={[name, 'platform']}
+											rules={[{ required: true, message: 'Plataforma' }]}
+											style={{ marginBottom: 0 }}
+										>
+											<Select
+												placeholder="Plataforma"
+												options={[
+													{ label: 'Instagram', value: 'instagram' },
+													{ label: 'Facebook', value: 'facebook' },
+													{ label: 'TikTok', value: 'tiktok' },
+													{ label: 'X (Twitter)', value: 'x' },
+													{ label: 'Website', value: 'website' }
+												]}
+											/>
+										</Form.Item>
+									</Col>
+									<Col xs={24} sm={8}>
+										<Form.Item
+											{...restField}
+											label="Enlace"
+											name={[name, 'link']}
+											rules={[{ required: true, message: 'Enlace' }]}
+											style={{ marginBottom: 0 }}
+										>
+											<Input
+												placeholder="Enlace (URL) o auto-inferir"
+												onChange={(e) => {
+													const val = e.target.value;
+													const platform = form.getFieldValue(['socialNetworks', name, 'platform']);
+													const currentDisplayName = form.getFieldValue(['socialNetworks', name, 'displayName']);
+													if (platform && val && !currentDisplayName) {
+														const inferred = getSocialUsername(platform, val);
+														if (inferred) {
+															const currentNetworks = form.getFieldValue('socialNetworks') || [];
+															if (currentNetworks[name]) {
+																currentNetworks[name] = { ...currentNetworks[name], displayName: inferred };
+																form.setFieldsValue({ socialNetworks: currentNetworks });
+															}
+														}
+													}
+												}}
+											/>
+										</Form.Item>
+									</Col>
+									<Col xs={20} sm={6}>
+										<Form.Item
+											{...restField}
+											label="Usuario a mostrar (Opcional)"
+											name={[name, 'displayName']}
+											style={{ marginBottom: 0 }}
+										>
+											<Input placeholder="Ej. @mi_local" />
+										</Form.Item>
+									</Col>
+
+									<Col xs={4} sm={2} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px' }}>
+										<MinusCircleOutlined onClick={() => remove(name)} style={{ color: 'red', fontSize: '20px' }} />
+									</Col>
+								</Row>
+							))}
+							<Form.Item>
+								<Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+									Agregar Red Social
+								</Button>
+							</Form.Item>
+						</>
+					)}
+				</Form.List>
+
 				<Row>
 					<Col>
 						<Button

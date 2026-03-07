@@ -5,15 +5,45 @@ import {
 	PhoneOutlined,
 	StarOutlined,
 	WhatsAppOutlined,
+	ClockCircleOutlined,
+	InstagramOutlined,
+	FacebookOutlined,
+	TikTokOutlined,
+	TwitterOutlined,
+	GlobalOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
-import { format } from "../../../utils/helpers";
+import { format, formatConsecutiveDays, getSocialUsername } from "../../../utils/helpers";
 import { EstablishmentProps } from "../../../types/Establishment";
 import { ToggleLanguageButton } from "./ToggleLanguageButton";
 import { useLanguageStore } from "../../../store/language";
 
 const { Title, Text } = Typography;
+
+const getSocialIcon = (platform: string) => {
+	switch (platform) {
+		case 'instagram': return <InstagramOutlined />;
+		case 'facebook': return <FacebookOutlined />;
+		case 'tiktok': return <TikTokOutlined />;
+		case 'x': return <TwitterOutlined />;
+		case 'website': return <GlobalOutlined />;
+		default: return <GlobalOutlined />;
+	}
+};
+
+const getSocialLink = (platform: string, link: string) => {
+	if (platform === 'website') return link.startsWith('http') ? link : `https://${link}`;
+	if (link.startsWith('http')) return link;
+	const cleanLink = link.replace('@', '');
+	switch (platform) {
+		case 'instagram': return `https://instagram.com/${cleanLink}`;
+		case 'facebook': return `https://facebook.com/${cleanLink}`;
+		case 'tiktok': return `https://tiktok.com/@${cleanLink}`;
+		case 'x': return `https://x.com/${cleanLink}`;
+		default: return `https://${cleanLink}`;
+	}
+};
 
 interface EstablishmentInfoProps {
 	establishment: EstablishmentProps;
@@ -36,6 +66,8 @@ export const EstablishmentInfo = ({
 		addressLink,
 		enableMultiLanguage,
 		googlePlaceId,
+		schedules,
+		socialNetworks,
 	} = establishment;
 
 	return (
@@ -105,6 +137,17 @@ export const EstablishmentInfo = ({
 				</a>
 			)}
 
+			{schedules && schedules.length > 0 && (
+				<Space direction="vertical" size={2}>
+					{schedules.map((schedule, index) => (
+						<Space key={'schedule-' + index} style={{ opacity: 0.7 }}>
+							<ClockCircleOutlined />
+							<Text>{formatConsecutiveDays(schedule.days)}: {schedule.hours}</Text>
+						</Space>
+					))}
+				</Space>
+			)}
+
 			{(phone || whatsapp) && (
 				<Space>
 					{phone && (
@@ -144,6 +187,34 @@ export const EstablishmentInfo = ({
 						<Text>{dictionary.menu.establishment.leaveReview}</Text>
 					</Space>
 				</a>
+			)}
+
+			{socialNetworks && socialNetworks.length > 0 && (
+				<Space size="middle" style={{ marginTop: 10, flexWrap: "wrap" }}>
+					{socialNetworks.map((social, index) => {
+						const socialLink = getSocialLink(social.platform, social.link);
+						const socialUsername = getSocialUsername(social.platform, social.link);
+						const displayUsername = social.displayName || socialUsername;
+
+						return (
+							<a
+								key={'social-' + index}
+								href={socialLink}
+								target="_blank"
+								style={{ color: 'inherit', display: 'flex', alignItems: 'center' }}
+							>
+								<span style={{ fontSize: 24, color: establishment.mainHexColor || 'inherit', opacity: 0.8, marginRight: 5 }}>
+									{getSocialIcon(social.platform)}
+								</span>
+								{displayUsername && (
+									<Text strong style={{ fontSize: 13, opacity: 0.8, letterSpacing: -0.2 }}>
+										{displayUsername}
+									</Text>
+								)}
+							</a>
+						);
+					})}
+				</Space>
 			)}
 		</Space>
 	);
