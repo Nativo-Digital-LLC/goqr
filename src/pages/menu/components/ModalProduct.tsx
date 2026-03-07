@@ -39,6 +39,7 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 	const [visible, close, extra] = useModalVisible<ProductProps>(ModalName.Products);
 	const [save, saving] = useSaveProduct();
 	const [variants, setVariants] = useState<VariantProps[]>([]);
+	const [pricingType, setPricingType] = useState<'single' | 'multiple' | 'free' | 'none'>('single');
 	const [currentPhotoUrl, setCurrentPhotoUrl] = useState<string | null>(null);
 	const [form] = Form.useForm();
 
@@ -49,28 +50,47 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 			setCurrentPhotoUrl(null);
 
 			if (extra?.id) {
+				let inferredType: 'single' | 'multiple' | 'free' | 'none' = 'none';
+
+				if (extra.prices && extra.prices.length > 0) {
+					if (extra.prices.length === 1) {
+						if (extra.prices[0].price === 0) {
+							inferredType = 'free';
+						} else {
+							inferredType = 'single';
+							form.setFieldsValue({
+								price: extra.prices[0].price
+							});
+						}
+					} else {
+						inferredType = 'multiple';
+						setVariants(
+							extra.prices.map(({ price, label }) => ({
+								price,
+								label: label!,
+								id: crypto.randomUUID()
+							}))
+						);
+
+						extra.prices.forEach(({ label, price }, index) => {
+							form.setFieldValue(`variants[${index}].label`, label);
+							form.setFieldValue(`variants[${index}].price`, price);
+						});
+					}
+				}
+
+				setPricingType(inferredType);
+
 				form.setFieldsValue({
 					...extra,
-					price: extra.prices[0].price
+					pricingType: inferredType,
 				});
 
 				setCurrentPhotoUrl(extra.photoUrl);
-			}
-
-			if (extra?.prices && extra.prices.length > 1) {
-				setVariants(
-					extra
-						.prices
-						.map(({ price, label }) => ({
-							price,
-							label: label!,
-							id: crypto.randomUUID()
-						}))
-				);
-
-				extra.prices.forEach(({ label, price }, index) => {
-					form.setFieldValue(`variants[${index}].label`, label);
-					form.setFieldValue(`variants[${index}].price`, price);
+			} else {
+				setPricingType('single');
+				form.setFieldsValue({
+					pricingType: 'single'
 				});
 			}
 		}
@@ -90,26 +110,34 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 				layout='vertical'
 				onFinish={(data) => {
 					const prices: { label?: string; price?: number; }[] = [];
-					if (variants.length === 0) {
+					const pt = data.pricingType;
+
+					if (pt === 'single') {
 						prices.push({
 							price: data.price as number,
 							label: ''
 						});
-					}
+					} else if (pt === 'free') {
+						prices.push({
+							price: 0,
+							label: ''
+						});
+					} else if (pt === 'multiple') {
+						for (const key in data) {
+							const match = key.match(/variants\[(\d+)\]\.(\w+)/);
+							if (match) {
+								const index = Number(match[1]);
+								const property = match[2] as 'label' | 'price';
 
-					for (const key in data) {
-						const match = key.match(/variants\[(\d+)\]\.(\w+)/);
-						if (match) {
-							const index = Number(match[1]);
-							const property = match[2] as 'label' | 'price';
+								if (!prices[index]) {
+									prices[index] = {};
+								}
 
-							if (!prices[index]) {
-								prices[index] = {};
+								prices[index][property] = data[key];
 							}
-
-							prices[index][property] = data[key];
 						}
 					}
+					// If 'none', prices remains []
 
 					let photo: File | null | undefined = undefined;
 					if (data?.photo) {
@@ -161,7 +189,23 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 					</Form.Item>
 				)}
 
-				{variants.length === 0 && (
+				<Form.Item
+					name='pricingType'
+					label='Tipo de Precio'
+					rules={[{ required: true, message: 'Seleccione un tipo de precio' }]}
+				>
+					<Select
+						options={[
+							{ label: 'Un Solo Precio', value: 'single' },
+							{ label: 'Varios Precios', value: 'multiple' },
+							{ label: 'Gratis', value: 'free' },
+							{ label: 'Sin Precio', value: 'none' },
+						]}
+						onChange={(val) => setPricingType(val)}
+					/>
+				</Form.Item>
+
+				{pricingType === 'single' && (
 					<Form.Item
 						name='price'
 						label='Precio'
@@ -174,53 +218,55 @@ export const ModalProduct = ({ onFinish, enableEnglishVersion }: ModalProductPro
 					</Form.Item>
 				)}
 
-				{variants.length > 0 && (
-					variants.map(({ price, label, id }, index) => (
-						<Row gutter={[20, 20]} key={id}>
-							<Col span={12}>
-								<Form.Item
-									label={'Variante ' + (index + 1)}
-									name={`variants[${index}].label`}
-									rules={[{ required: true, message: 'Ingrese un nombre' }]}
-								>
-									<Input defaultValue={label} />
-								</Form.Item>
-							</Col>
-
-							<Col span={12}>
-								<Space>
+				{pricingType === 'multiple' && (
+					<>
+						{variants.map(({ price, label, id }, index) => (
+							<Row gutter={[20, 20]} key={id}>
+								<Col span={12}>
 									<Form.Item
-										label='Precio'
-										name={`variants[${index}].price`}
-										rules={[{ required: true, message: 'Ingrese un precio' }]}
+										label={'Variante ' + (index + 1)}
+										name={`variants[${index}].label`}
+										rules={[{ required: true, message: 'Ingrese un nombre' }]}
 									>
-										<InputNumber
-											defaultValue={price}
-											style={{ width: '100%' }}
-											onKeyDown={(event) => avoidNotNumerics(event, 2)}
-										/>
+										<Input defaultValue={label} />
 									</Form.Item>
+								</Col>
 
-									<Button
-										onClick={() => setVariants(variants.filter((_, i) => i !== index))}
-										style={{ marginTop: 6 }}
-									>
-										Eliminar
-									</Button>
-								</Space>
-							</Col>
-						</Row>
-					))
+								<Col span={12}>
+									<Space>
+										<Form.Item
+											label='Precio'
+											name={`variants[${index}].price`}
+											rules={[{ required: true, message: 'Ingrese un precio' }]}
+										>
+											<InputNumber
+												defaultValue={price}
+												style={{ width: '100%' }}
+												onKeyDown={(event) => avoidNotNumerics(event, 2)}
+											/>
+										</Form.Item>
+
+										<Button
+											onClick={() => setVariants(variants.filter((_, i) => i !== index))}
+											style={{ marginTop: 6 }}
+										>
+											Eliminar
+										</Button>
+									</Space>
+								</Col>
+							</Row>
+						))}
+
+						<Button
+							onClick={() => setVariants(variants.concat({ id: crypto.randomUUID(), label: '', price: 0 }))}
+							style={{ width: '100%' }}
+						>
+							Agregar Variante
+						</Button>
+						<br />
+						<br />
+					</>
 				)}
-
-				<Button
-					onClick={() => setVariants(variants.concat({ id: crypto.randomUUID(), label: '', price: 0 }))}
-					style={{ width: '100%' }}
-				>
-					Agregar Variante
-				</Button>
-				<br />
-				<br />
 
 				<Form.Item
 					label='Más vendido'
