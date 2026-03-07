@@ -426,12 +426,22 @@ export function Establishments() {
 												{(fields, { add, remove }) => (
 													<div className="flex flex-col gap-2">
 														{fields.map(({ key, name, ...restField }) => (
-															<div key={key} className="flex items-center gap-4 py-2 px-4 rounded-xl bg-slate-50 border border-slate-100/50">
+															<div key={key} className="flex flex-col md:flex-row md:items-center gap-4 py-3 md:py-2 px-4 rounded-xl bg-slate-50 border border-slate-100/50 relative">
+																{/* Delete Button (Mobile: top right, Desktop: inline end) */}
+																<div className="absolute top-2 right-2 md:relative md:top-auto md:right-auto md:order-last">
+																	<Button
+																		type="text"
+																		icon={<DeleteOutlined className="text-slate-400 hover:text-red-500" />}
+																		onClick={() => remove(name)}
+																		className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-red-50"
+																	/>
+																</div>
+
 																{/* Dot Indicator */}
-																<div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+																<div className="hidden md:block w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
 
 																{/* Days Select */}
-																<div className="flex-1 w-full max-w-[200px]">
+																<div className="flex-1 w-full md:max-w-[200px] mt-4 md:mt-0">
 																	<Form.Item
 																		{...restField}
 																		name={[name, 'days']}
@@ -440,9 +450,9 @@ export function Establishments() {
 																	>
 																		<Select
 																			mode="tags"
-																			placeholder="Días"
+																			placeholder="Seleccionar días..."
 																			variant="borderless"
-																			className="w-full text-sm font-semibold text-slate-700"
+																			className="w-full text-sm font-semibold text-slate-700 bg-white md:bg-transparent rounded-md border border-slate-200 md:border-none p-1 md:p-0"
 																			options={[
 																				{ label: 'Lunes', value: 'Lunes' },
 																				{ label: 'Martes', value: 'Martes' },
@@ -457,30 +467,22 @@ export function Establishments() {
 																</div>
 
 																{/* Hours Range */}
-																<div className="flex items-center gap-2 flex-1">
+																<div className="flex items-center gap-2 flex-1 w-full md:w-auto">
 																	<Form.Item
 																		{...restField}
 																		name={[name, 'hours']}
 																		rules={[{ required: true, message: 'Horario' }]}
-																		className="m-0 w-full max-w-[280px]"
+																		className="m-0 w-full md:max-w-[280px]"
 																	>
 																		<TimePicker.RangePicker
 																			use12Hours
 																			format="hh:mm A"
 																			variant="borderless"
 																			separator={<span className="text-slate-400 text-xs px-2">a</span>}
-																			className="w-full bg-white border border-slate-200 rounded-md py-1 px-3 text-sm shadow-sm"
+																			className="w-full bg-white border border-slate-200 rounded-md py-2 md:py-1 px-3 text-sm shadow-sm"
 																		/>
 																	</Form.Item>
 																</div>
-
-																{/* Delete Button */}
-																<Button
-																	type="text"
-																	icon={<DeleteOutlined className="text-slate-400 hover:text-red-500" />}
-																	onClick={() => remove(name)}
-																	className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-red-50"
-																/>
 															</div>
 														))}
 
@@ -518,8 +520,8 @@ export function Establishments() {
 												</Button>
 											</div>
 
-											{/* Table Header */}
-											<div className="grid grid-cols-12 gap-4 pb-3 mb-2 px-2 text-[11px] uppercase tracking-wider font-bold text-slate-500 border-b border-slate-100">
+											{/* Table Header (Desktop only) */}
+											<div className="hidden md:grid grid-cols-12 gap-4 pb-3 mb-2 px-2 text-[11px] uppercase tracking-wider font-bold text-slate-500 border-b border-slate-100">
 												<div className="col-span-3">Plataforma</div>
 												<div className="col-span-4">Enlace / Perfil</div>
 												<div className="col-span-4">Nombre a mostrar</div>
@@ -528,10 +530,22 @@ export function Establishments() {
 
 											<Form.List name="socialNetworks">
 												{(fields, { remove }) => (
-													<div className="flex flex-col">
+													<div className="flex flex-col gap-4 md:gap-0">
 														{fields.map(({ key, name, ...restField }) => (
-															<div key={key} className="grid grid-cols-12 gap-4 items-center py-2 px-2 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors rounded-lg">
-																<div className="col-span-3">
+															<div key={key} className="flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-4 md:items-center py-4 md:py-2 px-4 md:px-2 rounded-xl border border-slate-200 md:border-b md:border-x-0 md:border-t-0 md:border-slate-50 hover:bg-slate-50 last:border-0 transition-colors bg-white relative">
+
+																{/* Delete Button (Mobile: top right, Desktop: relative end) */}
+																<div className="absolute top-2 right-2 md:relative md:col-span-1 md:flex md:justify-center md:order-last">
+																	<Button
+																		type="text"
+																		icon={<DeleteOutlined className="text-slate-400 hover:text-red-500" />}
+																		onClick={() => remove(name)}
+																		className="w-8 h-8 rounded-md hover:bg-red-50 flex items-center justify-center"
+																	/>
+																</div>
+
+																<div className="md:col-span-3 pt-4 md:pt-0">
+																	<div className="text-xs font-semibold text-slate-500 mb-1 md:hidden">Plataforma</div>
 																	<Form.Item
 																		{...restField}
 																		name={[name, 'platform']}
@@ -541,7 +555,7 @@ export function Establishments() {
 																		<Select
 																			variant="borderless"
 																			placeholder="Seleccionar"
-																			className="w-full font-semibold text-slate-800 text-sm"
+																			className="w-full font-semibold text-slate-800 text-sm bg-slate-50 md:bg-transparent rounded-md border border-slate-200 md:border-none p-1 md:p-0"
 																			options={[
 																				{ label: 'Instagram', value: 'instagram' },
 																				{ label: 'Facebook', value: 'facebook' },
@@ -552,7 +566,8 @@ export function Establishments() {
 																		/>
 																	</Form.Item>
 																</div>
-																<div className="col-span-4 text-sm">
+																<div className="md:col-span-4 text-sm">
+																	<div className="text-xs font-semibold text-slate-500 mb-1 md:hidden">URL o Entonación</div>
 																	<Form.Item
 																		{...restField}
 																		name={[name, 'link']}
@@ -562,7 +577,7 @@ export function Establishments() {
 																		<Input
 																			variant="borderless"
 																			placeholder="instagram.com/miperfil"
-																			className="w-full text-slate-600 px-0"
+																			className="w-full text-slate-600 px-3 md:px-0 py-2 md:py-0 bg-slate-50 md:bg-transparent rounded-md border border-slate-200 md:border-none"
 																			onChange={(e) => {
 																				const val = e.target.value;
 																				const platform = form.getFieldValue(['socialNetworks', name, 'platform']);
@@ -581,22 +596,15 @@ export function Establishments() {
 																		/>
 																	</Form.Item>
 																</div>
-																<div className="col-span-4 text-sm font-semibold">
+																<div className="md:col-span-4 text-sm font-semibold">
+																	<div className="text-xs font-semibold text-slate-500 mb-1 md:hidden">Nombre a mostrar</div>
 																	<Form.Item
 																		{...restField}
 																		name={[name, 'displayName']}
 																		className="m-0"
 																	>
-																		<Input variant="borderless" placeholder="@miperfil" className="w-full text-slate-800 px-0" />
+																		<Input variant="borderless" placeholder="@miperfil" className="w-full text-slate-800 px-3 md:px-0 py-2 md:py-0 bg-slate-50 md:bg-transparent rounded-md border border-slate-200 md:border-none" />
 																	</Form.Item>
-																</div>
-																<div className="col-span-1 flex justify-center">
-																	<Button
-																		type="text"
-																		icon={<DeleteOutlined className="text-slate-400 hover:text-red-500" />}
-																		onClick={() => remove(name)}
-																		className="w-8 h-8 rounded-md hover:bg-red-50 flex items-center justify-center"
-																	/>
 																</div>
 															</div>
 														))}
