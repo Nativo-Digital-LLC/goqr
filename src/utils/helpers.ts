@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs';
-import { UploadFile } from 'antd';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { ModalName } from '../types/Modals';
@@ -170,14 +169,22 @@ export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt 
 
 export function maxFileSizeRule() {
 	return {
-		validator(_: unknown, value: { file: UploadFile }) {
+		validator(_: unknown, value: any) {
 			const maxFileSizeInMb = 30;
 			const maxFileSize = maxFileSizeInMb * 1024 * 1024;
-			if (!value?.file?.size) {
+
+			let file: any = null;
+			if (Array.isArray(value) && value.length > 0) {
+				file = value[0];
+			} else if (value && value.file) {
+				file = value.file;
+			}
+
+			if (!file || !file.size) {
 				return Promise.resolve();
 			}
 
-			if (value.file.size <= maxFileSize) {
+			if (file.size <= maxFileSize) {
 				return Promise.resolve();
 			}
 

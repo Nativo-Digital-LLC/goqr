@@ -55,6 +55,39 @@ export function Establishments() {
 	const [save, saving, error] = useSaveEstablishment();
 	useErrorHandler(error);
 
+	// Watch logo and banner fields to show previews
+	const logoFileList = Form.useWatch("logo", form);
+	const bannerFileList = Form.useWatch("banner", form);
+
+	const [logoPreview, setLogoPreview] = useState<string | null>(null);
+	const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (logoFileList && logoFileList.length > 0) {
+			const file = logoFileList[0].originFileObj || logoFileList[0];
+			if (file instanceof File) {
+				const url = URL.createObjectURL(file);
+				setLogoPreview(url);
+				return () => URL.revokeObjectURL(url);
+			}
+		} else {
+			setLogoPreview(null);
+		}
+	}, [logoFileList]);
+
+	useEffect(() => {
+		if (bannerFileList && bannerFileList.length > 0) {
+			const file = bannerFileList[0].originFileObj || bannerFileList[0];
+			if (file instanceof File) {
+				const url = URL.createObjectURL(file);
+				setBannerPreview(url);
+				return () => URL.revokeObjectURL(url);
+			}
+		} else {
+			setBannerPreview(null);
+		}
+	}, [bannerFileList]);
+
 	useEffect(() => {
 		form.resetFields();
 
@@ -135,8 +168,8 @@ export function Establishments() {
 											requiresTaxReceipt: data.requiresTaxReceipt || false,
 											rnc: data.rnc || null,
 											companyName: data.companyName || null,
-											logo: data.logo?.file || null,
-											banner: data.banner?.file || null,
+											logo: (data.logo && data.logo.length > 0) ? (data.logo[0].originFileObj || data.logo[0]) : null,
+											banner: (data.banner && data.banner.length > 0) ? (data.banner[0].originFileObj || data.banner[0]) : null,
 											paymentMethod: data.paymentMethod,
 											paymentFrequency: data.paymentFrequency,
 											schedules: data.schedules?.map((s: any) => ({
@@ -175,14 +208,33 @@ export function Establishments() {
 											<div className="relative w-full h-48 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden group">
 												{/* Banner Image / Upload */}
 												<div className="w-full h-full bg-slate-200 flex items-center justify-center relative">
-													{establishment?.bannerUrl ? (
-														<img src={establishment.bannerUrl} alt="Banner" className="w-full h-full object-cover" />
+													{bannerPreview || establishment?.bannerUrl ? (
+														<img src={bannerPreview || establishment?.bannerUrl || ''} alt="Banner" className="w-full h-full object-cover" />
 													) : (
 														<span className="text-slate-400">Sin banner</span>
 													)}
 													{/* Upload Banner Button Overlay */}
 													<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-														<Form.Item name="banner" rules={[maxFileSizeRule]} valuePropName="fileList" className="m-0" getValueFromEvent={(e) => { if (Array.isArray(e)) return e; return e?.fileList; }}>
+														<Form.Item
+															name="banner"
+															rules={[
+																maxFileSizeRule,
+																{
+																	validator: (_, value) => {
+																		if (value && value[0]) {
+																			const file = value[0].originFileObj || value[0];
+																			if (file.type === 'image/webp') {
+																				return Promise.reject('No se permiten archivos WebP');
+																			}
+																		}
+																		return Promise.resolve();
+																	}
+																}
+															]}
+															valuePropName="fileList"
+															className="m-0"
+															getValueFromEvent={(e) => { if (Array.isArray(e)) return e; return e?.fileList; }}
+														>
 															<Upload accept="image/png, image/jpeg, image/jpg" multiple={false} beforeUpload={() => false} maxCount={1} showUploadList={false}>
 																<Button type="primary" icon={<FileImageOutlined />} className="bg-primary border-none shadow-md">Cambiar Banner</Button>
 															</Upload>
@@ -194,17 +246,43 @@ export function Establishments() {
 												<div className="absolute bottom-4 left-6 z-10">
 													<div className="w-24 h-24 rounded-xl bg-white p-1 shadow-md border border-slate-200 overflow-hidden relative group/logo">
 														<div className="w-full h-full rounded-lg bg-orange-200/50 flex items-center justify-center overflow-hidden">
-															{establishment?.logoUrl ? (
-																<img src={establishment.logoUrl} alt="Logo" className="w-full h-full object-cover" />
+															{logoPreview || establishment?.logoUrl ? (
+																<img src={logoPreview || establishment?.logoUrl || ''} alt="Logo" className="w-full h-full object-cover" />
 															) : (
 																<span className="text-primary font-bold text-xs">Sin logo</span>
 															)}
 														</div>
 														{/* Upload Logo overlay */}
-														<div className="absolute inset-0 bg-black/40 opacity-0 group-hover/logo:opacity-100 transition-opacity flex items-center justify-center rounded-xl cursor-pointer">
-															<Form.Item name="logo" rules={[maxFileSizeRule]} valuePropName="fileList" className="m-0 absolute inset-0 z-20 w-full h-full opacity-0" getValueFromEvent={(e) => { if (Array.isArray(e)) return e; return e?.fileList; }}>
-																<Upload accept="image/png, image/jpeg, image/jpg" multiple={false} beforeUpload={() => false} maxCount={1} showUploadList={false}>
-																	<button className="w-full h-full" type="button" />
+														<div className="absolute inset-0 bg-black/40 opacity-0 group-hover/logo:opacity-100 transition-opacity flex items-center justify-center rounded-xl cursor-pointer overflow-hidden">
+															<Form.Item
+																name="logo"
+																rules={[
+																	maxFileSizeRule,
+																	{
+																		validator: (_, value) => {
+																			if (value && value[0]) {
+																				const file = value[0].originFileObj || value[0];
+																				if (file.type === 'image/webp') {
+																					return Promise.reject('No se permiten archivos WebP');
+																				}
+																			}
+																			return Promise.resolve();
+																		}
+																	}
+																]}
+																valuePropName="fileList"
+																className="m-0 absolute inset-0 z-20 w-full h-full opacity-0"
+																getValueFromEvent={(e) => { if (Array.isArray(e)) return e; return e?.fileList; }}
+															>
+																<Upload
+																	className="w-full h-full"
+																	accept="image/png, image/jpeg, image/jpg"
+																	multiple={false}
+																	beforeUpload={() => false}
+																	maxCount={1}
+																	showUploadList={false}
+																>
+																	<div className="w-24 h-24" />
 																</Upload>
 															</Form.Item>
 															<FileImageOutlined className="text-white text-xl z-10 pointer-events-none" />
