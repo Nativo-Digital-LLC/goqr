@@ -26,11 +26,13 @@ export async function createAccount(name: string, email: string, password: strin
 	await sendEmailVerification(user);
 
 	// Registrar como migrado para evitar el check de Appwrite
-	const migrationDocRef = doc(db, 'migratedUsers', email.toLowerCase());
+	const migrationDocRef = doc(db, 'migrated-users', email.toLowerCase());
 	await setDoc(migrationDocRef, {
 		migratedAt: new Date().toISOString(),
 		email: email.toLowerCase()
 	});
+
+	return user;
 }
 
 export async function login(email: string, password: string) {
@@ -69,7 +71,6 @@ export async function login(email: string, password: string) {
 	});
 
 	return user;
-
 }
 
 export async function authWithGoogle() {

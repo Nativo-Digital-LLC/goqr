@@ -38,12 +38,8 @@ export const useRegister = (): UseRegisterType => {
 		try {
 			setLoading(true);
 			setError(null);
-			await createAccount(
+			const firebaseUser = await createAccount(
 				name,
-				email,
-				password
-			);
-			const firebaseUser = await login(
 				email,
 				password
 			);
@@ -57,7 +53,6 @@ export const useRegister = (): UseRegisterType => {
 					photoURL: firebaseUser.photoURL
 				}
 			});
-			await sendVerificationEmail();
 			onDone?.();
 		} catch (error) {
 			setError(error as FirebaseError)
