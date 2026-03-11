@@ -11,6 +11,8 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
+import { confirmPasswordReset } from 'firebase/auth';
+import axios from 'axios';
 
 import { auth, googleProvider, appleProvider, db, functions } from '../utils/firebase';
 import { SessionProps } from '../types/Session';
@@ -31,6 +33,9 @@ export async function createAccount(name: string, email: string, password: strin
 		migratedAt: new Date().toISOString(),
 		email: email.toLowerCase()
 	});
+
+	const sendWelcomeEmail = httpsCallable(functions, 'sendWelcomeEmail');
+	await sendWelcomeEmail({ email });
 
 	return user;
 }
@@ -123,9 +128,6 @@ export async function getCurrentSession(): Promise<SessionProps | null> {
 export async function sendResetPasswordEmail(email: string) {
 	await sendPasswordResetEmail(auth, email);
 }
-
-import { confirmPasswordReset } from 'firebase/auth';
-import axios from 'axios';
 
 export async function resetPasswordWithSecret(oobCode: string, newPassword: string) {
 	await confirmPasswordReset(auth, oobCode, newPassword);
