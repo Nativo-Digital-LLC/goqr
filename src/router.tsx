@@ -23,6 +23,8 @@ import EstablishmentPage from "./pages/panel/establishment/EstablishmentPage";
 import SoonPage from "./pages/panel/SoonPage";
 import BillingPage from "./pages/panel/BillingPage";
 import TransferPage from "./pages/panel/billing/TransferPage";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminTransfersPage from "./pages/admin/AdminTransfersPage";
 import CheckoutResultPage from "./pages/checkout/CheckoutResultPage";
 
 const router = createBrowserRouter([
@@ -86,6 +88,15 @@ const router = createBrowserRouter([
 			{ path: "billing/transfer", element: <TransferPage /> },
 			{ path: "menus", element: <Navigate to="/dashboard" replace /> },
 			{ path: "invoices", element: <Navigate to="/dashboard/billing" replace /> },
+		],
+	},
+	{
+		path: "/admin",
+		element: <AdminLayout />,
+		children: [
+			{ index: true, element: <Navigate to="/admin/transfers" replace /> },
+			{ path: "transfers", element: <AdminTransfersPage /> },
+			{ path: "clients", element: <p>Muy pronto.</p> },
 		],
 	},
 	{
