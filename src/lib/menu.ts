@@ -75,9 +75,17 @@ export function openStatus(
 	if (!ranges.length) return null;
 
 	const t = ((now.getDay() + 6) % 7) * DAY + now.getHours() * 60 + now.getMinutes();
-	// La semana es circular: un rango del domingo noche puede terminar el lunes.
-	const current = ranges.find((r) => (t >= r.start && t < r.end) || (t + WEEK >= r.start && t + WEEK < r.end));
-	if (current) return { open: true, until: current.closeLabel };
+	// La semana es circular: se copian los rangos una semana antes y después.
+	const all = [-WEEK, 0, WEEK].flatMap((k) => ranges.map((r) => ({ ...r, start: r.start + k, end: r.end + k })));
+	let current = all.find((r) => t >= r.start && t < r.end);
+	if (current) {
+		// Encadena rangos que se solapan o se tocan hasta el final del período abierto continuo.
+		for (let next = current; next; ) {
+			current = next;
+			next = all.find((r) => r.start <= current!.end && r.end > current!.end) as typeof current;
+		}
+		return { open: true, until: current.closeLabel };
+	}
 
 	const next = ranges.reduce((best, r) => {
 		const wait = (r.start - t + WEEK) % WEEK;

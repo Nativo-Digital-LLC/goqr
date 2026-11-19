@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	descriptionLines, formatDays, formatPrice, isVisibleProduct, localized, menuColor,
-	openStatus, parseDays, parseHours, socialHref, whatsappHref,
+	openStatus, mapsEmbedSrc, reviewHref, telHref, parseDays, parseHours, socialHref, whatsappHref,
 } from "./menu";
 import { readableOn } from "./color";
 import { ProductStatus } from "../types/Product";
@@ -57,6 +57,14 @@ describe("menu", () => {
 		expect(openStatus(rows, wed(19))).toEqual({ open: true, until: "10:00 PM" });
 		expect(openStatus(rows, wed(14))).toEqual({ open: false, until: "6:00 PM" });
 	});
+	it("openStatus une rangos solapados, contiguos y de medianoche", () => {
+		const over = [{ days: "Miércoles", hours: "8:00 AM - 2:00 PM" }, { days: "Miércoles", hours: "12:00 PM - 10:00 PM" }];
+		expect(openStatus(over, wed(13))).toEqual({ open: true, until: "10:00 PM" });
+		const touch = [{ days: "Miércoles", hours: "8:00 AM - 2:00 PM" }, { days: "Miércoles", hours: "2:00 PM - 9:00 PM" }];
+		expect(openStatus(touch, wed(10))).toEqual({ open: true, until: "9:00 PM" });
+		const night = [{ days: "Martes", hours: "8:00 PM - 2:00 AM" }, { days: "Miércoles", hours: "1:00 AM - 5:00 AM" }];
+		expect(openStatus(night, wed(0, 30))).toEqual({ open: true, until: "5:00 AM" });
+	});
 	it("openStatus sin datos legibles", () => {
 		expect(openStatus(undefined, wed(12))).toBeNull();
 		expect(openStatus([{ days: "Lunes", hours: "cerrado" }], wed(12))).toBeNull();
@@ -76,6 +84,11 @@ describe("menu", () => {
 		expect(socialHref({ platform: "instagram", link: "" })).toBeNull();
 		expect(socialHref({ platform: "instagram", link: "@goqr" })).toBe("https://instagram.com/goqr");
 		expect(socialHref({ platform: "website", link: "goqr.com.do" })).toBe("https://goqr.com.do");
+	});
+	it("telHref, reviewHref y mapsEmbedSrc", () => {
+		expect(telHref("809-555-1234")).toBe("tel:809-555-1234");
+		expect(reviewHref("abc")).toBe("https://search.google.com/local/writereview?placeid=abc");
+		expect(mapsEmbedSrc("Calle 1 #2, Santo Domingo")).toBe("https://www.google.com/maps?q=Calle%201%20%232%2C%20Santo%20Domingo&output=embed");
 	});
 	it("descriptionLines", () => {
 		expect(descriptionLines("Hola\n*Abierto los lunes*")).toEqual([
