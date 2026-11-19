@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Timestamp } from 'firebase/firestore';
-import { billingView, billsFor, billStatus, formatMoney, statusLabel, transferReference } from './billing';
+import { billingView, billsFor, billStatus, formatMoney, statusLabel, toDate, transferReference } from './billing';
 import { EstablishmentProps } from '../types/Establishment';
 
 const est = (billing?: EstablishmentProps['billing']) => ({ billing }) as EstablishmentProps;
@@ -61,5 +61,14 @@ describe('billsFor', () => {
 	it('incluye las del establecimiento y las viejas sin establecimiento', () => {
 		const r = billsFor([{ establishmentId: 'a' }, { establishmentId: 'b' }, {}], 'a');
 		expect(r).toEqual([{ establishmentId: 'a' }, {}]);
+	});
+});
+
+describe('toDate', () => {
+	it('acepta Timestamp, Date y la cadena ISO que devuelve adminListClients', () => {
+		const iso = '2026-12-01T00:00:00.000Z';
+		expect(toDate(ts(iso)).toISOString()).toBe(iso);
+		expect(toDate(new Date(iso)).toISOString()).toBe(iso);
+		expect(toDate(iso).toISOString()).toBe(iso);
 	});
 });

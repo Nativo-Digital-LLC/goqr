@@ -14,7 +14,7 @@ import { ConfirmDialog } from "../panel/menu/ConfirmDialog";
 
 type Action = "pause" | "reactivate" | "extendTrial" | "markPaid";
 const COPY: Record<Action, { label: string; title: string; body: string }> = {
-	pause: { label: "Pausar", title: "¿Pausar este menú?", body: "El menú dejará de estar visible para sus clientes hasta que lo reactives." },
+	pause: { label: "Pausar", title: "¿Pausar este menú?", body: "El menú dejará de estar visible para sus clientes hasta que lo reactives. Esto solo oculta el menú; si paga con tarjeta, cancela también su suscripción en Stripe." },
 	reactivate: { label: "Reactivar", title: "¿Reactivar este menú?", body: "El menú vuelve a estar visible de inmediato." },
 	extendTrial: { label: "Extender prueba", title: "¿Extender la prueba 7 días?", body: "Se sumarán 7 días al final de la prueba." },
 	markPaid: { label: "Marcar pagado", title: "Marcar como pagado", body: "Elige el plan que pagó el cliente. Se activará su menú." },

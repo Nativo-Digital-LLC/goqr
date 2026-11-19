@@ -11,9 +11,9 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/establishments/$(estId)).data.userId == request.auth.uid;
     }
 
-    // Lectura pública de todo excepto `users`, `transfers` y `stripe-events`. Las reglas se suman (OR), por eso el comodín los excluye.
+    // Lectura pública de todo excepto `users`, `transfers`, `stripe-events` y `bills`. Las reglas se suman (OR), por eso el comodín los excluye.
     match /{collection}/{document=**} {
-      allow read: if !(collection in ['users', 'transfers', 'stripe-events']);
+      allow read: if !(collection in ['users', 'transfers', 'stripe-events', 'bills']);
     }
 
     match /establishments/{establishmentId} {
@@ -54,6 +54,12 @@ service cloud.firestore {
         && request.resource.data.status == 'pending'
         && !('reviewedBy' in request.resource.data);
       allow update, delete: if false;
+    }
+
+    // Llevan enlaces a facturas de Stripe: solo el dueño o un admin. Solo Functions escribe.
+    match /bills/{id} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || request.auth.token.admin == true);
+      allow write: if false;
     }
 
     match /stripe-events/{id} {

@@ -32,6 +32,10 @@ describe('clientMetrics', () => {
 	it('vencen esta semana usa trialEndsAt en prueba', () => {
 		expect(clientMetrics(list, now).dueThisWeek).toBe(2); // a y t; pausado y cancelado con fecha próxima no cuentan
 	});
+	it('vencen esta semana con fechas ISO (forma real de adminListClients)', () => {
+		const wire = [c('w', b({ status: 'active', plan: 'monthly', currentPeriodEnd: days(3).toISOString() })), c('w2', b({ status: 'trialing', trialEndsAt: days(4).toISOString() }))];
+		expect(clientMetrics(wire, now).dueThisWeek).toBe(2);
+	});
 	it('no se rompe con lista vacía', () => {
 		expect(clientMetrics([], now)).toEqual({ active: 0, trialing: 0, mrrDop: 0, dueThisWeek: 0 });
 	});

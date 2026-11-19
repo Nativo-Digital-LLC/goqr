@@ -6,7 +6,7 @@ import {
 	initializeTestEnvironment,
 	RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 let env: RulesTestEnvironment;
 
@@ -200,5 +200,38 @@ describe('transfers y stripe-events', () => {
 	it('stripe-events no se lee', async () => {
 		await assertFails(getDoc(doc(owner(), 'stripe-events/e1')));
 		await assertFails(getDoc(doc(anon(), 'stripe-events/e1')));
+	});
+});
+
+describe('bills', () => {
+	const anon = () => env.unauthenticatedContext().firestore();
+	const admin = () => env.authenticatedContext('staff', { admin: true }).firestore();
+
+	beforeEach(async () => {
+		await env.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), 'bills/b1'), { userId: 'owner', amount: 300, hostedInvoiceUrl: 'https://h' });
+		});
+	});
+
+	it('dueño lee la suya, también con la consulta por userId de la app', async () => {
+		await assertSucceeds(getDoc(doc(owner(), 'bills/b1')));
+		await assertSucceeds(getDocs(query(collection(owner(), 'bills'), where('userId', '==', 'owner'))));
+	});
+
+	it('otro usuario y anónimo no leen; nadie lista todo', async () => {
+		await assertFails(getDoc(doc(other(), 'bills/b1')));
+		await assertFails(getDoc(doc(anon(), 'bills/b1')));
+		await assertFails(getDocs(collection(anon(), 'bills')));
+		await assertFails(getDocs(collection(other(), 'bills')));
+	});
+
+	it('admin lee', async () => {
+		await assertSucceeds(getDoc(doc(admin(), 'bills/b1')));
+	});
+
+	it('el cliente no escribe', async () => {
+		await assertFails(setDoc(doc(owner(), 'bills/b2'), { userId: 'owner' }));
+		await assertFails(updateDoc(doc(owner(), 'bills/b1'), { amount: 1 }));
+		await assertFails(deleteDoc(doc(owner(), 'bills/b1')));
 	});
 });
