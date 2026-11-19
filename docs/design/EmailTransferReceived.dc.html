@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Correo · Comprobante recibido</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#C2381F}a:hover{color:#A82E18}
+</style>
+</helmet>
+<div style="width: 600px; min-height: 640px; box-sizing: border-box; background: #F5EFE9; font-family: Arial, Helvetica, sans-serif; color: #2A1410; padding: 24px 24px 32px; display: flex; flex-direction: column; gap: 16px">
+  <div style="font-size: 12px; line-height: 1.5; color: #6B5A54; display: flex; flex-direction: column; gap: 2px"><span><strong>Asunto:</strong> Recibimos tu comprobante de transferencia</span><span><strong>Vista previa:</strong> Lo revisamos en menos de 24 horas.</span></div>
+  <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+    <div style="background: #FFF3E6; padding: 20px 32px; display: flex; align-items: center; gap: 10px"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#C2381F"></circle><rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#FFF3E6" stroke-width="5"></rect><circle cx="43" cy="43" r="6" fill="#FFC53D"></circle></svg><span style="font-size: 26px; font-weight: 700; letter-spacing: -0.04em; color: #2A1410">goqr</span></div>
+    <div style="padding: 32px; display: flex; flex-direction: column; gap: 20px">
+<div style="align-self: flex-start; display: flex; gap: 8px; align-items: center; background: #E8EEFD; color: #1D4ED8; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 999px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg><span>En revisión</span></div>
+<h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 26px; line-height: 1.25; font-weight: 700; color: #2A1410">Recibimos tu comprobante</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #2A1410">Gracias. Estamos verificando tu transferencia y te escribimos en menos de 24 horas.</p>
+<div style="display: flex; flex-direction: column"><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Plan</span><span style="font-weight: 700; color: #2A1410; text-align: right">Anual</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Monto</span><span style="font-weight: 700; color: #2A1410; text-align: right">RD$2,520.00</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Banco de destino</span><span style="font-weight: 700; color: #2A1410; text-align: right">[BANCO]</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Enviado</span><span style="font-weight: 700; color: #2A1410; text-align: right">[FECHA]</span></div></div>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #2A1410">Mientras tanto, tu menú sigue activo.</p>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6B5A54">— El equipo de GoQR</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; line-height: 1.6; color: #766660; text-align: center; padding: 0 24px">GoQR · Santo Domingo, República Dominicana · <a href="#" style="color: #766660">contacto@goqr.com.do</a> · [YOUR WHATSAPP] · <a href="#" style="color: #766660">Preferencias de correo</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":600,"height":640}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>GoQR Admin · Transferencias</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2A1410}a:hover{color:#6B5A54}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FAF7F3; color: #2A1410; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="background: #2A1410; color: #FFF3E6; padding: 0 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px">
+    <div style="display: flex; align-items: center; gap: 28px; flex-wrap: wrap">
+      <span style="display: flex; align-items: center; gap: 10px"><svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#C2381F"></circle><rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#FFF3E6" stroke-width="5"></rect><circle cx="43" cy="43" r="6" fill="#FFC53D"></circle></svg><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.03em">GoQR Admin</span></span>
+      <nav aria-label="Admin" style="display: flex; gap: 4px">
+        <a href="AdminTransfers.dc.html" aria-current="page" style="color: #2A1410; background: #FFF3E6; text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 10px; display: flex; align-items: center; gap: 8px">Transferencias <span style="background: #C2381F; color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px">[N]</span></a>
+        <a href="AdminClients.dc.html" style="color: #FFF3E6; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 10px">Clientes</a>
+        <a href="#" style="color: #FFF3E6; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 10px">Correos</a>
+      </nav>
+    </div>
+    <span style="font-size: 14px; color: #E8D9CC">[ADMIN]</span>
+  </header>
+
+  <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 24px; padding: 28px 32px; align-items: flex-start">
+    <section aria-labelledby="cola" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; display: flex; flex-direction: column">
+      <div style="padding: 20px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+        <h1 id="cola" style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 24px; font-weight: 700">Transferencias por revisar</h1>
+        <div style="display: flex; gap: 8px">
+          <button type="button" aria-pressed="true" style="height: 36px; padding: 0 14px; border: 0; border-radius: 10px; background: #2A1410; color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600">Pendientes</button>
+          <button type="button" aria-pressed="false" style="height: 36px; padding: 0 14px; border: 0; border-radius: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE4DC; font: inherit; font-size: 14px; font-weight: 600; color: #2A1410">Aprobadas</button>
+          <button type="button" aria-pressed="false" style="height: 36px; padding: 0 14px; border: 0; border-radius: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE4DC; font: inherit; font-size: 14px; font-weight: 600; color: #2A1410">Rechazadas</button>
+        </div>
+      </div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 820px; border-collapse: collapse; font-size: 14px">
+          <thead><tr style="text-align: left; color: #6B5A54; box-shadow: inset 0 -1px 0 #ECE4DC">
+            <th scope="col" style="padding: 12px 24px; font-weight: 600">Comprobante</th><th scope="col" style="padding: 12px; font-weight: 600">Cliente</th><th scope="col" style="padding: 12px; font-weight: 600">Establecimiento</th><th scope="col" style="padding: 12px; font-weight: 600">Plan</th><th scope="col" style="padding: 12px; font-weight: 600">Monto</th><th scope="col" style="padding: 12px; font-weight: 600">Fecha</th><th scope="col" style="padding: 12px 24px; font-weight: 600; text-align: right">Acciones</th>
+          </tr></thead>
+          <tbody>
+            <tr style="background: #F5EFE9; box-shadow: inset 3px 0 0 #2A1410, inset 0 -1px 0 #ECE4DC">
+              <td style="padding: 12px 24px"><div style="width: 44px; height: 56px; border-radius: 6px; background: #EBCDB5; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6E4A3E">IMG</div></td>
+              <td style="padding: 12px"><div style="font-weight: 600">[NOMBRE]</div><div style="font-size: 13px; color: #6B5A54">[CORREO]</div></td>
+              <td style="padding: 12px">La Roca Restaurant</td><td style="padding: 12px">Anual</td><td style="padding: 12px; font-weight: 600">RD$2,520</td><td style="padding: 12px">[FECHA]</td>
+              <td style="padding: 12px 24px"><div style="display: flex; justify-content: flex-end; gap: 8px"><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #2A1410; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600">Aprobar</button><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #9F1239; color: #9F1239; font: inherit; font-size: 13px; font-weight: 600">Rechazar</button></div></td>
+            </tr>
+            <tr style="box-shadow: inset 0 -1px 0 #ECE4DC">
+              <td style="padding: 12px 24px"><div style="width: 44px; height: 56px; border-radius: 6px; background: #EBCDB5; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6E4A3E">PDF</div></td>
+              <td style="padding: 12px"><div style="font-weight: 600">[NOMBRE]</div><div style="font-size: 13px; color: #6B5A54">[CORREO]</div></td>
+              <td style="padding: 12px">Café Colonial</td><td style="padding: 12px">Mensual</td><td style="padding: 12px; font-weight: 600">RD$300</td><td style="padding: 12px">[FECHA]</td>
+              <td style="padding: 12px 24px"><div style="display: flex; justify-content: flex-end; gap: 8px"><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #2A1410; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600">Aprobar</button><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #9F1239; color: #9F1239; font: inherit; font-size: 13px; font-weight: 600">Rechazar</button></div></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 24px"><div style="width: 44px; height: 56px; border-radius: 6px; background: #EBCDB5; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6E4A3E">IMG</div></td>
+              <td style="padding: 12px"><div style="font-weight: 600">[NOMBRE]</div><div style="font-size: 13px; color: #6B5A54">[CORREO]</div></td>
+              <td style="padding: 12px">[ESTABLECIMIENTO]</td><td style="padding: 12px">De por vida</td><td style="padding: 12px; font-weight: 600">US$[MONTO USD]</td><td style="padding: 12px">[FECHA]</td>
+              <td style="padding: 12px 24px"><div style="display: flex; justify-content: flex-end; gap: 8px"><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #2A1410; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600">Aprobar</button><button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #9F1239; color: #9F1239; font: inherit; font-size: 13px; font-weight: 600">Rechazar</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside aria-labelledby="detalle" style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+      <div style="display: flex; justify-content: space-between; align-items: center"><h2 id="detalle" style="margin: 0; font-size: 18px; font-weight: 700">La Roca Restaurant</h2><span style="font-size: 12px; font-weight: 700; color: #1D4ED8; background: #E8EEFD; padding: 4px 10px; border-radius: 999px">En revisión</span></div>
+      <div style="height: 320px; border-radius: 12px; background: #EBCDB5; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #6E4A3E"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L5 21"></path></svg><span style="font-size: 13px">Vista previa del comprobante</span></div>
+      <a href="#" style="font-size: 14px; font-weight: 600">Abrir en tamaño completo</a>
+      <dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-size: 14px">
+        <div><dt style="color: #6B5A54">Código</dt><dd style="margin: 0; font-weight: 600">GOQR-[CÓDIGO]</dd></div>
+        <div><dt style="color: #6B5A54">Cuenta destino</dt><dd style="margin: 0; font-weight: 600">[BANCO] · RD$</dd></div>
+        <div><dt style="color: #6B5A54">Monto declarado</dt><dd style="margin: 0; font-weight: 600">RD$2,520</dd></div>
+        <div><dt style="color: #6B5A54">Monto esperado</dt><dd style="margin: 0; font-weight: 600">RD$2,520</dd></div>
+        <div><dt style="color: #6B5A54">Fecha declarada</dt><dd style="margin: 0; font-weight: 600">[FECHA]</dd></div>
+        <div><dt style="color: #6B5A54">Plan</dt><dd style="margin: 0; font-weight: 600">Anual</dd></div>
+      </dl>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="nota" style="font-size: 14px; font-weight: 600">Nota interna</label><textarea id="nota" rows="3" placeholder="Ej.: verificado en estado de cuenta" style="border: 0; border-radius: 12px; box-shadow: inset 0 0 0 1px #E0D5CB; padding: 12px 14px; font: inherit; font-size: 14px; resize: vertical"></textarea></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="motivo" style="font-size: 14px; font-weight: 600">Motivo de rechazo (se envía al cliente)</label><select id="motivo" style="height: 44px; border: 0; border-radius: 12px; box-shadow: inset 0 0 0 1px #E0D5CB; padding: 0 12px; font: inherit; font-size: 14px; background: #FFFFFF; color: #2A1410"><option>Selecciona un motivo</option><option>El monto no coincide</option><option>No encontramos la transferencia</option><option>Comprobante ilegible</option><option>Otro</option></select></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <button type="button" style="flex: 1; height: 44px; border: 0; border-radius: 12px; background: #2A1410; color: #FFFFFF; font: inherit; font-size: 15px; font-weight: 600">Aprobar y activar plan</button>
+        <button type="button" style="flex: 1; height: 44px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #9F1239; color: #9F1239; font: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>Rechazar con motivo</button>
+      </div>
+      <span style="font-size: 13px; color: #6B5A54">Al aprobar, el cliente recibe el correo “Transferencia aprobada” y su menú queda activo.</span>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

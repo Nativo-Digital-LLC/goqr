@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Correo · Pago recibido</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#C2381F}a:hover{color:#A82E18}
+</style>
+</helmet>
+<div style="width: 600px; min-height: 800px; box-sizing: border-box; background: #F5EFE9; font-family: Arial, Helvetica, sans-serif; color: #2A1410; padding: 24px 24px 32px; display: flex; flex-direction: column; gap: 16px">
+  <div style="font-size: 12px; line-height: 1.5; color: #6B5A54; display: flex; flex-direction: column; gap: 2px"><span><strong>Asunto:</strong> Recibo de GoQR · Factura [NÚMERO]</span><span><strong>Vista previa:</strong> Gracias por tu pago. Tu menú sigue activo.</span></div>
+  <div style="background: #FFFFFF; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column">
+    <div style="background: #FFF3E6; padding: 20px 32px; display: flex; align-items: center; gap: 10px"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#C2381F"></circle><rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#FFF3E6" stroke-width="5"></rect><circle cx="43" cy="43" r="6" fill="#FFC53D"></circle></svg><span style="font-size: 26px; font-weight: 700; letter-spacing: -0.04em; color: #2A1410">goqr</span></div>
+    <div style="padding: 32px; display: flex; flex-direction: column; gap: 20px">
+<div style="align-self: flex-start; display: flex; gap: 8px; align-items: center; background: #E7F5EC; color: #15803D; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 999px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg><span>Pago recibido</span></div>
+<h1 style="margin: 0; font-family: Arial, Helvetica, sans-serif; font-size: 26px; line-height: 1.25; font-weight: 700; color: #2A1410">¡Gracias! Recibimos tu pago</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; color: #2A1410">Tu menú de <strong>[ESTABLECIMIENTO]</strong> sigue activo. Aquí está tu recibo:</p>
+<div style="display: flex; flex-direction: column"><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Factura</span><span style="font-weight: 700; color: #2A1410; text-align: right">[NÚMERO]</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Plan</span><span style="font-weight: 700; color: #2A1410; text-align: right">Anual</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Período</span><span style="font-weight: 700; color: #2A1410; text-align: right">[FECHA] – [FECHA]</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Método</span><span style="font-weight: 700; color: #2A1410; text-align: right">Visa terminada en [0000]</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Fecha de pago</span><span style="font-weight: 700; color: #2A1410; text-align: right">[FECHA]</span></div><div style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #ECE4DC; font-size: 14px"><span style="color: #6B5A54">Total (ITBIS incluido)</span><span style="font-weight: 700; color: #2A1410; text-align: right">RD$2,520.00</span></div></div>
+<div style="display: flex"><a href="#" style="display: inline-block; background: #C2381F; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 16px; padding: 14px 28px; border-radius: 12px">Ver factura</a></div>
+<p style="margin: 0; font-size: 13px; line-height: 1.6; color: #6B5A54">¿Necesitas comprobante fiscal (NCF)? Agrega tu RNC en Plan y pagos y lo incluimos en tus próximas facturas.</p>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6B5A54">— El equipo de GoQR</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; line-height: 1.6; color: #766660; text-align: center; padding: 0 24px">GoQR · Santo Domingo, República Dominicana · <a href="#" style="color: #766660">contacto@goqr.com.do</a> · [YOUR WHATSAPP] · <a href="#" style="color: #766660">Preferencias de correo</a></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":600,"height":800}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Landing GoQR móvil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#C2381F}a:hover{color:#A82E18}
+summary{cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 5000px; box-sizing: border-box; background: #FFF3E6; color: #2A1410; font-family: 'DM Sans', system-ui, sans-serif; overflow: hidden">
+
+  <header style="padding: 14px 20px; display: flex; align-items: center; justify-content: space-between">
+    <a href="#" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #2A1410">
+      <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#C2381F"></circle><rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#FFF3E6" stroke-width="5"></rect><circle cx="43" cy="43" r="6" fill="#FFC53D"></circle></svg>
+      <span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.04em">goqr</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 4px">
+      <a href="Login.dc.html" style="color: #2A1410; text-decoration: none; font-weight: 600; font-size: 15px; padding: 12px 10px">Ingresar</a>
+      <button aria-label="Abrir menú" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2A1410" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+    </div>
+  </header>
+
+  <section style="padding: 24px 20px 48px; display: flex; flex-direction: column; gap: 20px">
+    <span style="align-self: flex-start; font-size: 13px; font-weight: 700; background: #FFC53D; padding: 6px 12px; border-radius: 999px; transform: rotate(-3deg)">Hecho en RD</span>
+    <h1 style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.035em">Tu menú en el celular de cada cliente, con un solo QR.</h1>
+    <p style="margin: 0; font-size: 17px; line-height: 1.5; color: #4F302A">Créalo en minutos, cámbialo cuando quieras y deja de pagar imprenta cada vez que sube un precio.</p>
+    <a href="Register.dc.html" style="background: #C2381F; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 17px; padding: 17px; border-radius: 999px; text-align: center">Crea tu menú gratis</a>
+    <a href="MenuMobile.dc.html" style="color: #2A1410; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px; border-radius: 999px; box-shadow: inset 0 0 0 2px #2A1410; text-align: center">Ver menú de ejemplo</a>
+    <span style="font-size: 14px; color: #6E4A3E; text-align: center">30 días gratis · sin tarjeta · listo en 10 minutos</span>
+    <div style="display: flex; justify-content: center; position: relative; padding-top: 12px">
+      <div style="position: absolute; width: 300px; height: 300px; border-radius: 999px; background: #C2381F; top: 40px"></div>
+      <div style="position: relative; width: 250px; background: #2A1410; border-radius: 38px; padding: 8px; box-shadow: 0 24px 48px rgba(42,20,16,0.18)">
+        <div style="border-radius: 31px; overflow: hidden; background: #FFFFFF">
+          <div style="height: 110px; background: #D9A98A"></div>
+          <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px">
+            <strong style="font-size: 15px">La Roca Restaurant</strong>
+            <div style="display: flex; gap: 6px"><span style="background: #E86B2A; color: #2A1410; font-size: 11px; font-weight: 700; padding: 6px 10px; border-radius: 999px">Entradas</span><span style="font-size: 11px; padding: 6px 10px; border-radius: 999px; box-shadow: inset 0 0 0 1px #ECE4DC">Desayunos</span></div>
+            <div style="display: flex; gap: 10px; align-items: center"><div style="width: 56px; height: 56px; border-radius: 12px; background: #EBCDB5"></div><div style="font-size: 12px"><strong>Croquetas de Pollo</strong><div>$7</div></div></div>
+            <div style="display: flex; gap: 10px; align-items: center"><div style="width: 56px; height: 56px; border-radius: 12px; background: #EBCDB5"></div><div style="font-size: 12px"><strong>Pastelitos de Pollo</strong><div>$2</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: #FFFFFF; padding: 32px 20px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid #EBD3BC; border-bottom: 1px solid #EBD3BC">
+    <span style="font-size: 14px; font-weight: 600; color: #6E4A3E">Ya lo usan restaurantes en RD</span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <span style="height: 44px; border-radius: 12px; background: #F5EFE9; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #6E4A3E">[LOGO CLIENTE 1]</span>
+      <span style="height: 44px; border-radius: 12px; background: #F5EFE9; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #6E4A3E">[LOGO CLIENTE 2]</span>
+    </div>
+    <blockquote style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 20px; font-weight: 700; line-height: 1.25">"[TESTIMONIO REAL de un cliente actual]"</blockquote>
+    <span style="font-size: 13px; color: #6E4A3E">[Nombre] · [Restaurante]</span>
+  </section>
+
+  <section style="padding: 56px 20px; display: flex; flex-direction: column; gap: 20px">
+    <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #C2381F">Cómo funciona</span>
+    <h2 style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em">De cero a QR en la mesa, hoy mismo.</h2>
+    <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px">
+      <li style="background: #FFFFFF; border-radius: 24px; padding: 22px; display: flex; gap: 14px"><span style="flex: 0 0 40px; height: 40px; border-radius: 999px; background: #C2381F; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">1</span><div><h3 style="margin: 0 0 4px; font-size: 18px">Crea tu cuenta</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4F302A">Nombre del negocio, logo y color. Sin tarjeta.</p></div></li>
+      <li style="background: #FFFFFF; border-radius: 24px; padding: 22px; display: flex; gap: 14px"><span style="flex: 0 0 40px; height: 40px; border-radius: 999px; background: #C2381F; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">2</span><div><h3 style="margin: 0 0 4px; font-size: 18px">Sube tu menú</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4F302A">Categorías, platos, fotos y precios, desde el celular.</p></div></li>
+      <li style="background: #FFFFFF; border-radius: 24px; padding: 22px; display: flex; gap: 14px"><span style="flex: 0 0 40px; height: 40px; border-radius: 999px; background: #C2381F; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">3</span><div><h3 style="margin: 0 0 4px; font-size: 18px">Imprime tu QR</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #4F302A">Con tu marca. Ese QR no cambia nunca.</p></div></li>
+    </ol>
+  </section>
+
+  <section style="background: #2A1410; color: #FFF3E6; padding: 56px 20px; display: flex; flex-direction: column; gap: 16px">
+    <h2 style="margin: 0 0 8px; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em">Lo que te preguntas antes de cambiar el menú de papel.</h2>
+    <div style="background: #3A221C; border-radius: 22px; padding: 20px"><h3 style="margin: 0 0 6px; font-size: 17px">¿Y si suben los precios?</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #E8D3C4">Lo cambias en el panel y se ve al instante. Sin reimprimir.</p></div>
+    <div style="background: #3A221C; border-radius: 22px; padding: 20px"><h3 style="margin: 0 0 6px; font-size: 17px">¿Se verá como mi restaurante?</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #E8D3C4">Tu logo, tu color y tus fotos. GoQR casi ni se nota.</p></div>
+    <div style="background: #3A221C; border-radius: 22px; padding: 20px"><h3 style="margin: 0 0 6px; font-size: 17px">¿Y los turistas?</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #E8D3C4">Menú en inglés con un toque.</p></div>
+    <div style="background: #3A221C; border-radius: 22px; padding: 20px"><h3 style="margin: 0 0 6px; font-size: 17px">¿Qué platos miran más?</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #E8D3C4">Lo ves en tu panel y te llega un resumen por correo cada mes.</p></div>
+    <div style="background: #3A221C; border-radius: 22px; padding: 20px"><h3 style="margin: 0 0 6px; font-size: 17px">¿Tienen que bajar una app?</h3><p style="margin: 0; font-size: 15px; line-height: 1.5; color: #E8D3C4">No. Abre en el navegador de cualquier celular.</p></div>
+  </section>
+
+  <section style="background: #FFFFFF; padding: 56px 20px; display: flex; flex-direction: column; gap: 16px">
+    <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #C2381F">Precios</span>
+    <h2 style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em">Menos que una impresión de menús.</h2>
+    <p style="margin: 0 0 8px; font-size: 15px; color: #4F302A">30 días gratis, sin tarjeta. ITBIS incluido.</p>
+    <div style="border-radius: 24px; padding: 24px; background: #C2381F; color: #FFFFFF; display: flex; flex-direction: column; gap: 10px; position: relative">
+      <span style="align-self: flex-start; font-size: 12px; font-weight: 700; color: #2A1410; background: #FFC53D; padding: 5px 10px; border-radius: 999px">Ahorras 30%</span>
+      <strong style="font-size: 18px">Anual</strong>
+      <div><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 40px; font-weight: 800">RD$210</span><span style="color: #FFE3D6"> /mes</span></div>
+      <span style="font-size: 14px; color: #FFE3D6">RD$2,520 al año, en un solo pago.</span>
+    </div>
+    <div style="border-radius: 24px; padding: 24px; box-shadow: inset 0 0 0 2px #EBD3BC; display: flex; justify-content: space-between; align-items: baseline"><strong style="font-size: 18px">Mensual</strong><span><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 28px; font-weight: 800">RD$300</span> /mes</span></div>
+    <div style="border-radius: 24px; padding: 24px; box-shadow: inset 0 0 0 2px #EBD3BC; display: flex; justify-content: space-between; align-items: baseline"><strong style="font-size: 18px">De por vida</strong><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 28px; font-weight: 800">RD$11,000</span></div>
+    <a href="Register.dc.html" style="background: #C2381F; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 17px; padding: 17px; border-radius: 999px; text-align: center">Crea tu menú gratis</a>
+    <span style="font-size: 14px; color: #4F302A; line-height: 1.5">Paga con tarjeta (Stripe) o transferencia a cuenta en RD o EE. UU.</span>
+  </section>
+
+  <section style="padding: 56px 20px; display: flex; flex-direction: column; gap: 12px">
+    <h2 style="margin: 0 0 8px; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 800; letter-spacing: -0.03em">Preguntas</h2>
+    <details open style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">¿Tengo que pagar para probar?</summary><p style="margin: 10px 0 0; font-size: 15px; line-height: 1.55; color: #4F302A">No. 30 días gratis, sin tarjeta.</p></details>
+    <details style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">Si cambio un precio, ¿imprimo otro QR?</summary></details>
+    <details style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">¿Cuánto tardo en tenerlo listo?</summary></details>
+    <details style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">¿Cómo pago?</summary></details>
+    <details style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">¿Puedo tener varios locales?</summary></details>
+    <details style="background: #FFFFFF; border-radius: 18px; padding: 18px"><summary style="font-size: 16px; font-weight: 700">¿Y si necesito ayuda?</summary></details>
+  </section>
+
+  <section style="padding: 0 20px 48px">
+    <div style="background: #C2381F; color: #FFFFFF; border-radius: 28px; padding: 32px 24px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 32px; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em">Tu menú nuevo puede estar en las mesas mañana.</h2>
+      <a href="Register.dc.html" style="background: #FFC53D; color: #2A1410; text-decoration: none; font-weight: 700; font-size: 17px; padding: 17px; border-radius: 999px; text-align: center">Crea tu menú gratis</a>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid #EBD3BC; padding: 28px 20px; display: flex; flex-direction: column; gap: 12px; font-size: 14px; color: #6E4A3E">
+    <a href="mailto:contacto@goqr.com.do" style="color: #6E4A3E">contacto@goqr.com.do</a>
+    <a href="#" style="color: #6E4A3E">WhatsApp [YOUR WHATSAPP]</a>
+    <div style="display: flex; gap: 20px"><a href="#" style="color: #6E4A3E">Términos</a><a href="#" style="color: #6E4A3E">Privacidad</a></div>
+    <span>© 2026 GoQR</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":5000}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

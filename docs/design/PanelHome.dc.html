@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Panel · Resumen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2A1410}a:hover{color:#C2381F}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #FAF7F3; color: #2A1410; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-wrap: wrap">
+  <aside style="flex: 1 1 248px; box-sizing: border-box; background: #FFFFFF; box-shadow: inset -1px 0 0 #ECE4DC; padding: 20px 16px; display: flex; flex-direction: column; gap: 28px">
+    <a href="PanelHome.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 4px 8px">
+      <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#C2381F"></circle><rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#FFF3E6" stroke-width="5"></rect><circle cx="43" cy="43" r="6" fill="#FFC53D"></circle></svg>
+      <span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.04em; color: #2A1410">goqr</span>
+    </a>
+    <nav aria-label="Panel" style="display: flex; flex-direction: column; gap: 4px">
+      <a href="PanelHome.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; background: #FBE7E2; color: #C2381F; font-weight: 600; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Resumen</a>
+      <a href="PanelMenuEditor.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"></path><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"></path></svg>Menú</a>
+      <a href="PanelEstablishment.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"></path><path d="M4 9v11h16V9"></path><path d="M9 20v-6h6v6"></path></svg>Establecimiento</a>
+      <a href="PanelQR.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><path d="M14 14h3v3h-3zM21 14v.01M14 21h.01M17 21h4v-4"></path></svg>Código QR</a>
+      <a href="PanelStats.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M7 15l4-4 3 3 5-6"></path></svg>Estadísticas</a>
+      <a href="BillingPlan.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>Plan y pagos</a>
+      <a href="#" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: #2A1410; font-weight: 500; font-size: 15px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>Ayuda</a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #ECE4DC; padding-top: 16px">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px">
+        <div style="width: 36px; height: 36px; border-radius: 999px; background: #F5EFE9; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px">LR</div>
+        <div style="display: flex; flex-direction: column; min-width: 0"><span style="font-weight: 600; font-size: 14px">[NOMBRE DEL DUEÑO]</span><span style="font-size: 13px; color: #6B5A54">[correo@restaurante.com]</span></div>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border: 0; background: transparent; border-radius: 12px; color: #6B5A54; font: 500 15px 'DM Sans', system-ui, sans-serif; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 40px 48px; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em">Resumen</h1>
+        <span style="font-size: 14px; color: #6B5A54">Así va tu menú esta semana.</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+        <button type="button" aria-label="Cambiar establecimiento" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border: 0; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE4DC; border-radius: 12px; font: 600 15px 'DM Sans', system-ui, sans-serif; color: #2A1410; cursor: pointer"><span style="width: 24px; height: 24px; border-radius: 999px; background: #E86B2A"></span>La Roca Restaurant<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <a href="#" style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border-radius: 12px; text-decoration: none; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE4DC; font-weight: 600; font-size: 15px">Ver menú<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+      </div>
+    </header>
+
+    <section aria-label="Prueba gratis" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: #FEF3E2; border-radius: 16px; padding: 16px 20px">
+      <div style="display: flex; gap: 12px; align-items: center; color: #B45309">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 700; font-size: 15px; color: #2A1410">Te quedan [N] días de prueba</span><span style="font-size: 14px; color: #6B5A54">Elige un plan para que tu menú siga visible cuando termine la prueba.</span></div>
+      </div>
+      <a href="BillingPlan.dc.html" style="display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 12px; background: #2A1410; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px">Elegir plan</a>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+      <section aria-labelledby="setup" style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+          <h2 id="setup" style="margin: 0; font-size: 18px; font-weight: 700">Deja tu menú listo</h2>
+          <span style="font-size: 14px; color: #6B5A54">1 de 4</span>
+        </div>
+        <div style="height: 8px; border-radius: 999px; background: #F5EFE9; overflow: hidden"><div style="width: 25%; height: 8px; background: #15803D; border-radius: 999px"></div></div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px">
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px; color: #6B5A54"><span style="width: 24px; height: 24px; border-radius: 999px; background: #15803D; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="text-decoration: line-through">Sube tu logo y tu banner</span></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px"><span style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 2px #E0D5CB"></span><span style="flex: 1">Agrega al menos 5 productos <span style="color: #6B5A54">([N] de 5)</span></span><a href="PanelMenuEditor.dc.html" style="font-size: 14px; font-weight: 600">Agregar</a></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px"><span style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 2px #E0D5CB"></span><span style="flex: 1">Imprime tu código QR</span><a href="PanelQR.dc.html" style="font-size: 14px; font-weight: 600">Descargar</a></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px"><span style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 2px #E0D5CB"></span><span style="flex: 1">Comparte el enlace en tu Instagram</span><a href="#" style="font-size: 14px; font-weight: 600">Copiar enlace</a></li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="estado" style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <h2 id="estado" style="margin: 0; font-size: 18px; font-weight: 700">Tu menú</h2>
+        <div style="display: flex; align-items: center; gap: 8px; color: #15803D; font-weight: 600; font-size: 14px; background: #E7F5EC; align-self: flex-start; padding: 6px 12px; border-radius: 999px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #15803D"></span>Publicado</div>
+        <div style="display: flex; gap: 8px; align-items: center">
+          <label for="menu-url" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Enlace del menú</label>
+          <input id="menu-url" readonly value="goqr.com.do/m/la-roca-restaurant" style="flex: 1; min-width: 0; height: 44px; box-sizing: border-box; border: 0; box-shadow: inset 0 0 0 1px #E0D5CB; border-radius: 12px; padding: 0 14px; font: 500 15px 'DM Sans', system-ui, sans-serif; color: #2A1410; background: #F5EFE9">
+          <button type="button" aria-label="Copiar enlace" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE4DC; color: #2A1410; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+        </div>
+        <span style="font-size: 14px; color: #6B5A54">Lo que cambies aquí se ve al instante en el menú. No tienes que reimprimir el QR.</span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: auto">
+          <a href="PanelMenuEditor.dc.html" style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: #F5EFE9; text-decoration: none; font-weight: 600; font-size: 14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>Editar menú</a>
+          <a href="PanelQR.dc.html" style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: #F5EFE9; text-decoration: none; font-weight: 600; font-size: 14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>Descargar QR</a>
+          <a href="#" style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: #F5EFE9; text-decoration: none; font-weight: 600; font-size: 14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>Ver menú</a>
+        </div>
+      </section>
+    </div>
+
+    <section aria-labelledby="kpis" style="display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap">
+        <h2 id="kpis" style="margin: 0; font-size: 18px; font-weight: 700">Últimos 7 días</h2>
+        <a href="PanelStats.dc.html" style="font-size: 14px; font-weight: 600">Ver estadísticas</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px">
+        <div style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #6B5A54">Visitas al menú</span><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 700">[N]</span><span style="font-size: 13px; color: #15803D; font-weight: 600">[±N%] vs. semana pasada</span></div>
+        <div style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #6B5A54">Escaneos del QR</span><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 700">[N]</span><span style="font-size: 13px; color: #6B5A54; font-weight: 600">[±N%] vs. semana pasada</span></div>
+        <div style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #6B5A54">Visitantes únicos</span><span style="font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-size: 34px; font-weight: 700">[N]</span><span style="font-size: 13px; color: #6B5A54; font-weight: 600">[±N%] vs. semana pasada</span></div>
+        <div style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #6B5A54">Plato más visto</span><span style="font-size: 20px; font-weight: 700; padding-top: 6px">Croquetas de Pollo</span><span style="font-size: 13px; color: #6B5A54">[N] vistas</span></div>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 24px">
+      <section aria-labelledby="chart" style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+          <h2 id="chart" style="margin: 0; font-size: 18px; font-weight: 700">Visitas por día</h2>
+          <div style="display: flex; gap: 16px; font-size: 13px; color: #6B5A54"><span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2A1410"></span>Visitas</span><span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #E0A33A"></span>Escaneos QR</span></div>
+        </div>
+        <svg viewBox="0 0 560 180" role="img" aria-label="Gráfico de visitas y escaneos de los últimos 7 días" style="width: 100%; height: 180px">
+          <line x1="0" y1="45" x2="560" y2="45" stroke="#F5EFE9" stroke-width="1"></line>
+          <line x1="0" y1="90" x2="560" y2="90" stroke="#F5EFE9" stroke-width="1"></line>
+          <line x1="0" y1="135" x2="560" y2="135" stroke="#F5EFE9" stroke-width="1"></line>
+          <line x1="0" y1="179" x2="560" y2="179" stroke="#ECE4DC" stroke-width="1"></line>
+          <polyline points="10,120 100,98 190,110 280,72 370,80 460,40 550,56" fill="none" stroke="#2A1410" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+          <polyline points="10,150 100,138 190,142 280,118 370,124 460,96 550,104" fill="none" stroke="#E0A33A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        </svg>
+        <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); font-size: 12px; color: #6B5A54; text-align: center"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
+      </section>
+
+      <section aria-labelledby="top" style="background: #FFFFFF; border-radius: 16px; box-shadow: inset 0 0 0 1px #ECE4DC; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+        <h2 id="top" style="margin: 0; font-size: 18px; font-weight: 700">Platos más vistos</h2>
+        <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #F5EFE9"><span style="width: 20px; font-weight: 700; color: #6B5A54">1</span><span style="width: 36px; height: 36px; border-radius: 10px; background: #EBCDB5"></span><span style="flex: 1; font-weight: 600">Croquetas de Pollo</span><span style="color: #6B5A54; font-size: 14px">[N]</span></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #F5EFE9"><span style="width: 20px; font-weight: 700; color: #6B5A54">2</span><span style="width: 36px; height: 36px; border-radius: 10px; background: #D9A98A"></span><span style="flex: 1; font-weight: 600">Mangú con los tres golpes</span><span style="color: #6B5A54; font-size: 14px">[N]</span></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #F5EFE9"><span style="width: 20px; font-weight: 700; color: #6B5A54">3</span><span style="width: 36px; height: 36px; border-radius: 10px; background: #EBCDB5"></span><span style="flex: 1; font-weight: 600">Pastelitos de Pollo</span><span style="color: #6B5A54; font-size: 14px">[N]</span></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #F5EFE9"><span style="width: 20px; font-weight: 700; color: #6B5A54">4</span><span style="width: 36px; height: 36px; border-radius: 10px; background: #D9A98A"></span><span style="flex: 1; font-weight: 600">Chicharrón de pollo</span><span style="color: #6B5A54; font-size: 14px">[N]</span></li>
+          <li style="display: flex; align-items: center; gap: 12px; min-height: 52px"><span style="width: 20px; font-weight: 700; color: #6B5A54">5</span><span style="width: 36px; height: 36px; border-radius: 10px; background: #EBCDB5"></span><span style="flex: 1; font-weight: 600">[PRODUCTO]</span><span style="color: #6B5A54; font-size: 14px">[N]</span></li>
+        </ol>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

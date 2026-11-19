@@ -1,0 +1,215 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "icon-tile-stack",
+        "value": "*",
+        "files": [
+          "docs/design/VerifyEmail.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.565Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/PanelQR.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.581Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/PanelMobile.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.595Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/PanelMenuEditor.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.609Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/PanelMenuEditor.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.626Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/PanelMenuEditor.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.638Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/PanelMenuEditor.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.653Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/PanelHome.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.667Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/PanelHome.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.680Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/PanelEstablishment.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.692Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/PanelEstablishment.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.710Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/PanelEstablishment.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.722Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding3.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.734Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding3.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.748Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding3.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.760Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding2.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.772Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding1.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.784Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding1.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.795Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding1.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.806Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/MenuMobile.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.818Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/MenuMobile.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.830Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/MenuDesktop.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.842Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/MenuDesktop.dc.html"
+        ],
+        "createdAt": "2026-11-19T13:55:26.854Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      }
+    ]
+  }
+}
