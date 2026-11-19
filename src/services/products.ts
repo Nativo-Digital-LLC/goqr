@@ -14,11 +14,6 @@ import { ProductProps } from '../types/Product';
 import { db } from '../utils/firebase';
 import { uploadFile } from '../utils/helpers';
 
-const {
-	VITE_APP_MEILI_SEARCH_HOST,
-	VITE_APP_MEILI_SEARCH_KEY
-} = import.meta.env;
-
 export async function getAllProducts(establishmentId: string) {
 	const productsQuery = query(
 		collection(db, Collection.Products),
@@ -51,19 +46,6 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		deletedAt: null
-	});
-
-	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=id', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
-		},
-		body: JSON.stringify({
-			...data,
-			photoUrl,
-			id: productId
-		})
 	});
 
 	const productsQuery = query(
@@ -109,18 +91,6 @@ export async function updateProduct(id: string, { photo, ...data }: Partial<Prod
 
 	await updateDoc(doc(db, Collection.Products, id), updates);
 
-	await fetch(VITE_APP_MEILI_SEARCH_HOST + '/indexes/products/documents?primaryKey=id', {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
-		},
-		body: JSON.stringify([{
-			...data,
-			...(photoUrl !== null && { photoUrl }),
-			id
-		}])
-	});
 }
 
 export async function changeProductOrder(
@@ -141,13 +111,5 @@ export async function changeProductOrder(
 export async function deleteProduct(id: string) {
 	await updateDoc(doc(db, Collection.Products, id), {
 		deletedAt: new Date()
-	});
-
-	await fetch(`${VITE_APP_MEILI_SEARCH_HOST}/indexes/products/documents/${id}`, {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${VITE_APP_MEILI_SEARCH_KEY}`
-		}
 	});
 }
