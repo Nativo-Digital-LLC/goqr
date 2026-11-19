@@ -58,7 +58,15 @@ export function StepBusiness({ establishment, saveStep, saving, setSaving, saveR
 	const canContinue = name.trim() !== "" && status === "available" && !saving;
 
 	async function save() {
-		if (!canContinue) return null;
+		// «Guardar y salir» mientras se comprueba el enlace: se espera la comprobación en vez de salir sin guardar.
+		if (status === "checking" && name.trim() !== "" && !saving) {
+			setSaving(true);
+			const ok = await isSlugAvailable(slug).catch(() => null);
+			setSaving(false);
+			if (ok === null) return null;
+			setResult({ slug, status: ok ? "available" : "taken" });
+			if (!ok) return null;
+		} else if (!canContinue) return null;
 		setSaving(true);
 		try {
 			await saveStep(2, {

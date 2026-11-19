@@ -10,5 +10,8 @@ describe("parsePrice", () => {
 		["abc", null],
 		["0", null],
 		["", null],
+		["1,50", null],
+		["12,345.6", 12345.6],
+		["1,5000", null],
 	])("%s -> %s", (input, out) => expect(parsePrice(input)).toBe(out));
 });
