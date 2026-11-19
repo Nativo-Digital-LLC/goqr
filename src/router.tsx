@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import HomePage from "./pages/home/index";
+import LandingPage from "./pages/landing/LandingPage";
 import LoginPage from "./pages/auth/login";
 import RequestResetPasswordPage from "./pages/auth/request-reset-password";
 import ChangePasswordAfterRequestPage from "./pages/auth/change-password-after-request";
@@ -19,7 +19,7 @@ import { Establishments } from "./pages/panel/Establishments";
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <HomePage />,
+		element: <LandingPage />,
 	},
 	{
 		path: "/terms",
