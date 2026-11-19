@@ -38,6 +38,7 @@ export interface EstablishmentProps {
 	enableMultiLanguage: boolean;
 	isActive: boolean;
 	onboardingStep?: number | null;
+	billing?: { trialEndsAt?: Timestamp };
 	type?: EstablishmentType | null;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;

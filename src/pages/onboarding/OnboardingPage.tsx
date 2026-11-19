@@ -6,6 +6,7 @@ import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
 import { StepBrand } from "./StepBrand";
 import { StepBusiness } from "./StepBusiness";
+import { StepDone } from "./StepDone";
 import { StepFirstDish } from "./StepFirstDish";
 import { useOnboarding } from "./useOnboarding";
 
@@ -80,8 +81,7 @@ export default function OnboardingPage() {
 				) : step === 3 ? (
 					<StepFirstDish establishment={establishment} saveStep={saveStep} />
 				) : (
-					// Marcador: la tarea 8 reemplaza el paso 4.
-					<p className="text-muted-foreground">Paso {step} próximamente.</p>
+					<StepDone establishment={establishment} />
 				)}
 			</main>
 		</div>
