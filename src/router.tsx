@@ -14,6 +14,7 @@ import PrivacyPoliciesPage from "./pages/privacy-policies";
 import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import PanelLayout from "./pages/panel/PanelLayout";
 import HomePage from "./pages/panel/HomePage";
+import ProductEditPage from "./pages/panel/menu/ProductEditPage";
 import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
 import MenuEditorPage from "./pages/panel/menu/MenuEditorPage";
 import SoonPage from "./pages/panel/SoonPage";
@@ -63,8 +64,8 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <HomePage /> },
 			{ path: "menu", element: <MenuEditorPage /> },
-			{ path: "menu/product/new", element: <PanelPlaceholder title="Nuevo producto" /> },
-			{ path: "menu/product/:productId", element: <PanelPlaceholder title="Editar producto" /> },
+			{ path: "menu/product/new", element: <ProductEditPage /> },
+			{ path: "menu/product/:productId", element: <ProductEditPage /> },
 			{ path: "establishment", element: <PanelPlaceholder title="Establecimiento" /> },
 			{ path: "qr", element: <PanelPlaceholder title="Código QR" /> },
 			{

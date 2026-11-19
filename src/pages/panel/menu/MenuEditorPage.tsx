@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, Search } from "lucide-react";
 
@@ -34,7 +34,11 @@ export default function MenuEditorPage() {
 	const { establishment: est } = usePanel();
 	const { categories, subcategories, products, loading, error, reload } = useMenuEditor(est.id);
 
-	const [sel, setSel] = useState<{ categoryId?: string; subcategoryId: string | null }>({ subcategoryId: null });
+	const [params] = useSearchParams();
+	const [sel, setSel] = useState<{ categoryId?: string; subcategoryId: string | null }>({
+		categoryId: params.get("categoryId") ?? undefined,
+		subcategoryId: params.get("subcategoryId"),
+	});
 	const [search, setSearch] = useState("");
 	const [draft, setDraft] = useState<ProductProps[] | null>(null); // no es null mientras se reordena
 	const [previewKey, setPreviewKey] = useState(0);
