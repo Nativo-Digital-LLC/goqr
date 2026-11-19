@@ -50,8 +50,10 @@ export const useGetEstablishmentsByUserId = (
 	return [establishments, loading, error, load];
 };
 
-type SaveEstablishmentParams = Partial<CreateEstablishmentParams> & {
+type SaveEstablishmentParams = Omit<Partial<CreateEstablishmentParams>, "banner" | "logo"> & {
 	id?: string;
+	banner?: File | null;
+	logo?: File | null;
 };
 
 type UseSaveEstablishmentType = [

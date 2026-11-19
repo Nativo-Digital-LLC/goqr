@@ -17,6 +17,7 @@ import HomePage from "./pages/panel/HomePage";
 import ProductEditPage from "./pages/panel/menu/ProductEditPage";
 import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
 import MenuEditorPage from "./pages/panel/menu/MenuEditorPage";
+import EstablishmentPage from "./pages/panel/establishment/EstablishmentPage";
 import SoonPage from "./pages/panel/SoonPage";
 import BillingPage from "./pages/panel/BillingPage";
 
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
 			{ path: "menu", element: <MenuEditorPage /> },
 			{ path: "menu/product/new", element: <ProductEditPage /> },
 			{ path: "menu/product/:productId", element: <ProductEditPage /> },
-			{ path: "establishment", element: <PanelPlaceholder title="Establecimiento" /> },
+			{ path: "establishment", element: <EstablishmentPage /> },
 			{ path: "qr", element: <PanelPlaceholder title="Código QR" /> },
 			{
 				path: "stats",

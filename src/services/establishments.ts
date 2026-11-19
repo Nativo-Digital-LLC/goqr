@@ -161,10 +161,14 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 	return estabId;
 }
 
-export async function updateEstablishment(id: string, { banner, logo, ...rest }: Partial<CreateEstablishmentParams>) {
+/** `logo`/`banner`: undefined = sin cambios, null = quitar, File = foto nueva. */
+export async function updateEstablishment(
+	id: string,
+	{ banner, logo, ...rest }: Omit<Partial<CreateEstablishmentParams>, 'banner' | 'logo'> & { banner?: File | null; logo?: File | null }
+) {
 	const [bannerUrl, logoUrl] = await Promise.all([
-		banner ? uploadFile(banner) : null,
-		logo ? uploadFile(logo) : null,
+		banner ? uploadFile(banner) : banner,
+		logo ? uploadFile(logo) : logo,
 	]);
 
 	const updates: any = {
@@ -172,8 +176,8 @@ export async function updateEstablishment(id: string, { banner, logo, ...rest }:
 		updatedAt: new Date()
 	};
 
-	if (bannerUrl !== null) updates.bannerUrl = bannerUrl;
-	if (logoUrl !== null) updates.logoUrl = logoUrl;
+	if (bannerUrl !== undefined) updates.bannerUrl = bannerUrl;
+	if (logoUrl !== undefined) updates.logoUrl = logoUrl;
 
 	await updateDoc(doc(db, Collection.Establishments, id), updates);
 }
