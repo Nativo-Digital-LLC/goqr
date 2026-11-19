@@ -63,6 +63,7 @@ const SearchArea = ({ categories, products, lang, dictionary, color, inline, res
 	const showResults = !!query && refined === query && (inline || open);
 	useEffect(() => {
 		onActiveChange?.(!!inline && showResults);
+		return () => onActiveChange?.(false);
 	}, [inline, showResults, onActiveChange]);
 
 	const close = () => {

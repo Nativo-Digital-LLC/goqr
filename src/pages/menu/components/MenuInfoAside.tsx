@@ -50,12 +50,12 @@ export const MenuInfoAside = ({ establishment: e, lang, dictionary }: Props) => 
 						className="h-44 w-full rounded-xl border-0"
 					/>
 					<p className="text-sm text-muted-foreground">{e.address}</p>
-					{e.addressLink && (
-						<a href={e.addressLink} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-center gap-2 rounded-full bg-muted text-sm font-semibold">
-							<MapPin className="size-4" aria-hidden="true" />{t.directions}
-						</a>
-					)}
 				</section>
+			)}
+			{e.addressLink && (
+				<a href={e.addressLink} target="_blank" rel="noreferrer" className="flex min-h-11 items-center justify-center gap-2 rounded-full bg-muted text-sm font-semibold">
+					<MapPin className="size-4" aria-hidden="true" />{t.directions}
+				</a>
 			)}
 			{hasContact && (
 				<section className={card}>
