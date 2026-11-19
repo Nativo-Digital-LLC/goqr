@@ -1,4 +1,4 @@
-/** Precio escrito por el dueño (coma de miles, punto decimal, "RD$" opcional) a número; null si no es válido o no es mayor que 0. */
+/** Precio escrito por el dueño (coma de miles, punto decimal, "RD$" opcional) a número (0 vale: se muestra "Gratis"); null si está vacío, no es válido o es negativo. */
 export function parsePrice(input: string): number | null {
 	const trimmed = input.replace(/RD\$|\$|\s/gi, "");
 	// La coma solo vale como separador de miles bien agrupado: "1,50" no es 1.50 ni 150.
@@ -6,5 +6,14 @@ export function parsePrice(input: string): number | null {
 	const clean = trimmed.replace(/,/g, "");
 	if (!/^\d+(\.\d{1,2})?$/.test(clean)) return null;
 	const n = Number(clean);
-	return n > 0 ? n : null;
+	return n;
+}
+
+/** Precios guardados como arreglo o, en datos viejos, como texto JSON; cualquier otra cosa da []. */
+export function normalizePrices(raw: unknown): { label?: string; price: number }[] {
+	let v = raw;
+	if (typeof v === "string") {
+		try { v = JSON.parse(v); } catch { return []; }
+	}
+	return Array.isArray(v) ? v : [];
 }

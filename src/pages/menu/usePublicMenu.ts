@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { normalizePrices } from '@/lib/price';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 
 import { db } from '@/utils/firebase';
@@ -72,6 +73,7 @@ export const usePublicMenu = (slug: string | undefined): PublicMenuResult => {
 				const categories = catsSnap.docs.map((d) => withId<CategoryProps>(d)).filter((c) => c.hidden !== true).sort(byOrder);
 				const products = prodsSnap.docs
 					.map((d) => withId<ProductProps>(d))
+					.map((p) => ({ ...p, prices: normalizePrices(p.prices) }))
 					.filter(isVisibleProduct)
 					.sort(byOrder);
 

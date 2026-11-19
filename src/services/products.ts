@@ -12,6 +12,7 @@ import {
 import { Collection } from '../constants/Collections';
 import { ProductProps } from '../types/Product';
 import { db } from '../utils/firebase';
+import { normalizePrices } from '../lib/price';
 import { uploadFile } from '../utils/helpers';
 
 export async function getAllProducts(establishmentId: string) {
@@ -24,14 +25,7 @@ export async function getAllProducts(establishmentId: string) {
 	const snapshot = await getDocs(productsQuery);
 	return snapshot.docs.map(doc => {
 		const data = doc.data();
-		let prices = data.prices;
-		if (typeof prices === 'string') {
-			try { prices = JSON.parse(prices); } catch { /* ignore */ }
-		}
-		return {
-			...data,
-			prices
-		};
+		return { ...data, prices: normalizePrices(data.prices) };
 	}) as unknown as ProductProps[];
 }
 
@@ -40,37 +34,13 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 		? await uploadFile(photo)
 		: null;
 
-	const { id: productId } = await addDoc(collection(db, Collection.Products), {
+	await addDoc(collection(db, Collection.Products), {
 		...data,
 		photoUrl,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		deletedAt: null
 	});
-
-	const productsQuery = query(
-		collection(db, Collection.Products),
-		where('establishmentId', '==', data.establishmentId),
-		where('deletedAt', '==', null),
-		where('order', '>=', data.order)
-	);
-
-	const snap = await getDocs(productsQuery);
-	if (snap.size <= 1) {
-		return;
-	}
-
-	await Promise.all(
-		snap
-			.docs
-			.filter((item) => item.id !== productId)
-			.map((item) => {
-				const ref = doc(db, Collection.Products, item.id);
-				return updateDoc(ref, {
-					order: increment(1)
-				});
-			})
-	);
 }
 
 export async function updateProduct(id: string, { photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {

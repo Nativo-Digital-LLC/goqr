@@ -6,6 +6,7 @@ import { Collection } from '@/constants/Collections';
 import { CategoryProps } from '@/types/Category';
 import { SubcategoryProps } from '@/types/Subcategory';
 import { ProductProps } from '@/types/Product';
+import { normalizePrices } from '@/lib/price';
 
 type Data = {
 	categories: CategoryProps[];
@@ -31,7 +32,7 @@ async function fetchMenu(id: string): Promise<Data> {
 		))
 	]);
 	const categories = catsSnap.docs.map((d) => withId<CategoryProps>(d)).sort(byOrder);
-	const products = prodsSnap.docs.map((d) => withId<ProductProps>(d)).sort(byOrder);
+	const products = prodsSnap.docs.map((d) => withId<ProductProps>(d)).map((p) => ({ ...p, prices: normalizePrices(p.prices) })).sort(byOrder);
 
 	const subcategories: Record<string, SubcategoryProps[]> = {};
 	await Promise.all(
