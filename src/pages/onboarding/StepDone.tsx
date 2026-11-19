@@ -21,6 +21,8 @@ const dateFmt = new Intl.DateTimeFormat("es-DO", { day: "numeric", month: "long"
 export function StepDone({ establishment }: { establishment: EstablishmentProps | null }) {
 	const [est, setEst] = useState(establishment);
 	const [qr, setQr] = useState("");
+	const [qrError, setQrError] = useState(false);
+	const [qrTry, setQrTry] = useState(0);
 	const [category, setCategory] = useState<string>();
 	const [product, setProduct] = useState<ProductProps>();
 	const slug = est?.domain ?? "";
@@ -48,8 +50,12 @@ export function StepDone({ establishment }: { establishment: EstablishmentProps 
 	}, [establishment]);
 
 	useEffect(() => {
-		if (slug) QRCode.toDataURL(qrSrc(slug), { width: 480, margin: 2, color: { dark: "#2A1410", light: "#FFFFFF" } }).then(setQr).catch(() => {});
-	}, [slug]);
+		if (!slug) return;
+		setQrError(false);
+		QRCode.toDataURL(qrSrc(slug), { width: 480, margin: 2, color: { dark: "#2A1410", light: "#FFFFFF" } })
+			.then(setQr)
+			.catch(() => setQrError(true));
+	}, [slug, qrTry]);
 
 	const trialEnd = est?.billing?.trialEndsAt;
 	const trialText = trialEnd ? `el ${dateFmt.format(trialEnd.toDate())}` : "en 30 días";
@@ -75,7 +81,16 @@ export function StepDone({ establishment }: { establishment: EstablishmentProps 
 					</p>
 				</div>
 				<div className="flex flex-wrap items-center gap-6 rounded-2xl border border-border bg-white p-5">
-					{qr && <img src={qr} alt={`Código QR de ${url}`} className="size-40 shrink-0" />}
+					{qrError ? (
+						<div role="alert" className="flex size-40 shrink-0 flex-col items-center justify-center gap-2 rounded-xl bg-muted p-3 text-center">
+							<span className="text-sm text-muted-foreground">No pudimos generar el QR.</span>
+							<Button type="button" size="sm" className={`h-11 rounded-xl ${focus}`} onClick={() => setQrTry((n) => n + 1)}>
+								Reintentar
+							</Button>
+						</div>
+					) : (
+						qr && <img src={qr} alt={`Código QR de ${url}`} className="size-40 shrink-0" />
+					)}
 					<div className="flex min-w-[200px] flex-1 flex-col gap-3">
 						<span className="text-sm text-muted-foreground">Escanea para ver el menú</span>
 						<Button variant="outline" className={`h-11 rounded-xl border-border bg-white ${focus}`} onClick={() => downloadQrPng(slug, `qr-${slug}.png`).catch(() => toast.error("No pudimos generar el PNG."))}>
