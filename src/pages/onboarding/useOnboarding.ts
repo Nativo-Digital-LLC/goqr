@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PaymentFrequency, PaymentMethod } from "@/types/Bill";
 import { CreateEstablishmentParams, EstablishmentProps } from "@/types/Establishment";
-import { createEstablishment, getEstablishmentsByUserId, updateEstablishment } from "@/services/establishments";
+import { createEstablishment, getEstablishmentsByUserId, isSlugAvailable, updateEstablishment } from "@/services/establishments";
 import { auth } from "@/utils/firebase";
 
 type Step = 1 | 2 | 3 | 4;
@@ -14,6 +14,10 @@ export function useOnboarding() {
 	// Resultado de la primera carga: la página redirige con esto.
 	const [unauthenticated, setUnauthenticated] = useState(false);
 	const [finished, setFinished] = useState(false);
+	const [loadError, setLoadError] = useState(false);
+	const [attempt, setAttempt] = useState(0);
+	// Id recién creado: si el refresco falla, un reintento actualiza en vez de crear otro.
+	const createdId = useRef<string | null>(null);
 
 	const fetchEstablishment = useCallback(async () => {
 		await auth.authStateReady();
@@ -24,6 +28,8 @@ export function useOnboarding() {
 
 	useEffect(() => {
 		let cancelled = false;
+		setLoading(true);
+		setLoadError(false);
 		fetchEstablishment()
 			.then((found) => {
 				if (cancelled) return;
@@ -33,25 +39,30 @@ export function useOnboarding() {
 				if (found && !(saved === 1 || saved === 2 || saved === 3)) setFinished(true);
 				else setStep((saved as Step) ?? 1);
 			})
-			.catch(() => !cancelled && setUnauthenticated(true))
+			.catch(() => !cancelled && setLoadError(true))
 			.finally(() => !cancelled && setLoading(false));
 		return () => {
 			cancelled = true;
 		};
-	}, [fetchEstablishment]);
+	}, [fetchEstablishment, attempt]);
 
 	// n es el próximo paso a mostrar; 4 = onboarding terminado.
 	const saveStep = useCallback(
 		async (n: Step, data: Partial<CreateEstablishmentParams>) => {
 			const uid = auth.currentUser?.uid;
 			if (!uid) throw new Error("Sin sesión");
-			// Nunca se crea un segundo establecimiento: si ya existe, se actualiza.
-			if (establishment) {
+			// Nunca se crea un segundo establecimiento: se busca el existente aunque el estado local esté vacío.
+			const existing = establishment ?? (await getEstablishmentsByUserId(uid))[0];
+			const targetId = existing?.id ?? createdId.current;
+			if (data.domain && data.domain !== existing?.domain && !(await isSlugAvailable(data.domain))) {
+				throw new Error("slug-taken");
+			}
+			if (targetId) {
 				const rest = { ...data };
 				delete rest.userId; // las reglas no permiten escribir userId en updates
-				await updateEstablishment(establishment.id, { ...rest, onboardingStep: n });
+				await updateEstablishment(targetId, { ...rest, onboardingStep: n });
 			} else {
-				await createEstablishment({
+				createdId.current = await createEstablishment({
 					name: "",
 					domain: "",
 					description: "",
@@ -73,5 +84,7 @@ export function useOnboarding() {
 		[establishment, fetchEstablishment]
 	);
 
-	return { establishment, step, loading, unauthenticated, finished, saveStep };
+	const retry = useCallback(() => setAttempt((a) => a + 1), []);
+
+	return { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep };
 }

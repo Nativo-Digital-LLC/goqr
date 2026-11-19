@@ -3,17 +3,30 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Logo } from "@/components/brand/Logo";
+import { Button } from "@/components/ui/button";
 import { StepBusiness } from "./StepBusiness";
 import { useOnboarding } from "./useOnboarding";
 
 const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
 
 export default function OnboardingPage() {
-	const { establishment, step, loading, unauthenticated, finished, saveStep } = useOnboarding();
+	const { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep } = useOnboarding();
 	const navigate = useNavigate();
 	const [leaving, setLeaving] = useState(false);
 
 	if (unauthenticated) return <Navigate to="/login" replace />;
+	if (loadError) {
+		return (
+			<div className="flex flex-col items-center gap-4 p-12 text-center">
+				<p role="alert" className="text-[15px] text-muted-foreground">
+					No pudimos cargar tu información. Revisa tu conexión e intenta de nuevo.
+				</p>
+				<Button className="h-11 rounded-xl focus-visible:ring-2 focus-visible:ring-primary" onClick={retry}>
+					Reintentar
+				</Button>
+			</div>
+		);
+	}
 	if (finished) return <Navigate to="/dashboard" replace />;
 	if (loading) {
 		return (

@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { isValidSlug, slugify } from "@/lib/slug";
 import { isSlugAvailable } from "@/services/establishments";
 import { EstablishmentProps, EstablishmentType } from "@/types/Establishment";
-import { MenuPreview, TYPE_LABELS } from "./MenuPreview";
+import { MenuPreview } from "./MenuPreview";
+import { TYPE_LABELS } from "./typeLabels";
 import { useOnboarding } from "./useOnboarding";
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 };
 
 type SlugStatus = "idle" | "invalid" | "checking" | "available" | "taken" | "error";
+type SlugResult = { slug: string; status: "available" | "taken" | "error" };
 
 const labelClass = "text-sm font-semibold";
 const hintClass = "text-[13px] text-muted-foreground";
@@ -28,26 +30,31 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 	const [type, setType] = useState<EstablishmentType>(establishment?.type ?? "restaurant");
 	const [phone, setPhone] = useState(establishment?.phone ?? "");
 	const [whatsapp, setWhatsapp] = useState(establishment?.whatsapp ?? "");
-	const [status, setStatus] = useState<SlugStatus>("idle");
+	// Resultado de la comprobación junto con el slug exacto que se comprobó.
+	const [result, setResult] = useState<SlugResult | null>(null);
 	const [saving, setSaving] = useState(false);
 
+	// El enlace que ya es del propio establecimiento cuenta como disponible.
+	const isOwn = !!slug && slug === establishment?.domain;
+	let status: SlugStatus = "checking";
+	if (!slug) status = "idle";
+	else if (!isValidSlug(slug)) status = "invalid";
+	else if (isOwn) status = "available";
+	else if (result?.slug === slug) status = result.status;
+
 	useEffect(() => {
-		if (!slug) return setStatus("idle");
-		if (!isValidSlug(slug)) return setStatus("invalid");
-		// El enlace que ya es del propio establecimiento cuenta como disponible.
-		if (slug === establishment?.domain) return setStatus("available");
-		setStatus("checking");
+		if (!slug || !isValidSlug(slug) || isOwn) return;
 		let cancelled = false;
 		const timer = setTimeout(() => {
 			isSlugAvailable(slug)
-				.then((ok) => !cancelled && setStatus(ok ? "available" : "taken"))
-				.catch(() => !cancelled && setStatus("error"));
+				.then((ok) => !cancelled && setResult({ slug, status: ok ? "available" : "taken" }))
+				.catch(() => !cancelled && setResult({ slug, status: "error" }));
 		}, 400);
 		return () => {
 			cancelled = true;
 			clearTimeout(timer);
 		};
-	}, [slug, establishment?.domain]);
+	}, [slug, isOwn]);
 
 	function onName(value: string) {
 		setName(value);
@@ -68,8 +75,11 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 				phone: phone.trim(),
 				whatsapp: whatsapp.trim() || undefined,
 			});
-		} catch {
-			toast.error("No pudimos guardar tus datos. Intenta de nuevo.");
+		} catch (err) {
+			if ((err as Error).message === "slug-taken") {
+				setResult({ slug, status: "taken" });
+				toast.error("Ese enlace acaba de ocuparse, prueba otro.");
+			} else toast.error("No pudimos guardar tus datos. Intenta de nuevo.");
 			setSaving(false);
 		}
 	}
