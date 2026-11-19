@@ -3,8 +3,6 @@ import {
 	signInWithEmailAndPassword,
 	signInWithPopup,
 	signOut,
-	sendEmailVerification,
-	sendPasswordResetEmail,
 	onAuthStateChanged,
 	updateProfile,
 	User
@@ -20,24 +18,16 @@ import { SessionProps } from '../types/Session';
 const APPWRITE_ENDPOINT = 'https://appwrite.nd.com.do/v1';
 const APPWRITE_PROJECT_ID = '66f768e4001537551adf';
 
-// La URL de acción de las plantillas no se puede cambiar en este proyecto (EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED):
-// el enlace abre la página de Firebase y su botón "Continuar" vuelve a GoQR.
-const continueTo = (path: string) => ({ url: `${window.location.origin}${path}` });
-
 export async function createAccount(name: string, email: string, password: string) {
 	const { user } = await createUserWithEmailAndPassword(auth, email, password);
 	if (name) {
 		await updateProfile(user, { displayName: name });
 	}
-	// Registrar como migrado para evitar el check de Appwrite; va en paralelo con el correo para no sumar esperas.
-	const migrationDocRef = doc(db, 'migrated-users', email.toLowerCase());
-	await Promise.all([
-		sendEmailVerification(user, continueTo('/verify')),
-		setDoc(migrationDocRef, {
-			migratedAt: new Date().toISOString(),
-			email: email.toLowerCase()
-		})
-	]);
+	// Registrar como migrado para evitar el check de Appwrite. El correo de verificación lo envía el trigger onUserCreated.
+	await setDoc(doc(db, 'migrated-users', email.toLowerCase()), {
+		migratedAt: new Date().toISOString(),
+		email: email.toLowerCase()
+	});
 
 	return user;
 }
@@ -97,7 +87,7 @@ export async function sendVerificationEmail() {
 		return;
 	}
 
-	await sendEmailVerification(auth.currentUser, continueTo('/verify'));
+	await httpsCallable(functions, 'sendVerificationEmail')();
 }
 
 function mapUserToSession(user: User): SessionProps {
@@ -128,7 +118,7 @@ export async function getCurrentSession(): Promise<SessionProps | null> {
 }
 
 export async function sendResetPasswordEmail(email: string) {
-	await sendPasswordResetEmail(auth, email, continueTo('/login'));
+	await httpsCallable(functions, 'sendPasswordReset')({ email });
 }
 
 export async function resetPasswordWithSecret(oobCode: string, newPassword: string) {

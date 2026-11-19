@@ -11,9 +11,9 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/establishments/$(estId)).data.userId == request.auth.uid;
     }
 
-    // Lectura pública de todo excepto `users`, `transfers`, `stripe-events` y `bills`. Las reglas se suman (OR), por eso el comodín los excluye.
+    // Lectura pública de todo excepto `users`, `transfers`, `stripe-events`, `bills` y `mail-throttle`. Las reglas se suman (OR), por eso el comodín los excluye.
     match /{collection}/{document=**} {
-      allow read: if !(collection in ['users', 'transfers', 'stripe-events', 'bills']);
+      allow read: if !(collection in ['users', 'transfers', 'stripe-events', 'bills', 'mail-throttle']);
     }
 
     match /establishments/{establishmentId} {

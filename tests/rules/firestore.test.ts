@@ -235,3 +235,23 @@ describe('bills', () => {
 		await assertFails(deleteDoc(doc(owner(), 'bills/b1')));
 	});
 });
+
+describe('mail-throttle', () => {
+	const anon = () => env.unauthenticatedContext().firestore();
+
+	beforeEach(async () => {
+		await env.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), 'mail-throttle/x'), { at: 1 });
+		});
+	});
+
+	it('ni usuario ni anónimo leen', async () => {
+		await assertFails(getDoc(doc(owner(), 'mail-throttle/x')));
+		await assertFails(getDoc(doc(anon(), 'mail-throttle/x')));
+	});
+
+	it('ni usuario ni anónimo escriben', async () => {
+		await assertFails(setDoc(doc(owner(), 'mail-throttle/x'), { at: 2 }));
+		await assertFails(setDoc(doc(anon(), 'mail-throttle/x'), { at: 2 }));
+	});
+});

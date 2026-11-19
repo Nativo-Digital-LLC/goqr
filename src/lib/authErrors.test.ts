@@ -25,6 +25,12 @@ describe("authErrorMessage", () => {
 		expect(authErrorMessage({ isAxiosError: true, response: { status: 401 } })).toBe(BAD_LOGIN);
 	});
 
+	it("muestra el mensaje en español de los errores de Functions", () => {
+		const msg = "Espera un minuto antes de pedir otro correo.";
+		expect(authErrorMessage({ code: "functions/resource-exhausted", message: msg })).toBe(msg);
+		expect(authErrorMessage({ code: "functions/internal", message: "internal" })).toBe(GENERIC);
+	});
+
 	it("usa el mensaje genérico para el resto", () => {
 		expect(authErrorMessage(new Error("x"))).toBe(GENERIC);
 		expect(authErrorMessage(null)).toBe(GENERIC);

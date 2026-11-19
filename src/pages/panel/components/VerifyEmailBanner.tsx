@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { authErrorMessage } from "@/lib/authErrors";
 import { sendVerificationEmail } from "@/services/auth";
 import { auth } from "@/utils/firebase";
 
@@ -18,8 +19,9 @@ export function VerifyEmailBanner() {
 		try {
 			await sendVerificationEmail();
 			toast.success("Te enviamos el correo de confirmación.");
-		} catch {
-			toast.error("No pudimos enviar el correo. Intenta de nuevo.");
+		} catch (err) {
+			const msg = authErrorMessage(err);
+			toast.error(msg === "Algo salió mal. Inténtalo de nuevo." ? "No pudimos enviar el correo. Intenta de nuevo." : msg);
 		} finally {
 			setSending(false);
 		}
