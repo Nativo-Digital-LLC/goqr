@@ -1,0 +1,144 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Configure, InstantSearch, useHits, useSearchBox } from "react-instantsearch";
+import { Search, X } from "lucide-react";
+
+import searchClient from "@/utils/search";
+import { isVisibleProduct, localized } from "@/lib/menu";
+import type { ProductProps } from "@/types/Product";
+import type { CategoryProps } from "@/types/Category";
+import type { DictionaryProps, Lang } from "@/types/Dictionary";
+import { Button } from "@/components/ui/button";
+import { ProductDetail } from "./ProductDetail";
+import { ProductItem } from "./ProductItem";
+
+type Props = {
+	establishmentId: string;
+	categories: CategoryProps[];
+	products: ProductProps[];
+	lang: Lang;
+	dictionary: DictionaryProps;
+	color: string;
+};
+
+export const MenuSearch = (props: Props) => (
+	<InstantSearch searchClient={searchClient} indexName="products" future={{ preserveSharedStateOnUnmount: true }}>
+		<Configure filters={`establishmentId="${props.establishmentId}"`} hitsPerPage={50} />
+		<SearchArea {...props} />
+	</InstantSearch>
+);
+
+const SearchArea = ({ categories, products, lang, dictionary, color }: Props) => {
+	const { refine } = useSearchBox();
+	const { items } = useHits<{ id?: string; objectID: string }>();
+	const [value, setValue] = useState("");
+	const [open, setOpen] = useState(false);
+	const [selected, setSelected] = useState<ProductProps | null>(null);
+	const [detailOpen, setDetailOpen] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
+	const skipFocus = useRef(false);
+	const query = value.trim();
+
+	useEffect(() => {
+		const t = setTimeout(() => refine(query), 250);
+		return () => clearTimeout(t);
+	}, [query, refine]);
+
+	// Datos frescos de Firestore; un hit que no esté en el menú (u oculto) se descarta.
+	const groups = useMemo(() => {
+		const byId = new Map(products.map((p) => [p.id, p]));
+		const found = items
+			.map((h) => byId.get(h.id ?? h.objectID))
+			.filter((p): p is ProductProps => !!p && isVisibleProduct(p));
+		return categories
+			.map((c) => ({ category: c, products: found.filter((p) => p.categoryId === c.id) }))
+			.filter((g) => g.products.length);
+	}, [items, products, categories]);
+	const total = groups.reduce((n, g) => n + g.products.length, 0);
+
+	const close = () => {
+		setValue("");
+		setOpen(false);
+		skipFocus.current = true;
+		inputRef.current?.focus();
+	};
+
+	return (
+		<div
+			className={open ? "fixed inset-0 z-40 overflow-y-auto bg-white" : "px-5 py-3"}
+			onKeyDown={(e) => open && e.key === "Escape" && close()}
+		>
+			<div className={open ? "mx-auto max-w-[560px] px-5" : ""}>
+				<div className={open ? "flex items-center gap-2 py-3" : ""}>
+					<div className="relative flex-1">
+						<Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+						<input
+							ref={inputRef}
+							type="search"
+							value={value}
+							placeholder={dictionary.menu.search}
+							aria-label={dictionary.menu.search}
+							onChange={(e) => setValue(e.target.value)}
+							onFocus={() => {
+								if (skipFocus.current) skipFocus.current = false;
+								else setOpen(true);
+							}}
+							className="h-11 w-full rounded-full border border-border bg-white pr-10 pl-10 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
+						/>
+						{value && (
+							<button
+								type="button"
+								aria-label={dictionary.menu.cancel}
+								onClick={() => { setValue(""); inputRef.current?.focus(); }}
+								className="absolute top-1/2 right-1 flex size-9 -translate-y-1/2 items-center justify-center text-muted-foreground"
+							>
+								<X className="size-4" aria-hidden="true" />
+							</button>
+						)}
+					</div>
+					{open && (
+						<button type="button" onClick={close} className="min-h-11 text-sm font-semibold" style={{ color }}>
+							{dictionary.menu.cancel}
+						</button>
+					)}
+				</div>
+				{open && query && (
+					<div className="flex flex-col gap-3.5 pt-2 pb-8">
+						{total === 0 ? (
+							<div className="flex flex-col items-center gap-3 py-10 text-center">
+								<p className="text-lg font-bold">{dictionary.menu.noResultsTitle(query)}</p>
+								<p className="text-muted-foreground">{dictionary.menu.noResultsBody}</p>
+								<Button type="button" onClick={close} style={{ backgroundColor: color, color: "#fff" }}>
+									{dictionary.menu.seeFullMenu}
+								</Button>
+							</div>
+						) : (
+							<>
+								<p className="text-sm font-semibold text-muted-foreground" aria-live="polite">
+									{dictionary.menu.resultsFor(total, query)}
+								</p>
+								{groups.map((g) => (
+									<section key={g.category.id} className="flex flex-col gap-3">
+										<h2 className="text-sm font-bold uppercase tracking-wide">
+											{localized(g.category as unknown as Record<string, unknown>, "name", lang)}
+										</h2>
+										{g.products.map((p) => (
+											<ProductItem
+												key={p.id}
+												product={p}
+												lang={lang}
+												dictionary={dictionary}
+												color={color}
+												onOpen={(product) => { setSelected(product); setDetailOpen(true); }}
+											/>
+										))}
+									</section>
+								))}
+							</>
+						)}
+					</div>
+				)}
+			</div>
+			<ProductDetail product={selected} open={detailOpen} onOpenChange={setDetailOpen} lang={lang} dictionary={dictionary} color={color} />
+		</div>
+	);
+};

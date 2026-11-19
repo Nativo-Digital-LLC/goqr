@@ -13,6 +13,7 @@ import { MenuHero } from "./components/MenuHero";
 import { CategoryNav } from "./components/CategoryNav";
 import { SubcategoryGrid } from "./components/SubcategoryGrid";
 import { AllergyDialog } from "./components/AllergyDialog";
+import { MenuSearch } from "./components/MenuSearch";
 import { ProductList } from "./components/ProductList";
 
 export default function MenuPage() {
@@ -94,6 +95,14 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 					<p className="p-5 text-center text-muted-foreground">{dictionary.menu.emptyMenu}</p>
 				) : (
 					<>
+						<MenuSearch
+							establishmentId={establishment.id}
+							categories={categories}
+							products={menu.products}
+							lang={lang}
+							dictionary={dictionary}
+							color={color}
+						/>
 						<CategoryNav
 							categories={categories}
 							activeId={category?.id}
