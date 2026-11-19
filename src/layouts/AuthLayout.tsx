@@ -9,30 +9,41 @@ type AuthLayoutProps = {
 	/** Contenido del panel de marca. Si se pasa, la página va dividida; si no, centrada. */
 	aside?: ReactNode;
 	className?: string;
+	/** Estilo del panel lateral: tomate (por defecto) o crema. */
+	asideTone?: "brand" | "crema";
 };
 
-export function AuthLayout({ children, aside, className }: AuthLayoutProps) {
+export function AuthLayout({ children, aside, className, asideTone = "brand" }: AuthLayoutProps) {
 	if (aside) {
+		const crema = asideTone === "crema";
 		return (
 			<div className="flex min-h-screen flex-col bg-white font-sans text-primary lg:flex-row">
-				<aside className="hidden flex-1 flex-col justify-between gap-10 bg-brand p-12 text-crema lg:flex">
+				<aside
+					className={cn(
+						"hidden flex-1 flex-col justify-between gap-10 p-12 lg:flex",
+						crema ? "bg-crema text-primary" : "bg-brand text-crema"
+					)}
+				>
 					<Link
 						to="/"
 						aria-label="GoQR, ir al inicio"
-						className="inline-flex w-fit rounded-md text-crema focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+						className={cn(
+							"inline-flex w-fit rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+							crema ? "text-primary" : "text-crema"
+						)}
 					>
-						{/* Logo invertido para el panel tomate */}
+						{/* Logo invertido en el panel tomate */}
 						<span className="inline-flex items-center gap-3">
 							<svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true">
-								<circle cx="32" cy="32" r="30" fill="#FFF3E6" />
-								<rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke="#C2381F" strokeWidth="5" />
+								<circle cx="32" cy="32" r="30" fill={crema ? "#C2381F" : "#FFF3E6"} />
+								<rect x="18" y="18" width="18" height="18" rx="5" fill="none" stroke={crema ? "#FFF3E6" : "#C2381F"} strokeWidth="5" />
 								<circle cx="43" cy="43" r="6" fill="#FFC53D" />
 							</svg>
 							<span className="font-display text-3xl font-extrabold leading-none tracking-[-0.04em]">goqr</span>
 						</span>
 					</Link>
 					{aside}
-					<span className="text-sm text-crema">¿Dudas? Escríbenos a contacto@goqr.com.do</span>
+					<span className={cn("text-sm", crema ? "text-cacao-2" : "text-crema")}>¿Dudas? Escríbenos a contacto@goqr.com.do</span>
 				</aside>
 				<main className="flex flex-1 flex-col items-center justify-center gap-8 px-6 py-10 lg:px-12 lg:py-12">
 					<Link

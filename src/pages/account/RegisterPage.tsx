@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Circle, CircleAlert, Lock } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
@@ -8,7 +9,7 @@ import { PasswordInput } from "@/components/account/PasswordInput";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { TRIAL_DAYS } from "@/constants/plans";
+import { PLANS, TRIAL_DAYS } from "@/constants/plans";
 import { useLogin, useRegister } from "@/hooks/useAuth";
 import { useRedirectIfAuthenticated } from "@/hooks/useRedirectIfAuthenticated";
 import { AuthLayout } from "@/layouts/AuthLayout";
@@ -26,11 +27,13 @@ const schema = z.object({
 	terms: z.boolean().refine((v) => v, "Debes aceptar los términos para continuar."),
 });
 
+const annual = PLANS.find((p) => p.id === "annual")!;
+
 const BENEFITS = [
 	"Sin tarjeta para empezar",
 	"Cambia precios y platos cuando quieras, sin reimprimir",
 	"Menú en español e inglés para tus turistas",
-	"Después, desde RD$210/mes con el plan anual",
+	`Después, desde RD$${annual.perMonthDop}/mes con el plan anual`,
 ];
 
 const STRENGTH = {
@@ -66,7 +69,7 @@ function Aside() {
 			<h1 className="max-w-[480px] font-display text-5xl font-extrabold leading-none tracking-[-0.03em]">
 				En 10 minutos tu menú está en cada mesa.
 			</h1>
-			<Benefits className="gap-3.5 text-[17px] leading-snug text-crema" iconClass="text-platano" />
+			<Benefits className="gap-3.5 text-[17px] leading-snug" iconClass="text-brand" />
 		</div>
 	);
 }
@@ -83,11 +86,13 @@ export default function RegisterPage() {
 	const password = form.watch("password");
 	const strength = STRENGTH[passwordStrength(password)];
 	const checks = passwordChecks(password);
+	const [lastTry, setLastTry] = useState<"email" | "google">("email");
 	const busy = registering || loggingIn;
-	const message = registerError || loginError ? authErrorMessage(registerError ?? loginError) : "";
+	const error = lastTry === "google" ? loginError : registerError;
+	const message = error ? authErrorMessage(error) : "";
 
 	return (
-		<AuthLayout aside={<Aside />}>
+		<AuthLayout aside={<Aside />} asideTone="crema">
 			<div className="flex flex-col gap-5">
 				<div className="flex flex-col gap-4 rounded-xl bg-crema p-4 lg:hidden">
 					<TrialBadge />
@@ -110,7 +115,12 @@ export default function RegisterPage() {
 					variant="outline"
 					className="rounded-xl border-border font-semibold focus-visible:ring-2 focus-visible:ring-primary"
 					disabled={busy}
-					onClick={() => handleLogin("Google", { page: "register" })}
+					onClick={async () => {
+						// Los términos también aplican al registro con Google.
+						if (!(await form.trigger("terms"))) return;
+						setLastTry("google");
+						handleLogin("Google", { page: "register" });
+					}}
 				>
 					<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
 						<path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2-1.9 3.2-4.7 3.2-8z" />
@@ -129,7 +139,10 @@ export default function RegisterPage() {
 					<form
 						noValidate
 						className="flex flex-col gap-5"
-						onSubmit={form.handleSubmit(({ name, email, password }) => handleRegister(name.trim(), email, password))}
+						onSubmit={form.handleSubmit(({ name, email, password }) => {
+							setLastTry("email");
+							handleRegister(name.trim(), email, password);
+						})}
 					>
 						<FormField
 							control={form.control}
