@@ -7,6 +7,7 @@ import {
 	createAccount,
 	login,
 	logout,
+	mapUserToSession,
 	resetPasswordWithSecret,
 	sendResetPasswordEmail
 } from '../services/auth';
@@ -201,8 +202,9 @@ export const useRequestResetPasswordEmail = (): UseRequestResetPasswordEmailType
 type UseResetPasswordWithSecretType = [
 	(
 		secret: string,
+		email: string,
 		password: string,
-		onDone?: () => void
+		onDone?: (signedIn: boolean) => void
 	) => void,
 	boolean,
 	FirebaseError | null
@@ -211,20 +213,20 @@ type UseResetPasswordWithSecretType = [
 export const useResetPasswordWithSecret = (): UseResetPasswordWithSecretType => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<FirebaseError | null>(null);
+	const setSession = useSessionStore(({ setSession }) => setSession);
 
 	async function handleReset(
 		secret: string,
+		email: string,
 		password: string,
-		onDone?: () => void
+		onDone?: (signedIn: boolean) => void
 	) {
 		try {
 			setLoading(true);
 			setError(null);
-			await resetPasswordWithSecret(
-				secret,
-				password
-			);
-			onDone?.();
+			const user = await resetPasswordWithSecret(secret, email, password);
+			if (user) setSession(mapUserToSession(user));
+			onDone?.(!!user);
 		} catch (error) {
 			setError(error as FirebaseError);
 		} finally {

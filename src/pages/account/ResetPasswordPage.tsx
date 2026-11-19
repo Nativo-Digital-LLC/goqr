@@ -126,9 +126,10 @@ export default function ResetPasswordPage() {
 					noValidate
 					className={cardClass}
 					onSubmit={form.handleSubmit(({ password }) =>
-						reset(oobCode!, password, () => {
-							toast.success("Contraseña actualizada. Ya puedes ingresar.");
-							navigate("/login", { replace: true });
+						reset(oobCode!, email, password, (signedIn) => {
+							// El panel manda a /onboarding si hace falta.
+							toast.success(signedIn ? "Contraseña actualizada." : "Contraseña actualizada. Ya puedes ingresar.");
+							navigate(signedIn ? "/dashboard" : "/login", { replace: true });
 						})
 					)}
 				>

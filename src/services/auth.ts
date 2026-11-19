@@ -90,7 +90,7 @@ export async function sendVerificationEmail() {
 	await httpsCallable(functions, 'sendVerificationEmail')();
 }
 
-function mapUserToSession(user: User): SessionProps {
+export function mapUserToSession(user: User): SessionProps {
 	return {
 		userId: user.uid,
 		user: {
@@ -121,6 +121,23 @@ export async function sendResetPasswordEmail(email: string) {
 	await httpsCallable(functions, 'sendPasswordReset')({ email });
 }
 
-export async function resetPasswordWithSecret(oobCode: string, newPassword: string) {
+/**
+ * Cambia la contraseña, inicia sesión en Firebase y marca la cuenta como migrada: si no, un usuario
+ * de Appwrite sin marca caería en la ruta de Appwrite al ingresar y su nueva contraseña no serviría.
+ * Devuelve null si la contraseña cambió pero no se pudo iniciar sesión.
+ */
+export async function resetPasswordWithSecret(oobCode: string, email: string, newPassword: string): Promise<User | null> {
 	await confirmPasswordReset(auth, oobCode, newPassword);
+	let user: User;
+	try {
+		({ user } = await signInWithEmailAndPassword(auth, email, newPassword));
+	} catch (error) {
+		console.error('No se pudo iniciar sesión tras restablecer la contraseña', error);
+		return null;
+	}
+	await setDoc(doc(db, 'migrated-users', email.toLowerCase()), {
+		migratedAt: new Date().toISOString(),
+		email: email.toLowerCase()
+	}).catch((error) => console.error('No se pudo marcar la cuenta como migrada', error));
+	return user;
 }
