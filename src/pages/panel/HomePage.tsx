@@ -12,7 +12,7 @@ import { PanelHeader } from "./components/PanelHeader";
 
 export default function HomePage() {
 	const { establishment: e } = usePanel();
-	const { products } = useMenuEditor(e.id);
+	const { products, loading, error, reload } = useMenuEditor(e.id);
 	const [, bump] = useState(0);
 
 	const days = e.billing?.status === "trialing" ? trialDaysLeft(e.billing.trialEndsAt, new Date()) : null;
@@ -64,7 +64,14 @@ export default function HomePage() {
 				</div>
 			)}
 
-			{done < 4 && (
+			{error && !loading && (
+				<div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-4">
+					<span className="text-[15px] text-muted-foreground">No pudimos cargar tu progreso.</span>
+					<Button variant="outline" onClick={() => reload()}>Reintentar</Button>
+				</div>
+			)}
+
+			{!loading && !error && done < 4 && (
 				<section aria-labelledby="checklist" className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
 					<div className="flex items-center justify-between">
 						<h2 id="checklist" className="text-lg font-bold">Deja tu menú listo</h2>
