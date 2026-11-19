@@ -24,13 +24,6 @@ export const useLanguageStore = create<LanguageStoreProps>((set) => ({
 	dictionary: es
 }));
 
-(async () => {
-	const { setLang } = useLanguageStore.getState();
-	const lang = localStorage.getItem('lang') as Lang | null;
-	if (lang) {
-		setLang(lang);
-		return;
-	}
-
-	setLang('es');
-})();
+// Solo se restaura la preferencia guardada; no se escribe nada si el visitante nunca eligió idioma.
+const savedLang = localStorage.getItem('lang') as Lang | null;
+if (savedLang === 'en' || savedLang === 'es') useLanguageStore.getState().setLang(savedLang);
