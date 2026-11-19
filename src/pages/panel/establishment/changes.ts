@@ -1,4 +1,4 @@
-import { schedulesToWeek, weekToSchedules } from "@/lib/schedule";
+import { schedulesToWeek, weekToSchedules } from "../../../lib/schedule";
 import type { FormValues } from "./Section";
 import type { CreateEstablishmentParams, EstablishmentProps, ScheduleProps, SocialNetworkProps } from "@/types/Establishment";
 
