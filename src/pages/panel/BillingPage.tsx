@@ -12,7 +12,7 @@ const th = "px-4 py-3 text-left text-[13px] font-semibold text-muted-foreground"
 export default function BillingPage() {
 	const { establishment } = usePanel();
 	const userId = useSessionStore((s) => s.session?.userId);
-	const [bills, loading] = useGetBillsByUserId(userId);
+	const [bills, loading, error, reload] = useGetBillsByUserId(userId);
 	const days = establishment.billing?.status === "trialing" ? trialDaysLeft(establishment.billing.trialEndsAt, new Date()) : null;
 
 	return (
@@ -27,6 +27,11 @@ export default function BillingPage() {
 				<h2 id="facturas" className="text-lg font-bold">Facturas</h2>
 				{loading ? (
 					<Skeleton className="h-32 w-full" />
+				) : error ? (
+					<div className="flex flex-col items-start gap-3">
+						<p className="text-[15px] text-muted-foreground">No pudimos cargar tus facturas.</p>
+						<Button variant="outline" onClick={() => userId && reload(userId)}>Reintentar</Button>
+					</div>
 				) : bills.length === 0 ? (
 					<p className="text-[15px] text-muted-foreground">Todavía no tienes facturas.</p>
 				) : (

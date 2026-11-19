@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { postAuthPath } from "@/lib/postAuth";
 import { getEstablishmentsByUserId } from "@/services/establishments";
@@ -40,19 +41,26 @@ export default function PanelLayout() {
 	const navigate = useNavigate();
 	const [establishments, setEstablishments] = useState<EstablishmentProps[] | null>(null);
 
+	const [failed, setFailed] = useState(false);
+
 	const load = useCallback(async () => {
+		setFailed(false);
 		await auth.authStateReady();
 		const user = auth.currentUser;
 		if (!user) {
 			navigate("/login", { replace: true });
 			return;
 		}
-		const list = await getEstablishmentsByUserId(user.uid);
-		if (postAuthPath(list) === "/onboarding") {
-			navigate("/onboarding", { replace: true });
-			return;
+		try {
+			const list = (await getEstablishmentsByUserId(user.uid)).filter((e) => !e.deletedAt);
+			if (postAuthPath(list) === "/onboarding") {
+				navigate("/onboarding", { replace: true });
+				return;
+			}
+			setEstablishments(list);
+		} catch {
+			setFailed(true);
 		}
-		setEstablishments(list.filter((e) => !e.deletedAt));
 	}, [navigate]);
 
 	useEffect(() => {
@@ -60,6 +68,14 @@ export default function PanelLayout() {
 	}, [load]);
 
 	const user = auth.currentUser;
+	if (failed) {
+		return (
+			<div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
+				<p className="text-[15px] font-semibold">No pudimos cargar tu panel.</p>
+				<Button onClick={load}>Reintentar</Button>
+			</div>
+		);
+	}
 	if (!establishments || !establishments.length || !user) {
 		return (
 			<div className="flex min-h-screen bg-background">
