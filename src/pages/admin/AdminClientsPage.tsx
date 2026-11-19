@@ -42,12 +42,12 @@ function Metric({ label, value }: { label: string; value: string | number }) {
 	);
 }
 
-function Filter({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: [string, string][] }) {
+function Filter({ id, label, value, onChange, options }: { id: string; label: string; value: string; onChange: (v: string) => void; options: [string, string][] }) {
 	return (
 		<div className="flex flex-col gap-1">
-			<label className="text-[12px] font-semibold text-muted-foreground">{label}</label>
+			<label htmlFor={id} className="text-[12px] font-semibold text-muted-foreground">{label}</label>
 			<Select value={value} onValueChange={onChange}>
-				<SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
+				<SelectTrigger id={id} className="w-[170px]"><SelectValue /></SelectTrigger>
 				<SelectContent>
 					{options.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}
 				</SelectContent>
@@ -113,12 +113,12 @@ export default function AdminClientsPage() {
 			</div>
 			<div className="flex flex-wrap items-end gap-3">
 				<div className="flex flex-col gap-1">
-					<label className="text-[12px] font-semibold text-muted-foreground">Buscar</label>
-					<Input className="w-[240px]" value={f.q} onChange={(e) => set("q")(e.target.value)} placeholder="Nombre, enlace o correo" />
+					<label htmlFor="client-q" className="text-[12px] font-semibold text-muted-foreground">Buscar</label>
+					<Input id="client-q" className="w-[240px]" value={f.q} onChange={(e) => set("q")(e.target.value)} placeholder="Nombre, enlace o correo" />
 				</div>
-				<Filter label="Estado" value={f.status} onChange={set("status")} options={[["all", "Todos"], ["trialing", "Prueba"], ["active", "Activo"], ["past_due", "Vencido"], ["paused", "Pausado"]]} />
-				<Filter label="Plan" value={f.plan} onChange={set("plan")} options={[["all", "Todos"], ...PLANS.map((p) => [p.id, p.name] as [string, string])]} />
-				<Filter label="Método de pago" value={f.method} onChange={set("method")} options={[["all", "Todos"], ["card", "Tarjeta (Stripe)"], ["transfer", "Transferencia"]]} />
+				<Filter id="client-status" label="Estado" value={f.status} onChange={set("status")} options={[["all", "Todos"], ["trialing", "Prueba"], ["active", "Activo"], ["past_due", "Vencido"], ["paused", "Pausado"]]} />
+				<Filter id="client-plan" label="Plan" value={f.plan} onChange={set("plan")} options={[["all", "Todos"], ...PLANS.map((p) => [p.id, p.name] as [string, string])]} />
+				<Filter id="client-method" label="Método de pago" value={f.method} onChange={set("method")} options={[["all", "Todos"], ["card", "Tarjeta (Stripe)"], ["transfer", "Transferencia"]]} />
 			</div>
 			<div className="min-w-0 overflow-x-auto">
 				<table className="w-full text-left text-[14px]">

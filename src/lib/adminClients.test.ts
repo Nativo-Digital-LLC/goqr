@@ -16,9 +16,9 @@ describe('clientMetrics', () => {
 		c('p', b({ status: 'past_due', plan: 'monthly', currentPeriodEnd: days(-2) })),
 		c('t', b({ status: 'trialing', trialEndsAt: days(5) })),
 		c('t2', b({ status: 'trialing', trialEndsAt: days(20) })),
-		c('z', b({ status: 'paused', plan: 'monthly' })),
+		c('z', b({ status: 'paused', plan: 'monthly', currentPeriodEnd: days(2) })),
 		c('g', b({ status: 'legacy' })),
-		c('x', b({ status: 'canceled', plan: 'monthly' })),
+		c('x', b({ status: 'canceled', plan: 'monthly', currentPeriodEnd: days(2) })),
 		c('n', null),
 	];
 	it('cuenta activos y en prueba; legacy/canceled no cuentan', () => {
@@ -30,7 +30,7 @@ describe('clientMetrics', () => {
 		expect(clientMetrics(list, now).mrrDop).toBe(300 + 210 + 0 + 300);
 	});
 	it('vencen esta semana usa trialEndsAt en prueba', () => {
-		expect(clientMetrics(list, now).dueThisWeek).toBe(2); // a y t
+		expect(clientMetrics(list, now).dueThisWeek).toBe(2); // a y t; pausado y cancelado con fecha próxima no cuentan
 	});
 	it('no se rompe con lista vacía', () => {
 		expect(clientMetrics([], now)).toEqual({ active: 0, trialing: 0, mrrDop: 0, dueThisWeek: 0 });

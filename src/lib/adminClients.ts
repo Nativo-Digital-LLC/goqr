@@ -1,8 +1,10 @@
+import { PLANS } from '../constants/plans';
 import { toDate } from './billing';
 import { AdminClient } from '../services/admin';
 
 const DAY = 86_400_000;
-const MONTHLY_DOP: Record<string, number> = { monthly: 300, annual: Math.round(2520 / 12), lifetime: 0 };
+const price = (id: string) => PLANS.find((p) => p.id === id)!.priceDop;
+const MONTHLY_DOP: Record<string, number> = { monthly: price('monthly'), annual: Math.round(price('annual') / 12), lifetime: 0 };
 
 const endOf = (c: AdminClient) => {
 	const b = c.billing;
@@ -19,7 +21,7 @@ export function clientMetrics(clients: AdminClient[], now: Date) {
 		if (b?.status === 'active') active++;
 		if (b?.status === 'trialing') trialing++;
 		if (b?.status === 'active' || b?.status === 'past_due') mrrDop += MONTHLY_DOP[b.plan ?? ''] ?? 0;
-		const end = endOf(c);
+		const end = b?.status === 'trialing' || b?.status === 'active' || b?.status === 'past_due' ? endOf(c) : null;
 		if (end && end >= now && end.getTime() <= now.getTime() + 7 * DAY) dueThisWeek++;
 	}
 	return { active, trialing, mrrDop, dueThisWeek };
