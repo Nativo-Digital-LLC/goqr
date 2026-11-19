@@ -8,3 +8,15 @@ export function useFilePreview(file: File | null | undefined): string | null {
 	}, [url]);
 	return url;
 }
+
+// Arrastrar y soltar con la misma restricción que accept="image/*" del input.
+export function imageDrop(setFile: (f: File) => void) {
+	return {
+		onDragOver: (e: React.DragEvent) => e.preventDefault(),
+		onDrop: (e: React.DragEvent) => {
+			e.preventDefault();
+			const f = e.dataTransfer.files[0];
+			if (f?.type.startsWith("image/")) setFile(f);
+		},
+	};
+}

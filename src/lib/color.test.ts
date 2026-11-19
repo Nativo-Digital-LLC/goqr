@@ -9,6 +9,12 @@ describe("color", () => {
 		expect(readableOn("#2A1410").ok).toBe(true);
 		expect(readableOn("#c2381f").ok).toBe(true);
 	});
+	it("con fondo oscuro igual llega a 4.5", () => {
+		const bg = "#1C1917";
+		const r = readableOn("#6B21A8", bg);
+		expect(r.ok).toBe(false);
+		expect(contrastRatio(r.text, bg)).toBeGreaterThanOrEqual(4.5);
+	});
 	it("oscurece un color claro hasta 4.5", () => {
 		const r = readableOn("#F5A623");
 		expect(r.ok).toBe(false);

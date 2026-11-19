@@ -9,7 +9,7 @@ import { createProduct } from "@/services/products";
 import { EstablishmentProps } from "@/types/Establishment";
 import { ProductStatus } from "@/types/Product";
 import { MenuPreview } from "./MenuPreview";
-import { useFilePreview } from "./useFilePreview";
+import { imageDrop, useFilePreview } from "./useFilePreview";
 import { useOnboarding } from "./useOnboarding";
 
 type Props = {
@@ -32,6 +32,9 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 	// Si el guardado falla a medias, el reintento no repite lo que ya se creó.
 	const categoryId = useRef<string | null>(null);
 	const productDone = useRef(false);
+	// Refs no re-renderizan: estos estados bloquean los campos ya guardados.
+	const [categoryLocked, setCategoryLocked] = useState(false);
+	const [productLocked, setProductLocked] = useState(false);
 
 	const amount = Number(price.replace(",", "."));
 	const canSave = !!establishment && category.trim() !== "" && name.trim() !== "" && amount > 0 && !saving;
@@ -58,7 +61,9 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 						es_name: category.trim(),
 						en_name: category.trim(),
 						order: 0,
+						enableSubcategories: false,
 					})) ?? null;
+				setCategoryLocked(true);
 			}
 			if (!productDone.current) {
 				await createProduct({
@@ -76,6 +81,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 					photo,
 				});
 				productDone.current = true;
+				setProductLocked(true);
 			}
 			await saveStep(4, {});
 		} catch {
@@ -95,7 +101,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 				</div>
 				<div className="flex flex-col gap-1.5">
 					<label htmlFor="cat" className={labelClass}>Categoría</label>
-					<Input id="cat" value={category} onChange={(e) => setCategory(e.target.value)} className={fieldClass} />
+					<Input id="cat" disabled={categoryLocked} value={category} onChange={(e) => setCategory(e.target.value)} className={fieldClass} />
 					<div className="flex flex-wrap items-center gap-2 pt-1">
 						<span className="text-[13px] text-muted-foreground">Sugerencias:</span>
 						{SUGGESTIONS.map((s) => (
@@ -103,6 +109,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 								key={s}
 								type="button"
 								aria-pressed={category === s}
+								disabled={categoryLocked}
 								onClick={() => setCategory(s)}
 								className={`h-11 rounded-full px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
 									category === s ? "bg-primary text-primary-foreground" : "border border-border bg-white"
@@ -116,8 +123,8 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 				<div className="flex flex-col gap-3">
 					<span className={labelClass}>Plato</span>
 					<div className="flex flex-wrap gap-4">
-						<label className="flex size-[120px] shrink-0 cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-white text-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary">
-							<input type="file" accept="image/*" className="sr-only" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} />
+						<label {...imageDrop((f) => !productLocked && setPhoto(f))} className="flex size-[120px] shrink-0 cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-white text-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary">
+							<input type="file" accept="image/*" disabled={productLocked} className="sr-only" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} />
 							{photoUrl ? (
 								<img src={photoUrl} alt="Foto del plato" className="size-full object-cover" />
 							) : (
@@ -130,7 +137,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 						<div className="grid min-w-[220px] flex-1 grid-cols-[1fr_120px] gap-3">
 							<div className="flex flex-col gap-1.5">
 								<label htmlFor="pn" className={labelClass}>Nombre</label>
-								<Input id="pn" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
+								<Input id="pn" disabled={productLocked} value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
 							</div>
 							<div className="flex flex-col gap-1.5">
 								<label htmlFor="pp" className={labelClass}>Precio</label>
@@ -138,6 +145,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 									<span className="text-[15px] text-muted-foreground">$</span>
 									<input
 										id="pp"
+										disabled={productLocked}
 										inputMode="decimal"
 										value={price}
 										onChange={(e) => setPrice(e.target.value)}
@@ -153,6 +161,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 						</label>
 						<textarea
 							id="pd"
+							disabled={productLocked}
 							rows={2}
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
@@ -184,6 +193,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 					logoUrl={establishment?.logoUrl}
 					bannerUrl={establishment?.bannerUrl}
 					color={establishment?.mainHexColor}
+					exactColor={establishment?.exactColor}
 					category={category.trim() || undefined}
 					product={name.trim() ? { name: name.trim(), price: price || "0", description, photoUrl } : undefined}
 				/>

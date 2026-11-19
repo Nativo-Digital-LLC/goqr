@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { readableOn } from "@/lib/color";
 import { EstablishmentProps } from "@/types/Establishment";
 import { MenuPreview } from "./MenuPreview";
-import { useFilePreview } from "./useFilePreview";
+import { imageDrop, useFilePreview } from "./useFilePreview";
 import { useOnboarding } from "./useOnboarding";
 
 type Props = {
@@ -34,7 +34,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 	const [banner, setBanner] = useState<File | null>(null);
 	const [color, setColor] = useState((establishment?.mainHexColor ?? "#C2381F").toUpperCase());
 	const [hexText, setHexText] = useState(color);
-	const [exact, setExact] = useState(false);
+	const [exact, setExact] = useState(establishment?.exactColor ?? false);
 	const [saving, setSaving] = useState(false);
 	const logoUrl = useFilePreview(logo) ?? establishment?.logoUrl ?? null;
 	const bannerUrl = useFilePreview(banner) ?? establishment?.bannerUrl ?? null;
@@ -59,8 +59,8 @@ export function StepBrand({ establishment, saveStep }: Props) {
 
 	function submit(e: FormEvent) {
 		e.preventDefault();
-		if (saving) return;
-		void go({ ...(logo && { logo }), ...(banner && { banner }), mainHexColor: color });
+		if (saving || !HEX.test(hexText)) return;
+		void go({ ...(logo && { logo }), ...(banner && { banner }), mainHexColor: color, exactColor: exact });
 	}
 
 	const dropClass =
@@ -76,7 +76,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 				<div className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-4">
 					<div className="flex flex-col gap-1.5">
 						<span className={labelClass}>Logo</span>
-						<label className={`${dropClass} size-[140px]`}>
+						<label className={`${dropClass} size-[140px]`} {...imageDrop(setLogo)}>
 							<input type="file" accept="image/*" className="sr-only" onChange={(e) => setLogo(e.target.files?.[0] ?? null)} />
 							{logoUrl ? (
 								<img src={logoUrl} alt="Logo elegido" className="size-full object-cover" />
@@ -91,7 +91,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 					</div>
 					<div className="flex flex-col gap-1.5">
 						<span className={labelClass}>Foto de portada</span>
-						<label className={`${dropClass} h-[140px] px-3`}>
+						<label className={`${dropClass} h-[140px] px-3`} {...imageDrop(setBanner)}>
 							<input type="file" accept="image/*" className="sr-only" onChange={(e) => setBanner(e.target.files?.[0] ?? null)} />
 							{bannerUrl ? (
 								<img src={bannerUrl} alt="Portada elegida" className="size-full object-cover" />
@@ -167,7 +167,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 					<button type="button" disabled={saving} onClick={() => void go({})} className={ghostBtn}>
 						Omitir por ahora
 					</button>
-					<Button type="submit" disabled={saving} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
+					<Button type="submit" disabled={saving || !HEX.test(hexText)} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
 						Continuar
 						<ArrowRight aria-hidden="true" />
 					</Button>
@@ -183,6 +183,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 					logoUrl={logoUrl}
 					bannerUrl={bannerUrl}
 					color={color}
+					exactColor={exact}
 					category="Entradas"
 				/>
 			</aside>

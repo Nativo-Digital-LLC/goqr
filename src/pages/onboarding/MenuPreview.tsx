@@ -1,4 +1,4 @@
-import { contrastRatio } from "@/lib/color";
+import { contrastRatio, readableOn } from "@/lib/color";
 import { EstablishmentType } from "@/types/Establishment";
 import { TYPE_LABELS } from "./typeLabels";
 
@@ -10,11 +10,12 @@ type MenuPreviewProps = {
 	logoUrl?: string | null;
 	bannerUrl?: string | null;
 	color?: string;
+	exactColor?: boolean;
 	category?: string;
 	product?: { name: string; price: string | number; description?: string; photoUrl?: string | null };
 };
 
-export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color, category, product }: MenuPreviewProps) {
+export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color, exactColor, category, product }: MenuPreviewProps) {
 	const bg = color || "#2A1410";
 	const subtitle = [type && TYPE_LABELS[type], phone].filter(Boolean).join(" · ");
 	return (
@@ -55,7 +56,9 @@ export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color
 							<div className="flex min-w-0 flex-col gap-0.5">
 								<span className="text-sm font-semibold">{product.name}</span>
 								{product.description && <span className="text-xs text-muted-foreground">{product.description}</span>}
-								<span className="text-sm font-bold">RD$ {product.price}</span>
+								<span className="text-sm font-bold" style={color ? { color: exactColor ? color : readableOn(color).text } : undefined}>
+									RD$ {product.price}
+								</span>
 							</div>
 						</div>
 					) : (

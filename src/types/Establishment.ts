@@ -28,6 +28,7 @@ export interface EstablishmentProps {
 	phone: string | null;
 	whatsapp: string | null;
 	mainHexColor: string;
+	exactColor?: boolean;
 	requiresTaxReceipt: boolean;
 	rnc: string | null;
 	companyName: string | null;
@@ -48,6 +49,7 @@ export interface EstablishmentProps {
 export interface CreateEstablishmentParams {
 	userId: string;
 	mainHexColor: string;
+	exactColor?: boolean;
 	name: string;
 	domain: string;
 	description: string;

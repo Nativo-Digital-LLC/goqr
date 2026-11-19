@@ -45,5 +45,6 @@ export function readableOn(hex: string, bg = "#FFFFFF"): { ok: boolean; text: st
 		text = fromHsl(h, s, Math.max(l, 0));
 		if (contrastRatio(text, bg) >= 4.5) break;
 	}
+	if (contrastRatio(text, bg) < 4.5) text = ["#000000", "#FFFFFF"].find((c) => contrastRatio(c, bg) >= 4.5) ?? text;
 	return { ok: false, text };
 }
