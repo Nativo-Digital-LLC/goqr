@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	descriptionLines, formatDays, formatPrice, isVisibleProduct, localized, menuColor,
-	openStatus, mapsEmbedSrc, reviewHref, telHref, parseDays, parseHours, socialHref, whatsappHref,
+	openStatus, productsInLiveCategories, mapsEmbedSrc, reviewHref, telHref, parseDays, parseHours, socialHref, whatsappHref,
 } from "./menu";
 import { readableOn } from "./color";
 import { ProductStatus } from "../types/Product";
@@ -100,5 +100,20 @@ describe("menu", () => {
 			{ text: "Hola", bold: false },
 			{ text: "Abierto los lunes", bold: true },
 		]);
+	});
+});
+
+describe("productsInLiveCategories", () => {
+	const cats = [{ id: "a", enableSubcategories: true }, { id: "b", enableSubcategories: false }];
+	const subs = { a: [{ id: "s1" }] };
+	it("quita productos de categorías o subcategorías borradas", () => {
+		const ps = [
+			{ categoryId: "a", subcategoryId: "s1" },
+			{ categoryId: "a", subcategoryId: "gone" },
+			{ categoryId: "b", subcategoryId: null },
+			{ categoryId: "b", subcategoryId: "old" },
+			{ categoryId: "zzz", subcategoryId: null },
+		];
+		expect(productsInLiveCategories(ps, cats, subs)).toEqual([ps[0], ps[2], ps[3]]);
 	});
 });

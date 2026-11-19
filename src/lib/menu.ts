@@ -146,3 +146,17 @@ export function descriptionLines(text: string): { text: string; bold: boolean }[
 		line.startsWith("*") ? { text: line.replace(/^\*+|\*+$/g, ""), bold: true } : { text: line, bold: false }
 	);
 }
+
+/** Productos que el menú público puede mostrar: su categoría está visible y, si la categoría usa subcategorías, su subcategoría sigue viva. */
+export function productsInLiveCategories<P extends Pick<ProductProps, "categoryId" | "subcategoryId">>(
+	products: P[],
+	categories: { id: string; enableSubcategories?: boolean }[],
+	subcategories: Record<string, { id: string }[]>
+): P[] {
+	return products.filter((p) => {
+		const c = categories.find((x) => x.id === p.categoryId);
+		if (!c) return false;
+		if (!c.enableSubcategories || !p.subcategoryId) return true;
+		return (subcategories[c.id] ?? []).some((s) => s.id === p.subcategoryId);
+	});
+}

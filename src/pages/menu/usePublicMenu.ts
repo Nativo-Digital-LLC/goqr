@@ -4,7 +4,7 @@ import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 
 import { db } from '@/utils/firebase';
 import { Collection } from '@/constants/Collections';
-import { isVisibleProduct } from '@/lib/menu';
+import { isVisibleProduct, productsInLiveCategories } from '@/lib/menu';
 import { EstablishmentProps } from '@/types/Establishment';
 import { CategoryProps } from '@/types/Category';
 import { SubcategoryProps } from '@/types/Subcategory';
@@ -88,7 +88,8 @@ export const usePublicMenu = (slug: string | undefined): PublicMenuResult => {
 					})
 				);
 
-				if (!cancelled) setState({ status: 'ready', menu: { establishment, categories, subcategories, products } });
+				const live = productsInLiveCategories(products, categories, subcategories);
+				if (!cancelled) setState({ status: 'ready', menu: { establishment, categories, subcategories, products: live } });
 			} catch (error) {
 				console.error(error);
 				if (!cancelled) setState({ status: 'error' });

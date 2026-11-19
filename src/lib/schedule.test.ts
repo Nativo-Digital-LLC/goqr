@@ -37,6 +37,12 @@ describe("schedulesToWeek", () => {
 		expect(weekToSchedules(week, unparsed)).toEqual([mixed]);
 	});
 
+	it("una fila con días nulos no rompe y se conserva", () => {
+		const bad = { days: null, hours: "8:00 AM - 5:00 PM" } as unknown as { days: string; hours: string };
+		expect(schedulesToWeek([bad]).unparsed).toEqual([bad]);
+		expect(schedulesToWeek([{ days: "Lunes", hours: null as unknown as string }]).unparsed).toHaveLength(1);
+	});
+
 	it("sin horario o con horas ilegibles no abre nada", () => {
 		expect(schedulesToWeek(undefined).week.every((d) => !d.open)).toBe(true);
 		expect(schedulesToWeek([{ days: "Lunes", hours: "todo el día" }]).unparsed).toHaveLength(1);
