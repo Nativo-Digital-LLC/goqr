@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-import HomeContainer from "./containers/HomeContainer";
+import { MarketingLayout } from "@/layouts/MarketingLayout";
 
 export default function PrivacyPoliciesPage() {
 	return (
-		<HomeContainer>
+		<MarketingLayout>
 			<div className="section-parent bg-white">
 				<div className="section-child w-full text-left flex flex-col items-center p-[20px]!">
 					<div className="max-w-[890px] w-full">
@@ -153,6 +153,6 @@ export default function PrivacyPoliciesPage() {
 					</div>
 				</div>
 			</div>
-		</HomeContainer>
+		</MarketingLayout>
 	);
 }

@@ -1,8 +1,8 @@
-import HomeContainer from "./containers/HomeContainer";
+import { MarketingLayout } from "@/layouts/MarketingLayout";
 
 export default function TermsPage() {
 	return (
-		<HomeContainer>
+		<MarketingLayout>
 			<div className="section-parent bg-white">
 				<div className="section-child w-full flex flex-col items-center text-left p-[20px]!">
 					<div className="max-w-[890px] w-full">
@@ -137,6 +137,6 @@ export default function TermsPage() {
 					</div>
 				</div>
 			</div>
-		</HomeContainer>
+		</MarketingLayout>
 	);
 }

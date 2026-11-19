@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-import HomeContainer from "./containers/HomeContainer";
+import { MarketingLayout } from "@/layouts/MarketingLayout";
 
 export default function NotFoundPage() {
 	return (
-		<HomeContainer>
+		<MarketingLayout>
 			<div className="section-parent">
 				<div className=" section-child flex flex-col justify-center items-center flex-1">
 					<div className="w-full grow flex flex-col mb-[40px] items-center">
@@ -23,6 +23,6 @@ export default function NotFoundPage() {
 					</div>
 				</div>
 			</div>
-		</HomeContainer>
+		</MarketingLayout>
 	);
 }
