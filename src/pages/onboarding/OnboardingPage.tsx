@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,8 @@ const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
 export default function OnboardingPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep } = useOnboarding((location.state as { prefetched?: Prefetched } | null)?.prefetched);
+	const isNew = useSearchParams()[0].get("new") === "1";
+	const { establishment, step, loading, unauthenticated, finished, loadError, hasOthers, retry, saveStep } = useOnboarding((location.state as { prefetched?: Prefetched } | null)?.prefetched, isNew);
 	// El estado del historial sobrevive a una recarga: se borra apenas se usa para no retomar con datos viejos.
 	useEffect(() => {
 		if (location.state) navigate(".", { replace: true, state: null });
@@ -84,13 +85,13 @@ export default function OnboardingPage() {
 						<Skeleton className="h-[520px] w-[280px] rounded-[36px]" />
 					</div>
 				) : step === 1 ? (
-					<StepBusiness {...stepProps} />
+					<StepBusiness {...stepProps} noTrial={hasOthers} />
 				) : step === 2 ? (
 					<StepBrand {...stepProps} />
 				) : step === 3 ? (
 					<StepFirstDish {...stepProps} onDish={setDish} />
 				) : (
-					<StepDone establishment={establishment} dish={dish} />
+					<StepDone establishment={establishment} dish={dish} noTrial={hasOthers} />
 				)}
 			</main>
 		</div>

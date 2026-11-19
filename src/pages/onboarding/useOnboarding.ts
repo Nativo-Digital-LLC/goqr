@@ -5,6 +5,8 @@ import { CreateEstablishmentParams, EstablishmentProps } from "@/types/Establish
 import { createEstablishment, getEstablishmentsByUserId, isSlugAvailable, updateEstablishment } from "@/services/establishments";
 import { useSessionStore } from "@/store/session";
 import { auth } from "@/utils/firebase";
+import { PANEL_ESTABLISHMENT_KEY } from "@/constants/panel";
+import { pickStart } from "./start";
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -26,7 +28,8 @@ export type StepProps = {
 /** Lo que ya consultó la redirección tras ingresar (`location.state.prefetched`). */
 export type Prefetched = { uid: string; establishments: EstablishmentProps[] };
 
-export function useOnboarding(prefetched?: Prefetched | null) {
+/** isNew: añadir otro local (`?new=1`): no retoma ni redirige, crea uno nuevo desde el paso 1. */
+export function useOnboarding(prefetched?: Prefetched | null, isNew = false) {
 	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
 	const [step, setStep] = useState<Step>(1);
 	const [loading, setLoading] = useState(true);
@@ -35,37 +38,52 @@ export function useOnboarding(prefetched?: Prefetched | null) {
 	const [finished, setFinished] = useState(false);
 	const [loadError, setLoadError] = useState(false);
 	const [attempt, setAttempt] = useState(0);
+	// Con isNew: ya tenía locales, así que el nuevo no lleva prueba gratis.
+	const [hasOthers, setHasOthers] = useState(false);
 	// Id recién creado: si el refresco falla, un reintento actualiza en vez de crear otro.
 	const createdId = useRef<string | null>(null);
 
-	const fetchEstablishment = useCallback(async () => {
+	// undefined = sin usuario.
+	const fetchList = useCallback(async () => {
 		await auth.authStateReady();
 		const uid = auth.currentUser?.uid;
 		if (!uid) return undefined;
-		return (await getEstablishmentsByUserId(uid))[0] ?? null;
+		return getEstablishmentsByUserId(uid);
 	}, []);
+
+	// El que se está editando: el recién creado en esta visita, o el primero salvo con isNew.
+	const pick = useCallback(
+		(list: EstablishmentProps[]) => (isNew ? list.find((e) => e.id === createdId.current) : list[0]) ?? null,
+		[isNew]
+	);
+
+	const fetchEstablishment = useCallback(async () => {
+		const list = await fetchList();
+		return list && pick(list);
+	}, [fetchList, pick]);
 
 	useEffect(() => {
 		let cancelled = false;
 		setLoading(true);
 		setLoadError(false);
-		const first = attempt === 0 && prefetched
+		const first = attempt === 0 && prefetched && !isNew
 			? auth.authStateReady().then(() =>
-				auth.currentUser?.uid === prefetched.uid ? prefetched.establishments[0] ?? null : fetchEstablishment()
+				auth.currentUser?.uid === prefetched.uid ? prefetched.establishments : fetchList()
 			)
-			: fetchEstablishment();
+			: fetchList();
 		first
-			.then((found) => {
+			.then((list) => {
 				if (cancelled) return;
-				if (found === undefined) {
+				if (list === undefined) {
 					// Sin usuario en Firebase: se borra la sesión vieja para que /login no rebote de vuelta aquí.
 					useSessionStore.getState().setSession(null);
 					return setUnauthenticated(true);
 				}
-				setEstablishment(found);
-				const saved = found?.onboardingStep;
-				if (found && !(saved === 1 || saved === 2 || saved === 3)) setFinished(true);
-				else setStep((saved as Step) ?? 1);
+				setHasOthers(isNew && list.length > 0);
+				const start = pickStart(list, isNew);
+				setEstablishment(start.establishment);
+				if (start.finished) setFinished(true);
+				else setStep(start.step);
 			})
 			.catch(() => !cancelled && setLoadError(true))
 			.finally(() => !cancelled && setLoading(false));
@@ -74,7 +92,7 @@ export function useOnboarding(prefetched?: Prefetched | null) {
 		};
 		// prefetched solo cuenta en la primera carga.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [fetchEstablishment, attempt]);
+	}, [fetchList, attempt]);
 
 	// n es el próximo paso a mostrar; 4 = onboarding terminado.
 	const saveStep = useCallback(
@@ -82,7 +100,7 @@ export function useOnboarding(prefetched?: Prefetched | null) {
 			const uid = auth.currentUser?.uid;
 			if (!uid) throw new Error("Sin sesión");
 			// Nunca se crea un segundo establecimiento: se busca el existente aunque el estado local esté vacío.
-			const existing = establishment ?? (await getEstablishmentsByUserId(uid))[0];
+			const existing = establishment ?? (isNew ? undefined : (await getEstablishmentsByUserId(uid))[0]);
 			const targetId = existing?.id ?? createdId.current;
 			if (data.domain && data.domain !== existing?.domain && !(await isSlugAvailable(data.domain))) {
 				throw new Error("slug-taken");
@@ -112,15 +130,17 @@ export function useOnboarding(prefetched?: Prefetched | null) {
 					userId: uid,
 					onboardingStep: n,
 				});
+				// El panel abre con el local nuevo seleccionado.
+				if (isNew) localStorage.setItem(PANEL_ESTABLISHMENT_KEY, createdId.current);
 			}
 			const fresh = await fetchEstablishment();
 			if (fresh) setEstablishment(fresh);
 			setStep(n);
 		},
-		[establishment, fetchEstablishment]
+		[establishment, fetchEstablishment, isNew]
 	);
 
 	const retry = useCallback(() => setAttempt((a) => a + 1), []);
 
-	return { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep };
+	return { establishment, step, loading, unauthenticated, finished, loadError, hasOthers, retry, saveStep };
 }

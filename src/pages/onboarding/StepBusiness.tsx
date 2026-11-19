@@ -18,7 +18,7 @@ const labelClass = "text-sm font-semibold";
 const hintClass = "text-[13px] text-muted-foreground";
 const fieldClass = "rounded-xl border-border bg-white text-[15px] focus-visible:ring-2 focus-visible:ring-primary";
 
-export function StepBusiness({ establishment, saveStep, saving, setSaving, saveRef }: StepProps) {
+export function StepBusiness({ establishment, saveStep, saving, setSaving, saveRef, noTrial }: StepProps & { noTrial?: boolean }) {
 	const [name, setName] = useState(establishment?.name ?? "");
 	const [slug, setSlug] = useState(establishment?.domain ?? "");
 	const [slugTouched, setSlugTouched] = useState(!!establishment?.domain);
@@ -117,6 +117,11 @@ export function StepBusiness({ establishment, saveStep, saving, setSaving, saveR
 					<p className="text-base text-muted-foreground">
 						Esto es lo que verán tus clientes arriba del menú. Lo puedes cambiar después.
 					</p>
+					{noTrial && (
+						<p role="note" className="rounded-xl bg-accent px-3.5 py-2.5 text-sm font-semibold text-primary">
+							Este local no tiene prueba gratis: lo activas al elegir un plan.
+						</p>
+					)}
 				</div>
 				<div className="flex flex-col gap-1.5">
 					<label htmlFor="name" className={labelClass}>Nombre del negocio</label>

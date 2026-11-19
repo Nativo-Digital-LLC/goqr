@@ -16,7 +16,7 @@ const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visi
 const dateFmt = new Intl.DateTimeFormat("es-DO", { day: "numeric", month: "long" });
 
 // dish: el plato creado en el paso 3; null si eligió «Lo hago después».
-export function StepDone({ establishment, dish }: { establishment: EstablishmentProps | null; dish: CreatedDish | null }) {
+export function StepDone({ establishment, dish, noTrial }: { establishment: EstablishmentProps | null; dish: CreatedDish | null; noTrial?: boolean }) {
 	const [est, setEst] = useState(establishment);
 	const [qr, setQr] = useState("");
 	const [qrError, setQrError] = useState(false);
@@ -29,8 +29,12 @@ export function StepDone({ establishment, dish }: { establishment: Establishment
 	useEffect(() => {
 		const uid = establishment?.userId;
 		if (!uid) return;
-		getEstablishmentsByUserId(uid).then((r) => r[0] && setEst(r[0])).catch(() => {});
-	}, [establishment?.userId]);
+		// Con varios locales, el [0] puede ser otro: se busca por id.
+		getEstablishmentsByUserId(uid).then((r) => {
+			const mine = r.find((x) => x.id === establishment.id);
+			if (mine) setEst(mine);
+		}).catch(() => {});
+	}, [establishment?.userId, establishment?.id]);
 
 	useEffect(() => {
 		if (!slug) return;
@@ -98,7 +102,7 @@ export function StepDone({ establishment, dish }: { establishment: Establishment
 					</div>
 				</div>
 				<p className="text-[15px] text-muted-foreground">
-					Tu prueba gratis termina {trialText}. No necesitas tarjeta hasta entonces.{" "}
+					{noTrial ? "Este local no tiene prueba gratis: lo activas al elegir un plan." : `Tu prueba gratis termina ${trialText}. No necesitas tarjeta hasta entonces.`}{" "}
 					<Link to="/dashboard/invoices" className={`font-semibold text-primary underline ${focus}`}>
 						Ver planes
 					</Link>

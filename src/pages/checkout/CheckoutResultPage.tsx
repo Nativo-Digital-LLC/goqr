@@ -5,13 +5,13 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { PLANS } from "@/constants/plans";
 import { Collection } from "@/constants/Collections";
+import { PANEL_ESTABLISHMENT_KEY } from "@/constants/panel";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { formatMoney, toDate } from "@/lib/billing";
 import { auth, db } from "@/utils/firebase";
 import type { EstablishmentProps } from "@/types/Establishment";
 
 const WAIT_MS = 30_000;
-const PANEL_KEY = "goqr:panel-establishment"; // mismo valor que PanelContext
 
 type Phase = "auth" | "loading" | "missing" | "ready" | "timeout";
 
@@ -47,7 +47,7 @@ export default function CheckoutResultPage({ result }: { result: "success" | "ca
 	}, [signedIn, establishmentId, result]);
 
 	const goPanel = () => {
-		if (establishmentId && e) localStorage.setItem(PANEL_KEY, establishmentId);
+		if (establishmentId && e) localStorage.setItem(PANEL_ESTABLISHMENT_KEY, establishmentId);
 		navigate("/dashboard");
 	};
 
@@ -128,5 +128,5 @@ export default function CheckoutResultPage({ result }: { result: "success" | "ca
 
 // Deja seleccionado el establecimiento que se intentó pagar antes de entrar al panel.
 const goPanelSelect = (id: string | null) => () => {
-	if (id) localStorage.setItem(PANEL_KEY, id);
+	if (id) localStorage.setItem(PANEL_ESTABLISHMENT_KEY, id);
 };

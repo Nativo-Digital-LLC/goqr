@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import {
 	DropdownMenu,
@@ -38,7 +39,7 @@ export function EstablishmentSwitcher() {
 				</DropdownMenuRadioGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem asChild>
-					<a href="mailto:contacto@goqr.com.do?subject=Quiero%20agregar%20otro%20local">¿Otro local? Escríbenos</a>
+					<Link to="/onboarding?new=1">Añadir establecimiento</Link>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 
+import { PANEL_ESTABLISHMENT_KEY as STORAGE_KEY } from "@/constants/panel";
 import type { EstablishmentProps } from "@/types/Establishment";
 
-const STORAGE_KEY = "goqr:panel-establishment";
 
 type PanelValue = {
 	establishments: EstablishmentProps[];
