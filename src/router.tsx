@@ -22,6 +22,7 @@ import MenuEditorPage from "./pages/panel/menu/MenuEditorPage";
 import EstablishmentPage from "./pages/panel/establishment/EstablishmentPage";
 import SoonPage from "./pages/panel/SoonPage";
 import BillingPage from "./pages/panel/BillingPage";
+import TransferPage from "./pages/panel/billing/TransferPage";
 
 const router = createBrowserRouter([
 	{
@@ -81,6 +82,7 @@ const router = createBrowserRouter([
 				),
 			},
 			{ path: "billing", element: <BillingPage /> },
+			{ path: "billing/transfer", element: <TransferPage /> },
 			{ path: "menus", element: <Navigate to="/dashboard" replace /> },
 			{ path: "invoices", element: <Navigate to="/dashboard/billing" replace /> },
 		],
