@@ -62,6 +62,8 @@ export default function ResetPasswordPage() {
 	const [reset, loading, error] = useResetPasswordWithSecret();
 	// undefined = comprobando el enlace, null = enlace inválido o vencido
 	const [email, setEmail] = useState<string | null | undefined>(oobCode ? undefined : null);
+	const [checkFailed, setCheckFailed] = useState(false);
+	const [attempt, setAttempt] = useState(0);
 	const form = useForm<z.infer<typeof schema>>({
 		resolver: zodResolver(schema),
 		defaultValues: { password: "", confirm: "" },
@@ -71,15 +73,38 @@ export default function ResetPasswordPage() {
 	useEffect(() => {
 		if (!oobCode) return;
 		let cancelled = false;
+		setCheckFailed(false);
 		verifyPasswordResetCode(auth, oobCode)
 			.then((e) => !cancelled && setEmail(e))
-			.catch(() => !cancelled && setEmail(null));
+			.catch((err) => {
+				if (cancelled) return;
+				// Solo un código vencido o inválido es "enlace vencido"; el resto (p. ej. red) se puede reintentar.
+				if (["auth/expired-action-code", "auth/invalid-action-code"].includes(err?.code)) setEmail(null);
+				else setCheckFailed(true);
+			});
 		return () => {
 			cancelled = true;
 		};
-	}, [oobCode]);
+	}, [oobCode, attempt]);
 
 	if (email === null) return <ExpiredLink />;
+	if (checkFailed) {
+		return (
+			<AuthLayout>
+				<div className={cardClass}>
+					<div className="flex flex-col gap-2">
+						<h1 className="font-display text-[28px] font-bold tracking-[-0.02em]">No pudimos comprobar tu enlace</h1>
+						<p role="alert" className="text-[15px] leading-normal text-muted-foreground">
+							{authErrorMessage(null)}
+						</p>
+					</div>
+					<Button className="rounded-xl focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setAttempt((a) => a + 1)}>
+						Reintentar
+					</Button>
+				</div>
+			</AuthLayout>
+		);
+	}
 	if (email === undefined) {
 		return (
 			<AuthLayout>

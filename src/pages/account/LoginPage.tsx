@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 import { PasswordInput } from "@/components/account/PasswordInput";
@@ -12,9 +12,6 @@ import { useLogin } from "@/hooks/useAuth";
 import { useRedirectIfAuthenticated } from "@/hooks/useRedirectIfAuthenticated";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { authErrorMessage } from "@/lib/authErrors";
-import { postAuthPath } from "@/lib/postAuth";
-import { getEstablishmentsByUserId } from "@/services/establishments";
-import { auth } from "@/utils/firebase";
 
 const schema = z.object({
 	email: z.string().min(1, "Escribe tu correo.").email("Escribe un correo válido."),
@@ -62,8 +59,7 @@ function Aside() {
 }
 
 export default function LoginPage() {
-	const navigate = useNavigate();
-	// Tras un login con correo el store recibe la sesión y este hook navega; no se navega dos veces.
+	// Tras un login con correo o Google el store recibe la sesión y este hook navega; no se navega dos veces.
 	useRedirectIfAuthenticated();
 	const [handleLogin, loading, loginType, error] = useLogin();
 	const form = useForm<z.infer<typeof schema>>({
@@ -71,16 +67,6 @@ export default function LoginPage() {
 		defaultValues: { email: "", password: "" },
 	});
 	const message = error ? authErrorMessage(error) : "";
-
-	const onGoogleDone = async () => {
-		// Con Google el store no se actualiza solo: el uid sale de auth.currentUser.
-		const uid = auth.currentUser?.uid;
-		try {
-			navigate(uid ? postAuthPath(await getEstablishmentsByUserId(uid)) : "/dashboard", { replace: true });
-		} catch {
-			navigate("/dashboard", { replace: true });
-		}
-	};
 
 	return (
 		<AuthLayout aside={<Aside />}>
@@ -164,7 +150,7 @@ export default function LoginPage() {
 					variant="outline"
 					className="rounded-xl border-border font-semibold focus-visible:ring-2 focus-visible:ring-primary"
 					disabled={loading}
-					onClick={() => handleLogin("Google", { page: "login" }, onGoogleDone)}
+					onClick={() => handleLogin("Google", { page: "login" })}
 				>
 					<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
 						<path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2-1.9 3.2-4.7 3.2-8z" />

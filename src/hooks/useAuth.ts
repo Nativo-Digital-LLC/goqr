@@ -15,6 +15,7 @@ import {
 	sendResetPasswordEmail,
 	sendVerificationEmail
 } from '../services/auth';
+import { auth } from '../utils/firebase';
 import { useSessionStore } from '../store/session';
 import { EmailVerificationStatus } from '../types/Auth';
 
@@ -118,6 +119,20 @@ export const useLogin = (): UseLoginType => {
 
 			if (type === 'Google') {
 				await authWithGoogle();
+				// authWithGoogle no escribe la sesión; el store solo se inicializa una vez.
+				const user = auth.currentUser;
+				if (user) {
+					setSession({
+						userId: user.uid,
+						user: {
+							uid: user.uid,
+							displayName: user.displayName,
+							email: user.email,
+							emailVerified: user.emailVerified,
+							photoURL: user.photoURL
+						}
+					});
+				}
 			}
 
 			if (type === 'Apple') {
