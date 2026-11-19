@@ -71,9 +71,10 @@ export default function MenuEditorPage() {
 	const done = async () => {
 		setWriting(true);
 		try {
-			await reload();
+			const ok = await reload();
 			setPreviewKey((k) => k + 1);
-			toast.success("Guardado");
+			if (ok) toast.success("Guardado");
+			else toast.error("Guardamos los cambios, pero no pudimos actualizar la lista. Recarga la página.");
 		} finally {
 			setWriting(false);
 		}
@@ -113,6 +114,7 @@ export default function MenuEditorPage() {
 	};
 
 	const onSaveCategory = (v: CategoryValues) =>
+		!busy &&
 		saveCategory(
 			{ ...v, id: catDialog?.category?.id, establishmentId: est.id, order: nextOrder(categories) },
 			() => {
@@ -122,7 +124,7 @@ export default function MenuEditorPage() {
 		);
 
 	const onSaveSub = (v: SubcategoryValues) => {
-		if (!subDialog) return;
+		if (!subDialog || busy) return;
 		saveSubcategory(
 			{
 				...v,
@@ -229,7 +231,7 @@ export default function MenuEditorPage() {
 										<p className="text-[15px]">
 											{subs.length ? "Elige una subcategoría de la lista para ver sus productos." : "Esta categoría usa subcategorías. Crea la primera para agregar productos."}
 										</p>
-										<Button variant="outline" onClick={() => setSubDialog({ category, sub: null })}><Plus /> Agregar subcategoría</Button>
+										<Button variant="outline" disabled={locked} onClick={() => setSubDialog({ category, sub: null })}><Plus /> Agregar subcategoría</Button>
 									</div>
 								) : (
 									<>

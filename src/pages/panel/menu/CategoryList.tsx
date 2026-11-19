@@ -80,7 +80,7 @@ export function CategoryList({
 										<DropdownMenuItem disabled={i === categories.length - 1} onSelect={() => a.onMove(i, 1)}>Bajar</DropdownMenuItem>
 										<DropdownMenuItem onSelect={() => a.onToggleHidden(c)}>{c.hidden ? "Mostrar" : "Ocultar"}</DropdownMenuItem>
 										{c.enableSubcategories && (
-											<DropdownMenuItem onSelect={() => a.onAddSubcategory(c)}>Agregar subcategoría</DropdownMenuItem>
+											<DropdownMenuItem disabled={busy} onSelect={() => a.onAddSubcategory(c)}>Agregar subcategoría</DropdownMenuItem>
 										)}
 										<DropdownMenuSeparator />
 										<DropdownMenuItem variant="destructive" onSelect={() => a.onDelete(c)}>Eliminar</DropdownMenuItem>

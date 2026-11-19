@@ -54,18 +54,20 @@ export const useMenuEditor = (establishmentId: string | undefined) => {
 	current.current = establishmentId;
 	const generation = useRef(0);
 
-	const load = useCallback(async (id: string | undefined) => {
-		if (!id) return;
+	const load = useCallback(async (id: string | undefined): Promise<boolean> => {
+		if (!id) return false;
 		const gen = ++generation.current;
 		try {
 			const data = await fetchMenu(id);
 			if (generation.current === gen) setStored({ id, data, loading: false, error: null });
+			return true;
 		} catch (e) {
 			console.error(e);
 			// Keep previous data (only if it belongs to this establishment).
 			if (generation.current === gen) {
 				setStored((s) => ({ ...s, id, data: s.id === id ? s.data : empty, loading: false, error: e as Error }));
 			}
+			return false;
 		}
 	}, []);
 
