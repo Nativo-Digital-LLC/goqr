@@ -69,6 +69,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 	return (
 		<>
 			<form onSubmit={submit} className="flex min-w-0 max-w-[600px] flex-[999_1_480px] flex-col gap-6">
+				<fieldset disabled={saving} className="contents">
 				<div className="flex flex-col gap-2">
 					<h1 className="font-display text-[28px] font-bold tracking-[-0.02em] sm:text-4xl">Dale tu cara al menú</h1>
 					<p className="text-base text-muted-foreground">Tu logo, una foto de portada y tu color. Mira cómo queda a la derecha.</p>
@@ -76,7 +77,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 				<div className="grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-4">
 					<div className="flex flex-col gap-1.5">
 						<span className={labelClass}>Logo</span>
-						<label className={`${dropClass} size-[140px]`} {...imageDrop(setLogo)}>
+						<label className={`${dropClass} size-[140px]`} {...imageDrop((f) => !saving && setLogo(f))}>
 							<input type="file" accept="image/*" className="sr-only" onChange={(e) => setLogo(e.target.files?.[0] ?? null)} />
 							{logoUrl ? (
 								<img src={logoUrl} alt="Logo elegido" className="size-full object-cover" />
@@ -91,7 +92,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 					</div>
 					<div className="flex flex-col gap-1.5">
 						<span className={labelClass}>Foto de portada</span>
-						<label className={`${dropClass} h-[140px] px-3`} {...imageDrop(setBanner)}>
+						<label className={`${dropClass} h-[140px] px-3`} {...imageDrop((f) => !saving && setBanner(f))}>
 							<input type="file" accept="image/*" className="sr-only" onChange={(e) => setBanner(e.target.files?.[0] ?? null)} />
 							{bannerUrl ? (
 								<img src={bannerUrl} alt="Portada elegida" className="size-full object-cover" />
@@ -172,6 +173,7 @@ export function StepBrand({ establishment, saveStep }: Props) {
 						<ArrowRight aria-hidden="true" />
 					</Button>
 				</div>
+				</fieldset>
 			</form>
 			<aside className="flex flex-[1_1_300px] flex-col items-center gap-3">
 				<span className="text-[13px] font-semibold text-muted-foreground">Vista previa en vivo</span>

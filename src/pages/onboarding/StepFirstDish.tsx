@@ -93,6 +93,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 	return (
 		<>
 			<form onSubmit={submit} className="flex min-w-0 max-w-[600px] flex-[999_1_480px] flex-col gap-6">
+				<fieldset disabled={saving} className="contents">
 				<div className="flex flex-col gap-2">
 					<h1 className="font-display text-[28px] font-bold tracking-[-0.02em] sm:text-4xl">Sube tu primer plato</h1>
 					<p className="text-base text-muted-foreground">
@@ -123,7 +124,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 				<div className="flex flex-col gap-3">
 					<span className={labelClass}>Plato</span>
 					<div className="flex flex-wrap gap-4">
-						<label {...imageDrop((f) => !productLocked && setPhoto(f))} className="flex size-[120px] shrink-0 cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-white text-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary">
+						<label {...imageDrop((f) => !productLocked && !saving && setPhoto(f))} className="flex size-[120px] shrink-0 cursor-pointer flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border-2 border-dashed border-border bg-white text-center has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary">
 							<input type="file" accept="image/*" disabled={productLocked} className="sr-only" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} />
 							{photoUrl ? (
 								<img src={photoUrl} alt="Foto del plato" className="size-full object-cover" />
@@ -183,6 +184,7 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 						<ArrowRight aria-hidden="true" />
 					</Button>
 				</div>
+				</fieldset>
 			</form>
 			<aside className="flex flex-[1_1_300px] flex-col items-center gap-3">
 				<span className="text-[13px] font-semibold text-muted-foreground">Vista previa en vivo</span>
