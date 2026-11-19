@@ -17,7 +17,6 @@ import {
 } from '../services/auth';
 import { auth } from '../utils/firebase';
 import { useSessionStore } from '../store/session';
-import { EmailVerificationStatus } from '../types/Auth';
 
 type UseRegisterType = [
 	(
@@ -268,46 +267,6 @@ export const useSendVerificationEmail = (): UseSendVerificationEmailType => {
 	}
 
 	return [handleRequest, loading, error];
-}
-
-type UseVerifyEmailType = [
-	EmailVerificationStatus | null,
-	boolean,
-	FirebaseError | null,
-	(status: EmailVerificationStatus) => void
-];
-
-export const useVerifyEmail = (): UseVerifyEmailType => {
-
-	const [status, setStatus] = useState<EmailVerificationStatus | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	useEffect(() => {
-		load();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	async function load() {
-		try {
-			// Con Firebase el enlace de verificación se maneja con action codes
-			// directamente en el frontend; aquí sólo validamos que el usuario exista.
-			const session = useSessionStore.getState().session;
-			if (!session) {
-				return setStatus('login-required');
-			}
-
-			setStatus('verified');
-		} catch (error) {
-			setError(error as FirebaseError);
-			setStatus('error');
-			Sentry.captureException(error);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	return [status, loading, error, (status) => setStatus(status)];
 }
 
 type UseRequestResetPasswordEmailType = [

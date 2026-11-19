@@ -9,7 +9,7 @@ import MenuPage from "./pages/menu";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import MenusPage from "./pages/dashboard/Menus";
 import InvoicesPage from "./pages/dashboard/Invoices";
-import VerifyEmailPage from "./pages/verify-email";
+import VerifyEmailPage from "./pages/account/VerifyEmailPage";
 import NotFoundPage from "./pages/404";
 import QrPage from "./pages/menu/qr";
 import TermsPage from "./pages/terms";
