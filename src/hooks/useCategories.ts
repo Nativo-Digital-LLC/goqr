@@ -15,6 +15,7 @@ interface SaveCategoryParams {
 	en_name: string;
 	order?: number;
 	enableSubcategories?: boolean;
+	hidden?: boolean;
 }
 
 type UseSaveCategoryType = [
@@ -37,7 +38,8 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 				es_name,
 				en_name = null,
 				enableSubcategories = true,
-				order
+				order,
+				hidden
 			} = params;
 
 			if (params?.id) {
@@ -46,7 +48,8 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 					id: params.id,
 					es_name,
 					en_name,
-					enableSubcategories
+					enableSubcategories,
+					hidden
 				});
 			} else {
 				await createCategory({
@@ -54,7 +57,8 @@ export const useSaveCategory = (): UseSaveCategoryType => {
 					en_name,
 					es_name,
 					order: order!,
-					enableSubcategories
+					enableSubcategories,
+					hidden
 				});
 			}
 

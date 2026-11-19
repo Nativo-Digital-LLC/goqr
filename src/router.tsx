@@ -15,6 +15,7 @@ import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import PanelLayout from "./pages/panel/PanelLayout";
 import HomePage from "./pages/panel/HomePage";
 import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
+import MenuEditorPage from "./pages/panel/menu/MenuEditorPage";
 import SoonPage from "./pages/panel/SoonPage";
 import BillingPage from "./pages/panel/BillingPage";
 
@@ -61,7 +62,7 @@ const router = createBrowserRouter([
 		element: <PanelLayout />,
 		children: [
 			{ index: true, element: <HomePage /> },
-			{ path: "menu", element: <PanelPlaceholder title="Menú" /> },
+			{ path: "menu", element: <MenuEditorPage /> },
 			{ path: "menu/product/new", element: <PanelPlaceholder title="Nuevo producto" /> },
 			{ path: "menu/product/:productId", element: <PanelPlaceholder title="Editar producto" /> },
 			{ path: "establishment", element: <PanelPlaceholder title="Establecimiento" /> },
