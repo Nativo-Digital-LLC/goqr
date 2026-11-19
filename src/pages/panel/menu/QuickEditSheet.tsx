@@ -27,7 +27,7 @@ export function QuickEditSheet({
 }) {
 	return (
 		<Sheet open={!!product} onOpenChange={(o) => !o && !saving && onClose()}>
-			<SheetContent side="bottom" className="rounded-t-3xl">
+			<SheetContent side="bottom" className="max-h-[85dvh] gap-0 rounded-t-3xl">
 				{product && <Form key={product.id} product={product} saving={saving} onSave={onSave} />}
 			</SheetContent>
 		</Sheet>
@@ -48,7 +48,7 @@ function Form({ product, saving, onSave }: { product: ProductProps; saving: bool
 
 	return (
 		<>
-			<SheetHeader className="gap-3 px-5 pb-0 pt-5">
+			<SheetHeader className="shrink-0 gap-3 px-5 pb-4 pt-5">
 				<div className="flex items-center gap-3 pr-8">
 					{product.photoUrl
 						? <img src={product.photoUrl} alt="" className="size-[52px] shrink-0 rounded-xl object-cover" />
@@ -59,7 +59,7 @@ function Form({ product, saving, onSave }: { product: ProductProps; saving: bool
 					</div>
 				</div>
 			</SheetHeader>
-			<div className="flex flex-col gap-4 px-5 pb-8">
+			<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4">
 				{values.length > 0 && (
 					<fieldset className="flex flex-col gap-2.5">
 						<legend className="mb-2.5 text-sm font-semibold">Precios</legend>
@@ -97,10 +97,10 @@ function Form({ product, saving, onSave }: { product: ProductProps; saving: bool
 						</button>
 					))}
 				</div>
-				<div className="flex gap-2">
+			</div>
+			<div className="flex shrink-0 gap-2 border-t border-border px-5 pb-8 pt-4">
 					<Button asChild variant="outline" className="h-12 flex-1"><Link to={`/dashboard/menu/product/${product.id}`}>Editar todo</Link></Button>
 					<Button className="h-12 flex-1" loading={saving} disabled={saving} onClick={submit}>Guardar</Button>
-				</div>
 			</div>
 		</>
 	);

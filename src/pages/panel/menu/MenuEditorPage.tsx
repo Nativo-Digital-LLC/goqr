@@ -343,12 +343,12 @@ export default function MenuEditorPage() {
 				}
 			/>
 			<Sheet open={catsOpen} onOpenChange={setCatsOpen}>
-				<SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-3xl">
-					<SheetHeader className="pb-0">
+				<SheetContent side="bottom" className="max-h-[85dvh] gap-0 rounded-t-3xl">
+					<SheetHeader className="shrink-0 pb-0">
 						<SheetTitle className="sr-only">Categorías</SheetTitle>
 						<SheetDescription className="sr-only">Administra tus categorías y subcategorías.</SheetDescription>
 					</SheetHeader>
-					<div className="px-4 pb-8">
+					<div className="min-h-0 flex-1 overflow-y-auto px-4 pb-8 pt-2">
 						<CategoryList
 							categories={categories}
 							subcategories={subcategories}
