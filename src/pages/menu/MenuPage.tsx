@@ -54,6 +54,7 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 	const params = new URLSearchParams(search);
 	const category = categories.find((c) => c.id === params.get("categoryId"));
 	const subs = category?.enableSubcategories ? subcategories[category.id] ?? [] : [];
+	const hasSubId = params.has("subcategoryId");
 	const subcategory = subs.find((s) => s.id === params.get("subcategoryId"));
 
 	useEffect(() => {
@@ -66,8 +67,11 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 	useEffect(() => {
 		if (establishment.isActive && !category && categories.length) {
 			navigate({ search: `?categoryId=${categories[0].id}` }, { replace: true });
+		} else if (establishment.isActive && category && hasSubId && !subcategory) {
+			// subcategoryId ajeno a la categoría: se quita (sin bucle, la URL nueva ya no lo trae).
+			navigate({ search: `?categoryId=${category.id}` }, { replace: true });
 		}
-	}, [establishment.isActive, category, categories, navigate]);
+	}, [establishment.isActive, category, categories, hasSubId, subcategory, navigate]);
 
 	const color = menuColor(establishment.mainHexColor, establishment.exactColor);
 	const closeAllergy = () => {
