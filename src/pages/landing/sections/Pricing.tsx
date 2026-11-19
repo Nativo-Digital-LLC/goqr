@@ -13,7 +13,7 @@ function PlanCard({ plan }: { plan: Plan }) {
 		<div
 			className={cn(
 				"relative flex flex-col gap-3 rounded-2xl border bg-white p-7",
-				highlighted ? "border-2 border-primary" : "border-line"
+				highlighted ? "border-2 border-primary max-md:order-first max-md:border-brand max-md:bg-brand max-md:text-white" : "border-line"
 			)}
 		>
 			{plan.badge && (
@@ -26,13 +26,13 @@ function PlanCard({ plan }: { plan: Plan }) {
 				<span className="font-display text-4xl font-extrabold">
 					{money(plan.id === "lifetime" ? plan.priceDop : plan.perMonthDop)}
 				</span>
-				{plan.id !== "lifetime" && <span className="text-cacao-2">/mes</span>}
+				{plan.id !== "lifetime" && <span className={cn("text-cacao-2", highlighted && "max-md:text-white")}>/mes</span>}
 			</div>
-			<span className="text-sm text-cacao-2">{plan.note}</span>
+			<span className={cn("text-sm text-cacao-2", highlighted && "max-md:text-white")}>{plan.note}</span>
 			<CtaLink
 				to={`/register?plan=${plan.id}`}
 				variant={highlighted ? "primary" : "outline"}
-				className="mt-auto"
+				className={cn("mt-auto", highlighted && "max-md:bg-platano max-md:text-primary max-md:hover:bg-platano/90")}
 				onClick={() => sessionStorage.setItem("goqr:plan", plan.id)}
 			>
 				Empezar gratis

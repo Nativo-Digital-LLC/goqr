@@ -21,12 +21,17 @@ export function HowItWorks() {
 			</div>
 			<ol className="grid gap-6 md:grid-cols-3">
 				{STEPS.map((s, i) => (
-					<li key={s.title} className="flex flex-col gap-3">
-						<span className="flex size-10 items-center justify-center rounded-full bg-brand font-display text-lg font-bold text-white">
+					<li
+						key={s.title}
+						className="flex gap-4 rounded-3xl bg-white p-5 md:flex-col md:gap-3 md:rounded-none md:bg-transparent md:p-0"
+					>
+						<span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand font-display text-lg font-bold text-white">
 							{i + 1}
 						</span>
-						<h3 className="font-display text-xl font-bold">{s.title}</h3>
-						<p className="text-cacao-2">{s.text}</p>
+						<div className="flex flex-col gap-1 md:gap-3">
+							<h3 className="font-display text-xl font-bold">{s.title}</h3>
+							<p className="text-cacao-2">{s.text}</p>
+						</div>
 					</li>
 				))}
 			</ol>
