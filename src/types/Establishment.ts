@@ -40,7 +40,12 @@ export interface EstablishmentProps {
 	onboardingStep?: number | null;
 	billing?: {
 		status?: 'trialing' | 'active' | 'past_due' | 'paused' | 'canceled' | 'legacy';
+		plan?: 'monthly' | 'annual' | 'lifetime';
+		method?: 'card' | 'transfer';
 		trialEndsAt?: Timestamp;
+		currentPeriodEnd?: Timestamp;
+		stripeCustomerId?: string;
+		stripeSubscriptionId?: string;
 	};
 	type?: EstablishmentType | null;
 	createdAt: Timestamp;

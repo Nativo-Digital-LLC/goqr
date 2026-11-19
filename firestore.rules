@@ -11,9 +11,9 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/establishments/$(estId)).data.userId == request.auth.uid;
     }
 
-    // Lectura pública de todo excepto `users`. Las reglas se suman (OR), por eso el comodín excluye `users`.
+    // Lectura pública de todo excepto `users`, `transfers` y `stripe-events`. Las reglas se suman (OR), por eso el comodín los excluye.
     match /{collection}/{document=**} {
-      allow read: if collection != 'users';
+      allow read: if !(collection in ['users', 'transfers', 'stripe-events']);
     }
 
     match /establishments/{establishmentId} {
@@ -44,6 +44,20 @@ service cloud.firestore {
     match /migrated-users/{email} {
       allow create, update: if signedIn() && request.auth.token.email.lower() == email;
       // sin delete: borrarlo reabriría la ruta de migración desde Appwrite
+    }
+
+    match /transfers/{id} {
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || request.auth.token.admin == true);
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && ownsEstablishment(request.resource.data.establishmentId)
+        && request.resource.data.status == 'pending'
+        && !('reviewedBy' in request.resource.data);
+      allow update, delete: if false;
+    }
+
+    match /stripe-events/{id} {
+      allow read, write: if false;
     }
 
     match /users/{uid} {

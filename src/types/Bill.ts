@@ -21,4 +21,11 @@ export interface BillProps {
 	period: string;
 	paymentUrl: string;
 	billingPeriod: string;
+	establishmentId?: string;
+	currency?: string;
+	method?: 'card' | 'transfer';
+	stripeInvoiceId?: string;
+	hostedInvoiceUrl?: string;
+	invoicePdf?: string;
+	transferId?: string;
 }
