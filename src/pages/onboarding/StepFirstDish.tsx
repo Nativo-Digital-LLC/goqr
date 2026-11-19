@@ -1,33 +1,27 @@
 import { ArrowRight, ImagePlus } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { parsePrice } from "@/lib/price";
 import { createCategory } from "@/services/categories";
 import { createProduct } from "@/services/products";
-import { EstablishmentProps } from "@/types/Establishment";
 import { ProductStatus } from "@/types/Product";
 import { MenuPreview } from "./MenuPreview";
 import { imageDrop, useFilePreview } from "./useFilePreview";
-import { useOnboarding } from "./useOnboarding";
-
-type Props = {
-	establishment: EstablishmentProps | null;
-	saveStep: ReturnType<typeof useOnboarding>["saveStep"];
-};
+import { CreatedDish, StepProps } from "./useOnboarding";
 
 const SUGGESTIONS = ["Entradas", "Platos fuertes", "Bebidas", "Postres"];
 const labelClass = "text-sm font-semibold";
 const fieldClass = "rounded-xl border-border bg-white text-[15px] focus-visible:ring-2 focus-visible:ring-primary";
 
-export function StepFirstDish({ establishment, saveStep }: Props) {
+export function StepFirstDish({ establishment, saveStep, saving, setSaving, saveRef, onDish }: StepProps & { onDish: (dish: CreatedDish) => void }) {
 	const [category, setCategory] = useState("");
 	const [name, setName] = useState("");
 	const [price, setPrice] = useState("");
 	const [description, setDescription] = useState("");
 	const [photo, setPhoto] = useState<File | null>(null);
-	const [saving, setSaving] = useState(false);
 	const photoUrl = useFilePreview(photo);
 	// Si el guardado falla a medias, el reintento no repite lo que ya se creó.
 	const categoryId = useRef<string | null>(null);
@@ -36,8 +30,8 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 	const [categoryLocked, setCategoryLocked] = useState(false);
 	const [productLocked, setProductLocked] = useState(false);
 
-	const amount = Number(price.replace(",", "."));
-	const canSave = !!establishment && category.trim() !== "" && name.trim() !== "" && amount > 0 && !saving;
+	const amount = parsePrice(price);
+	const canSave = !!establishment && category.trim() !== "" && name.trim() !== "" && amount !== null && !saving;
 
 	async function skip() {
 		setSaving(true);
@@ -45,13 +39,13 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 			await saveStep(4, {});
 		} catch {
 			toast.error("No pudimos guardar tu avance. Intenta de nuevo.");
+		} finally {
 			setSaving(false);
 		}
 	}
 
-	async function submit(e: FormEvent) {
-		e.preventDefault();
-		if (!canSave || !establishment) return;
+	async function save() {
+		if (!canSave || !establishment || amount === null) return null;
 		setSaving(true);
 		try {
 			if (!categoryId.current) {
@@ -83,12 +77,30 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 				productDone.current = true;
 				setProductLocked(true);
 			}
+			onDish({ category: category.trim(), name: name.trim(), price: amount, description: description.trim(), photo });
 			await saveStep(4, {});
+			return true;
 		} catch {
 			toast.error("No pudimos guardar tu plato. Intenta de nuevo.");
+			return false;
+		} finally {
 			setSaving(false);
 		}
 	}
+
+	useEffect(() => {
+		saveRef.current = save;
+		return () => {
+			saveRef.current = null;
+		};
+	});
+
+	function submit(e: FormEvent) {
+		e.preventDefault();
+		void save();
+	}
+
+	const priceError = price.trim() !== "" && amount === null;
 
 	return (
 		<>
@@ -150,9 +162,16 @@ export function StepFirstDish({ establishment, saveStep }: Props) {
 										inputMode="decimal"
 										value={price}
 										onChange={(e) => setPrice(e.target.value)}
+										aria-invalid={priceError}
+										aria-describedby={priceError ? "pp-error" : undefined}
 										className="h-11 min-w-0 flex-1 bg-transparent px-2 text-[15px] outline-none"
 									/>
 								</div>
+								{priceError && (
+									<span id="pp-error" className="text-[13px] font-semibold text-error">
+										Escribe un precio mayor que 0, como 1,500.
+									</span>
+								)}
 							</div>
 						</div>
 					</div>

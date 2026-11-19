@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isValidSlug, slugify } from "./slug";
+import { isValidSlug, slugify, slugifyInput } from "./slug";
 
 describe("slugify", () => {
 	it("normaliza mayúsculas y espacios", () => expect(slugify("La Roca Restaurant")).toBe("la-roca-restaurant"));
@@ -18,4 +18,11 @@ describe("isValidSlug", () => {
 		["-la-roca", false],
 		["a".repeat(41), false],
 	])("%s -> %s", (s, ok) => expect(isValidSlug(s)).toBe(ok));
+});
+
+describe("slugifyInput", () => {
+	it("normaliza lo pegado", () => expect(slugifyInput("La Roca Ñ")).toBe("la-roca-n"));
+	it("conserva el guion final mientras se escribe", () => expect(slugifyInput("la roca ")).toBe("la-roca-"));
+	it("no agrega guion tras una letra con acento", () => expect(slugifyInput("café")).toBe("cafe"));
+	it("vacío sigue vacío", () => expect(slugifyInput("-")).toBe(""));
 });

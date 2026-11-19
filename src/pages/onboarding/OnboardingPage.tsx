@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -8,14 +7,16 @@ import { StepBrand } from "./StepBrand";
 import { StepBusiness } from "./StepBusiness";
 import { StepDone } from "./StepDone";
 import { StepFirstDish } from "./StepFirstDish";
-import { useOnboarding } from "./useOnboarding";
+import { CreatedDish, StepSave, useOnboarding } from "./useOnboarding";
 
 const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
 
 export default function OnboardingPage() {
 	const { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep } = useOnboarding();
 	const navigate = useNavigate();
-	const [leaving, setLeaving] = useState(false);
+	const [saving, setSaving] = useState(false);
+	const saveRef = useRef<StepSave | null>(null);
+	const [dish, setDish] = useState<CreatedDish | null>(null);
 
 	if (unauthenticated) return <Navigate to="/login" replace />;
 	if (loadError) {
@@ -39,16 +40,15 @@ export default function OnboardingPage() {
 		);
 	}
 
+	// Guarda lo escrito en el paso actual si es válido; si no, sale sin guardar.
 	async function saveAndExit() {
-		setLeaving(true);
-		try {
-			if (establishment) await saveStep(step, {});
-			navigate("/dashboard");
-		} catch {
-			toast.error("No pudimos guardar tu avance. Intenta de nuevo.");
-			setLeaving(false);
-		}
+		const saved = (await saveRef.current?.()) ?? null;
+		if (saved === false) return;
+		// Sin establecimiento, el panel viejo mandaría al formulario antd.
+		navigate(establishment || saved ? "/dashboard" : "/");
 	}
+
+	const stepProps = { establishment, saveStep, saving, setSaving, saveRef };
 
 	return (
 		<div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -67,7 +67,7 @@ export default function OnboardingPage() {
 				<button
 					type="button"
 					onClick={saveAndExit}
-					disabled={leaving}
+					disabled={saving}
 					className="rounded-md px-1 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
 				>
 					Guardar y salir
@@ -75,13 +75,13 @@ export default function OnboardingPage() {
 			</header>
 			<main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-wrap items-start gap-x-16 gap-y-10 px-4 py-8 sm:px-8 sm:py-12">
 				{step === 1 ? (
-					<StepBusiness establishment={establishment} saveStep={saveStep} />
+					<StepBusiness {...stepProps} />
 				) : step === 2 ? (
-					<StepBrand establishment={establishment} saveStep={saveStep} />
+					<StepBrand {...stepProps} />
 				) : step === 3 ? (
-					<StepFirstDish establishment={establishment} saveStep={saveStep} />
+					<StepFirstDish {...stepProps} onDish={setDish} />
 				) : (
-					<StepDone establishment={establishment} />
+					<StepDone establishment={establishment} dish={dish} />
 				)}
 			</main>
 		</div>

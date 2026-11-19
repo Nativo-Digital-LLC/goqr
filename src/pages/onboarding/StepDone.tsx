@@ -1,4 +1,3 @@
-import { collection, getDocs } from "firebase/firestore";
 import { ArrowRight, Copy, Download, MessageCircle } from "lucide-react";
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
@@ -6,25 +5,23 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Collection } from "@/constants/Collections";
 import { downloadQrPng, menuUrl, qrSrc } from "@/lib/qr";
 import { getEstablishmentsByUserId } from "@/services/establishments";
-import { getAllProducts } from "@/services/products";
 import { EstablishmentProps } from "@/types/Establishment";
-import { ProductProps } from "@/types/Product";
-import { db } from "@/utils/firebase";
 import { MenuPreview } from "./MenuPreview";
+import { useFilePreview } from "./useFilePreview";
+import { CreatedDish } from "./useOnboarding";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const dateFmt = new Intl.DateTimeFormat("es-DO", { day: "numeric", month: "long" });
 
-export function StepDone({ establishment }: { establishment: EstablishmentProps | null }) {
+// dish: el plato creado en el paso 3; null si eligió «Lo hago después».
+export function StepDone({ establishment, dish }: { establishment: EstablishmentProps | null; dish: CreatedDish | null }) {
 	const [est, setEst] = useState(establishment);
 	const [qr, setQr] = useState("");
 	const [qrError, setQrError] = useState(false);
 	const [qrTry, setQrTry] = useState(0);
-	const [category, setCategory] = useState<string>();
-	const [product, setProduct] = useState<ProductProps>();
+	const photoUrl = useFilePreview(dish?.photo);
 	const slug = est?.domain ?? "";
 	const url = menuUrl(slug);
 
@@ -36,20 +33,6 @@ export function StepDone({ establishment }: { establishment: EstablishmentProps 
 	}, [establishment?.userId]);
 
 	useEffect(() => {
-		if (!establishment) return;
-		getAllProducts(establishment.id)
-			.then(async (list) => {
-				const p = list[0];
-				if (!p) return;
-				setProduct(p);
-				const cats = await getDocs(collection(db, Collection.Establishments, establishment.id, "categories"));
-				const c = cats.docs.find((d) => d.id === p.categoryId)?.data();
-				setCategory(c?.es_name);
-			})
-			.catch(() => {});
-	}, [establishment]);
-
-	useEffect(() => {
 		if (!slug) return;
 		setQrError(false);
 		QRCode.toDataURL(qrSrc(slug), { width: 480, margin: 2, color: { dark: "#2A1410", light: "#FFFFFF" } })
@@ -59,7 +42,6 @@ export function StepDone({ establishment }: { establishment: EstablishmentProps 
 
 	const trialEnd = est?.billing?.trialEndsAt;
 	const trialText = trialEnd ? `el ${dateFmt.format(trialEnd.toDate())}` : "en 30 días";
-	const price = product?.prices?.[0]?.price;
 
 	async function copy() {
 		try {
@@ -137,8 +119,8 @@ export function StepDone({ establishment }: { establishment: EstablishmentProps 
 					bannerUrl={est?.bannerUrl}
 					color={est?.mainHexColor}
 					exactColor={est?.exactColor}
-					category={category}
-					product={product ? { name: product.es_name, price: price ?? "", description: product.es_description ?? undefined, photoUrl: product.photoUrl } : undefined}
+					category={dish?.category}
+					product={dish ? { name: dish.name, price: dish.price.toLocaleString("es-DO"), description: dish.description || undefined, photoUrl } : undefined}
 				/>
 			</aside>
 		</>

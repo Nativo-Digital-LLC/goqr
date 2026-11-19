@@ -57,7 +57,7 @@ export interface CreateEstablishmentParams {
 	address: string;
 	addressLink?: string;
 	phone: string;
-	whatsapp?: string;
+	whatsapp?: string | null;
 	requiresTaxReceipt?: boolean;
 	rnc?: string;
 	companyName?: string;

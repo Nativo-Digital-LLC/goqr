@@ -4,17 +4,12 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { isValidSlug, slugify } from "@/lib/slug";
+import { isValidSlug, slugify, slugifyInput } from "@/lib/slug";
 import { isSlugAvailable } from "@/services/establishments";
-import { EstablishmentProps, EstablishmentType } from "@/types/Establishment";
+import { EstablishmentType } from "@/types/Establishment";
 import { MenuPreview } from "./MenuPreview";
 import { TYPE_LABELS } from "./typeLabels";
-import { useOnboarding } from "./useOnboarding";
-
-type Props = {
-	establishment: EstablishmentProps | null;
-	saveStep: ReturnType<typeof useOnboarding>["saveStep"];
-};
+import { StepProps } from "./useOnboarding";
 
 type SlugStatus = "idle" | "invalid" | "checking" | "available" | "taken" | "error";
 type SlugResult = { slug: string; status: "available" | "taken" | "error" };
@@ -23,7 +18,7 @@ const labelClass = "text-sm font-semibold";
 const hintClass = "text-[13px] text-muted-foreground";
 const fieldClass = "rounded-xl border-border bg-white text-[15px] focus-visible:ring-2 focus-visible:ring-primary";
 
-export function StepBusiness({ establishment, saveStep }: Props) {
+export function StepBusiness({ establishment, saveStep, saving, setSaving, saveRef }: StepProps) {
 	const [name, setName] = useState(establishment?.name ?? "");
 	const [slug, setSlug] = useState(establishment?.domain ?? "");
 	const [slugTouched, setSlugTouched] = useState(!!establishment?.domain);
@@ -32,7 +27,6 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 	const [whatsapp, setWhatsapp] = useState(establishment?.whatsapp ?? "");
 	// Resultado de la comprobación junto con el slug exacto que se comprobó.
 	const [result, setResult] = useState<SlugResult | null>(null);
-	const [saving, setSaving] = useState(false);
 
 	// El enlace que ya es del propio establecimiento cuenta como disponible.
 	const isOwn = !!slug && slug === establishment?.domain;
@@ -63,9 +57,8 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 
 	const canContinue = name.trim() !== "" && status === "available" && !saving;
 
-	async function submit(e: FormEvent) {
-		e.preventDefault();
-		if (!canContinue) return;
+	async function save() {
+		if (!canContinue) return null;
 		setSaving(true);
 		try {
 			await saveStep(2, {
@@ -73,15 +66,30 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 				domain: slug,
 				type,
 				phone: phone.trim(),
-				whatsapp: whatsapp.trim() || undefined,
+				whatsapp: whatsapp.trim() || null,
 			});
+			return true;
 		} catch (err) {
 			if ((err as Error).message === "slug-taken") {
 				setResult({ slug, status: "taken" });
 				toast.error("Ese enlace acaba de ocuparse, prueba otro.");
 			} else toast.error("No pudimos guardar tus datos. Intenta de nuevo.");
+			return false;
+		} finally {
 			setSaving(false);
 		}
+	}
+
+	useEffect(() => {
+		saveRef.current = save;
+		return () => {
+			saveRef.current = null;
+		};
+	});
+
+	function submit(e: FormEvent) {
+		e.preventDefault();
+		void save();
 	}
 
 	const message: Record<SlugStatus, string | null> = {
@@ -115,7 +123,7 @@ export function StepBusiness({ establishment, saveStep }: Props) {
 							value={slug}
 							onChange={(e) => {
 								setSlugTouched(true);
-								setSlug(e.target.value);
+								setSlug(slugifyInput(e.target.value));
 							}}
 							aria-describedby="slug-status"
 							className="h-11 min-w-0 flex-1 bg-transparent pr-2 text-[15px] font-semibold outline-none"

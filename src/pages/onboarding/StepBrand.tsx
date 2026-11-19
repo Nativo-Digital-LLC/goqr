@@ -1,19 +1,13 @@
 import { ArrowRight, TriangleAlert, Upload } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { readableOn } from "@/lib/color";
-import { EstablishmentProps } from "@/types/Establishment";
 import { MenuPreview } from "./MenuPreview";
 import { imageDrop, useFilePreview } from "./useFilePreview";
-import { useOnboarding } from "./useOnboarding";
-
-type Props = {
-	establishment: EstablishmentProps | null;
-	saveStep: ReturnType<typeof useOnboarding>["saveStep"];
-};
+import { StepProps } from "./useOnboarding";
 
 const PRESETS = [
 	{ hex: "#E86B2A", name: "Naranja" },
@@ -29,13 +23,12 @@ const labelClass = "text-sm font-semibold";
 const ghostBtn =
 	"inline-flex h-11 items-center rounded-xl px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50";
 
-export function StepBrand({ establishment, saveStep }: Props) {
+export function StepBrand({ establishment, saveStep, saving, setSaving, saveRef }: StepProps) {
 	const [logo, setLogo] = useState<File | null>(null);
 	const [banner, setBanner] = useState<File | null>(null);
 	const [color, setColor] = useState((establishment?.mainHexColor ?? "#C2381F").toUpperCase());
 	const [hexText, setHexText] = useState(color);
 	const [exact, setExact] = useState(establishment?.exactColor ?? false);
-	const [saving, setSaving] = useState(false);
 	const logoUrl = useFilePreview(logo) ?? establishment?.logoUrl ?? null;
 	const bannerUrl = useFilePreview(banner) ?? establishment?.bannerUrl ?? null;
 
@@ -51,16 +44,30 @@ export function StepBrand({ establishment, saveStep }: Props) {
 		setSaving(true);
 		try {
 			await saveStep(3, data);
+			return true;
 		} catch {
 			toast.error("No pudimos guardar tu marca. Intenta de nuevo.");
+			return false;
+		} finally {
 			setSaving(false);
 		}
 	}
 
+	async function save() {
+		if (saving || !HEX.test(hexText)) return null;
+		return go({ ...(logo && { logo }), ...(banner && { banner }), mainHexColor: color, exactColor: exact });
+	}
+
+	useEffect(() => {
+		saveRef.current = save;
+		return () => {
+			saveRef.current = null;
+		};
+	});
+
 	function submit(e: FormEvent) {
 		e.preventDefault();
-		if (saving || !HEX.test(hexText)) return;
-		void go({ ...(logo && { logo }), ...(banner && { banner }), mainHexColor: color, exactColor: exact });
+		void save();
 	}
 
 	const dropClass =

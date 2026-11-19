@@ -1,11 +1,27 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { PaymentFrequency, PaymentMethod } from "@/types/Bill";
 import { CreateEstablishmentParams, EstablishmentProps } from "@/types/Establishment";
 import { createEstablishment, getEstablishmentsByUserId, isSlugAvailable, updateEstablishment } from "@/services/establishments";
+import { useSessionStore } from "@/store/session";
 import { auth } from "@/utils/firebase";
 
 type Step = 1 | 2 | 3 | 4;
+
+/** Guarda el paso actual: true si guardó, false si falló (ya avisó), null si el formulario no es válido. */
+export type StepSave = () => Promise<boolean | null>;
+
+/** El plato creado en el paso 3, para la vista previa del paso 4. */
+export type CreatedDish = { category: string; name: string; price: number; description: string; photo: File | null };
+
+export type StepProps = {
+	establishment: EstablishmentProps | null;
+	saveStep: ReturnType<typeof useOnboarding>["saveStep"];
+	// Compartido con «Guardar y salir»: bloquea la salida mientras el paso guarda.
+	saving: boolean;
+	setSaving: (saving: boolean) => void;
+	saveRef: MutableRefObject<StepSave | null>;
+};
 
 export function useOnboarding() {
 	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
@@ -33,7 +49,11 @@ export function useOnboarding() {
 		fetchEstablishment()
 			.then((found) => {
 				if (cancelled) return;
-				if (found === undefined) return setUnauthenticated(true);
+				if (found === undefined) {
+					// Sin usuario en Firebase: se borra la sesión vieja para que /login no rebote de vuelta aquí.
+					useSessionStore.getState().setSession(null);
+					return setUnauthenticated(true);
+				}
 				setEstablishment(found);
 				const saved = found?.onboardingStep;
 				if (found && !(saved === 1 || saved === 2 || saved === 3)) setFinished(true);

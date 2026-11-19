@@ -15,6 +15,9 @@ type MenuPreviewProps = {
 	product?: { name: string; price: string | number; description?: string; photoUrl?: string | null };
 };
 
+// Fondo de la tarjeta del plato: el hex de --muted en src/styles/tokens.css.
+const CARD_BG = "#F5EFE9";
+
 export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color, exactColor, category, product }: MenuPreviewProps) {
 	const bg = color || "#2A1410";
 	const subtitle = [type && TYPE_LABELS[type], phone].filter(Boolean).join(" · ");
@@ -56,7 +59,7 @@ export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color
 							<div className="flex min-w-0 flex-col gap-0.5">
 								<span className="text-sm font-semibold">{product.name}</span>
 								{product.description && <span className="text-xs text-muted-foreground">{product.description}</span>}
-								<span className="text-sm font-bold" style={color ? { color: exactColor ? color : readableOn(color).text } : undefined}>
+								<span className="text-sm font-bold" style={color ? { color: exactColor ? color : readableOn(color, CARD_BG).text } : undefined}>
 									RD$ {product.price}
 								</span>
 							</div>
