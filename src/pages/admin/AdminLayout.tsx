@@ -9,7 +9,7 @@ import { auth } from "@/utils/firebase";
 type AdminState = "loading" | "anon" | "admin" | "denied";
 
 // Única verificación de la claim admin.
-export function useIsAdmin(): AdminState {
+function useIsAdmin(): AdminState {
 	const [state, setState] = useState<AdminState>("loading");
 	useEffect(() => {
 		(async () => {
