@@ -198,7 +198,7 @@ export function StepFirstDish({ establishment, saveStep, saving, setSaving, save
 					>
 						Lo hago después
 					</button>
-					<Button type="submit" disabled={!canSave} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
+					<Button type="submit" loading={saving} disabled={!canSave} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
 						Guardar y continuar
 						<ArrowRight aria-hidden="true" />
 					</Button>

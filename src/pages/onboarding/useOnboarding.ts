@@ -91,6 +91,12 @@ export function useOnboarding(prefetched?: Prefetched | null) {
 				const rest = { ...data };
 				delete rest.userId; // las reglas no permiten escribir userId en updates
 				await updateEstablishment(targetId, { ...rest, onboardingStep: n });
+				// Sin imágenes no hay nada nuevo que venga del servidor: se actualiza en local y se evita otra consulta.
+				if (existing && !data.logo && !data.banner) {
+					setEstablishment({ ...existing, ...rest, onboardingStep: n } as EstablishmentProps);
+					setStep(n);
+					return;
+				}
 			} else {
 				createdId.current = await createEstablishment({
 					name: "",

@@ -16,23 +16,29 @@ const ERROR_TOAST = "post-auth-error";
  * Corre también justo después de un login con correo o Google (el hook de login escribe la
  * sesión en el store), así que las páginas no deben navegar por su cuenta en ese caso.
  */
-export function useRedirectIfAuthenticated(): void {
+/** Devuelve true mientras decide a dónde mandar al usuario (para dejar el botón cargando). */
+export function useRedirectIfAuthenticated(): boolean {
 	const navigate = useNavigate();
 	// Se depende del objeto de sesión (no solo del uid): cada login lo reemplaza y relanza la consulta aunque sea el mismo usuario.
 	const session = useSessionStore((state) => state.session);
 	const setSession = useSessionStore((state) => state.setSession);
 	const [attempt, setAttempt] = useState(0);
+	const [redirecting, setRedirecting] = useState(false);
 
 	useEffect(() => {
 		if (!session) return;
 		let cancelled = false;
+		setRedirecting(true);
 		toast.dismiss(ERROR_TOAST);
 		// Se decide con el usuario real de Firebase: el del store puede ser una sesión vieja de localStorage.
 		auth.authStateReady()
 			.then(() => {
 				const uid = auth.currentUser?.uid;
 				if (!uid) {
-					if (!cancelled) setSession(null);
+					if (!cancelled) {
+						setSession(null);
+						setRedirecting(false);
+					}
 					return null;
 				}
 				return getEstablishmentsByUserId(uid).then((establishments) => ({ uid, establishments }));
@@ -44,6 +50,7 @@ export function useRedirectIfAuthenticated(): void {
 			.catch((error) => {
 				// Sin la consulta no se adivina el destino: se avisa y se permite reintentar.
 				if (!cancelled) {
+					setRedirecting(false);
 					toast.error(authErrorMessage(error), {
 						id: ERROR_TOAST,
 						duration: Infinity,
@@ -56,4 +63,6 @@ export function useRedirectIfAuthenticated(): void {
 			toast.dismiss(ERROR_TOAST);
 		};
 	}, [session, setSession, navigate, attempt]);
+
+	return redirecting;
 }

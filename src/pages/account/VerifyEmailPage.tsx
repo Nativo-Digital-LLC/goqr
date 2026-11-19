@@ -145,7 +145,7 @@ export default function VerifyEmailPage() {
 						<p className={pClass}>Por seguridad, los enlaces duran un tiempo limitado. Pide uno nuevo y listo.</p>
 					</div>
 					{hasUser && (
-						<Button className={btnClass} disabled={busy} onClick={resend}>
+						<Button className={btnClass} loading={busy} onClick={resend}>
 							Enviar enlace nuevo
 						</Button>
 					)}
@@ -195,7 +195,7 @@ export default function VerifyEmailPage() {
 							{destError}
 						</p>
 					)}
-					<Button className={btnClass} disabled={busy} onClick={continueTo}>
+					<Button className={btnClass} loading={busy} onClick={continueTo}>
 						Empezar
 					</Button>
 				</div>
@@ -218,7 +218,7 @@ export default function VerifyEmailPage() {
 						{destError}
 					</p>
 				)}
-				<Button className={btnClass} disabled={busy} onClick={resend}>
+				<Button className={btnClass} loading={busy} onClick={resend}>
 					Reenviar correo
 				</Button>
 				<Button variant="outline" className={btnClass} onClick={() => logout(() => navigate("/register"))}>

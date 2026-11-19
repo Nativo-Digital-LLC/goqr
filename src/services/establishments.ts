@@ -29,13 +29,10 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		crypto.randomUUID()
 	];
 
-	const bannerUrl = (params.banner)
-		? await uploadFile(params.banner)
-		: null;
-
-	const logoUrl = (params.logo)
-		? await uploadFile(params.logo)
-		: null;
+	const [bannerUrl, logoUrl] = await Promise.all([
+		params.banner ? uploadFile(params.banner) : null,
+		params.logo ? uploadFile(params.logo) : null,
+	]);
 
 	const photoUrl = 'https://firebasestorage.googleapis.com/v0/b/goqr-914b1.firebasestorage.app/o/141d431b-a9bf-41f9-a0ff-6bff1569cdf2.png?alt=media&token=e4962afc-128e-41ce-8d36-1f6ddf0ec3ae';
 
@@ -165,13 +162,10 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 }
 
 export async function updateEstablishment(id: string, { banner, logo, ...rest }: Partial<CreateEstablishmentParams>) {
-	const bannerUrl = (banner)
-		? await uploadFile(banner)
-		: null;
-
-	const logoUrl = (logo)
-		? await uploadFile(logo)
-		: null;
+	const [bannerUrl, logoUrl] = await Promise.all([
+		banner ? uploadFile(banner) : null,
+		logo ? uploadFile(logo) : null,
+	]);
 
 	const updates: any = {
 		...rest,

@@ -175,7 +175,7 @@ export function StepBrand({ establishment, saveStep, saving, setSaving, saveRef 
 					<button type="button" disabled={saving} onClick={() => void go({})} className={ghostBtn}>
 						Omitir por ahora
 					</button>
-					<Button type="submit" disabled={saving || !HEX.test(hexText)} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
+					<Button type="submit" loading={saving} disabled={!HEX.test(hexText)} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
 						Continuar
 						<ArrowRight aria-hidden="true" />
 					</Button>

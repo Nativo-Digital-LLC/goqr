@@ -180,7 +180,7 @@ export default function ResetPasswordPage() {
 							<span>{message}</span>
 						</div>
 					)}
-					<Button type="submit" className="rounded-xl focus-visible:ring-2 focus-visible:ring-primary" disabled={loading}>
+					<Button type="submit" className="rounded-xl focus-visible:ring-2 focus-visible:ring-primary" loading={loading}>
 						{loading ? "Guardando…" : "Guardar y entrar a mi panel"}
 					</Button>
 				</form>

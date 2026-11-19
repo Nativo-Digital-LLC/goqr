@@ -187,7 +187,7 @@ export function StepBusiness({ establishment, saveStep, saving, setSaving, saveR
 					</div>
 				</div>
 				<div className="flex justify-end pt-2">
-					<Button type="submit" disabled={!canContinue} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
+					<Button type="submit" loading={saving} disabled={!canContinue} className="h-11 rounded-xl px-7 text-[15px] focus-visible:ring-2 focus-visible:ring-primary">
 						Continuar
 						<ArrowRight aria-hidden="true" />
 					</Button>

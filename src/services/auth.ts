@@ -29,14 +29,15 @@ export async function createAccount(name: string, email: string, password: strin
 	if (name) {
 		await updateProfile(user, { displayName: name });
 	}
-	await sendEmailVerification(user, continueTo('/verify'));
-
-	// Registrar como migrado para evitar el check de Appwrite
+	// Registrar como migrado para evitar el check de Appwrite; va en paralelo con el correo para no sumar esperas.
 	const migrationDocRef = doc(db, 'migrated-users', email.toLowerCase());
-	await setDoc(migrationDocRef, {
-		migratedAt: new Date().toISOString(),
-		email: email.toLowerCase()
-	});
+	await Promise.all([
+		sendEmailVerification(user, continueTo('/verify')),
+		setDoc(migrationDocRef, {
+			migratedAt: new Date().toISOString(),
+			email: email.toLowerCase()
+		})
+	]);
 
 	return user;
 }

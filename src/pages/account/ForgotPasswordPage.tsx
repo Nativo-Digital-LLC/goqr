@@ -128,7 +128,7 @@ export default function ForgotPasswordPage() {
 							{authErrorMessage(error)}
 						</p>
 					)}
-					<Button type="submit" className="rounded-xl focus-visible:ring-2 focus-visible:ring-primary" disabled={loading}>
+					<Button type="submit" className="rounded-xl focus-visible:ring-2 focus-visible:ring-primary" loading={loading}>
 						{loading ? "Enviando…" : "Enviar enlace"}
 					</Button>
 					<Link to="/login" className={`${linkClass} text-center`}>
