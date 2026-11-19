@@ -140,7 +140,8 @@ const SearchArea = ({ categories, products, lang, dictionary, color, onColor, in
 			aria-modal={!inline && open ? true : undefined}
 			aria-label={!inline && open ? dictionary.menu.search : undefined}
 			className={inline ? "" : open ? "fixed inset-0 z-40 overflow-y-auto bg-white" : "px-5 py-3"}
-			onKeyDown={(e) => (open || inline) && !detailOpen && e.key === "Escape" && close()}
+			// El detalle vive en un portal: su Escape burbujea por el árbol de React pero no es un nodo del panel.
+			onKeyDown={(e) => (open || inline) && !detailOpen && e.key === "Escape" && e.currentTarget.contains(e.target as Node) && close()}
 		>
 			<p className="sr-only" aria-live="polite">
 				{showResults && fresh ? (total ? dictionary.menu.resultsFor(total, query) : dictionary.menu.noResultsTitle(query)) : ""}
