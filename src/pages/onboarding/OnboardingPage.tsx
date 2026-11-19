@@ -1,19 +1,25 @@
-import { useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { StepBrand } from "./StepBrand";
 import { StepBusiness } from "./StepBusiness";
 import { StepDone } from "./StepDone";
 import { StepFirstDish } from "./StepFirstDish";
-import { CreatedDish, StepSave, useOnboarding } from "./useOnboarding";
+import { CreatedDish, Prefetched, StepSave, useOnboarding } from "./useOnboarding";
 
 const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
 
 export default function OnboardingPage() {
-	const { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep } = useOnboarding();
+	const location = useLocation();
 	const navigate = useNavigate();
+	const { establishment, step, loading, unauthenticated, finished, loadError, retry, saveStep } = useOnboarding((location.state as { prefetched?: Prefetched } | null)?.prefetched);
+	// El estado del historial sobrevive a una recarga: se borra apenas se usa para no retomar con datos viejos.
+	useEffect(() => {
+		if (location.state) navigate(".", { replace: true, state: null });
+	}, [location.state, navigate]);
 	const [saving, setSaving] = useState(false);
 	const saveRef = useRef<StepSave | null>(null);
 	const [dish, setDish] = useState<CreatedDish | null>(null);
@@ -32,14 +38,6 @@ export default function OnboardingPage() {
 		);
 	}
 	if (finished) return <Navigate to="/dashboard" replace />;
-	if (loading) {
-		return (
-			<p role="status" className="p-12 text-center text-[15px] text-muted-foreground">
-				Cargando…
-			</p>
-		);
-	}
-
 	// Guarda lo escrito en el paso actual si es válido; si no, sale sin guardar.
 	async function saveAndExit() {
 		const saved = (await saveRef.current?.()) ?? null;
@@ -67,14 +65,25 @@ export default function OnboardingPage() {
 				<button
 					type="button"
 					onClick={saveAndExit}
-					disabled={saving}
+					disabled={saving || loading}
 					className="rounded-md px-1 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
 				>
 					Guardar y salir
 				</button>
 			</header>
 			<main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-wrap items-start gap-x-16 gap-y-10 px-4 py-8 sm:px-8 sm:py-12">
-				{step === 1 ? (
+				{loading ? (
+					<div role="status" aria-label="Cargando" className="flex w-full flex-wrap gap-x-16 gap-y-10">
+						<div className="flex min-w-[280px] flex-1 flex-col gap-4">
+							<Skeleton className="h-9 w-3/4" />
+							<Skeleton className="h-5 w-1/2" />
+							<Skeleton className="mt-4 h-11 w-full" />
+							<Skeleton className="h-11 w-full" />
+							<Skeleton className="h-11 w-full" />
+						</div>
+						<Skeleton className="h-[520px] w-[280px] rounded-[36px]" />
+					</div>
+				) : step === 1 ? (
 					<StepBusiness {...stepProps} />
 				) : step === 2 ? (
 					<StepBrand {...stepProps} />

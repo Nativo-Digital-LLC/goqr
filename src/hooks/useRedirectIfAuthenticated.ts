@@ -35,10 +35,11 @@ export function useRedirectIfAuthenticated(): void {
 					if (!cancelled) setSession(null);
 					return null;
 				}
-				return getEstablishmentsByUserId(uid);
+				return getEstablishmentsByUserId(uid).then((establishments) => ({ uid, establishments }));
 			})
-			.then((establishments) => {
-				if (establishments && !cancelled) navigate(postAuthPath(establishments), { replace: true });
+			.then((found) => {
+				// Se pasa lo consultado para que /onboarding no repita la consulta (en Safari, recién creada la sesión, tardaba).
+				if (found && !cancelled) navigate(postAuthPath(found.establishments), { replace: true, state: { prefetched: found } });
 			})
 			.catch((error) => {
 				// Sin la consulta no se adivina el destino: se avisa y se permite reintentar.

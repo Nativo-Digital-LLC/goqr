@@ -23,7 +23,10 @@ export type StepProps = {
 	saveRef: MutableRefObject<StepSave | null>;
 };
 
-export function useOnboarding() {
+/** Lo que ya consultó la redirección tras ingresar (`location.state.prefetched`). */
+export type Prefetched = { uid: string; establishments: EstablishmentProps[] };
+
+export function useOnboarding(prefetched?: Prefetched | null) {
 	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
 	const [step, setStep] = useState<Step>(1);
 	const [loading, setLoading] = useState(true);
@@ -46,7 +49,12 @@ export function useOnboarding() {
 		let cancelled = false;
 		setLoading(true);
 		setLoadError(false);
-		fetchEstablishment()
+		const first = attempt === 0 && prefetched
+			? auth.authStateReady().then(() =>
+				auth.currentUser?.uid === prefetched.uid ? prefetched.establishments[0] ?? null : fetchEstablishment()
+			)
+			: fetchEstablishment();
+		first
 			.then((found) => {
 				if (cancelled) return;
 				if (found === undefined) {
@@ -64,6 +72,8 @@ export function useOnboarding() {
 		return () => {
 			cancelled = true;
 		};
+		// prefetched solo cuenta en la primera carga.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fetchEstablishment, attempt]);
 
 	// n es el próximo paso a mostrar; 4 = onboarding terminado.
