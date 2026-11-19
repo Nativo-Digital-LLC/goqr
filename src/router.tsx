@@ -6,17 +6,16 @@ import ForgotPasswordPage from "./pages/account/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/account/ResetPasswordPage";
 import RegisterPage from "./pages/account/RegisterPage";
 import MenuPage from "./pages/menu/MenuPage";
-import DashboardLayout from "./pages/dashboard/DashboardLayout";
-import MenusPage from "./pages/dashboard/Menus";
-import InvoicesPage from "./pages/dashboard/Invoices";
 import VerifyEmailPage from "./pages/account/VerifyEmailPage";
 import EmailActionRouter from "./pages/account/EmailActionRouter";
 import NotFoundPage from "./pages/404";
-import QrPage from "./pages/menu/qr";
 import TermsPage from "./pages/terms";
 import PrivacyPoliciesPage from "./pages/privacy-policies";
 import OnboardingPage from "./pages/onboarding/OnboardingPage";
-import { Establishments } from "./pages/panel/Establishments";
+import PanelLayout from "./pages/panel/PanelLayout";
+import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
+import SoonPage from "./pages/panel/SoonPage";
+import BillingPage from "./pages/panel/BillingPage";
 
 const router = createBrowserRouter([
 	{
@@ -58,25 +57,31 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard",
-		element: <DashboardLayout />,
+		element: <PanelLayout />,
 		children: [
+			{ index: true, element: <PanelPlaceholder title="Resumen" /> },
+			{ path: "menu", element: <PanelPlaceholder title="Menú" /> },
+			{ path: "menu/product/new", element: <PanelPlaceholder title="Nuevo producto" /> },
+			{ path: "menu/product/:productId", element: <PanelPlaceholder title="Editar producto" /> },
+			{ path: "establishment", element: <PanelPlaceholder title="Establecimiento" /> },
+			{ path: "qr", element: <PanelPlaceholder title="Código QR" /> },
 			{
-				index: true,
-				element: <Navigate to="/dashboard/menus" replace />,
+				path: "stats",
+				element: (
+					<SoonPage
+						title="Estadísticas"
+						body="Muy pronto verás aquí cuántas personas abren tu menú, los escaneos del QR y los platos más vistos."
+					/>
+				),
 			},
-			{
-				path: "menus",
-				element: <MenusPage />,
-			},
-			{
-				path: "invoices",
-				element: <InvoicesPage />,
-			},
+			{ path: "billing", element: <BillingPage /> },
+			{ path: "menus", element: <Navigate to="/dashboard" replace /> },
+			{ path: "invoices", element: <Navigate to="/dashboard/billing" replace /> },
 		],
 	},
 	{
 		path: "/panel/establishments",
-		element: <Establishments />,
+		element: <Navigate to="/dashboard/establishment" replace />,
 	},
 	{
 		path: "/onboarding",
@@ -92,7 +97,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/qr/:establishmentUrl",
-		element: <QrPage />,
+		element: <Navigate to="/dashboard/qr" replace />,
 	},
 	{
 		path: "*",
