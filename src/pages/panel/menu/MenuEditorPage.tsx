@@ -59,8 +59,11 @@ export default function MenuEditorPage() {
 	const [saveProduct, savingProduct, saveProductError] = useSaveProduct();
 
 	useEffect(() => {
-		if (saveCategoryError ?? saveSubError ?? deleteCategoryError ?? deleteSubError ?? deleteProductError ?? saveProductError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
-	}, [saveCategoryError, saveSubError, deleteCategoryError, deleteSubError, deleteProductError, saveProductError]);
+		if (saveCategoryError ?? saveSubError ?? deleteCategoryError ?? deleteSubError ?? deleteProductError ?? saveProductError) {
+			toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
+			reload(); // una escritura de varios pasos pudo quedar a medias
+		}
+	}, [saveCategoryError, saveSubError, deleteCategoryError, deleteSubError, deleteProductError, saveProductError, reload]);
 
 	const busy = writing || savingCategory || savingSub || deletingCategory || deletingSub || deletingProduct || savingProduct;
 	const locked = busy || !!draft;
@@ -171,7 +174,7 @@ export default function MenuEditorPage() {
 		onMove: moveCategory,
 		onToggleHidden: (c) =>
 			saveCategory(
-				{ id: c.id, establishmentId: est.id, es_name: c.es_name, en_name: c.en_name, enableSubcategories: c.enableSubcategories, hidden: !c.hidden },
+				{ id: c.id, establishmentId: est.id, hidden: !c.hidden },
 				done
 			),
 		onAddSubcategory: (c) => setSubDialog({ category: c, sub: null }),
@@ -321,6 +324,7 @@ export default function MenuEditorPage() {
 						!!catDialog.category &&
 						(subcategories[catDialog.category.id] ?? []).some((s) => products.some((p) => p.subcategoryId === s.id))
 					}
+					blockEnable={!!catDialog.category && products.some((p) => p.categoryId === catDialog.category!.id && !p.subcategoryId)}
 					loading={savingCategory}
 					onSave={onSaveCategory}
 					onClose={() => setCatDialog(null)}

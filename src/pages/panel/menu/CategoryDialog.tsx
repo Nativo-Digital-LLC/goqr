@@ -13,6 +13,7 @@ export type CategoryValues = { es_name: string; en_name: string; enableSubcatego
 export function CategoryDialog({
 	category,
 	lockSubcategories,
+	blockEnable,
 	loading,
 	onSave,
 	onClose,
@@ -20,6 +21,8 @@ export function CategoryDialog({
 	category: CategoryProps | null;
 	/** La categoría ya tiene subcategorías con productos: no se puede desactivar. */
 	lockSubcategories: boolean;
+	/** La categoría tiene productos sin subcategoría: activar subcategorías los dejaría fuera del menú. */
+	blockEnable: boolean;
 	loading: boolean;
 	onSave: (v: CategoryValues) => void;
 	onClose: () => void;
@@ -29,6 +32,7 @@ export function CategoryDialog({
 	const [subs, setSubs] = useState(category?.enableSubcategories ?? false);
 	const [hidden, setHidden] = useState(category?.hidden ?? false);
 	const [touched, setTouched] = useState(false);
+	const enableBlocked = blockEnable && !subs;
 	const missing = !esName.trim();
 
 	const submit = (e: React.FormEvent) => {
@@ -60,10 +64,12 @@ export function CategoryDialog({
 							<span className="text-sm text-muted-foreground">
 								{lockSubcategories
 									? "No se puede desactivar: esta categoría tiene subcategorías con productos."
+									: enableBlocked
+									? "No se puede activar: esta categoría tiene productos sin subcategoría. Muévelos primero."
 									: "Divide la categoría en secciones, por ejemplo Cervezas y Vinos."}
 							</span>
 						</div>
-						<Switch id="cat-subs" checked={subs} onCheckedChange={setSubs} disabled={lockSubcategories} />
+						<Switch id="cat-subs" checked={subs} onCheckedChange={setSubs} disabled={lockSubcategories || enableBlocked} />
 					</div>
 					<div className="flex items-center justify-between gap-4">
 						<Label htmlFor="cat-hidden">Ocultar del menú</Label>

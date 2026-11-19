@@ -2,10 +2,7 @@ import {
 	addDoc,
 	collection,
 	doc,
-	getDocs,
 	updateDoc,
-	query,
-	where,
 	increment
 } from 'firebase/firestore';
 
@@ -36,28 +33,6 @@ export async function createSubcategory({ es_name, en_name = null, order, catego
 		deletedAt: null
 	}
 	const { id } = await addDoc(subcategoriesRef, subcategory);
-
-	const subcategoriesQuery = query(
-		subcategoriesRef,
-		where('deletedAt', '==', null),
-		where('order', '>=', order)
-	);
-	const snap = await getDocs(subcategoriesQuery);
-	if (snap.size <= 1) {
-		return id;
-	}
-
-	await Promise.all(
-		snap
-			.docs
-			.filter((item) => item.id !== id)
-			.map((item) => {
-				const subcategoryRef = doc(db, Collection.Establishments, establishmentId, 'categories', categoryId, 'subcategories', item.id);
-				return updateDoc(subcategoryRef, {
-					order: increment(1)
-				});
-			})
-	);
 
 	return id;
 }

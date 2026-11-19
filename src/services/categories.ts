@@ -2,11 +2,8 @@ import {
 	addDoc,
 	collection,
 	doc,
-	getDocs,
 	increment,
-	query,
-	updateDoc,
-	where
+	updateDoc
 } from 'firebase/firestore';
 
 import { db } from '../utils/firebase';
@@ -35,29 +32,6 @@ export async function createCategory({ es_name, en_name = null, order, establish
 		deletedAt: null
 	});
 
-	const categoriesQuery = query(
-		collection(db, Collection.Establishments, establishmentId, 'categories'),
-		where('deletedAt', '==', null),
-		where('order', '>=', order)
-	);
-
-	const snap = await getDocs(categoriesQuery);
-	if (snap.size <= 1) {
-		return id;
-	}
-
-	await Promise.all(
-		snap
-			.docs
-			.filter((item) => item.id !== id)
-			.map((item) => {
-				const ref = doc(db, Collection.Establishments, establishmentId, 'categories', item.id);
-				return updateDoc(ref, {
-					order: increment(1)
-				});
-			})
-	);
-
 	return id;
 }
 
@@ -70,18 +44,19 @@ export async function deleteCategory(id: string, establishmentId: string) {
 
 interface UpdateCategoryNameParams {
 	id: string;
-	es_name: string;
+	es_name?: string;
 	en_name?: string | null;
 	enableSubcategories?: boolean;
 	hidden?: boolean;
 	establishmentId: string;
 }
 
-export async function updateCategoryName({ establishmentId, id, es_name, en_name = null, enableSubcategories, hidden }: UpdateCategoryNameParams) {
+// Los campos sin definir no se escriben (así ocultar/mostrar no toca nombres ni subcategorías).
+export async function updateCategoryName({ establishmentId, id, es_name, en_name, enableSubcategories, hidden }: UpdateCategoryNameParams) {
 	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), {
-		es_name,
-		en_name,
-		enableSubcategories,
+		...(es_name !== undefined && { es_name }),
+		...(en_name !== undefined && { en_name }),
+		...(enableSubcategories !== undefined && { enableSubcategories }),
 		...(hidden !== undefined && { hidden }),
 		updatedAt: new Date()
 	});
