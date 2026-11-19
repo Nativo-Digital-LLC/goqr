@@ -18,7 +18,7 @@
 - Hooks con el patrón `useXxx() → [handler, loading, error]`.
 - `Functions/functions` tiene cambios sin commitear del usuario (`package.json`, `package-lock.json`, `src/connection.ts`, `src/modules/images.ts`, `src/modules/products.ts`, `src/helpers.ts`, `src/types/`): **nunca** `git checkout`, `stash`, `reset` ni añadirlos a un commit. Hacer commit solo de archivos tocados por este plan con `git add <ruta>`.
 - `/m/:slug` y `/qr/:slug` deben seguir funcionando igual al final de la fase.
-- Secrets por `defineSecret`: `RESEND_API_KEY`, `MEILI_ADMIN_KEY`.
+- Claves en `functions/.env` (`process.env`), escrito por el action desde los secrets de GitHub: `RESEND_API_KEY`, `MEILI_ADMIN_KEY`. `MEILI_SEARCH_HOST` en `functions/.env.goqr-914b1`.
 - Prueba gratis: una por usuario (`users/{uid}.trialUsedAt`). 30 días.
 
 ## Foco de revisión
@@ -219,6 +219,6 @@ Fechas (`Timestamp`) se convierten a milisegundos antes de enviar.
 - Crear: `Functions/functions/scripts/set-admin.ts` (`tsx scripts/set-admin.ts <email>` → `auth.setCustomUserClaims(uid, { admin: true })`)
 
 - [ ] **Paso 1:** escribir el script.
-- [ ] **Paso 2 (necesita al usuario):** `firebase functions:secrets:set MEILI_ADMIN_KEY` y `RESEND_API_KEY` (antes, quitar la línea `RESEND_API_KEY` de `Functions/functions/.env`: la CLI rechaza un secret que también está en .env); definir `MEILI_HOST` en `Functions/functions/.env` (param no secreto). Rotar la clave pública de Meilisearch a una de solo búsqueda y actualizar `VITE_APP_MEILI_SEARCH_KEY` en `Web/.env` y el secret `MEILI_SEARCH_KEY` del repo en GitHub (lo usa el build de Actions).
-- [ ] **Paso 3 (con aprobación del usuario), en este orden:** (a) `cd Functions && firebase deploy --only functions`; (b) hosting lo despliega GitHub Actions (`.github/workflows/firebase-hosting-push.yml`) al hacer push a `master`: PR `relaunch` → `master` y merge; (c) esperar a que las pestañas abiertas recarguen (~1 h) y entonces `cd Web && firebase deploy --only firestore:rules,storage`. Por qué: el bundle viejo escribe `isActive` y sube a la raíz del bucket, lo que las reglas nuevas deniegan; el trigger debe existir antes de que el cliente nuevo deje de escribir `isActive`.
+- [ ] **Paso 2 (necesita al usuario):** agregar el secret `MEILI_ADMIN_KEY` en el repo de Functions en GitHub (`RESEND_API_KEY` ya existe). Rotar la clave pública de Meilisearch a una de solo búsqueda y actualizar `VITE_APP_MEILI_SEARCH_KEY` en `Web/.env` y el secret `MEILI_SEARCH_KEY` del repo Web en GitHub.
+- [ ] **Paso 3 (con aprobación del usuario), en este orden:** (a) Functions lo despliega GitHub Actions (`on-push.yml`) al hacer push a `main`: PR `relaunch` → `main` y merge; (b) hosting lo despliega GitHub Actions (`.github/workflows/firebase-hosting-push.yml`) al hacer push a `master`: PR `relaunch` → `master` y merge; (c) esperar a que las pestañas abiertas recarguen (~1 h) y entonces `cd Web && firebase deploy --only firestore:rules,storage`. Por qué: el bundle viejo escribe `isActive` y sube a la raíz del bucket, lo que las reglas nuevas deniegan; el trigger debe existir antes de que el cliente nuevo deje de escribir `isActive`.
 - [ ] **Paso 4: verificación en producción:** crear una cuenta de prueba → llega el correo de bienvenida, el establecimiento queda `trialing` con `isActive: true`; crear producto → aparece en la búsqueda; `/m/desayunos-la-roca-restaurant` carga igual; llamar `updateUserPassword` con un correo cualquiera y contraseña falsa → `permission-denied`.
