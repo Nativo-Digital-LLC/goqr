@@ -17,3 +17,7 @@ export function normalizePrices(raw: unknown): { label?: string; price: number }
 	}
 	return Array.isArray(v) ? v : [];
 }
+
+/** Una sola fila vacía (sin etiqueta ni precio) es un producto "sin precio" (datos viejos): se guarda `prices: []`. */
+export const isNoPrice = (rows: { label: string; price: string }[]) =>
+	rows.length === 1 && !rows[0].label.trim() && !rows[0].price.trim();

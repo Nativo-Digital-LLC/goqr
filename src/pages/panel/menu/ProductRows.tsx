@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/menu";
 import { ProductStatus, type ProductProps } from "@/types/Product";
+import { usePanel } from "../PanelContext";
 
 const STATUS = {
 	[ProductStatus.Visible]: { label: "Visible", variant: "secondary" },
@@ -35,6 +36,7 @@ export function ProductRows({
 	/** En el celular, tocar el producto abre el cambio rápido en vez de la página completa. */
 	onQuickEdit?: (p: ProductProps) => void;
 }) {
+	const multiLanguage = usePanel().establishment.enableMultiLanguage;
 	const locked = busy || reordering;
 
 	return (
@@ -61,9 +63,11 @@ export function ProductRows({
 								: <span className="size-12 shrink-0 rounded-lg bg-secondary" aria-hidden />}
 							<span className="flex min-w-0 flex-1 flex-col">
 								<span className="truncate text-[15px] font-semibold">{p.es_name}</span>
-								<span className={`truncate text-[13px] ${p.en_name ? "text-muted-foreground" : "text-warning"}`}>
-									{p.en_name ? "ES · EN" : "Falta inglés"}
-								</span>
+								{multiLanguage && (
+									<span className={`truncate text-[13px] ${p.en_name ? "text-muted-foreground" : "text-warning"}`}>
+										{p.en_name ? "ES · EN" : "Falta inglés"}
+									</span>
+								)}
 							</span>
 							<span className="text-[15px] font-semibold">{priceText(p)}</span>
 							<Badge variant={status.variant}>{status.label}</Badge>

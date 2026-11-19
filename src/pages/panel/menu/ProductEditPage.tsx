@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMenuEditor } from "@/hooks/useMenuEditor";
 import { useDeleteProduct, useSaveProduct } from "@/hooks/useProducts";
-import { parsePrice } from "@/lib/price";
+import { isNoPrice, parsePrice } from "@/lib/price";
 import { ProductStatus, type ProductProps } from "@/types/Product";
 import { usePanel } from "../PanelContext";
 import { PanelHeader } from "../components/PanelHeader";
@@ -27,8 +27,14 @@ const schema = z.object({
 	es_description: z.string(),
 	en_description: z.string(),
 	prices: z
-		.array(z.object({ label: z.string(), price: z.string().refine((v) => parsePrice(v) !== null, "Escribe un precio válido.") }))
-		.min(1),
+		.array(z.object({ label: z.string(), price: z.string() }))
+		.min(1)
+		.superRefine((rows, ctx) => {
+			if (isNoPrice(rows)) return; // producto sin precio (datos viejos)
+			rows.forEach((r, i) => {
+				if (parsePrice(r.price) === null) ctx.addIssue({ code: "custom", path: [i, "price"], message: "Escribe un precio válido." });
+			});
+		}),
 	categoryId: z.string().min(1, "Elige una categoría."),
 	subcategoryId: z.string(),
 	status: z.enum(ProductStatus),
@@ -65,6 +71,11 @@ export default function ProductEditPage() {
 					<p className="text-[15px]">No encontramos este producto.</p>
 					<Button asChild variant="outline"><Link to="/dashboard/menu">Volver al menú</Link></Button>
 				</div>
+			) : !product && editor.categories.length === 0 ? (
+				<div className="flex flex-col items-start gap-3 rounded-2xl border border-border bg-card px-5 py-4">
+					<p className="text-[15px]">Crea una categoría primero.</p>
+					<Button asChild variant="outline"><Link to="/dashboard/menu">Ir al menú</Link></Button>
+				</div>
 			) : (
 				<ProductForm key={product?.id ?? "new"} product={product} editor={editor} establishmentId={est.id} />
 			)}
@@ -95,6 +106,10 @@ function ProductForm({
 		if (saveError ?? deleteError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
 	}, [saveError, deleteError]);
 
+	// Los parámetros de la URL solo valen si existen en el menú cargado.
+	const urlCategory = categories.find((c) => c.id === params.get("categoryId"))?.id;
+	const urlSub = urlCategory && (subcategories[urlCategory] ?? []).find((s) => s.id === params.get("subcategoryId"))?.id;
+
 	const form = useForm<Values>({
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -105,9 +120,9 @@ function ProductForm({
 			prices: product?.prices?.length
 				? product.prices.map((p) => ({ label: p.label ?? "", price: String(p.price) }))
 				: [{ label: "", price: "" }],
-			categoryId: product?.categoryId ?? params.get("categoryId") ?? categories[0]?.id ?? "",
-			subcategoryId: product?.subcategoryId ?? params.get("subcategoryId") ?? "",
-			status: product?.status ?? ProductStatus.Visible,
+			categoryId: product?.categoryId ?? urlCategory ?? categories[0]?.id ?? "",
+			subcategoryId: product?.subcategoryId ?? urlSub ?? "",
+			status: product && Object.values(ProductStatus).includes(product.status) ? product.status : ProductStatus.Visible,
 			bestSeller: product?.bestSeller ?? false,
 		},
 	});
@@ -131,10 +146,12 @@ function ProductForm({
 					en_name: v.en_name.trim(),
 					es_description: v.es_description.trim(),
 					en_description: v.en_description.trim(),
-					prices: v.prices.map((p) => {
-						const label = p.label.trim();
-						return { ...(label && { label }), price: parsePrice(p.price)! };
-					}),
+					prices: isNoPrice(v.prices)
+						? []
+						: v.prices.map((p) => {
+								const label = p.label.trim();
+								return { ...(label && { label }), price: parsePrice(p.price)! };
+							}),
 					categoryId: v.categoryId,
 					subcategoryId: subId,
 					status: v.status,

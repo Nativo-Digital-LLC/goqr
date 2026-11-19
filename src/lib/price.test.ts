@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { normalizePrices, parsePrice } from "./price";
+import { isNoPrice, normalizePrices, parsePrice } from "./price";
 
 describe("parsePrice", () => {
 	it.each([
@@ -24,4 +24,14 @@ describe("normalizePrices", () => {
 	it("lee texto JSON", () => expect(normalizePrices(JSON.stringify(arr))).toEqual(arr));
 	it("texto inválido -> []", () => expect(normalizePrices("no es json")).toEqual([]));
 	it("undefined -> []", () => expect(normalizePrices(undefined)).toEqual([]));
+});
+
+describe("isNoPrice", () => {
+	it("solo una fila totalmente vacía cuenta como sin precio", () => {
+		expect(isNoPrice([{ label: "", price: "" }])).toBe(true);
+		expect(isNoPrice([{ label: " ", price: " " }])).toBe(true);
+		expect(isNoPrice([{ label: "Grande", price: "" }])).toBe(false);
+		expect(isNoPrice([{ label: "", price: "0" }])).toBe(false);
+		expect(isNoPrice([{ label: "", price: "" }, { label: "", price: "" }])).toBe(false);
+	});
 });
