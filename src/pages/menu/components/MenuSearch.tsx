@@ -28,8 +28,8 @@ export const MenuSearch = (props: Props) => (
 );
 
 const SearchArea = ({ categories, products, lang, dictionary, color }: Props) => {
-	const { refine } = useSearchBox();
-	const { items } = useHits<{ id?: string; objectID: string }>();
+	const { query: refined, refine } = useSearchBox();
+	const { items } = useHits<{ $id?: string; id?: string; objectID: string }>();
 	const [value, setValue] = useState("");
 	const [open, setOpen] = useState(false);
 	const [selected, setSelected] = useState<ProductProps | null>(null);
@@ -47,7 +47,7 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 	const groups = useMemo(() => {
 		const byId = new Map(products.map((p) => [p.id, p]));
 		const found = items
-			.map((h) => byId.get(h.id ?? h.objectID))
+			.map((h) => byId.get(h.$id ?? h.id ?? h.objectID))
 			.filter((p): p is ProductProps => !!p && isVisibleProduct(p));
 		return categories
 			.map((c) => ({ category: c, products: found.filter((p) => p.categoryId === c.id) }))
@@ -60,6 +60,8 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 		setOpen(false);
 		skipFocus.current = true;
 		inputRef.current?.focus();
+		// Si el campo ya tenía foco no hay evento onFocus que limpie la marca.
+		setTimeout(() => { skipFocus.current = false; });
 	};
 
 	return (
@@ -101,7 +103,7 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 						</button>
 					)}
 				</div>
-				{open && query && (
+				{open && query && refined === query && (
 					<div className="flex flex-col gap-3.5 pt-2 pb-8">
 						{total === 0 ? (
 							<div className="flex flex-col items-center gap-3 py-10 text-center">
