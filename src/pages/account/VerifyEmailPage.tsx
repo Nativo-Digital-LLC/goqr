@@ -1,5 +1,5 @@
 import { applyActionCode, reload } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -23,22 +23,33 @@ const pClass = "text-[15px] leading-normal text-muted-foreground";
 export default function VerifyEmailPage() {
 	const oobCode = useSearchParams()[0].get("oobCode");
 	const navigate = useNavigate();
-	const session = useSessionStore((s) => s.session);
 	const setSession = useSessionStore((s) => s.setSession);
 	const [logout] = useLogout();
 	const [status, setStatus] = useState<Status>("loading");
 	const [attempt, setAttempt] = useState(0);
 	const [busy, setBusy] = useState(false);
 	const [destError, setDestError] = useState("");
+	// Un código se usa una sola vez: si el refresco falla, reintentar no debe volver a aplicarlo.
+	const applied = useRef<string | null>(null);
+	// Usuario real de Firebase (no el del store, que puede quedar viejo en localStorage).
+	const [email, setEmail] = useState<string | null>(null);
+	const [hasUser, setHasUser] = useState(false);
 
 	useEffect(() => {
 		let cancelled = false;
 		setStatus("loading");
 		(async () => {
 			try {
-				if (oobCode) await applyActionCode(auth, oobCode);
+				if (oobCode && applied.current !== oobCode) {
+					await applyActionCode(auth, oobCode);
+					applied.current = oobCode;
+				}
 				await auth.authStateReady();
 				const user = auth.currentUser;
+				if (!cancelled) {
+					setHasUser(!!user);
+					setEmail(user?.email ?? null);
+				}
 				if (!oobCode && !user) return !cancelled && setStatus("login");
 				if (user) {
 					await reload(user);
@@ -50,7 +61,9 @@ export default function VerifyEmailPage() {
 				}
 				if (!cancelled) setStatus(oobCode || user?.emailVerified ? "verified" : "pending");
 			} catch (err) {
+				await auth.authStateReady().catch(() => {});
 				if (cancelled) return;
+				setHasUser(!!auth.currentUser);
 				// Solo un código vencido o inválido es "enlace vencido"; el resto (p. ej. red) se puede reintentar.
 				const code = (err as { code?: string })?.code;
 				setStatus(code === "auth/expired-action-code" || code === "auth/invalid-action-code" ? "expired" : "failed");
@@ -74,7 +87,7 @@ export default function VerifyEmailPage() {
 	}
 
 	async function continueTo() {
-		const uid = session?.userId ?? auth.currentUser?.uid;
+		const uid = auth.currentUser?.uid;
 		if (!uid) return navigate("/login");
 		setBusy(true);
 		setDestError("");
@@ -124,12 +137,12 @@ export default function VerifyEmailPage() {
 						<h1 className={h1Class}>Este enlace venció</h1>
 						<p className={pClass}>Por seguridad, los enlaces duran un tiempo limitado. Pide uno nuevo y listo.</p>
 					</div>
-					{session && (
+					{hasUser && (
 						<Button className={btnClass} disabled={busy} onClick={resend}>
 							Enviar enlace nuevo
 						</Button>
 					)}
-					<Button asChild variant={session ? "outline" : "default"} className={btnClass}>
+					<Button asChild variant={hasUser ? "outline" : "default"} className={btnClass}>
 						<Link to="/login">Ir a ingresar</Link>
 					</Button>
 				</div>
@@ -164,7 +177,7 @@ export default function VerifyEmailPage() {
 				<div className="flex flex-col gap-2">
 					<h1 className={h1Class}>Confirma tu correo</h1>
 					<p className={pClass}>
-						Te enviamos un enlace a <strong className="text-primary">{session?.user.email ?? auth.currentUser?.email}</strong>. Ábrelo
+						Te enviamos un enlace a <strong className="text-primary">{email}</strong>. Ábrelo
 						desde tu celular o computadora para activar tu cuenta.
 					</p>
 				</div>
