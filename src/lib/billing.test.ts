@@ -4,7 +4,6 @@ import { billingView, statusLabel, transferReference } from './billing';
 import { EstablishmentProps } from '../types/Establishment';
 
 const est = (billing?: EstablishmentProps['billing']) => ({ billing }) as EstablishmentProps;
-const now = new Date('2026-11-19T12:00:00Z');
 const ts = (d: string) => Timestamp.fromDate(new Date(d));
 
 describe('transferReference', () => {
@@ -15,18 +14,18 @@ describe('transferReference', () => {
 
 describe('billingView', () => {
 	it('sin billing, prueba, pausado y cancelado → choose', () => {
-		expect(billingView(est(), now)).toBe('choose');
-		expect(billingView(est({ status: 'trialing' }), now)).toBe('choose');
-		expect(billingView(est({ status: 'paused' }), now)).toBe('choose');
-		expect(billingView(est({ status: 'canceled' }), now)).toBe('choose');
+		expect(billingView(est())).toBe('choose');
+		expect(billingView(est({ status: 'trialing' }))).toBe('choose');
+		expect(billingView(est({ status: 'paused' }))).toBe('choose');
+		expect(billingView(est({ status: 'canceled' }))).toBe('choose');
 	});
 	it('active, past_due y legacy', () => {
-		expect(billingView(est({ status: 'active' }), now)).toBe('active');
-		expect(billingView(est({ status: 'past_due' }), now)).toBe('past_due');
-		expect(billingView(est({ status: 'legacy' }), now)).toBe('legacy');
+		expect(billingView(est({ status: 'active' }))).toBe('active');
+		expect(billingView(est({ status: 'past_due' }))).toBe('past_due');
+		expect(billingView(est({ status: 'legacy' }))).toBe('legacy');
 	});
 	it('active sigue activo aunque currentPeriodEnd ya pasó', () => {
-		expect(billingView(est({ status: 'active', currentPeriodEnd: ts('2026-11-01') }), now)).toBe('active');
+		expect(billingView(est({ status: 'active', currentPeriodEnd: ts('2026-11-01') }))).toBe('active');
 	});
 });
 
