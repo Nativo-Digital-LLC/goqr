@@ -52,16 +52,18 @@ export const useMenuEditor = (establishmentId: string | undefined) => {
 	);
 	const current = useRef(establishmentId);
 	current.current = establishmentId;
+	const generation = useRef(0);
 
 	const load = useCallback(async (id: string | undefined) => {
 		if (!id) return;
+		const gen = ++generation.current;
 		try {
 			const data = await fetchMenu(id);
-			if (current.current === id) setStored({ id, data, loading: false, error: null });
+			if (generation.current === gen) setStored({ id, data, loading: false, error: null });
 		} catch (e) {
 			console.error(e);
 			// Keep previous data (only if it belongs to this establishment).
-			if (current.current === id) {
+			if (generation.current === gen) {
 				setStored((s) => ({ ...s, id, data: s.id === id ? s.data : empty, loading: false, error: e as Error }));
 			}
 		}
