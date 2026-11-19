@@ -23,6 +23,8 @@ import { MenuPreview } from "./MenuPreview";
 import { ProductRows } from "./ProductRows";
 import { SubcategoryDialog, type SubcategoryValues } from "./SubcategoryDialog";
 
+const nextOrder = (items: { order?: number }[]) => Math.max(0, ...items.map((i) => i.order ?? 0)) + 1;
+
 type Confirm =
 	| { kind: "category"; item: CategoryProps }
 	| { kind: "subcategory"; item: SubcategoryProps; category: CategoryProps }
@@ -36,7 +38,7 @@ export default function MenuEditorPage() {
 	const [search, setSearch] = useState("");
 	const [draft, setDraft] = useState<ProductProps[] | null>(null); // no es null mientras se reordena
 	const [previewKey, setPreviewKey] = useState(0);
-	const [busy, setBusy] = useState(false);
+	const [writing, setWriting] = useState(false); // escritura o recarga en curso
 	const [catDialog, setCatDialog] = useState<{ category: CategoryProps | null } | null>(null);
 	const [subDialog, setSubDialog] = useState<{ category: CategoryProps; sub: SubcategoryProps | null } | null>(null);
 	const [confirm, setConfirm] = useState<Confirm | null>(null);
@@ -51,6 +53,9 @@ export default function MenuEditorPage() {
 		if (saveCategoryError ?? saveSubError ?? deleteCategoryError ?? deleteSubError ?? deleteProductError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
 	}, [saveCategoryError, saveSubError, deleteCategoryError, deleteSubError, deleteProductError]);
 
+	const busy = writing || savingCategory || savingSub || deletingCategory || deletingSub || deletingProduct;
+	const locked = busy || !!draft;
+
 	const category = categories.find((c) => c.id === sel.categoryId) ?? categories[0];
 	const subs = category ? subcategories[category.id] ?? [] : [];
 	const subcategory = category?.enableSubcategories ? subs.find((s) => s.id === sel.subcategoryId) ?? null : null;
@@ -63,30 +68,34 @@ export default function MenuEditorPage() {
 	const q = search.trim().toLowerCase();
 	const shown = draft ?? (q ? list.filter((p) => `${p.es_name} ${p.en_name ?? ""}`.toLowerCase().includes(q)) : list);
 
-	const done = () => {
-		reload();
-		setPreviewKey((k) => k + 1);
-		toast.success("Guardado");
+	const done = async () => {
+		setWriting(true);
+		try {
+			await reload();
+			setPreviewKey((k) => k + 1);
+			toast.success("Guardado");
+		} finally {
+			setWriting(false);
+		}
 	};
 	// Escrituras de orden: en lote; si falla, se avisa y se recarga lo que hay en el servidor.
 	const writeOrder = async (fn: () => Promise<void>) => {
-		setBusy(true);
+		setWriting(true);
 		try {
 			await fn();
-			done();
-			return true;
 		} catch (e) {
 			console.error(e);
 			toast.error("No pudimos guardar el orden. Intenta de nuevo.");
-			reload();
+			setDraft(null);
+			try { await reload(); } finally { setWriting(false); }
 			return false;
-		} finally {
-			setBusy(false);
 		}
+		await done();
+		return true;
 	};
 
 	const select = (categoryId: string, subcategoryId: string | null) => {
-		if (draft) return;
+		if (locked) return;
 		setSel({ categoryId, subcategoryId });
 		setSearch("");
 	};
@@ -105,7 +114,7 @@ export default function MenuEditorPage() {
 
 	const onSaveCategory = (v: CategoryValues) =>
 		saveCategory(
-			{ ...v, id: catDialog?.category?.id, establishmentId: est.id, order: categories.length + 1 },
+			{ ...v, id: catDialog?.category?.id, establishmentId: est.id, order: nextOrder(categories) },
 			() => {
 				setCatDialog(null);
 				done();
@@ -120,7 +129,7 @@ export default function MenuEditorPage() {
 				id: subDialog.sub?.id,
 				categoryId: subDialog.category.id,
 				establishmentId: est.id,
-				order: (subcategories[subDialog.category.id]?.length ?? 0) + 1,
+				order: nextOrder(subcategories[subDialog.category.id] ?? []),
 			},
 			() => {
 				setSubDialog(null);
@@ -171,7 +180,7 @@ export default function MenuEditorPage() {
 						products={products}
 						selectedCategoryId={category?.id}
 						selectedSubcategoryId={subcategory?.id ?? null}
-						busy={busy || !!draft}
+						busy={locked}
 						actions={{
 							onSelect: select,
 							onNew: () => setCatDialog({ category: null }),
@@ -206,11 +215,11 @@ export default function MenuEditorPage() {
 									{!needsSub && (
 										<div className="flex flex-wrap gap-2">
 											{list.length > 1 && (
-												<Button variant="outline" loading={busy && !!draft} onClick={toggleReorder}>
+												<Button variant="outline" loading={writing && !!draft} disabled={busy} onClick={toggleReorder}>
 													{draft ? "Guardar orden" : "Reordenar"}
 												</Button>
 											)}
-											<Button asChild><Link to={newProductUrl}><Plus /> Nuevo producto</Link></Button>
+											<Button asChild><Link to={newProductUrl} aria-disabled={locked} tabIndex={locked ? -1 : undefined} className={locked ? "pointer-events-none opacity-50" : undefined}><Plus /> Nuevo producto</Link></Button>
 										</div>
 									)}
 								</div>

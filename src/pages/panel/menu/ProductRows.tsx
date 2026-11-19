@@ -32,13 +32,21 @@ export function ProductRows({
 	onMove: (index: number, delta: -1 | 1) => void;
 	onDelete: (p: ProductProps) => void;
 }) {
+	const locked = busy || reordering;
+
 	return (
 		<ul className="flex flex-col">
 			{products.map((p, i) => {
 				const status = STATUS[p.status] ?? STATUS[ProductStatus.Visible];
 				return (
 					<li key={p.id} className="flex items-center gap-2 border-b border-border py-2 last:border-0">
-						<Link to={`/dashboard/menu/product/${p.id}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 hover:bg-secondary/60">
+						<Link
+							to={`/dashboard/menu/product/${p.id}`}
+							aria-disabled={locked}
+							tabIndex={locked ? -1 : undefined}
+							onClick={(e) => locked && e.preventDefault()}
+							className={`flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 hover:bg-secondary/60 ${locked ? "pointer-events-none" : ""}`}
+						>
 							{p.photoUrl
 								? <img src={p.photoUrl} alt="" className="size-12 shrink-0 rounded-lg object-cover" />
 								: <span className="size-12 shrink-0 rounded-lg bg-secondary" aria-hidden />}
@@ -53,8 +61,8 @@ export function ProductRows({
 						</Link>
 						{reordering ? (
 							<div className="flex">
-								<Button variant="ghost" size="icon" aria-label={`Subir ${p.es_name}`} disabled={i === 0} onClick={() => onMove(i, -1)}><ArrowUp /></Button>
-								<Button variant="ghost" size="icon" aria-label={`Bajar ${p.es_name}`} disabled={i === products.length - 1} onClick={() => onMove(i, 1)}><ArrowDown /></Button>
+								<Button variant="ghost" size="icon" aria-label={`Subir ${p.es_name}`} disabled={busy || i === 0} onClick={() => onMove(i, -1)}><ArrowUp /></Button>
+								<Button variant="ghost" size="icon" aria-label={`Bajar ${p.es_name}`} disabled={busy || i === products.length - 1} onClick={() => onMove(i, 1)}><ArrowDown /></Button>
 							</div>
 						) : (
 							<Button variant="ghost" size="icon" aria-label={`Eliminar ${p.es_name}`} disabled={busy} onClick={() => onDelete(p)}><Trash2 /></Button>

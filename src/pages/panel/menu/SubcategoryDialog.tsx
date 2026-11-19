@@ -39,16 +39,15 @@ export function SubcategoryDialog({
 
 	const pick = (f: File | undefined) => {
 		if (!f) return;
-		if (!TYPES.includes(f.type)) return setPhotoError("La foto debe ser JPG, PNG o WebP.");
-		if (f.size > MAX_BYTES) return setPhotoError("La foto no puede pesar más de 10 MB.");
-		setPhotoError("");
-		setPhoto(f);
+		const bad = !TYPES.includes(f.type) ? "La foto debe ser JPG, PNG o WebP." : f.size > MAX_BYTES ? "La foto no puede pesar más de 10 MB." : "";
+		setPhotoError(bad);
+		setPhoto(bad ? undefined : f);
 	};
 
 	const submit = (e: React.FormEvent) => {
 		e.preventDefault();
 		setTouched(true);
-		if (missing) return;
+		if (missing || photoError) return;
 		onSave({ es_name: esName.trim(), en_name: enName.trim(), photo });
 	};
 
