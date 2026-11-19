@@ -20,7 +20,7 @@ import { ContactSection } from "./ContactSection";
 import { HoursSection } from "./HoursSection";
 import { InfoSection } from "./InfoSection";
 import { LanguageSection } from "./LanguageSection";
-import { changedFields, toChangeValues } from "./changes";
+import { changedFields, invalidSocialRows, toChangeValues } from "./changes";
 import type { FormValues } from "./Section";
 import { SocialSection } from "./SocialSection";
 import { TaxSection } from "./TaxSection";
@@ -86,12 +86,12 @@ export default function EstablishmentPage() {
 			phone: lenient(est.phone, (v) => PHONE.test(v), "Usa solo números y símbolos de teléfono."),
 			whatsapp: lenient(est.whatsapp, (v) => PHONE.test(v), "Usa solo números y símbolos de teléfono."),
 			week: z.array(z.object({ open: z.boolean(), from: z.string(), to: z.string() })),
-			social: z.array(z.object({
-				platform: z.string(),
-				// @usuario y dominios sin esquema valen; un esquema que no sea http(s) (p. ej. javascript:) no.
-				link: z.string().refine((v) => !/^[a-z][a-z0-9+.-]*:/i.test(v.trim()) || /^https?:\/\//i.test(v.trim()), "Escribe un enlace que empiece con https://"),
-				displayName: z.string().optional(),
-			})),
+			social: z
+				.array(z.object({ platform: z.string(), link: z.string(), displayName: z.string().optional() }))
+				.superRefine((rows, ctx) => {
+					for (const i of invalidSocialRows(rows, est.socialNetworks))
+						ctx.addIssue({ code: "custom", path: [i, "link"], message: "Escribe un enlace que empiece con https://" });
+				}),
 			enableMultiLanguage: z.boolean(),
 			showFoodAllergyAndRiskDisclaimer: z.boolean(),
 			requiresTaxReceipt: z.boolean(),

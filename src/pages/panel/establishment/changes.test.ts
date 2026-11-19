@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { EstablishmentProps } from "@/types/Establishment";
-import { changedFields, toChangeValues, type ChangeValues } from "./changes";
+import { changedFields, invalidSocialRows, toChangeValues, type ChangeValues } from "./changes";
 
 const original = {
 	id: "e1",
@@ -75,5 +75,19 @@ describe("toChangeValues", () => {
 	it("si se editan, se normalizan", () => {
 		const edited = { ...form, social: [{ platform: "Instagram", link: "@name2 " }, { platform: "x", link: " " }] };
 		expect(changedFields(legacy, toChangeValues(edited, legacy)).socialNetworks).toEqual([{ platform: "instagram", link: "@name2" }]);
+	});
+});
+
+describe("invalidSocialRows", () => {
+	const stored = [{ platform: "website", link: "ftp://ejemplo.com" }];
+
+	it("no valida una fila vieja sin tocar", () => {
+		expect(invalidSocialRows(stored, stored)).toEqual([]);
+	});
+
+	it("valida filas nuevas o editadas", () => {
+		expect(invalidSocialRows([...stored, { platform: "x", link: "javascript:alert(1)" }], stored)).toEqual([1]);
+		expect(invalidSocialRows([{ platform: "website", link: "ftp://otro.com" }], stored)).toEqual([0]);
+		expect(invalidSocialRows([{ platform: "instagram", link: "@name" }, { platform: "website", link: "https://a.com" }], [])).toEqual([]);
 	});
 });

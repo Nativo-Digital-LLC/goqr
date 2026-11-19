@@ -56,3 +56,13 @@ export function toChangeValues(v: FormValues, e: EstablishmentProps): ChangeValu
 			: e.socialNetworks ?? [],
 	};
 }
+
+/** Índices de filas de redes con un esquema que no es http(s). Las filas sin tocar (iguales a la original en esa posición) no se validan. */
+export function invalidSocialRows(rows: { platform: string; link: string }[], original: SocialNetworkProps[] = []): number[] {
+	return rows.flatMap((r, i) => {
+		const o = original[i];
+		if (o && o.platform === r.platform && o.link === r.link) return [];
+		const link = r.link.trim();
+		return /^[a-z][a-z0-9+.-]*:/i.test(link) && !/^https?:\/\//i.test(link) ? [i] : [];
+	});
+}
