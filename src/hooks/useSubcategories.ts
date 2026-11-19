@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FirebaseError } from 'firebase/app';
 
 import {
@@ -7,55 +7,6 @@ import {
 	changeSubcategoryOrder,
 	deleteSubcategory
 } from '../services/subcategories';
-import { SubcategoryProps } from '../types/Subcategory';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import { db } from '../utils/firebase';
-
-type UseGetSubcategoriesType = [
-	SubcategoryProps[],
-	boolean,
-	FirebaseError | null
-];
-
-export const useGetSubcategories = (establishmentId?: string, categoryId?: string): UseGetSubcategoriesType => {
-	const [subcategories, setSubcategories] = useState<SubcategoryProps[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	useEffect(() => {
-		if (!establishmentId || !categoryId) {
-			return;
-		}
-
-		const ref = query(
-			collection(
-				db,
-				"establishments",
-				establishmentId,
-				"categories",
-				categoryId,
-				"subcategories"
-			),
-			where("deletedAt", "==", null),
-			orderBy("order", "asc")
-		);
-		const unsubscribe = onSnapshot(
-			ref,
-			(snapshot) => {
-				setSubcategories(snapshot.docs.map((doc) => ({
-					...doc.data(),
-					id: doc.id
-				} as SubcategoryProps)));
-				setLoading(false);
-			},
-			setError
-		);
-
-		return () => unsubscribe();
-	}, [establishmentId, categoryId]);
-
-	return [subcategories, loading, error];
-}
 
 interface SaveSubcategoryParams {
 	id?: string;

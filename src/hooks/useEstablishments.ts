@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
 import { FirebaseError } from "firebase/app";
-import {
-	collection,
-	onSnapshot,
-	query,
-	where
-} from "firebase/firestore";
 
 import {
 	CreateEstablishmentParams,
@@ -18,54 +12,6 @@ import {
 	getTaxInformation,
 	updateEstablishment,
 } from "../services/establishments";
-import { db } from "../utils/firebase";
-
-type UseGetEstablishmentByDomainType = [
-	EstablishmentProps | null,
-	boolean,
-	FirebaseError | null
-];
-
-export const useGetEstablishmentByDomain = (
-	domain?: string
-): UseGetEstablishmentByDomainType => {
-	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	useEffect(() => {
-		if (!domain) {
-			return;
-		}
-
-		const ref = query(
-			collection(db, "establishments"),
-			where("domain", "==", domain)
-		);
-		const unsubscribe = onSnapshot(
-			ref,
-			(snapshot) => {
-				if (snapshot.empty) {
-					setEstablishment(null);
-					setLoading(false);
-					return;
-				}
-
-				const [doc] = snapshot.docs;
-				setEstablishment({
-					...doc.data(),
-					id: doc.id
-				} as EstablishmentProps);
-				setLoading(false);
-			},
-			setError
-		);
-
-		return () => unsubscribe();
-	}, [domain]);
-
-	return [establishment, loading, error];
-};
 
 type UseGetEstablishmentsByUserIdType = [
 	EstablishmentProps[],

@@ -199,27 +199,6 @@ export function maxFileSizeRule() {
 	}
 }
 
-export function formatConsecutiveDays(daysString: string) {
-	if (!daysString) return '';
-	const DAYS_OF_WEEK = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
-	const days = daysString.split(',').map(d => d.trim()).filter(Boolean);
-	if (days.length <= 1) return daysString;
-
-	const indices = days.map(d => DAYS_OF_WEEK.indexOf(d));
-	if (indices.includes(-1)) return daysString;
-
-	indices.sort((a, b) => a - b);
-
-	const isConsecutive = indices.every((val, i, arr) => i === 0 || val === arr[i - 1] + 1);
-
-	if (isConsecutive) {
-		return `${DAYS_OF_WEEK[indices[0]]} a ${DAYS_OF_WEEK[indices[indices.length - 1]]}`;
-	}
-
-	return daysString;
-}
-
 export const getSocialUsername = (platform: string, link: string) => {
 	if (platform === 'website') return null;
 	if (link.startsWith('http') || link.includes('.com')) {

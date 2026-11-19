@@ -9,59 +9,6 @@ import {
 	getAllProducts,
 	updateProduct
 } from '../services/products';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import { db } from '../utils/firebase';
-
-type UseListenProductsType = [
-	ProductProps[],
-	boolean,
-	FirebaseError | null
-];
-
-export const useListenProducts = (establishmentId?: string, categoryId?: string, subcategoryId?: string | null): UseListenProductsType => {
-	const [products, setProducts] = useState<ProductProps[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	useEffect(() => {
-		if (!establishmentId || !categoryId) {
-			return;
-		}
-
-		let q = query(
-			collection(
-				db,
-				'products'
-			),
-			where('establishmentId', '==', establishmentId),
-			where('categoryId', '==', categoryId),
-			where('deletedAt', '==', null)
-		);
-
-		if (subcategoryId) {
-			q = query(q, where('subcategoryId', '==', subcategoryId));
-		}
-
-		q = query(q, orderBy('order', 'asc'));
-
-		const unsubscribe = onSnapshot(
-			q,
-			(snapshot) => {
-				const data = snapshot.docs.map((doc) => ({
-					...doc.data(),
-					id: doc.id
-				} as ProductProps));
-				setProducts(data);
-				setLoading(false);
-			},
-			setError
-		);
-
-		return () => unsubscribe();
-	}, [establishmentId, categoryId, subcategoryId]);
-
-	return [products, loading, error];
-}
 
 type UseGetAllProductsType = [
 	ProductProps[],

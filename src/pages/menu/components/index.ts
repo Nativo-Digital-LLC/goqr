@@ -1,14 +1,3 @@
-export { CategoriesMenu } from './CategoriesMenu';
-export { EstablishmentInfo } from './EstablishmentInfo';
 export { MenuFooter } from './Footer';
-export { MenuHeader } from './Header';
 export { ModalCategory } from './ModalCategory';
-export { SubcategoriesList } from './SubcategoriesList';
-export { ProductsList } from './ProductsList';
-export { SubcategoryCard } from './SubcategoryCard';
 export { ModalSubcategory } from './ModalSubcategory';
-export { ProductCard } from './ProductCard'
-export { Loading } from './Loading';
-export { ToggleLanguageButton } from './ToggleLanguageButton';
-export { UnavailableEstablishment } from './UnavailableEstablishment';
-export { NotFoundEstablishment } from './NotFoundEstablishment';

@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FirebaseError } from 'firebase/app';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 
 import {
 	createCategory,
@@ -8,47 +7,6 @@ import {
 	updateCategoryName,
 	updateCategoryOrder
 } from '../services/categories';
-import { db } from '../utils/firebase';
-import { CategoryProps } from '../types/Category';
-
-type UseGetCategoriesType = [
-	CategoryProps[],
-	boolean,
-	FirebaseError | null
-];
-
-export const useGetCategories = (establishmentId?: string): UseGetCategoriesType => {
-	const [categories, setCategories] = useState<CategoryProps[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	useEffect(() => {
-		if (!establishmentId) {
-			return;
-		}
-
-		const ref = query(
-			collection(db, "establishments", establishmentId, "categories"),
-			where("deletedAt", "==", null),
-			orderBy("order", "asc")
-		);
-		const unsubscribe = onSnapshot(
-			ref,
-			(snapshot) => {
-				setCategories(snapshot.docs.map((doc) => ({
-					...doc.data(),
-					id: doc.id
-				} as CategoryProps)));
-				setLoading(false);
-			},
-			setError
-		);
-
-		return () => unsubscribe();
-	}, [establishmentId]);
-
-	return [categories, loading, error];
-}
 
 interface SaveCategoryParams {
 	id?: string;
