@@ -23,7 +23,7 @@ const FAQS = [
 	},
 	{
 		q: "¿Y si necesito ayuda?",
-		a: "Escríbenos por WhatsApp o a contacto@goqr.com.do. Si quieres, te ayudamos a montar el menú.",
+		a: "Escríbenos a contacto@goqr.com.do. Si quieres, te ayudamos a montar el menú.",
 	},
 ];
 

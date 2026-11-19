@@ -1,7 +1,8 @@
 import { EXAMPLE_MENU_SLUG } from "@/constants/landing";
 import { TRIAL_DAYS } from "@/constants/plans";
 
-import { CtaLink, ctaClass } from "./CtaLink";
+import { CtaLink } from "./CtaLink";
+import { ctaClass } from "./ctaClass";
 import { PhoneMenu } from "./mockups";
 
 export function Hero() {
