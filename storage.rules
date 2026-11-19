@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Lectura pública (incluye imágenes viejas en la raíz y `optimized/`) excepto comprobantes.
+    match /{file} {
+      allow read;
+      allow write: if false;
+    }
+
+    match /{folder}/{rest=**} {
+      allow read: if folder != 'proofs';
+      allow write: if false;
+    }
+
+    match /uploads/{uid}/{file} {
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size < 10 * 1024 * 1024;
+    }
+
+    match /proofs/{uid}/{file} {
+      allow read: if request.auth != null
+        && (request.auth.uid == uid || request.auth.token.get('admin', false) == true);
+      allow write: if request.auth != null
+        && (request.auth.uid == uid || request.auth.token.get('admin', false) == true)
+        && (request.resource.contentType.matches('image/.*') || request.resource.contentType == 'application/pdf')
+        && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}

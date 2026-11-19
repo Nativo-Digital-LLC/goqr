@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { ModalName } from '../types/Modals';
-import { storage } from './firebase';
+import { auth, storage } from './firebase';
 import { PaymentFrequency } from '../types/Bill';
 
 export const ModalOpener$ = new Subject<{ name: ModalName; extra?: unknown; }>();
@@ -125,9 +125,13 @@ export function avoidNotNumerics(event: any, decimals = 0) {
 		event.preventDefault();
 }
 
-export async function uploadFile(file: File) {
+export async function uploadFile(file: File): Promise<string> {
+	const uid = auth.currentUser?.uid;
+	if (!uid)
+		throw new Error('Debes iniciar sesión para subir archivos.');
+
 	const fileExtension = file.name.split('.').pop();
-	const fileName = `${crypto.randomUUID()}.${fileExtension}`;
+	const fileName = `uploads/${uid}/${crypto.randomUUID()}.${fileExtension}`;
 	const storageRef = ref(storage, fileName);
 
 	await uploadBytes(storageRef, file);
