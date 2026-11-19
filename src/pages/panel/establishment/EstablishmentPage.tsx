@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useSaveEstablishment } from "@/hooks/useEstablishments";
 import { useMenuEditor } from "@/hooks/useMenuEditor";
 import { untranslatedCount } from "@/lib/panel";
-import { schedulesToWeek, weekToSchedules } from "@/lib/schedule";
+import { schedulesToWeek } from "@/lib/schedule";
 import { isValidSlug } from "@/lib/slug";
 import { isSlugAvailable } from "@/services/establishments";
 import type { EstablishmentProps } from "@/types/Establishment";
@@ -20,7 +20,7 @@ import { ContactSection } from "./ContactSection";
 import { HoursSection } from "./HoursSection";
 import { InfoSection } from "./InfoSection";
 import { LanguageSection } from "./LanguageSection";
-import { changedFields, type ChangeValues } from "./changes";
+import { changedFields, toChangeValues } from "./changes";
 import type { FormValues } from "./Section";
 import { SocialSection } from "./SocialSection";
 import { TaxSection } from "./TaxSection";
@@ -58,17 +58,6 @@ function toForm(e: EstablishmentProps): FormValues {
 	};
 }
 
-/** Los horarios solo se reescriben si el dueño tocó la semana: los viejos con formato raro quedan intactos. */
-function toChangeValues(v: FormValues, e: EstablishmentProps): ChangeValues {
-	const { week: initial, unparsed } = schedulesToWeek(e.schedules);
-	const { week, social, ...rest } = v;
-	return {
-		...rest,
-		schedules: JSON.stringify(week) === JSON.stringify(initial) ? e.schedules ?? [] : weekToSchedules(week, unparsed),
-		socialNetworks: social.filter((s) => s.link.trim()).map((s) => ({ ...s, platform: s.platform.toLowerCase(), link: s.link.trim() })),
-	};
-}
-
 export default function EstablishmentPage() {
 	const { establishment: est, reload } = usePanel();
 	const { products } = useMenuEditor(est.id);
@@ -76,6 +65,7 @@ export default function EstablishmentPage() {
 	const [logo, setLogo] = useState<File | null | undefined>(undefined);
 	const [banner, setBanner] = useState<File | null | undefined>(undefined);
 	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [reloading, setReloading] = useState(false);
 
 	useEffect(() => {
 		if (saveError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
@@ -92,11 +82,16 @@ export default function EstablishmentPage() {
 			mainHexColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Escribe un color válido, por ejemplo #C2381F."),
 			exactColor: z.boolean(),
 			address: z.string(),
-			addressLink: lenient(est.addressLink, (v) => { try { new URL(v.trim()); return true; } catch { return false; } }, "Escribe un enlace válido."),
+			addressLink: lenient(est.addressLink, (v) => { try { return /^https?:$/.test(new URL(v.trim()).protocol); } catch { return false; } }, "Escribe un enlace que empiece con https://"),
 			phone: lenient(est.phone, (v) => PHONE.test(v), "Usa solo números y símbolos de teléfono."),
 			whatsapp: lenient(est.whatsapp, (v) => PHONE.test(v), "Usa solo números y símbolos de teléfono."),
 			week: z.array(z.object({ open: z.boolean(), from: z.string(), to: z.string() })),
-			social: z.array(z.object({ platform: z.string(), link: z.string(), displayName: z.string().optional() })),
+			social: z.array(z.object({
+				platform: z.string(),
+				// @usuario y dominios sin esquema valen; un esquema que no sea http(s) (p. ej. javascript:) no.
+				link: z.string().refine((v) => !/^[a-z][a-z0-9+.-]*:/i.test(v.trim()) || /^https?:\/\//i.test(v.trim()), "Escribe un enlace que empiece con https://"),
+				displayName: z.string().optional(),
+			})),
 			enableMultiLanguage: z.boolean(),
 			showFoodAllergyAndRiskDisclaimer: z.boolean(),
 			requiresTaxReceipt: z.boolean(),
@@ -117,7 +112,7 @@ export default function EstablishmentPage() {
 
 	const values = watch();
 	const dirty = logo !== undefined || banner !== undefined || Object.keys(changedFields(est, toChangeValues(values, est))).length > 0;
-	const busy = saving;
+	const busy = saving || reloading;
 
 	const checkSlug = useCallback(
 		async (slug: string) => {
@@ -151,8 +146,15 @@ export default function EstablishmentPage() {
 				...(banner !== undefined && { banner }),
 			},
 			async () => {
-				await reload();
-				toast.success("Guardado");
+				setReloading(true);
+				try {
+					await reload();
+					toast.success("Guardado");
+				} catch {
+					toast.error("Guardamos los cambios, pero no pudimos actualizar la página. Recarga la página.");
+				} finally {
+					setReloading(false);
+				}
 			}
 		);
 	};
@@ -206,7 +208,7 @@ export default function EstablishmentPage() {
 								>
 									Descartar
 								</Button>
-								<Button type="submit" loading={saving}>Guardar</Button>
+								<Button type="submit" loading={busy}>Guardar</Button>
 							</div>
 						</div>
 					)}
@@ -217,7 +219,7 @@ export default function EstablishmentPage() {
 				title="¿Cambiar el enlace del menú?"
 				body="El QR impreso dejará de funcionar y tendrás que imprimirlo de nuevo."
 				confirmLabel="Cambiar enlace"
-				loading={saving}
+				loading={busy}
 				onConfirm={doSave}
 				onOpenChange={setConfirmOpen}
 			/>

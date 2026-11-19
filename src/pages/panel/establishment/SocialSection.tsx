@@ -15,14 +15,15 @@ const PLATFORMS = [
 ];
 
 export function SocialSection({ busy }: { busy: boolean }) {
-	const { watch, setValue } = useFormContext<FormValues>();
+	const { watch, setValue, formState: { errors } } = useFormContext<FormValues>();
 	const rows = watch("social");
 	const set = (next: FormValues["social"]) => setValue("social", next, { shouldDirty: true });
 
 	return (
 		<Section id="redes" title="Redes sociales">
 			{rows.map((r, i) => (
-				<div key={i} className="flex items-center gap-2">
+				<div key={i} className="flex flex-col gap-1">
+				<div className="flex items-center gap-2">
 					<Select value={r.platform} disabled={busy} onValueChange={(platform) => set(rows.map((x, j) => (j === i ? { ...x, platform } : x)))}>
 						<SelectTrigger className="w-[140px] shrink-0" aria-label="Red social"><SelectValue /></SelectTrigger>
 						<SelectContent>
@@ -35,6 +36,8 @@ export function SocialSection({ busy }: { busy: boolean }) {
 					<Button type="button" variant="ghost" size="icon" aria-label="Quitar red social" disabled={busy} onClick={() => set(rows.filter((_, j) => j !== i))}>
 						<X size={18} />
 					</Button>
+				</div>
+				{errors.social?.[i]?.link && <span className="text-sm text-destructive">{errors.social[i]?.link?.message}</span>}
 				</div>
 			))}
 			<Button type="button" variant="outline" className="self-start" disabled={busy} onClick={() => set([...rows, { platform: "instagram", link: "" }])}>

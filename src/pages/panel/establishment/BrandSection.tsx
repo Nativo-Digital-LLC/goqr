@@ -46,13 +46,10 @@ export function BrandSection({
 
 	return (
 		<Section id="marca" title="Marca">
-			<div className="flex flex-col gap-2">
-				<span className="text-sm font-semibold">Logo</span>
-				<PhotoField value={logo} currentUrl={establishment.logoUrl} onChange={onLogo} disabled={busy} />
-			</div>
-			<div className="flex flex-col gap-2">
-				<span className="text-sm font-semibold">Banner · Foto de portada · 1600 × 600 recomendado</span>
-				<PhotoField value={banner} currentUrl={establishment.bannerUrl} onChange={onBanner} disabled={busy} />
+			<PhotoField label="Logo" alt="Logo del establecimiento" value={logo} currentUrl={establishment.logoUrl} onChange={onLogo} disabled={busy} />
+			<div className="flex flex-col gap-1">
+				<PhotoField label="Banner" alt="Foto de portada" value={banner} currentUrl={establishment.bannerUrl} onChange={onBanner} disabled={busy} />
+				<span className="text-[13px] text-muted-foreground">Foto de portada · 1600 × 600 recomendado</span>
 			</div>
 			<Field id="mainHexColor" label="Color principal" error={errors.mainHexColor?.message}>
 				<div className="flex items-center gap-3">

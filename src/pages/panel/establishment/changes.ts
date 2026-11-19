@@ -1,3 +1,5 @@
+import { schedulesToWeek, weekToSchedules } from "@/lib/schedule";
+import type { FormValues } from "./Section";
 import type { CreateEstablishmentParams, EstablishmentProps, ScheduleProps, SocialNetworkProps } from "@/types/Establishment";
 
 export type ChangeValues = {
@@ -39,4 +41,18 @@ export function changedFields(original: EstablishmentProps, values: ChangeValues
 	if (JSON.stringify(values.schedules) !== JSON.stringify(original.schedules ?? [])) out.schedules = values.schedules;
 	if (JSON.stringify(values.socialNetworks) !== JSON.stringify(original.socialNetworks ?? [])) out.socialNetworks = values.socialNetworks;
 	return out as Partial<CreateEstablishmentParams>;
+}
+
+/** Horarios y redes solo se reescriben si el dueño los tocó: los datos viejos quedan intactos. */
+export function toChangeValues(v: FormValues, e: EstablishmentProps): ChangeValues {
+	const { week: initial, unparsed } = schedulesToWeek(e.schedules);
+	const { week, social, ...rest } = v;
+	const socialEdited = JSON.stringify(social) !== JSON.stringify(e.socialNetworks ?? []);
+	return {
+		...rest,
+		schedules: JSON.stringify(week) === JSON.stringify(initial) ? e.schedules ?? [] : weekToSchedules(week, unparsed),
+		socialNetworks: socialEdited
+			? social.filter((s) => s.link.trim()).map((s) => ({ ...s, platform: s.platform.toLowerCase(), link: s.link.trim() }))
+			: e.socialNetworks ?? [],
+	};
 }

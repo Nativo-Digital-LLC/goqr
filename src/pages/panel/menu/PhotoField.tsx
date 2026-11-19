@@ -12,11 +12,15 @@ export function PhotoField({
 	currentUrl,
 	onChange,
 	disabled,
+	label = "Foto",
+	alt = "Foto del producto",
 }: {
 	value: File | null | undefined;
 	currentUrl: string | null;
 	onChange: (value: File | null | undefined) => void;
 	disabled?: boolean;
+	label?: string;
+	alt?: string;
 }) {
 	const [error, setError] = useState(false);
 	const preview = useMemo(() => (value ? URL.createObjectURL(value) : null), [value]);
@@ -32,10 +36,10 @@ export function PhotoField({
 
 	return (
 		<div className="flex flex-col gap-2">
-			<span className="text-sm font-semibold">Foto</span>
+			<span className="text-sm font-semibold">{label}</span>
 			<div className="flex items-stretch gap-4">
 				<div className="flex size-[140px] shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-secondary text-muted-foreground">
-					{src ? <img src={src} alt="Foto del producto" className="size-full object-cover" /> : <ImageIcon size={28} aria-hidden />}
+					{src ? <img src={src} alt={alt} className="size-full object-cover" /> : <ImageIcon size={28} aria-hidden />}
 				</div>
 				<label
 					className="relative flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-border bg-background p-4 text-center focus-within:ring-[3px] focus-within:ring-ring/50"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { EstablishmentProps } from "@/types/Establishment";
-import { changedFields, type ChangeValues } from "./changes";
+import { changedFields, toChangeValues, type ChangeValues } from "./changes";
 
 const original = {
 	id: "e1",
@@ -57,5 +57,23 @@ describe("changedFields", () => {
 	it("nunca incluye billing, isActive ni userId", () => {
 		const extra = { ...same, name: "X", billing: { status: "canceled" }, isActive: false, userId: "otro" };
 		expect(Object.keys(changedFields(original, extra))).toEqual(["name"]);
+	});
+});
+
+describe("toChangeValues", () => {
+	const legacy = { ...original, socialNetworks: [{ platform: "Instagram", link: "@name " }] } as unknown as EstablishmentProps;
+	const form = {
+		...same,
+		week: Array.from({ length: 7 }, () => ({ open: false, from: "8:00 AM", to: "10:00 PM" })),
+		social: [{ platform: "Instagram", link: "@name " }],
+	};
+
+	it("redes viejas sin tocar no entran al payload", () => {
+		expect(changedFields(legacy, toChangeValues(form, legacy))).not.toHaveProperty("socialNetworks");
+	});
+
+	it("si se editan, se normalizan", () => {
+		const edited = { ...form, social: [{ platform: "Instagram", link: "@name2 " }, { platform: "x", link: " " }] };
+		expect(changedFields(legacy, toChangeValues(edited, legacy)).socialNetworks).toEqual([{ platform: "instagram", link: "@name2" }]);
 	});
 });

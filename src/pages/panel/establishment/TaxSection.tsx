@@ -9,7 +9,7 @@ import type { TaxPayerProps } from "@/types/Establishment";
 import { Field, Section, SwitchRow, type FormValues } from "./Section";
 
 export function TaxSection({ busy }: { busy: boolean }) {
-	const { register, watch, setValue } = useFormContext<FormValues>();
+	const { register, watch, setValue, getValues } = useFormContext<FormValues>();
 	const [loading, setLoading] = useState(false);
 	const [result, setResult] = useState<TaxPayerProps | "error" | null>(null);
 
@@ -18,10 +18,11 @@ export function TaxSection({ busy }: { busy: boolean }) {
 		setLoading(true);
 		try {
 			const data = rnc ? await getTaxInformation(rnc) : null;
+			if (getValues("rnc").replace(/\D/g, "") !== rnc) return; // el campo cambió mientras se verificaba
 			setResult(data ?? "error");
 			if (data) setValue("companyName", data.name, { shouldDirty: true });
 		} catch {
-			setResult("error");
+			if (getValues("rnc").replace(/\D/g, "") === rnc) setResult("error");
 		} finally {
 			setLoading(false);
 		}
@@ -36,7 +37,7 @@ export function TaxSection({ busy }: { busy: boolean }) {
 				<>
 					<Field id="rnc" label="RNC o cédula">
 						<div className="flex gap-2">
-							<Input id="rnc" inputMode="numeric" disabled={busy} {...register("rnc", { onChange: () => setResult(null) })} />
+							<Input id="rnc" inputMode="numeric" disabled={busy || loading} {...register("rnc", { onChange: () => setResult(null) })} />
 							<Button type="button" variant="outline" loading={loading} disabled={busy} onClick={verify}>Verificar</Button>
 						</div>
 						{result === "error" && <span role="alert" className="text-sm text-destructive">No encontramos ese RNC o cédula.</span>}
