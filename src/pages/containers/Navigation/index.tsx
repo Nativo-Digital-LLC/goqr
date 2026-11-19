@@ -50,7 +50,7 @@ export default function Navigation() {
 		>
 			<div className="relative navigation-inner-container flex justify-center">
 				<div>
-					<h3 className="text-[26px] font-[900]">GoQr</h3>
+					<h3 className="text-[26px] font-black">GoQr</h3>
 					<button
 						onClick={() => setIsOpen(!isOpen)}
 						className="navigation-menu-bars"

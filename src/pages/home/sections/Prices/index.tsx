@@ -9,7 +9,7 @@ export default function Prices() {
 	return (
 		<div className="section-parent prices-container" id="prices">
 			<div className="section-child">
-				<h2 className="title text-[var(--primary)]">
+				<h2 className="title text-(--legacy-primary)">
 					¿Cuáles son los precios?
 				</h2>
 				<div className="prices-cards flex justify-center items-center mb-[15px]">
@@ -19,7 +19,7 @@ export default function Prices() {
 								{item.title}
 							</span>
 							<div className="flex flex-col items-center">
-								<span className="!font-[600] !text-[21px]">
+								<span className="font-semibold! text-[21px]!">
 									DOP
 								</span>
 								<b>{item.price}</b>

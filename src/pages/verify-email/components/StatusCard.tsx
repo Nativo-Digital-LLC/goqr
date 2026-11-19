@@ -25,7 +25,7 @@ export const StatusCard = ({ status, onPressActionButton, loading, loadingAction
 				{/* Estado actual */}
 				<div className="relative">
 					<div className="absolute inset-0 bg-white/30 backdrop-blur-xl rounded-3xl transform -rotate-3"></div>
-					<div className="relative bg-white/80 backdrop-blur-sm p-12 rounded-3xl shadow-xl min-w-[400px] transform rotate-3 transition-all duration-500">
+					<div className="relative bg-white/80 backdrop-blur-xs p-12 rounded-3xl shadow-xl min-w-[400px] transform rotate-3 transition-all duration-500">
 						<div className="flex flex-col items-center text-center space-y-6">
 							<div className="transform transition-transform duration-500 hover:scale-110">
 								<LoadingOutlined className="text-[#8ECAC1]" style={{ fontSize: 100 }} />
@@ -48,7 +48,7 @@ export const StatusCard = ({ status, onPressActionButton, loading, loadingAction
 			{/* Estado actual */}
 			<div className="relative">
 				<div className="absolute inset-0 bg-white/30 backdrop-blur-xl rounded-3xl transform -rotate-3"></div>
-				<div className="relative bg-white/80 backdrop-blur-sm p-12 rounded-3xl shadow-xl min-w-[400px] transform rotate-3 transition-all duration-500">
+				<div className="relative bg-white/80 backdrop-blur-xs p-12 rounded-3xl shadow-xl min-w-[400px] transform rotate-3 transition-all duration-500">
 					<div className="flex flex-col items-center text-center space-y-6">
 						<div className="transform transition-transform duration-500 hover:scale-110">
 							{Config[status].icon}

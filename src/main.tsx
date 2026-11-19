@@ -6,6 +6,8 @@ Sentry.init({
 	dsn: import.meta.env.VITE_APP_SENTRY_DSN
 });
 
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/dm-sans';
 import './index.css'
 import router from './router';
 

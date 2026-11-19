@@ -36,11 +36,11 @@ export default function LoginPage() {
 
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[var(--secondary)]">
+			<div className="section-parent bg-(--legacy-secondary)">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">
-						<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
-							<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+						<div className="p-[30px] bg-(--legacy-primary) border border-(--text) rounded-[15px] shadow-md shadow-[#00000030]">
+							<h1 className="text-center text-[24px] font-bold mb-[25px]">
 								Iniciar Sesión
 							</h1>
 							<Form
@@ -73,12 +73,12 @@ export default function LoginPage() {
 											message: "Correo inválido",
 										},
 									]}
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input
 										placeholder="jhon@gmail.com"
 										type="email"
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 									/>
 								</Form.Item>
@@ -98,10 +98,10 @@ export default function LoginPage() {
 										},
 									]}
 									validateTrigger="onBlur"
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input.Password
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 										minLength={8}
 									/>
@@ -121,7 +121,7 @@ export default function LoginPage() {
 										loading &&
 										loginType === "EmailAndPassword"
 									}
-									className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+									className="border border-(--text) mt-[10px] h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 								>
 									Acceder
 								</Button>
@@ -148,16 +148,16 @@ export default function LoginPage() {
 								)}
 
 								<div className="flex items-center my-[10px]">
-									<div className="h-[1px] bg-[--border] w-full" />
-									<span className="text-[--border] pb-[3px] mx-[10px]">
+									<div className="h-px bg-(--legacy-border) w-full" />
+									<span className="text-(--legacy-border) pb-[3px] mx-[10px]">
 										o
 									</span>
-									<div className="h-[1px] bg-[--border] w-full" />
+									<div className="h-px bg-(--legacy-border) w-full" />
 								</div>
 								<div className="flex justify-between items-center gap-3">
 									<Button
 										type="primary"
-										className="border border-[var(--text)] h-[38px] rounded-[8px] w-full bg-[#FFF] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
+										className="border border-(--text) h-[38px] rounded-[8px] w-full bg-white text-(--text) shadow-none hover:text-(--text)! hover:bg-white! outline-hidden hover:border-(--legacy-border)!"
 										onClick={() =>
 											login("Google", {
 												page: "login",
@@ -178,7 +178,7 @@ export default function LoginPage() {
 									{/* {isAppleDevice && (
 										<Button
 											type="primary"
-											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
+											className="h-[38px] rounded-[8px] w-full bg-(--tertiary) border-(--legacy-border) text-(--text) shadow-none hover:text-(--text)! hover:bg-white! outline-hidden hover:border-(--legacy-border)!"
 											onClick={() =>
 												login("Apple", {
 													page: "login",

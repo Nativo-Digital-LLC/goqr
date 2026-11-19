@@ -2,7 +2,7 @@ import { ShopOutlined, ExclamationCircleOutlined, ArrowLeftOutlined, HomeOutline
 
 export const UnavailableEstablishment = () => {
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+		<div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
 			<div className="max-w-2xl mx-auto px-4 py-16 sm:px-6 sm:py-24">
 				<div className="bg-white rounded-2xl shadow-xl p-8 text-center">
 					{/* Icono y estado */}
@@ -34,7 +34,7 @@ export const UnavailableEstablishment = () => {
 						</h2>
 						<ul className="space-y-3 text-gray-600">
 							<li className="flex items-start">
-								<span className="flex-shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
+								<span className="shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
 									•
 								</span>
 								<span>
@@ -43,7 +43,7 @@ export const UnavailableEstablishment = () => {
 								</span>
 							</li>
 							<li className="flex items-start">
-								<span className="flex-shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
+								<span className="shrink-0 h-6 w-6 text-[#61b7ba] mr-2">
 									•
 								</span>
 								<span>

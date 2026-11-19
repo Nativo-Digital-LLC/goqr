@@ -1,17 +1,17 @@
 :root {
-	--primary: #efe9db;
-	--secondary: #61b7ba;
+	--legacy-primary: #efe9db;
+	--legacy-secondary: #61b7ba;
 	--tertiary: #fc9761;
 	--text: #4c4c4c;
 	--field: #f3f3f3;
-	--border: #00000020;
+	--legacy-border: #00000020;
 }
 
 .home-container {
 	display: flex;
 	min-height: 100vh;
 	color: var(--text);
-	background-color: var(--primary);
+	background-color: var(--legacy-primary);
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;

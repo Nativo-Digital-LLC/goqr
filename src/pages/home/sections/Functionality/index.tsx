@@ -18,7 +18,7 @@ export default function Functionality() {
 					/>
 					<div className="w-[50%] ml-[40px] text-right">
 						<h3>Escanea el código QR</h3>
-						<p className="!text-right">
+						<p className="text-right!">
 							Usa la cámara de tu teléfono o una app para escanear
 							el código QR disponible en la mesa o área del
 							restaurante.
@@ -58,7 +58,7 @@ export default function Functionality() {
 					/>
 					<div className="w-[50%] ml-[40px] text-right">
 						<h3>Haz tu pedido al mesero</h3>
-						<p className="!text-right">
+						<p className="text-right!">
 							Una vez que tengas decidido qué ordenar,
 							comunícaselo al mesero para que tome tu pedido.
 						</p>

@@ -1,9 +1,9 @@
 .faqs-container-secondary {
-	background-color: var(--primary);
+	background-color: var(--legacy-primary);
 }
 
 .faqs-container-secondary {
-	background-color: var(--secondary);
+	background-color: var(--legacy-secondary);
 }
 
 .faqs-container-tertiary {

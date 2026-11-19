@@ -8,7 +8,7 @@ export default function Welcome() {
 		<div className="welcome-container section-parent">
 			<div className="section-child flex flex-col justify-center items-center">
 				<h1>
-					<span className="text-[var(--primary)]">GoQR</span>
+					<span className="text-(--legacy-primary)">GoQR</span>
 					<span className="w-[250px]">Menú Digital</span>
 				</h1>
 				<button className="hover:scale-150 transition-all duration-200">

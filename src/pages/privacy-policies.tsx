@@ -5,14 +5,14 @@ import HomeContainer from "./containers/HomeContainer";
 export default function PrivacyPoliciesPage() {
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[#FFF]">
-				<div className="section-child w-full text-left flex flex-col items-center !p-[20px]">
+			<div className="section-parent bg-white">
+				<div className="section-child w-full text-left flex flex-col items-center p-[20px]!">
 					<div className="max-w-[890px] w-full">
-						<h1 className="text-center text-[25px] font-[700] mb-[30px]">
+						<h1 className="text-center text-[25px] font-bold mb-[30px]">
 							Políticas de Privacidad de GoQR
 						</h1>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								1. Información General
 							</h4>
 							<p className="ml-[18px]">
@@ -28,7 +28,7 @@ export default function PrivacyPoliciesPage() {
 							</p>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								2. Datos Personales Recopilados
 							</h4>
 							<p className="ml-[18px] mb-[5px]">
@@ -46,7 +46,7 @@ export default function PrivacyPoliciesPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								3. Finalidad del Uso de los Datos
 							</h4>
 							<p className="ml-[18px] mb-[5px]">
@@ -67,7 +67,7 @@ export default function PrivacyPoliciesPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								4. Uso de Servicios de Terceros
 							</h4>
 							<p className="ml-[18px] mb-[5px]">
@@ -76,17 +76,17 @@ export default function PrivacyPoliciesPage() {
 							</p>
 							<ul className="ml-[18px]">
 								<li className="mb-[5px]">
-									<b className="font-[500]">Portal:</b>{" "}
+									<b className="font-medium">Portal:</b>{" "}
 									Compartimos el correo electrónico y número
 									de WhatsApp para pagos con tarjeta.
 								</li>
 								<li className="mb-[5px]">
-									<b className="font-[500]">Stripe:</b>{" "}
+									<b className="font-medium">Stripe:</b>{" "}
 									Compartimos el correo electrónico para pagos
 									con tarjeta.
 								</li>
 								<li className="mb-[5px]">
-									<b className="font-[500]">
+									<b className="font-medium">
 										Google Analytics y Google Search
 										Console:
 									</b>{" "}
@@ -94,7 +94,7 @@ export default function PrivacyPoliciesPage() {
 									sitio web, sin compartir datos personales.
 								</li>
 								<li className="mb-[5px]">
-									<b className="font-[500]">Meta Pixel:</b>{" "}
+									<b className="font-medium">Meta Pixel:</b>{" "}
 									Usado para seguimiento de campañas
 									publicitarias, sin compartir datos
 									personales.
@@ -102,7 +102,7 @@ export default function PrivacyPoliciesPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								5. Seguridad de los Datos
 							</h4>
 							<p className="ml-[18px] mb-[5px]">
@@ -123,7 +123,7 @@ export default function PrivacyPoliciesPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								6. Derechos del Usuario
 							</h4>
 							<p className="ml-[18px] mb-[5px]">
@@ -141,7 +141,7 @@ export default function PrivacyPoliciesPage() {
 							</ul>
 							<br />
 
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								7. Cambios en la Política de Privacidad
 							</h4>
 							<p className="ml-[18px]">

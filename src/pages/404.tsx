@@ -7,8 +7,8 @@ export default function NotFoundPage() {
 		<HomeContainer>
 			<div className="section-parent">
 				<div className=" section-child flex flex-col justify-center items-center flex-1">
-					<div className="w-full flex-grow flex flex-col mb-[40px] items-center">
-						<h1 className="md:text-[100px] text-[60px] font-[700]">
+					<div className="w-full grow flex flex-col mb-[40px] items-center">
+						<h1 className="md:text-[100px] text-[60px] font-bold">
 							404
 						</h1>
 						<p className="md:text-[22px] text-[18px]">
@@ -16,7 +16,7 @@ export default function NotFoundPage() {
 						</p>
 						<Link
 							to="/"
-							className="mt-[40px] underline underline-offset-[4px] decoration-[3px] decoration-[--secondary] font-[500]"
+							className="mt-[40px] underline underline-offset-4 decoration-[3px] decoration-(--legacy-secondary) font-medium"
 						>
 							Volver al incio
 						</Link>

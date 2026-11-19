@@ -12,11 +12,11 @@ export default function RequestResetPasswordPage() {
 
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[var(--secondary)]">
+			<div className="section-parent bg-(--legacy-secondary)">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">
-						<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
-							<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+						<div className="p-[30px] bg-(--legacy-primary) border border-(--text) rounded-[15px] shadow-md shadow-[#00000030]">
+							<h1 className="text-center text-[24px] font-bold mb-[25px]">
 								Restablecer Contraseña
 							</h1>
 							<p>Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.</p>
@@ -45,12 +45,12 @@ export default function RequestResetPasswordPage() {
 											message: "Correo inválido",
 										},
 									]}
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input
 										placeholder="jhon@gmail.com"
 										type="email"
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 									/>
 								</Form.Item>
@@ -59,22 +59,22 @@ export default function RequestResetPasswordPage() {
 									type="primary"
 									htmlType="submit"
 									loading={loading}
-									className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+									className="border border-(--text) mt-[10px] h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 								>
 									Enviar Instrucciones
 								</Button>
 
 								<div className="flex items-center my-[10px]">
-									<div className="h-[1px] bg-[--border] w-full" />
-									<span className="text-[--border] pb-[3px] mx-[10px]">
+									<div className="h-px bg-(--legacy-border) w-full" />
+									<span className="text-(--legacy-border) pb-[3px] mx-[10px]">
 										o
 									</span>
-									<div className="h-[1px] bg-[--border] w-full" />
+									<div className="h-px bg-(--legacy-border) w-full" />
 								</div>
 								<Link to='/login'>
 									<Button
 										type="text"
-										className="border border-[var(--text)] h-[38px] rounded-[8px] w-full bg-[#FFF] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
+										className="border border-(--text) h-[38px] rounded-[8px] w-full bg-white text-(--text) shadow-none hover:text-(--text)! hover:bg-white! outline-hidden hover:border-(--legacy-border)!"
 									>
 										Volver a Inicio de Sesión
 									</Button>

@@ -130,7 +130,7 @@ export function Establishments() {
 	}
 
 	return (
-		<div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display w-full">
+		<div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-legacy-display w-full">
 			<div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
 				<div className="layout-container flex h-full grow flex-col">
 					<main className="flex flex-1 justify-center py-8">
@@ -195,9 +195,9 @@ export function Establishments() {
 							>
 								<div className="flex flex-col gap-6 w-full shadow-none">
 									{/* Section 1: General Information */}
-									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm overflow-hidden">
+									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs overflow-hidden">
 										<div className="mb-6 flex items-center gap-2">
-											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-legacy/10 text-legacy">
 												<InfoCircleOutlined className="text-sm" />
 											</div>
 											<h2 className="text-lg font-bold m-0 text-slate-900">Información General</h2>
@@ -236,7 +236,7 @@ export function Establishments() {
 															getValueFromEvent={(e) => { if (Array.isArray(e)) return e; return e?.fileList; }}
 														>
 															<Upload accept="image/png, image/jpeg, image/jpg" multiple={false} beforeUpload={() => false} maxCount={1} showUploadList={false}>
-																<Button type="primary" icon={<FileImageOutlined />} className="bg-primary border-none shadow-md">Cambiar Banner</Button>
+																<Button type="primary" icon={<FileImageOutlined />} className="bg-legacy border-none shadow-md">Cambiar Banner</Button>
 															</Upload>
 														</Form.Item>
 													</div>
@@ -249,7 +249,7 @@ export function Establishments() {
 															{logoPreview || establishment?.logoUrl ? (
 																<img src={logoPreview || establishment?.logoUrl || ''} alt="Logo" className="w-full h-full object-cover" />
 															) : (
-																<span className="text-primary font-bold text-xs">Sin logo</span>
+																<span className="text-legacy font-bold text-xs">Sin logo</span>
 															)}
 														</div>
 														{/* Upload Logo overlay */}
@@ -301,7 +301,7 @@ export function Establishments() {
 												>
 													<Input.TextArea
 														placeholder="Cuenta la historia de tu cocina y qué hace especial a La Roca..."
-														className="rounded-xl border-slate-200 bg-slate-50 p-4 focus:border-primary focus:ring-1 focus:ring-primary min-h-[120px] text-sm"
+														className="rounded-xl border-slate-200 bg-slate-50 p-4 focus:border-legacy focus:ring-1 focus:ring-legacy min-h-[120px] text-sm"
 													/>
 												</Form.Item>
 											</div>
@@ -309,10 +309,10 @@ export function Establishments() {
 											{/* Missing Fields placed compactly below description */}
 											<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 												<Form.Item label={<span className="text-sm font-semibold text-slate-700">Nombre del Local</span>} name="name" rules={[{ required: true, message: "Escribe el nombre" }]} className="m-0">
-													<Input className="rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-1 focus:ring-primary" />
+													<Input className="rounded-lg border-slate-200 bg-slate-50 focus:border-legacy focus:ring-1 focus:ring-legacy" />
 												</Form.Item>
 												<Form.Item label={<span className="text-sm font-semibold text-slate-700">URL del Menú</span>} name="domain" rules={[{ required: !establishment, message: "Elige tu URL" }]} className="m-0">
-													<Input prefix="goqr.com.do/m/" disabled={!!establishment} className="rounded-lg border-slate-200 bg-slate-50 focus:border-primary focus:ring-1 focus:ring-primary"
+													<Input prefix="goqr.com.do/m/" disabled={!!establishment} className="rounded-lg border-slate-200 bg-slate-50 focus:border-legacy focus:ring-1 focus:ring-legacy"
 														onInput={(event) => {
 															const target = event.target as HTMLInputElement;
 															target.value = target.value.toLowerCase().normalize("NFD").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "");
@@ -327,9 +327,9 @@ export function Establishments() {
 									</section>
 
 									{/* Section 2: Contact & Localization */}
-									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
 										<div className="mb-6 flex items-center gap-2">
-											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-legacy/10 text-legacy">
 												<EnvironmentOutlined className="text-sm" />
 											</div>
 											<h2 className="text-lg font-bold m-0 text-slate-900">Contacto y Ubicación</h2>
@@ -389,7 +389,7 @@ export function Establishments() {
 													<Form.Item name="addressLink" rules={[{ type: "url", message: "URL inválida" }]} className="m-0 z-10 w-full flex justify-center mt-2">
 														<Input
 															prefix={<span className="text-slate-400 mx-1">🔗</span>}
-															className="w-full max-w-[200px] rounded-full border-slate-200 bg-white/90 shadow-sm focus:border-primary focus:ring-1 focus:ring-primary py-2 text-center text-xs font-semibold text-slate-700"
+															className="w-full max-w-[200px] rounded-full border-slate-200 bg-white/90 shadow-xs focus:border-legacy focus:ring-1 focus:ring-legacy py-2 text-center text-xs font-semibold text-slate-700"
 															placeholder="Vincular Mapa"
 														/>
 													</Form.Item>
@@ -399,9 +399,9 @@ export function Establishments() {
 									</section>
 
 									{/* Section 3: Payments & Taxes */}
-									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+									<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs">
 										<div className="mb-6 flex items-center gap-2">
-											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+											<div className="flex items-center justify-center w-6 h-6 rounded-full bg-legacy/10 text-legacy">
 												<CreditCardOutlined className="text-sm" />
 											</div>
 											<h2 className="text-lg font-bold m-0 text-slate-900">Pagos y Facturación</h2>
@@ -434,9 +434,9 @@ export function Establishments() {
 													<Select
 														className="w-full h-10 [&_.ant-select-selector]:rounded-lg [&_.ant-select-selector]:border-slate-200 [&_.ant-select-selector]:bg-slate-50"
 														options={[
-															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Mensual</Text><Text className="text-primary font-bold">$300 / mes</Text></div>, value: PaymentFrequency.Monthly },
-															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Anual</Text><Text className="text-primary font-bold">$2,500 / año</Text></div>, value: PaymentFrequency.Annual },
-															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Premium</Text><Text className="text-primary font-bold">$11,000 / mes</Text></div>, value: PaymentFrequency.Never },
+															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Mensual</Text><Text className="text-legacy font-bold">$300 / mes</Text></div>, value: PaymentFrequency.Monthly },
+															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Anual</Text><Text className="text-legacy font-bold">$2,500 / año</Text></div>, value: PaymentFrequency.Annual },
+															{ label: <div className="flex justify-between items-center"><Text className="font-semibold text-slate-800">Plan Premium</Text><Text className="text-legacy font-bold">$11,000 / mes</Text></div>, value: PaymentFrequency.Never },
 														]}
 													/>
 												</Form.Item>
@@ -450,7 +450,7 @@ export function Establishments() {
 														valuePropName="checked"
 														className="m-0"
 													>
-														<Switch onChange={setRequiresTaxReceipt} defaultChecked={false} className="bg-slate-200 [&.ant-switch-checked]:bg-primary" />
+														<Switch onChange={setRequiresTaxReceipt} defaultChecked={false} className="bg-slate-200 [&.ant-switch-checked]:bg-legacy" />
 													</Form.Item>
 													<span className="text-sm text-slate-600">Habilitar NCF</span>
 												</div>
@@ -467,7 +467,7 @@ export function Establishments() {
 														className="m-0"
 													>
 														<Input
-															className="h-10 rounded-lg border-slate-200 bg-slate-50 focus:border-primary"
+															className="h-10 rounded-lg border-slate-200 bg-slate-50 focus:border-legacy"
 															onKeyDown={avoidNotNumerics}
 															minLength={9}
 															maxLength={11}
@@ -481,7 +481,7 @@ export function Establishments() {
 														rules={[{ required: true, message: "Escriba su Razón Social" }]}
 														className="m-0"
 													>
-														<Input className="h-10 rounded-lg border-slate-200 bg-slate-50 focus:border-primary" />
+														<Input className="h-10 rounded-lg border-slate-200 bg-slate-50 focus:border-legacy" />
 													</Form.Item>
 												</div>
 											</div>
@@ -490,15 +490,15 @@ export function Establishments() {
 
 									<div className="flex flex-col gap-6 w-full">
 										{/* Section 4: Operating Hours */}
-										<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm w-full">
+										<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs w-full">
 											<div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
 												<div className="flex items-center gap-2">
-													<div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+													<div className="flex items-center justify-center w-6 h-6 rounded-full bg-legacy/10 text-legacy">
 														<ClockCircleOutlined className="text-sm" />
 													</div>
 													<h2 className="text-lg font-bold m-0 text-slate-900">Horarios de Operación</h2>
 												</div>
-												<Button type="text" onClick={() => { }} className="text-primary font-semibold hover:text-primary/80 hover:bg-transparent p-0 m-0">Añadir Excepción</Button>
+												<Button type="text" onClick={() => { }} className="text-legacy font-semibold hover:text-legacy/80 hover:bg-transparent p-0 m-0">Añadir Excepción</Button>
 											</div>
 											<Form.List name="schedules">
 												{(fields, { add, remove }) => (
@@ -516,7 +516,7 @@ export function Establishments() {
 																</div>
 
 																{/* Dot Indicator */}
-																<div className="hidden md:block w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+																<div className="hidden md:block w-2 h-2 rounded-full bg-green-500 shrink-0"></div>
 
 																{/* Days Select */}
 																<div className="flex-1 w-full md:max-w-[200px] mt-4 md:mt-0">
@@ -557,7 +557,7 @@ export function Establishments() {
 																			format="hh:mm A"
 																			variant="borderless"
 																			separator={<span className="text-slate-400 text-xs px-2">a</span>}
-																			className="w-full bg-white border border-slate-200 rounded-md py-2 md:py-1 px-3 text-sm shadow-sm"
+																			className="w-full bg-white border border-slate-200 rounded-md py-2 md:py-1 px-3 text-sm shadow-xs"
 																		/>
 																	</Form.Item>
 																</div>
@@ -565,13 +565,13 @@ export function Establishments() {
 														))}
 
 														<div className="flex items-center gap-4 py-2 px-4 rounded-xl mt-2 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => add()}>
-															<div className="w-2 h-2 rounded-full bg-slate-300 flex-shrink-0"></div>
+															<div className="w-2 h-2 rounded-full bg-slate-300 shrink-0"></div>
 															<span className="text-sm font-semibold text-slate-500 flex-1">Nuevo Horario</span>
 															<div className="flex-1 justify-center flex">
 																<span className="text-xs text-slate-400 italic">Clic para configurar</span>
 															</div>
 															<div className="w-8 h-8 flex items-center justify-center">
-																<PlusOutlined className="text-primary" />
+																<PlusOutlined className="text-legacy" />
 															</div>
 														</div>
 													</div>
@@ -580,15 +580,15 @@ export function Establishments() {
 										</section>
 
 										{/* Section 5: Social Networks */}
-										<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm w-full">
+										<section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs w-full">
 											<div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
 												<div className="flex items-center gap-2">
-													<div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary">
+													<div className="flex items-center justify-center w-6 h-6 rounded-full bg-legacy/10 text-legacy">
 														<GlobalOutlined className="text-sm" />
 													</div>
 													<h2 className="text-lg font-bold m-0 text-slate-900">Redes Sociales</h2>
 												</div>
-												<Button type="primary" ghost className="text-primary font-semibold border-primary/20 bg-primary/5 hover:bg-primary/10 rounded-full px-4 h-8 text-xs flex items-center gap-1" onClick={() => {
+												<Button type="primary" ghost className="text-legacy font-semibold border-legacy/20 bg-legacy/5 hover:bg-legacy/10 rounded-full px-4 h-8 text-xs flex items-center gap-1" onClick={() => {
 													// Ensure add works by getting it from the render props or trigger manually
 													// Since we are outside the Form.List scope here, we use form directly
 													const socials = form.getFieldValue('socialNetworks') || [];
@@ -704,7 +704,7 @@ export function Establishments() {
 											Descartar
 										</Button>
 										<Button
-											// className="flex-1 md:flex-none rounded-lg bg-primary px-8 py-5 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:scale-[1.02] active:scale-95 transition-all border-none"
+											// className="flex-1 md:flex-none rounded-lg bg-legacy px-8 py-5 text-sm font-bold text-white shadow-lg shadow-legacy/30 hover:scale-[1.02] active:scale-95 transition-all border-none"
 											loading={saving}
 											onClick={form.submit}
 											color="primary"

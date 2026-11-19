@@ -32,20 +32,20 @@ export default function FAQs() {
 			id="faq" className={`section-parent faqs-container ${bgColor} transition-all ease-in-out duration-500 overflow-hidden`}
 		>
 			<div className="section-child relative">
-				<h2 className="title text-[var(--primary)]">
+				<h2 className="title text-(--legacy-primary)">
 					Preguntas frecuentes
 				</h2>
 				<img
 					src={QuestionCloud}
 					alt="Question cloud"
-					className="w-[500px] absolute left-[-200px] z-[1]"
+					className="w-[500px] absolute left-[-200px] z-1"
 				/>
 				<img
 					src={QuestionGirl}
 					alt="Question girl"
 					className="w-[350px] absolute right-[-220px] bottom-[-20px]"
 				/>
-				<div className="z-[2] relative">
+				<div className="z-2 relative">
 					{Questions.map((item, index) => (
 						<Question {...item} key={index} />
 					))}
@@ -69,7 +69,7 @@ function Question({ question, answer }: { question: string; answer: string }) {
 			</div>
 			<div>
 				<div
-					className={`grid transition-all ease-in-out duration-[300ms] ${
+					className={`grid transition-all ease-in-out duration-300 ${
 						hiddenAnswer ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
 					}`}
 				>
@@ -78,7 +78,7 @@ function Question({ question, answer }: { question: string; answer: string }) {
 					</p>
 				</div>
 				<div
-					className={`grid transition-all ease-in-out duration-[300ms] ${
+					className={`grid transition-all ease-in-out duration-300 ${
 						hiddenAnswer ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
 					}`}
 				>

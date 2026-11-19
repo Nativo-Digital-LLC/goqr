@@ -27,14 +27,14 @@ export default function ChangePasswordAfterRequestPage() {
 	if (!userId || !secret || !expire) {
 		return (
 			<HomeContainer>
-				<div className="section-parent bg-[var(--secondary)]">
+				<div className="section-parent bg-(--legacy-secondary)">
 					<div className="w-full flex flex-col items-center p-[20px]">
 						<div className="max-w-[450px] w-full">
-							<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
+							<div className="p-[30px] bg-(--legacy-primary) border border-(--text) rounded-[15px] shadow-md shadow-[#00000030]">
 								<CloseCircleOutlined style={{ fontSize: 100, color: '#e74c3c' }} />
 								<br />
 								<br />
-								<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+								<h1 className="text-center text-[24px] font-bold mb-[25px]">
 									Enlace Inválido
 								</h1>
 								<p>El enlace para restablecer no es válido, por favor solicita un nuevo enlace.</p>
@@ -43,7 +43,7 @@ export default function ChangePasswordAfterRequestPage() {
 								<Link to='/request-reset-password'>
 									<Button
 										type="primary"
-										className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+										className="border border-(--text) mt-[10px] h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 									>
 										Solicitar nuevo enlace
 									</Button>
@@ -59,14 +59,14 @@ export default function ChangePasswordAfterRequestPage() {
 	if (dayjs().isAfter(dayjs(expire))) {
 		return (
 			<HomeContainer>
-				<div className="section-parent bg-[var(--secondary)]">
+				<div className="section-parent bg-(--legacy-secondary)">
 					<div className="w-full flex flex-col items-center p-[20px]">
 						<div className="max-w-[450px] w-full">
-							<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
+							<div className="p-[30px] bg-(--legacy-primary) border border-(--text) rounded-[15px] shadow-md shadow-[#00000030]">
 								<ClockCircleOutlined style={{ fontSize: 100, color: '#f39c12' }} />
 								<br />
 								<br />
-								<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+								<h1 className="text-center text-[24px] font-bold mb-[25px]">
 									Enlace Expirado
 								</h1>
 								<p>El enlace para restablecer tu contraseña ha expirado.</p>
@@ -75,7 +75,7 @@ export default function ChangePasswordAfterRequestPage() {
 								<Link to='/request-reset-password'>
 									<Button
 										type="primary"
-										className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+										className="border border-(--text) mt-[10px] h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 									>
 										Solicitar nuevo enlace
 									</Button>
@@ -90,11 +90,11 @@ export default function ChangePasswordAfterRequestPage() {
 
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[var(--secondary)]">
+			<div className="section-parent bg-(--legacy-secondary)">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">
-						<div className="p-[30px] bg-[--primary] border border-[var(--text)] rounded-[15px] shadow-md shadow-[#00000030]">
-							<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+						<div className="p-[30px] bg-(--legacy-primary) border border-(--text) rounded-[15px] shadow-md shadow-[#00000030]">
+							<h1 className="text-center text-[24px] font-bold mb-[25px]">
 								Nueva Contraseña
 							</h1>
 							<p>Por favor ingresa y confirma tu nueva contraseña.</p>
@@ -135,11 +135,11 @@ export default function ChangePasswordAfterRequestPage() {
 											message: "Tu contraseña debe tener almenos 8 caracteres",
 										},
 									]}
-									className="font-[500]"
+									className="font-medium"
 									hasFeedback
 								>
 									<Input.Password
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 									/>
 								</Form.Item>
@@ -167,10 +167,10 @@ export default function ChangePasswordAfterRequestPage() {
 											}
 										})
 									]}
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input.Password
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 									/>
 								</Form.Item>
@@ -179,7 +179,7 @@ export default function ChangePasswordAfterRequestPage() {
 									type="primary"
 									htmlType="submit"
 									loading={loading}
-									className="border border-[var(--text)] mt-[10px] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+									className="border border-(--text) mt-[10px] h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 								>
 									Guardar Nueva Contraseña
 								</Button>

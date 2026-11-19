@@ -1,3 +1,6 @@
 node_modules
 .env
 dist
+firestore-debug.log
+storage-debug.log
+ui-debug.log

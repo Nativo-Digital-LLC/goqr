@@ -31,11 +31,11 @@ export default function RegisterPage() {
 
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[var(--secondary)]">
+			<div className="section-parent bg-(--legacy-secondary)">
 				<div className="w-full flex flex-col items-center p-[20px]">
 					<div className="max-w-[450px] w-full">
-						<div className="p-[30px] bg-[--primary] rounded-[15px] shadow-md shadow-[#00000030] border border-[var(--text)]">
-							<h1 className="text-center text-[24px] font-[700] mb-[25px]">
+						<div className="p-[30px] bg-(--legacy-primary) rounded-[15px] shadow-md shadow-[#00000030] border border-(--text)">
+							<h1 className="text-center text-[24px] font-bold mb-[25px]">
 								Registro
 							</h1>
 							<Form
@@ -56,10 +56,10 @@ export default function RegisterPage() {
 											message: "Ingresa tu nombre",
 										},
 									]}
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 										placeholder="James"
 									/>
@@ -79,13 +79,13 @@ export default function RegisterPage() {
 											message: "Correo inválido",
 										},
 									]}
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input
 										type="email"
 										size="large"
 										placeholder="jhon@gmail.com"
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 									/>
 								</Form.Item>
 
@@ -104,11 +104,11 @@ export default function RegisterPage() {
 										},
 									]}
 									validateTrigger="onBlur"
-									className="font-[500]"
+									className="font-medium"
 								>
 									<Input.Password
 										placeholder="8 caracteres o más"
-										className="bg-[--field] font-[400] border border-[var(--text)]"
+										className="bg-(--field) font-normal border border-(--text)"
 										size="large"
 									/>
 								</Form.Item>
@@ -124,7 +124,7 @@ export default function RegisterPage() {
 									]}
 									className="mt-[30px]"
 								>
-									<Checkbox className="text-[14px] font-[500]">
+									<Checkbox className="text-[14px] font-medium">
 										Aceptar términos y condiciones
 									</Checkbox>
 								</Form.Item>
@@ -133,21 +133,21 @@ export default function RegisterPage() {
 									type="primary"
 									htmlType="submit"
 									loading={loading}
-									className="border border-[var(--text)] h-[38px] rounded-[8px] w-full bg-[--secondary] shadow-none hover:!bg-[--secondary] outline-none hover:!border-none"
+									className="border border-(--text) h-[38px] rounded-[8px] w-full bg-(--legacy-secondary) shadow-none hover:bg-(--legacy-secondary)! outline-hidden hover:border-none!"
 								>
 									Crear Cuenta
 								</Button>
 								<div className="flex items-center my-[10px]">
-									<div className="h-[1px] bg-[--border] w-full" />
-									<span className="text-[--border] pb-[3px] mx-[10px]">
+									<div className="h-px bg-(--legacy-border) w-full" />
+									<span className="text-(--legacy-border) pb-[3px] mx-[10px]">
 										o
 									</span>
-									<div className="h-[1px] bg-[--border] w-full" />
+									<div className="h-px bg-(--legacy-border) w-full" />
 								</div>
 								<div className="flex justify-between items-center gap-3">
 									<Button
 										type="primary"
-										className="border border-[var(--text)] h-[38px] rounded-[8px] w-full bg-[#FFF] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[#FFF] outline-none hover:!border-[--border]"
+										className="border border-(--text) h-[38px] rounded-[8px] w-full bg-white text-(--text) shadow-none hover:text-(--text)! hover:bg-white! outline-hidden hover:border-(--legacy-border)!"
 										onClick={() =>
 											login("Google", {
 												page: "register",
@@ -168,7 +168,7 @@ export default function RegisterPage() {
 									{/* {isAppleDevice && (
 										<Button
 											type="primary"
-											className="h-[38px] rounded-[8px] w-full bg-[--tertiary] border-[--border] text-[--text] shadow-none hover:!text-[--text] hover:!bg-[--tertiary] outline-none hover:!border-[--border]"
+											className="h-[38px] rounded-[8px] w-full bg-(--tertiary) border-(--legacy-border) text-(--text) shadow-none hover:text-(--text)! hover:bg-(--tertiary)! outline-hidden hover:border-(--legacy-border)!"
 											onClick={() =>
 												login("Apple", {
 													page: "register",
@@ -202,7 +202,7 @@ export default function RegisterPage() {
 									Servicio en este{" "}
 									<Link
 										to="/terms"
-										className="text-[--secondary] hover:text-[--secondary]"
+										className="text-(--legacy-secondary) hover:text-(--legacy-secondary)"
 									>
 										enlace
 									</Link>

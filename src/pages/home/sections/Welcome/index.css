@@ -1,5 +1,5 @@
 .welcome-container {
-	background-color: var(--secondary);
+	background-color: var(--legacy-secondary);
 	overflow: hidden;
 }
 
@@ -17,7 +17,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: var(--primary);
+	background-color: var(--legacy-primary);
 	height: 60px;
 	width: 250px;
 	margin-top: 40px;

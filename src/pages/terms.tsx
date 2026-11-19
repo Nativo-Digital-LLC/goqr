@@ -3,15 +3,15 @@ import HomeContainer from "./containers/HomeContainer";
 export default function TermsPage() {
 	return (
 		<HomeContainer>
-			<div className="section-parent bg-[#FFF]">
-				<div className="section-child w-full flex flex-col items-center text-left !p-[20px]">
+			<div className="section-parent bg-white">
+				<div className="section-child w-full flex flex-col items-center text-left p-[20px]!">
 					<div className="max-w-[890px] w-full">
-						<h1 className="text-center text-[25px] font-[700] mb-[30px]">
+						<h1 className="text-center text-[25px] font-bold mb-[30px]">
 							Términos y Condiciones de GoQR
 						</h1>
 
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								1. Uso del Servicio
 							</h4>
 							<ul className="ml-[18px]">
@@ -41,7 +41,7 @@ export default function TermsPage() {
 						</div>
 
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								2. Requisitos
 							</h4>
 							<p className="ml-[18px]">
@@ -51,7 +51,7 @@ export default function TermsPage() {
 						</div>
 
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								3. Propiedad Intelectual
 							</h4>
 							<ul className="ml-[18px]">
@@ -70,7 +70,7 @@ export default function TermsPage() {
 						</div>
 
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								4. Responsabilidad del Usuario
 							</h4>
 							<ul className="ml-[18px]">
@@ -86,7 +86,7 @@ export default function TermsPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								5. Responsabilidad y Exenciones de Garantía
 							</h4>
 							<p className="ml-[18px]">
@@ -97,7 +97,7 @@ export default function TermsPage() {
 							</p>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								6. Información de Pago
 							</h4>
 							<ul className="ml-[18px]">
@@ -114,7 +114,7 @@ export default function TermsPage() {
 							</ul>
 						</div>
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								7. Política de Reembolsos y Cancelaciones
 							</h4>
 							<p className="ml-[18px]">
@@ -125,7 +125,7 @@ export default function TermsPage() {
 						</div>
 
 						<div className="mb-[20px]">
-							<h4 className="font-[500] text-[17px] mb-[5px]">
+							<h4 className="font-medium text-[17px] mb-[5px]">
 								8. Cambios en los Términos y Condiciones
 							</h4>
 							<p className="ml-[18px]">

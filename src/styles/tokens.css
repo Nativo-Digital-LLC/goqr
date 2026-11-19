@@ -1,0 +1,85 @@
+/* Tokens de marca GoQR ("Sistema de diseño") mapeados a variables shadcn. */
+:root {
+	--background: #faf7f3;
+	--foreground: #2a1410;
+	--card: #ffffff;
+	--card-foreground: #2a1410;
+	--popover: #ffffff;
+	--popover-foreground: #2a1410;
+	--muted: #f5efe9;
+	--muted-foreground: #6b5a54;
+	--accent: #f5efe9;
+	--accent-foreground: #2a1410;
+	--secondary: #f5efe9;
+	--secondary-foreground: #2a1410;
+	--border: #ece4dc;
+	--input: #ece4dc;
+	--primary: #2a1410;
+	--primary-foreground: #ffffff;
+	--ring: #2a1410;
+	--radius: 12px;
+	--destructive: #9f1239;
+
+	--brand: #c2381f;
+	--brand-hover: #a82e18;
+	--brand-foreground: #ffffff;
+	--platano: #ffc53d;
+	--crema: #fff3e6;
+	--cacao-2: #6e4a3e;
+	--line: #ebd3bc;
+	--powered: #766660;
+
+	--success: #15803d;
+	--success-bg: #e7f5ec;
+	--warning: #b45309;
+	--warning-bg: #fef3e2;
+	--error: #9f1239;
+	--error-bg: #fdecef;
+	--info: #1d4ed8;
+	--info-bg: #e8eefd;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-ring: var(--ring);
+	--color-destructive: var(--destructive);
+	--color-brand: var(--brand);
+	--color-brand-hover: var(--brand-hover);
+	--color-brand-foreground: var(--brand-foreground);
+	--color-platano: var(--platano);
+	--color-crema: var(--crema);
+	--color-cacao-2: var(--cacao-2);
+	--color-line: var(--line);
+	--color-powered: var(--powered);
+	--color-success: var(--success);
+	--color-success-bg: var(--success-bg);
+	--color-warning: var(--warning);
+	--color-warning-bg: var(--warning-bg);
+	--color-error: var(--error);
+	--color-error-bg: var(--error-bg);
+	--color-info: var(--info);
+	--color-info-bg: var(--info-bg);
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--font-display: 'Bricolage Grotesque Variable', sans-serif;
+	--font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, sans-serif;
+	/* La UI antd vieja conserva su fuente base de sistema */
+	--default-font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
