@@ -8,6 +8,8 @@ import { postAuthPath } from "@/lib/postAuth";
 import { getEstablishmentsByUserId } from "@/services/establishments";
 import { useSessionStore } from "@/store/session";
 
+const ERROR_TOAST = "post-auth-error";
+
 /**
  * Si ya hay sesión, manda al usuario a /onboarding o /dashboard.
  * Corre también justo después de un login con correo o Google (el hook de login escribe la
@@ -23,6 +25,7 @@ export function useRedirectIfAuthenticated(): void {
 	useEffect(() => {
 		if (!userId) return;
 		let cancelled = false;
+		toast.dismiss(ERROR_TOAST);
 		getEstablishmentsByUserId(userId)
 			.then((establishments) => {
 				if (!cancelled) navigate(postAuthPath(establishments), { replace: true });
@@ -31,7 +34,7 @@ export function useRedirectIfAuthenticated(): void {
 				// Sin la consulta no se adivina el destino: se avisa y se permite reintentar.
 				if (!cancelled) {
 					toast.error(authErrorMessage(error), {
-						id: "redirect-error",
+						id: ERROR_TOAST,
 						duration: Infinity,
 						action: { label: "Reintentar", onClick: () => setAttempt((a) => a + 1) },
 					});
@@ -39,6 +42,7 @@ export function useRedirectIfAuthenticated(): void {
 			});
 		return () => {
 			cancelled = true;
+			toast.dismiss(ERROR_TOAST);
 		};
 	}, [session, userId, navigate, attempt]);
 }
