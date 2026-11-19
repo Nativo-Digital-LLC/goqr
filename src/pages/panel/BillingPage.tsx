@@ -18,12 +18,18 @@ export default function BillingPage() {
 	const userId = auth.currentUser!.uid; // PanelLayout no muestra esta página sin sesión
 	const [bills, loading, error, reload] = useGetBillsByUserId(userId);
 	const [pending, setPending] = useState<TransferProps[]>([]);
+	const [transfersError, setTransfersError] = useState(false);
+	const [attempt, setAttempt] = useState(0);
 	const view = billingView(e);
 
 	useEffect(() => {
-		// Sin esto el estado "En revisión" se omite; no bloquea la página.
-		getTransfers(e.id).then((t) => setPending(t.filter((x) => x.status === "pending"))).catch(() => setPending([]));
-	}, [e.id]);
+		let cancelled = false;
+		setTransfersError(false);
+		getTransfers(e.id)
+			.then((t) => !cancelled && setPending(t.filter((x) => x.status === "pending")))
+			.catch(() => !cancelled && (setPending([]), setTransfersError(true)));
+		return () => { cancelled = true; };
+	}, [e.id, attempt]);
 
 	return (
 		<>
@@ -33,9 +39,15 @@ export default function BillingPage() {
 			{view === "legacy" && (
 				<div className="rounded-2xl bg-secondary px-5 py-4 text-[15px] font-semibold">Tu plan actual sigue igual. Te escribiremos antes de cualquier cambio.</div>
 			)}
-			{view !== "choose" && <FiscalData establishment={e} />}
+			<FiscalData establishment={e} />
 			<section aria-labelledby="facturas" className="flex flex-col gap-3">
 				<h2 id="facturas" className="text-lg font-bold">Facturas</h2>
+				{transfersError && (
+					<div className="flex flex-wrap items-center gap-3">
+						<p className="text-[15px] text-muted-foreground">No pudimos cargar tus comprobantes.</p>
+						<Button variant="outline" size="sm" onClick={() => setAttempt((n) => n + 1)}>Reintentar</Button>
+					</div>
+				)}
 				{loading ? (
 					<Skeleton className="h-32 w-full" />
 				) : error ? (

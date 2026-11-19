@@ -32,7 +32,7 @@ const INDEX = [
 	["horarios", "Horarios"],
 	["redes", "Redes sociales"],
 	["idiomas", "Idiomas y avisos"],
-	["facturacion", "Facturación fiscal"],
+	["fiscal", "Facturación fiscal"],
 ];
 
 const PHONE = /^[\d\s()+\-.]*$/;
@@ -61,6 +61,10 @@ function toForm(e: EstablishmentProps): FormValues {
 export default function EstablishmentPage() {
 	const { establishment: est, reload } = usePanel();
 	const { products } = useMenuEditor(est.id);
+	// Navegar con hash dentro de la SPA no desplaza solo.
+	useEffect(() => {
+		if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+	}, []);
 	const [save, saving, saveError] = useSaveEstablishment();
 	const [logo, setLogo] = useState<File | null | undefined>(undefined);
 	const [banner, setBanner] = useState<File | null | undefined>(undefined);

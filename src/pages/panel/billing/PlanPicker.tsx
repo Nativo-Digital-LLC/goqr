@@ -15,7 +15,7 @@ const DETAIL: Record<PlanId, string> = {
 	annual: "Equivale a RD$210/mes. Un solo cobro al año.",
 	lifetime: "Pagas una vez y tu menú queda activo para siempre.",
 };
-const choice = (on: boolean) => `flex flex-col gap-1 rounded-2xl border-2 p-4 text-left ${on ? "border-brand bg-card" : "border-border bg-card"}`;
+const choice = (on: boolean) => `relative flex cursor-pointer flex-col gap-1 rounded-2xl border-2 bg-card p-4 text-left has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50 ${on ? "border-brand" : "border-border"}`;
 
 export function PlanPicker({ establishment: e }: { establishment: EstablishmentProps }) {
 	const [plan, setPlan] = useState<PlanId>("annual");
@@ -54,12 +54,13 @@ export function PlanPicker({ establishment: e }: { establishment: EstablishmentP
 				</div>
 				<div role="radiogroup" aria-labelledby="elige" className="grid gap-3 md:grid-cols-3">
 					{PLANS.map((p) => (
-						<button key={p.id} type="button" role="radio" aria-checked={plan === p.id} onClick={() => setPlan(p.id)} className={choice(plan === p.id)}>
+						<label key={p.id} className={choice(plan === p.id)}>
+							<input type="radio" name="plan" className="sr-only" checked={plan === p.id} onChange={() => setPlan(p.id)} />
 							<span className="text-[15px] font-bold">{p.name}</span>
 							{p.id === "annual" && <span className="text-[13px] font-semibold text-success">Recomendado · ahorras 30%</span>}
 							<span className="text-2xl font-bold">{formatMoney(p.priceDop)} <span className="text-sm font-medium text-muted-foreground">{SUFFIX[p.id]}</span></span>
 							<span className="text-sm text-muted-foreground">{DETAIL[p.id]}</span>
-						</button>
+						</label>
 					))}
 				</div>
 			</section>
@@ -67,14 +68,16 @@ export function PlanPicker({ establishment: e }: { establishment: EstablishmentP
 			<section aria-labelledby="pago" className="flex flex-col gap-3">
 				<h2 id="pago" className="text-lg font-bold">2. ¿Cómo quieres pagar?</h2>
 				<div role="radiogroup" aria-labelledby="pago" className="grid gap-3 md:grid-cols-2">
-					<button type="button" role="radio" aria-checked={method === "card"} onClick={() => setMethod("card")} className={choice(method === "card")}>
+					<label className={choice(method === "card")}>
+						<input type="radio" name="method" className="sr-only" checked={method === "card"} onChange={() => setMethod("card")} />
 						<span className="text-[15px] font-bold">Pagar con tarjeta</span>
 						<span className="text-sm text-muted-foreground">Visa, Mastercard o Amex. Pago seguro con Stripe. Se activa al instante.</span>
-					</button>
-					<button type="button" role="radio" aria-checked={method === "transfer"} onClick={() => setMethod("transfer")} className={choice(method === "transfer")}>
+					</label>
+					<label className={choice(method === "transfer")}>
+						<input type="radio" name="method" className="sr-only" checked={method === "transfer"} onChange={() => setMethod("transfer")} />
 						<span className="text-[15px] font-bold">Transferencia bancaria</span>
 						<span className="text-sm text-muted-foreground">Cuentas en República Dominicana o EE. UU. Subes el comprobante y lo aprobamos en menos de 24 h.</span>
-					</button>
+					</label>
 				</div>
 			</section>
 

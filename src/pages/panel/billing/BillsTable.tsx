@@ -21,9 +21,12 @@ export function BillsTable({ bills, pending }: { bills: BillProps[]; pending: Tr
 			return {
 				key: b.id, number: b.orderNumber, date: dateOf(b.createdAt), period: b.period || b.billingPeriod || "—",
 				amount: formatMoney(b.amount, b.currency), status,
-				action: status === "Pagada"
-					? b.invoicePdf && <Button asChild variant="outline" size="sm"><a href={b.invoicePdf} target="_blank" rel="noreferrer">PDF</a></Button>
-					: payUrl && <Button asChild size="sm"><a href={payUrl} target="_blank" rel="noreferrer">{status === "Fallida" ? "Reintentar pago" : "Pagar"}</a></Button>,
+				action: (
+					<div className="flex justify-end gap-2">
+						{b.invoicePdf && <Button asChild variant="outline" size="sm"><a href={b.invoicePdf} target="_blank" rel="noreferrer">PDF</a></Button>}
+						{status !== "Pagada" && payUrl && <Button asChild size="sm"><a href={payUrl} target="_blank" rel="noreferrer">{status === "Fallida" ? "Reintentar pago" : "Pagar"}</a></Button>}
+					</div>
+				),
 			};
 		}),
 	];

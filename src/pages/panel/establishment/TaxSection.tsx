@@ -29,7 +29,7 @@ export function TaxSection({ busy }: { busy: boolean }) {
 	}
 
 	return (
-		<Section id="facturacion" title="Facturación fiscal">
+		<Section id="fiscal" title="Facturación fiscal">
 			<SwitchRow id="requiresTaxReceipt" label="Necesito comprobante fiscal">
 				<Switch id="requiresTaxReceipt" checked={watch("requiresTaxReceipt")} disabled={busy} onCheckedChange={(v) => setValue("requiresTaxReceipt", v, { shouldDirty: true })} />
 			</SwitchRow>

@@ -46,7 +46,7 @@ export function ActivePlan({ establishment: e, past }: { establishment: Establis
 				<dl className="grid gap-3 sm:grid-cols-2">
 					<div>
 						<dt className="text-sm text-muted-foreground">{b.method === "card" && !lifetime ? "Próximo cobro" : "Vence"}</dt>
-						<dd className="text-[15px] font-semibold">{lifetime || !end ? "De por vida" : end.toLocaleDateString("es-DO")}</dd>
+						<dd className="text-[15px] font-semibold">{lifetime ? "De por vida" : end ? end.toLocaleDateString("es-DO") : "—"}</dd>
 					</div>
 					<div>
 						<dt className="text-sm text-muted-foreground">Método de pago</dt>
@@ -66,6 +66,13 @@ export function ActivePlan({ establishment: e, past }: { establishment: Establis
 }
 
 export function FiscalData({ establishment: e }: { establishment: EstablishmentProps }) {
+	if (!e.requiresTaxReceipt && !e.rnc) {
+		return (
+			<p className="text-sm text-muted-foreground">
+				¿Necesitas comprobante fiscal? <Link to="/dashboard/establishment#fiscal" className="font-semibold text-brand underline">Agrega tu RNC</Link>
+			</p>
+		);
+	}
 	return (
 		<section aria-labelledby="fiscal" className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
 			<div className="flex items-center justify-between">
