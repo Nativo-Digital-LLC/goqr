@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -37,10 +37,13 @@ function Detail({ t, client, onDone }: { t: TransferProps; client?: AdminClient;
 	const [other, setOther] = useState("");
 	const [confirm, setConfirm] = useState<"approve" | "reject" | null>(null);
 	const [loading, setLoading] = useState(false);
+	const [proofFailed, setProofFailed] = useState(false);
+	const [attempt, setAttempt] = useState(0);
 
 	useEffect(() => {
-		proofUrl(t.proofPath).then(setUrl, () => toast.error("No pudimos cargar el comprobante."));
-	}, [t.proofPath]);
+		setProofFailed(false);
+		proofUrl(t.proofPath).then(setUrl, () => setProofFailed(true));
+	}, [t.proofPath, attempt]);
 
 	const plan = PLANS.find((p) => p.id === t.plan)!;
 	const expected = t.currency === "USD" ? plan.priceUsd : plan.priceDop;
@@ -67,6 +70,12 @@ function Detail({ t, client, onDone }: { t: TransferProps; client?: AdminClient;
 		<div className="flex flex-col gap-4">
 			<p className="text-[16px] font-bold">{client?.name ?? t.establishmentId}</p>
 			<p className="text-[13px] font-semibold text-muted-foreground">Vista previa del comprobante</p>
+			{proofFailed && (
+				<div className="flex items-center gap-3 text-[14px]">
+					<span>No se pudo cargar el comprobante.</span>
+					<Button size="sm" variant="outline" onClick={() => setAttempt((n) => n + 1)}>Reintentar</Button>
+				</div>
+			)}
 			{url && !isPdf(t.proofPath) && <img src={url} alt="Comprobante" className="max-h-72 w-full rounded-lg border border-border object-contain" />}
 			{url && (
 				<a href={url} target="_blank" rel="noreferrer" className="text-[14px] font-semibold text-primary underline">
@@ -82,7 +91,7 @@ function Detail({ t, client, onDone }: { t: TransferProps; client?: AdminClient;
 			{pending ? (
 				<>
 					<div className="flex flex-col gap-2">
-						<label className="text-[13px] font-semibold">Motivo de rechazo (se envía al cliente)</label>
+						<label className="text-[13px] font-semibold">Motivo de rechazo (el cliente lo verá en su panel)</label>
 						<Select value={reason} onValueChange={setReason}>
 							<SelectTrigger><SelectValue placeholder="Selecciona un motivo" /></SelectTrigger>
 							<SelectContent>
@@ -106,7 +115,7 @@ function Detail({ t, client, onDone }: { t: TransferProps; client?: AdminClient;
 				open={!!confirm}
 				onOpenChange={(o) => !o && setConfirm(null)}
 				title={confirm === "approve" ? "¿Aprobar esta transferencia?" : "¿Rechazar esta transferencia?"}
-				body={confirm === "approve" ? "Se activará el plan del cliente." : `Se enviará al cliente el motivo: ${finalReason}`}
+				body={confirm === "approve" ? "Se activará el plan del cliente." : `El cliente verá este motivo en su panel: ${finalReason}`}
 				confirmLabel={confirm === "approve" ? "Aprobar y activar plan" : "Rechazar"}
 				destructive={confirm === "reject"}
 				loading={loading}
@@ -128,18 +137,26 @@ export default function AdminTransfersPage() {
 		listClients().then((l) => setClients(new Map(l.map((c) => [c.establishmentId, c]))), () => toast.error("No pudimos cargar los clientes."));
 	}, []);
 
-	const load = useCallback(() => {
+	const [reloads, setReloads] = useState(0);
+	useEffect(() => {
+		let cancelled = false; // una respuesta lenta de otra pestaña no debe pisar la lista
 		setItems(null);
-		listTransfers(status).then(setItems, () => {
-			setItems([]);
-			toast.error("No pudimos cargar las transferencias.");
-		});
-	}, [status]);
-	useEffect(load, [load]);
+		listTransfers(status).then(
+			(l) => !cancelled && setItems(l),
+			() => {
+				if (cancelled) return;
+				setItems([]);
+				toast.error("No pudimos cargar las transferencias.");
+			}
+		);
+		return () => {
+			cancelled = true;
+		};
+	}, [status, reloads]);
 
 	const done = () => {
 		setSelected(null);
-		load();
+		setReloads((n) => n + 1);
 		refreshPending();
 	};
 	const detail = selected && <Detail key={selected.id} t={selected} client={clients.get(selected.establishmentId)} onDone={done} />;
