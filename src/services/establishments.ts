@@ -55,7 +55,6 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		requiresTaxReceipt: params.requiresTaxReceipt,
 		schedules: params.schedules || [],
 		socialNetworks: params.socialNetworks || [],
-		isActive: true,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 	});
