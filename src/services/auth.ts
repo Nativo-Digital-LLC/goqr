@@ -34,9 +34,6 @@ export async function createAccount(name: string, email: string, password: strin
 		email: email.toLowerCase()
 	});
 
-	const sendWelcomeEmail = httpsCallable(functions, 'sendWelcomeEmail');
-	await sendWelcomeEmail({ email });
-
 	return user;
 }
 
