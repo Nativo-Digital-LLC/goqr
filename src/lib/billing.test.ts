@@ -25,9 +25,8 @@ describe('billingView', () => {
 		expect(billingView(est({ status: 'past_due' }), now)).toBe('past_due');
 		expect(billingView(est({ status: 'legacy' }), now)).toBe('legacy');
 	});
-	it('active con periodo vencido → choose', () => {
-		expect(billingView(est({ status: 'active', currentPeriodEnd: ts('2026-11-01') }), now)).toBe('choose');
-		expect(billingView(est({ status: 'active', currentPeriodEnd: ts('2026-12-01') }), now)).toBe('active');
+	it('active sigue activo aunque currentPeriodEnd ya pasó', () => {
+		expect(billingView(est({ status: 'active', currentPeriodEnd: ts('2026-11-01') }), now)).toBe('active');
 	});
 });
 

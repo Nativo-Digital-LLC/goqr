@@ -151,3 +151,54 @@ describe('lectura pública', () => {
 		await assertFails(setDoc(doc(owner(), 'bills/b1'), { userId: 'owner' }));
 	});
 });
+
+describe('transfers y stripe-events', () => {
+	const base = {
+		establishmentId: 'est1',
+		userId: 'owner',
+		plan: 'monthly',
+		amount: 300,
+		currency: 'DOP',
+		status: 'pending',
+	};
+	const anon = () => env.unauthenticatedContext().firestore();
+
+	beforeEach(async () => {
+		await env.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), 'transfers/t1'), base);
+			await setDoc(doc(ctx.firestore(), 'stripe-events/e1'), { type: 'x' });
+		});
+	});
+
+	it('dueño crea transferencia pendiente de su establecimiento', async () => {
+		await assertSucceeds(setDoc(doc(owner(), 'transfers/t2'), base));
+	});
+
+	it('no crea con status approved', async () => {
+		await assertFails(setDoc(doc(owner(), 'transfers/t2'), { ...base, status: 'approved' }));
+	});
+
+	it('no crea para establecimiento ajeno', async () => {
+		await assertFails(setDoc(doc(owner(), 'transfers/t2'), { ...base, establishmentId: 'est2' }));
+	});
+
+	it('no crea con reviewedBy', async () => {
+		await assertFails(setDoc(doc(owner(), 'transfers/t2'), { ...base, reviewedBy: 'owner' }));
+	});
+
+	it('dueño lee la suya; otro usuario y anónimo no', async () => {
+		await assertSucceeds(getDoc(doc(owner(), 'transfers/t1')));
+		await assertFails(getDoc(doc(other(), 'transfers/t1')));
+		await assertFails(getDoc(doc(anon(), 'transfers/t1')));
+	});
+
+	it('nadie actualiza ni borra', async () => {
+		await assertFails(updateDoc(doc(owner(), 'transfers/t1'), { status: 'approved' }));
+		await assertFails(deleteDoc(doc(owner(), 'transfers/t1')));
+	});
+
+	it('stripe-events no se lee', async () => {
+		await assertFails(getDoc(doc(owner(), 'stripe-events/e1')));
+		await assertFails(getDoc(doc(anon(), 'stripe-events/e1')));
+	});
+});
