@@ -20,12 +20,16 @@ import { SessionProps } from '../types/Session';
 const APPWRITE_ENDPOINT = 'https://appwrite.nd.com.do/v1';
 const APPWRITE_PROJECT_ID = '66f768e4001537551adf';
 
+// La URL de acción de las plantillas no se puede cambiar en este proyecto (EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED):
+// el enlace abre la página de Firebase y su botón "Continuar" vuelve a GoQR.
+const continueTo = (path: string) => ({ url: `${window.location.origin}${path}` });
+
 export async function createAccount(name: string, email: string, password: string) {
 	const { user } = await createUserWithEmailAndPassword(auth, email, password);
 	if (name) {
 		await updateProfile(user, { displayName: name });
 	}
-	await sendEmailVerification(user);
+	await sendEmailVerification(user, continueTo('/verify'));
 
 	// Registrar como migrado para evitar el check de Appwrite
 	const migrationDocRef = doc(db, 'migrated-users', email.toLowerCase());
@@ -92,7 +96,7 @@ export async function sendVerificationEmail() {
 		return;
 	}
 
-	await sendEmailVerification(auth.currentUser);
+	await sendEmailVerification(auth.currentUser, continueTo('/verify'));
 }
 
 function mapUserToSession(user: User): SessionProps {
@@ -123,7 +127,7 @@ export async function getCurrentSession(): Promise<SessionProps | null> {
 }
 
 export async function sendResetPasswordEmail(email: string) {
-	await sendPasswordResetEmail(auth, email);
+	await sendPasswordResetEmail(auth, email, continueTo('/login'));
 }
 
 export async function resetPasswordWithSecret(oobCode: string, newPassword: string) {
