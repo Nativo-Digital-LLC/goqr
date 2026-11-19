@@ -24,14 +24,14 @@ export const MenuHero = ({ establishment: e, lang, dictionary, color, canSwitch,
 		.filter((s): s is { href: string; label: string } => !!s.href);
 
 	return (
-		<header>
-			<div className="relative h-[200px]" style={{ backgroundColor: color }}>
+		<header className="lg:col-start-2 lg:row-start-1 lg:pt-4">
+			<div className="relative h-[200px] lg:h-[160px] lg:overflow-hidden lg:rounded-2xl" style={{ backgroundColor: color }}>
 				{e.bannerUrl && <img src={e.bannerUrl} alt="" className="size-full object-cover" />}
 			</div>
-			<div className="relative -mt-7 flex flex-col gap-4 rounded-t-[28px] bg-white px-5 pb-6">
-				<div className="-mt-9 flex items-end justify-between">
+			<div className="relative -mt-7 flex flex-col gap-4 rounded-t-[28px] bg-white px-5 pb-6 lg:mt-0 lg:px-0 lg:pb-2 lg:pt-4">
+				<div className="-mt-9 flex items-end justify-between lg:hidden">
 					<div className="flex size-21 items-center justify-center overflow-hidden rounded-full bg-white font-display text-3xl font-extrabold shadow-[0_0_0_4px_#FFF,0_8px_20px_rgba(42,20,16,0.18)]" style={{ color }}>
-						{e.logoUrl ? <img src={e.logoUrl} alt="" className="size-full object-cover" /> : e.name.charAt(0).toUpperCase()}
+						{e.logoUrl ? <img src={e.logoUrl} alt="" className="size-full object-contain" /> : e.name.charAt(0).toUpperCase()}
 					</div>
 					{canSwitch && <LanguageToggle lang={lang} onChange={onLangChange} />}
 				</div>
@@ -51,7 +51,7 @@ export const MenuHero = ({ establishment: e, lang, dictionary, color, canSwitch,
 						<span className="text-muted-foreground">· {status.open ? t.closesAt : t.opensAt} {status.until}</span>
 					</p>
 				)}
-				<div className="grid grid-cols-4 gap-2">
+				<div className="grid grid-cols-4 gap-2 lg:hidden">
 					{e.addressLink && <a href={e.addressLink} target="_blank" rel="noreferrer" className={tile}><MapPin className="size-5" aria-hidden="true" />{t.directions}</a>}
 					{e.phone && <a href={telHref(e.phone)} className={tile}><Phone className="size-5" aria-hidden="true" />{t.call}</a>}
 					{e.whatsapp && <a href={whatsappHref(e.whatsapp)} target="_blank" rel="noreferrer" className={tile}><MessageCircle className="size-5" aria-hidden="true" />{t.whatsapp}</a>}

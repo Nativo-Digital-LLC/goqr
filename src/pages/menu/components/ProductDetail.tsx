@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
@@ -15,17 +17,6 @@ type Props = {
 	lang: Lang;
 	dictionary: DictionaryProps;
 	color: string;
-};
-
-const useMediaQuery = (query: string) => {
-	const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
-	useEffect(() => {
-		const mq = window.matchMedia(query);
-		const update = () => setMatches(mq.matches);
-		mq.addEventListener("change", update);
-		return () => mq.removeEventListener("change", update);
-	}, [query]);
-	return matches;
 };
 
 export const ProductDetail = ({ product, open, onOpenChange, lang, dictionary, color }: Props) => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, QrCode } from "lucide-react";
 
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useShowIntro } from "@/hooks/useShowIntro";
 import { menuColor, localized } from "@/lib/menu";
 import { readableOn } from "@/lib/color";
@@ -15,6 +16,8 @@ import { SubcategoryGrid } from "./components/SubcategoryGrid";
 import { AllergyDialog } from "./components/AllergyDialog";
 import { MenuSearch } from "./components/MenuSearch";
 import { ProductList } from "./components/ProductList";
+import { MenuInfoAside } from "./components/MenuInfoAside";
+import { LanguageToggle } from "./components/LanguageToggle";
 
 export default function MenuPage() {
 	const { establishmentUrl } = useParams();
@@ -42,6 +45,9 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 	const { lang, dictionary, setLang, canSwitch } = useMenuLang(establishment.enableMultiLanguage);
 	const navigate = useNavigate();
 	const { search } = useLocation();
+	const isDesktop = useMediaQuery("(min-width: 1024px)");
+	const [resultsEl, setResultsEl] = useState<HTMLElement | null>(null);
+	const [searchActive, setSearchActive] = useState(false);
 
 	const allergyKey = `goqr:allergy:${establishment.id}`;
 	const [allergyOpen, setAllergyOpen] = useState(
@@ -80,9 +86,35 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 
 	if (!establishment.isActive) return <MenuUnavailable establishment={establishment} dictionary={dictionary} />;
 
+	const searchEl = (
+		<MenuSearch
+			establishmentId={establishment.id}
+			categories={categories}
+			products={menu.products}
+			lang={lang}
+			dictionary={dictionary}
+			color={color}
+			inline={isDesktop}
+			resultsEl={resultsEl}
+			onActiveChange={setSearchActive}
+		/>
+	);
+
 	return (
-		<div className="bg-black/5">
-			<div className="mx-auto flex min-h-screen max-w-[560px] flex-col bg-white text-foreground">
+		<div className="bg-black/5 lg:bg-white">
+			<div className="sticky top-0 z-30 hidden border-b border-border bg-white lg:block">
+				<div className="mx-auto flex h-[72px] max-w-[1280px] items-center gap-6 px-8">
+					<div className="flex min-w-0 flex-1 items-center gap-3">
+						<div className="flex size-10 flex-none items-center justify-center overflow-hidden rounded-full border border-border bg-white font-display font-extrabold" style={{ color }}>
+							{establishment.logoUrl ? <img src={establishment.logoUrl} alt="" className="size-full object-contain" /> : establishment.name.charAt(0).toUpperCase()}
+						</div>
+						<span className="truncate font-display text-lg font-bold">{establishment.name}</span>
+					</div>
+					{categories.length > 0 && isDesktop && <div className="w-[360px]">{searchEl}</div>}
+					{canSwitch && <LanguageToggle lang={lang} onChange={setLang} />}
+				</div>
+			</div>
+			<div className="mx-auto flex min-h-screen max-w-[560px] flex-col bg-white text-foreground lg:grid lg:max-w-[1280px] lg:grid-cols-[220px_minmax(0,1fr)_300px] lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:px-8">
 				<MenuHero
 					establishment={establishment}
 					lang={lang}
@@ -91,18 +123,12 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 					canSwitch={canSwitch}
 					onLangChange={setLang}
 				/>
+				<MenuInfoAside establishment={establishment} lang={lang} dictionary={dictionary} />
 				{categories.length === 0 ? (
 					<p className="p-5 text-center text-muted-foreground">{dictionary.menu.emptyMenu}</p>
 				) : (
 					<>
-						<MenuSearch
-							establishmentId={establishment.id}
-							categories={categories}
-							products={menu.products}
-							lang={lang}
-							dictionary={dictionary}
-							color={color}
-						/>
+						{!isDesktop && searchEl}
 						<CategoryNav
 							categories={categories}
 							activeId={category?.id}
@@ -110,7 +136,8 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 							color={color}
 							onSelect={(id) => navigate({ search: `?categoryId=${id}` })}
 						/>
-						<main className="flex flex-1 flex-col gap-3.5 p-5">
+						<div ref={setResultsEl} className="hidden lg:col-start-2 lg:row-start-2 lg:block" />
+						<main className={searchActive ? "hidden" : "flex flex-1 flex-col gap-3.5 p-5 lg:col-start-2 lg:row-start-2 lg:p-0 lg:pt-2"}>
 							{category && category.enableSubcategories && !subcategory && (
 								<SubcategoryGrid
 									categoryName={name(category)}
@@ -142,7 +169,7 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 						</main>
 					</>
 				)}
-				<footer className="flex flex-col items-center gap-2.5 border-t border-border px-5 pt-6 pb-8">
+				<footer className="flex flex-col items-center gap-2.5 border-t border-border px-5 pt-6 pb-8 lg:col-span-3 lg:row-start-3">
 					{establishment.showFoodAllergyAndRiskDisclaimer && (
 						<button type="button" onClick={() => setAllergyOpen(true)} className="min-h-11 text-[13px] text-muted-foreground underline">
 							{dictionary.menu.allergyInfo}

@@ -24,7 +24,7 @@ export const ProductList = ({ products, categoryId, subcategoryId, lang, diction
 	if (!list.length) return <p className="py-6 text-center text-muted-foreground">{dictionary.menu.emptyCategory}</p>;
 	return (
 		<>
-			<div className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
 				{list.map((p) => (
 					<ProductItem
 						key={p.id}

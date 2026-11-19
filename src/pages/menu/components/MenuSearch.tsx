@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Configure, InstantSearch, useHits, useSearchBox } from "react-instantsearch";
 import { Search, X } from "lucide-react";
 
@@ -18,6 +19,10 @@ type Props = {
 	lang: Lang;
 	dictionary: DictionaryProps;
 	color: string;
+	// Escritorio: el campo vive en la barra superior y los resultados se montan en `resultsEl` (sin overlay).
+	inline?: boolean;
+	resultsEl?: HTMLElement | null;
+	onActiveChange?: (active: boolean) => void;
 };
 
 export const MenuSearch = (props: Props) => (
@@ -27,7 +32,7 @@ export const MenuSearch = (props: Props) => (
 	</InstantSearch>
 );
 
-const SearchArea = ({ categories, products, lang, dictionary, color }: Props) => {
+const SearchArea = ({ categories, products, lang, dictionary, color, inline, resultsEl, onActiveChange }: Props) => {
 	const { query: refined, refine } = useSearchBox();
 	const { items } = useHits<{ $id?: string; id?: string; objectID: string }>();
 	const [value, setValue] = useState("");
@@ -55,6 +60,11 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 	}, [items, products, categories]);
 	const total = groups.reduce((n, g) => n + g.products.length, 0);
 
+	const showResults = !!query && refined === query && (inline || open);
+	useEffect(() => {
+		onActiveChange?.(!!inline && showResults);
+	}, [inline, showResults, onActiveChange]);
+
 	const close = () => {
 		setValue("");
 		setOpen(false);
@@ -64,13 +74,51 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 		setTimeout(() => { skipFocus.current = false; });
 	};
 
+
+	const results = showResults && (
+			<div className="flex flex-col gap-3.5 pt-2 pb-8">
+				{total === 0 ? (
+					<div className="flex flex-col items-center gap-3 py-10 text-center">
+						<p className="text-lg font-bold">{dictionary.menu.noResultsTitle(query)}</p>
+						<p className="text-muted-foreground">{dictionary.menu.noResultsBody}</p>
+						<Button type="button" onClick={close} style={{ backgroundColor: color, color: "#fff" }}>
+							{dictionary.menu.seeFullMenu}
+						</Button>
+					</div>
+				) : (
+					<>
+						<p className="text-sm font-semibold text-muted-foreground" aria-live="polite">
+							{dictionary.menu.resultsFor(total, query)}
+						</p>
+						{groups.map((g) => (
+							<section key={g.category.id} className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
+								<h2 className="text-sm font-bold uppercase tracking-wide lg:col-span-2">
+									{localized(g.category as unknown as Record<string, unknown>, "name", lang)}
+								</h2>
+								{g.products.map((p) => (
+									<ProductItem
+										key={p.id}
+										product={p}
+										lang={lang}
+										dictionary={dictionary}
+										color={color}
+										onOpen={(product) => { setSelected(product); setDetailOpen(true); }}
+									/>
+								))}
+							</section>
+						))}
+					</>
+				)}
+			</div>
+	);
+
 	return (
 		<div
-			className={open ? "fixed inset-0 z-40 overflow-y-auto bg-white" : "px-5 py-3"}
-			onKeyDown={(e) => open && e.key === "Escape" && close()}
+			className={inline ? "" : open ? "fixed inset-0 z-40 overflow-y-auto bg-white" : "px-5 py-3"}
+			onKeyDown={(e) => (open || inline) && e.key === "Escape" && close()}
 		>
-			<div className={open ? "mx-auto max-w-[560px] px-5" : ""}>
-				<div className={open ? "flex items-center gap-2 py-3" : ""}>
+			<div className={!inline && open ? "mx-auto max-w-[560px] px-5" : ""}>
+				<div className={!inline && open ? "flex items-center gap-2 py-3" : ""}>
 					<div className="relative flex-1">
 						<Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
 						<input
@@ -81,6 +129,7 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 							aria-label={dictionary.menu.search}
 							onChange={(e) => setValue(e.target.value)}
 							onFocus={() => {
+								if (inline) return;
 								if (skipFocus.current) skipFocus.current = false;
 								else setOpen(true);
 							}}
@@ -97,49 +146,15 @@ const SearchArea = ({ categories, products, lang, dictionary, color }: Props) =>
 							</button>
 						)}
 					</div>
-					{open && (
+					{!inline && open && (
 						<button type="button" onClick={close} className="min-h-11 text-sm font-semibold" style={{ color }}>
 							{dictionary.menu.cancel}
 						</button>
 					)}
 				</div>
-				{open && query && refined === query && (
-					<div className="flex flex-col gap-3.5 pt-2 pb-8">
-						{total === 0 ? (
-							<div className="flex flex-col items-center gap-3 py-10 text-center">
-								<p className="text-lg font-bold">{dictionary.menu.noResultsTitle(query)}</p>
-								<p className="text-muted-foreground">{dictionary.menu.noResultsBody}</p>
-								<Button type="button" onClick={close} style={{ backgroundColor: color, color: "#fff" }}>
-									{dictionary.menu.seeFullMenu}
-								</Button>
-							</div>
-						) : (
-							<>
-								<p className="text-sm font-semibold text-muted-foreground" aria-live="polite">
-									{dictionary.menu.resultsFor(total, query)}
-								</p>
-								{groups.map((g) => (
-									<section key={g.category.id} className="flex flex-col gap-3">
-										<h2 className="text-sm font-bold uppercase tracking-wide">
-											{localized(g.category as unknown as Record<string, unknown>, "name", lang)}
-										</h2>
-										{g.products.map((p) => (
-											<ProductItem
-												key={p.id}
-												product={p}
-												lang={lang}
-												dictionary={dictionary}
-												color={color}
-												onOpen={(product) => { setSelected(product); setDetailOpen(true); }}
-											/>
-										))}
-									</section>
-								))}
-							</>
-						)}
-					</div>
-				)}
+				{!inline && results}
 			</div>
+			{inline && resultsEl && results && createPortal(results, resultsEl)}
 			<ProductDetail product={selected} open={detailOpen} onOpenChange={setDetailOpen} lang={lang} dictionary={dictionary} color={color} />
 		</div>
 	);
