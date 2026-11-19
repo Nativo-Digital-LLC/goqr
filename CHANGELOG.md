@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.8.0 · 2026-11-19 · Relanzamiento, fases 2 y 3 (menú público y panel nuevos)
+
+### Nuevo
+- Menú público nuevo en `/m/:slug`: portada, categorías fijas (chips en el celular, lista lateral en la computadora), subcategorías con foto, ficha del plato, búsqueda, español/inglés, abierto/cerrado según el horario, mapa, contacto, redes y aviso de alergias.
+- Panel nuevo en `/dashboard` con barra lateral (computadora), barra inferior (celular) y selector de local:
+  - Resumen: prueba gratis, checklist para dejar el menú listo y tarjeta del menú.
+  - Editor del menú: categorías y subcategorías (crear, editar, ocultar, subir/bajar, borrar con confirmación), productos con búsqueda y reordenar, vista previa en vivo; en el celular, cambio rápido de precio y estado.
+  - Producto: foto, nombre y descripción en español e inglés, varios precios (0 = "Gratis", o sin precio), categoría y subcategoría, estado (Visible, Agotado, Oculto) y "Más vendido".
+  - Establecimiento: información y enlace, marca (logo, portada, color con aviso de contraste), contacto, horarios, redes, idiomas, aviso de alergias y comprobante fiscal con verificación de RNC. Solo guarda lo que cambió.
+  - Código QR: descarga en PNG, SVG y PDF para imprimir; logo al centro, color y texto del marco; plantillas de mesa, sticker y póster; compartir por enlace o WhatsApp.
+  - Facturación (lista de facturas) y Estadísticas (próximamente).
+
+### Cambios
+- Rutas viejas redirigen: `/dashboard/menus` → `/dashboard`, `/dashboard/invoices` → `/dashboard/billing`, `/panel/establishments` → `/dashboard/establishment`, `/qr/:slug` → `/m/:slug`.
+- Los precios guardados como texto (datos viejos) se leen bien en el menú y el panel.
+- Crear un producto, categoría o subcategoría ya no renumera el resto.
+- Se eliminan el panel viejo, la página QR vieja, los modales de edición y antd/sweetalert2 del código.
+
 ## 0.7.0 · 2026-11-19 · Relanzamiento, fase 1 (landing, cuenta y onboarding)
 
 ### Nuevo
