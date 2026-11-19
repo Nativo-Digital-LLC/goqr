@@ -108,8 +108,9 @@ export function formatDays(days: string, lang: Lang): string {
 	return idx.map((i) => dayLabel(i, lang)).join(", ");
 }
 
-export function menuColor(mainHexColor: string, exactColor?: boolean): string {
-	return exactColor ? mainHexColor : readableOn(mainHexColor).text;
+export function menuColor(mainHexColor: string | undefined, exactColor?: boolean): string {
+	const hex = mainHexColor?.trim() ? mainHexColor : "#C2381F";
+	return exactColor ? hex : readableOn(hex).text;
 }
 
 export function whatsappHref(number: string): string {

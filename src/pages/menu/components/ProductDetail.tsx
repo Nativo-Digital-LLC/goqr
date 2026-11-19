@@ -6,9 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { formatPrice, localized } from "@/lib/menu";
+import { cn } from "@/lib/utils";
 import { ProductStatus, type ProductProps } from "@/types/Product";
 import type { DictionaryProps, Lang } from "@/types/Dictionary";
 import { PANDORA_PRODUCT_ID } from "./ProductItem";
+
+// X legible sobre fotos: círculo blanco, más grande y sin la opacidad base.
+const closeX = "[&>button]:size-9 [&>button]:rounded-full [&>button]:bg-white [&>button]:p-0 [&>button]:opacity-100 [&>button]:shadow-md [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:text-foreground";
 
 type Props = {
 	product: ProductProps | null;
@@ -31,7 +35,8 @@ export const ProductDetail = ({ product, open, onOpenChange, lang, dictionary, c
 	if (!product) return null;
 	const doc = product as unknown as Record<string, unknown>;
 	const description = localized(doc, "description", lang);
-	const prices = product.prices ?? [];
+	const prices = (product.prices ?? []).filter((p) => typeof p.price === "number");
+	const closeLabel = lang === "en" ? "Close" : "Cerrar";
 	const hidePrice = product.id === PANDORA_PRODUCT_ID && prices.length === 1;
 
 	const body = (
@@ -72,11 +77,11 @@ export const ProductDetail = ({ product, open, onOpenChange, lang, dictionary, c
 
 	return isDesktop ? (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-h-[90vh] gap-0 overflow-y-auto p-0 sm:max-w-[520px]">{body}</DialogContent>
+			<DialogContent closeLabel={closeLabel} className={cn("max-h-[90vh] gap-0 overflow-y-auto p-0 sm:max-w-[520px]", closeX)}>{body}</DialogContent>
 		</Dialog>
 	) : (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent side="bottom" className="max-h-[90vh] gap-0 overflow-y-auto rounded-t-[28px] p-0">{body}</SheetContent>
+			<SheetContent side="bottom" closeLabel={closeLabel} className={cn("max-h-[90vh] gap-0 overflow-y-auto rounded-t-[28px] p-0", closeX)}>{body}</SheetContent>
 		</Sheet>
 	);
 };

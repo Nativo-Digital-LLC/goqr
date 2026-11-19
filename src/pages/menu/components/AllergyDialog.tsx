@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import type { DictionaryProps } from "@/types/Dictionary";
 
 type Props = {
+	lang?: string;
 	open: boolean;
 	onClose: () => void;
 	dictionary: DictionaryProps;
@@ -11,11 +12,11 @@ type Props = {
 	onColor: string;
 };
 
-export const AllergyDialog = ({ open, onClose, dictionary, color, onColor }: Props) => {
+export const AllergyDialog = ({ open, onClose, dictionary, color, onColor, lang }: Props) => {
 	const t = dictionary.menu;
 	return (
 		<Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-			<DialogContent className="max-w-[calc(100%-2.5rem)] gap-3.5 rounded-3xl border-0 p-6 sm:max-w-md">
+			<DialogContent closeLabel={lang === "en" ? "Close" : "Cerrar"} className="max-w-[calc(100%-2.5rem)] gap-3.5 rounded-3xl border-0 p-6 sm:max-w-md">
 				<div className="flex size-12 items-center justify-center rounded-full bg-warning-bg">
 					<TriangleAlert className="size-6 text-warning" aria-hidden="true" />
 				</div>

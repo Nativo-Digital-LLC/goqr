@@ -74,6 +74,11 @@ describe("menu", () => {
 		expect(formatDays("Lunes, Martes, Miércoles", "es")).toBe("Lunes a Miércoles");
 		expect(formatDays("Lunes, Miércoles", "es")).toBe("Lunes, Miércoles");
 	});
+	it("menuColor cae a #C2381F sin color", () => {
+		expect(menuColor("", true)).toBe("#C2381F");
+		expect(menuColor(undefined as unknown as string)).toBe(readableOn("#C2381F").text);
+	});
+
 	it("menuColor", () => {
 		expect(menuColor("#FFC53D", true)).toBe("#FFC53D");
 		expect(menuColor("#FFC53D")).toBe(readableOn("#FFC53D").text);

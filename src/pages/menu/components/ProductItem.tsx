@@ -25,7 +25,7 @@ export const ProductItem = ({ product, lang, dictionary, color, onOpen }: Props)
 	const doc = product as unknown as Record<string, unknown>;
 	const description = localized(doc, "description", lang);
 	const soldOut = product.status === ProductStatus.NotAvailable;
-	const prices = product.prices ?? [];
+	const prices = (product.prices ?? []).filter((p) => typeof p.price === "number");
 	const hidePrice = product.id === PANDORA_PRODUCT_ID && prices.length === 1;
 
 	return (

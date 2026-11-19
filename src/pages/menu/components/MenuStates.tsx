@@ -55,7 +55,7 @@ export const MenuUnavailable = ({ establishment, dictionary }: { establishment: 
 		<div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background p-8 text-center">
 			<div className="flex size-24 items-center justify-center overflow-hidden rounded-full bg-white font-display font-extrabold text-brand shadow-lg">
 				{establishment.logoUrl
-					? <img src={establishment.logoUrl} alt="" className="size-full object-cover" />
+					? <img src={establishment.logoUrl} alt="" className="size-full object-contain" />
 					: establishment.name.charAt(0).toUpperCase()}
 			</div>
 			<h1 className="font-display text-[26px] font-extrabold tracking-tight text-foreground">{t.unavailableTitle}</h1>
