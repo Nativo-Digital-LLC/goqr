@@ -25,9 +25,9 @@ function Aside() {
 	return (
 		<div className="flex flex-wrap items-end gap-8">
 			<div className="flex min-w-60 flex-1 flex-col gap-4">
-				<h1 className="font-display text-5xl font-extrabold leading-none tracking-[-0.03em]">
+				<p className="font-display text-5xl font-extrabold leading-none tracking-[-0.03em]">
 					Tu menú te estaba esperando.
-				</h1>
+				</p>
 				<p className="max-w-[360px] text-[17px] leading-normal text-crema">
 					Entra, cambia un precio y tus clientes lo ven al instante. Mismo QR, cero imprenta.
 				</p>
@@ -72,7 +72,7 @@ export default function LoginPage() {
 		<AuthLayout aside={<Aside />}>
 			<div className="flex flex-col gap-5">
 				<div className="flex flex-col gap-1.5">
-					<h2 className="font-display text-[32px] font-bold tracking-[-0.02em]">Ingresa a tu panel</h2>
+					<h1 className="font-display text-[32px] font-bold tracking-[-0.02em]">Ingresa a tu panel</h1>
 					<p className="text-[15px] text-muted-foreground">
 						¿Primera vez?{" "}
 						<Link to="/register" className={linkClass}>

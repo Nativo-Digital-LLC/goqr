@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 import { SessionProps, SessionStoreProps } from '../types/Session';
 import { getCurrentSession } from '../services/auth';
+import { auth } from '../utils/firebase';
 
 export const useSessionStore = create<SessionStoreProps>((set) => ({
 	session: JSON.parse(localStorage.getItem('session') || 'null'),
@@ -19,12 +20,17 @@ export const useSessionStore = create<SessionStoreProps>((set) => ({
 	}
 }));
 
+// La sesión de localStorage puede quedar vieja: Firebase manda.
 (async () => {
+	await auth.authStateReady();
 	const { session, setSession } = useSessionStore.getState();
-	if (session) {
+	if (!auth.currentUser) {
+		if (session) setSession(null);
+		return;
+	}
+	if (session?.userId === auth.currentUser.uid) {
 		return;
 	}
 
-	const currentSession = await getCurrentSession();
-	setSession(currentSession);
+	setSession(await getCurrentSession());
 })();

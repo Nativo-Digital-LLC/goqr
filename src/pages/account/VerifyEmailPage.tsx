@@ -1,4 +1,4 @@
-import { applyActionCode, reload } from "firebase/auth";
+import { ActionCodeOperation, applyActionCode, checkActionCode, reload } from "firebase/auth";
 import { useEffect, useRef, useState } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -13,7 +13,8 @@ import { getEstablishmentsByUserId } from "@/services/establishments";
 import { useSessionStore } from "@/store/session";
 import { auth } from "@/utils/firebase";
 
-type Status = "loading" | "pending" | "verified" | "expired" | "failed" | "login";
+// "other": se verificó una cuenta distinta de la que está abierta (o no hay ninguna abierta).
+type Status = "loading" | "pending" | "verified" | "other" | "expired" | "failed" | "login";
 
 const cardClass = "flex flex-col gap-5 rounded-[20px] border border-border bg-white p-6 sm:p-8";
 const btnClass = "rounded-xl focus-visible:ring-2 focus-visible:ring-primary";
@@ -30,7 +31,7 @@ export default function VerifyEmailPage() {
 	const [busy, setBusy] = useState(false);
 	const [destError, setDestError] = useState("");
 	// Un código se usa una sola vez: si el refresco falla, reintentar no debe volver a aplicarlo.
-	const applied = useRef<string | null>(null);
+	const applied = useRef<{ code: string; email: string } | null>(null);
 	// Usuario real de Firebase (no el del store, que puede quedar viejo en localStorage).
 	const [email, setEmail] = useState<string | null>(null);
 	const [hasUser, setHasUser] = useState(false);
@@ -40,22 +41,28 @@ export default function VerifyEmailPage() {
 		setStatus("loading");
 		(async () => {
 			try {
-				if (oobCode && applied.current !== oobCode) {
+				if (oobCode && applied.current?.code !== oobCode) {
+					// Antes de aplicarlo: el correo de la cuenta, y nunca se gasta un código de otro tipo.
+					const info = await checkActionCode(auth, oobCode);
+					if (info.operation !== ActionCodeOperation.VERIFY_EMAIL) throw { code: "auth/invalid-action-code" };
 					await applyActionCode(auth, oobCode);
-					applied.current = oobCode;
+					applied.current = { code: oobCode, email: info.data.email ?? "" };
 				}
 				await auth.authStateReady();
 				const user = auth.currentUser;
 				if (!cancelled) {
 					setHasUser(!!user);
-					setEmail(user?.email ?? null);
+					setEmail(oobCode ? applied.current!.email : (user?.email ?? null));
 				}
 				if (!oobCode && !user) return !cancelled && setStatus("login");
+				if (oobCode && user?.email?.toLowerCase() !== applied.current!.email.toLowerCase()) {
+					return !cancelled && setStatus("other");
+				}
 				if (user) {
 					await reload(user);
 					// Que el resto de la app vea el correo ya verificado.
 					const current = useSessionStore.getState().session;
-					if (current && user.emailVerified !== current.user.emailVerified) {
+					if (current?.userId === user.uid && user.emailVerified !== current.user.emailVerified) {
 						setSession({ ...current, user: { ...current.user, emailVerified: user.emailVerified } });
 					}
 				}
@@ -145,6 +152,31 @@ export default function VerifyEmailPage() {
 					<Button asChild variant={hasUser ? "outline" : "default"} className={btnClass}>
 						<Link to="/login">Ir a ingresar</Link>
 					</Button>
+				</div>
+			</AuthLayout>
+		);
+	}
+
+	if (status === "other") {
+		return (
+			<AuthLayout>
+				<div className={cardClass}>
+					<div className="flex flex-col gap-2">
+						<h1 className={h1Class}>¡Correo verificado!</h1>
+						<p className={pClass}>
+							Ingresa con <strong className="text-primary">{email}</strong> para seguir.
+						</p>
+					</div>
+					{/* Con otra cuenta abierta, /login la redirigiría a su panel: se cierra antes. */}
+					{hasUser ? (
+						<Button className={btnClass} disabled={busy} onClick={() => logout(() => navigate("/login"))}>
+							Ir a ingresar
+						</Button>
+					) : (
+						<Button asChild className={btnClass}>
+							<Link to="/login">Ir a ingresar</Link>
+						</Button>
+					)}
 				</div>
 			</AuthLayout>
 		);

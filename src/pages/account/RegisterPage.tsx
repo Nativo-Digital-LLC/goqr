@@ -66,9 +66,9 @@ function Aside() {
 	return (
 		<div className="flex flex-col gap-6">
 			<TrialBadge />
-			<h1 className="max-w-[480px] font-display text-5xl font-extrabold leading-none tracking-[-0.03em]">
+			<p className="max-w-[480px] font-display text-5xl font-extrabold leading-none tracking-[-0.03em]">
 				En 10 minutos tu menú está en cada mesa.
-			</h1>
+			</p>
 			<Benefits className="gap-3.5 text-[17px] leading-snug" iconClass="text-brand" />
 		</div>
 	);
@@ -102,7 +102,7 @@ export default function RegisterPage() {
 					<Benefits className="gap-1.5 text-sm leading-snug" iconClass="text-brand" />
 				</div>
 				<div className="flex flex-col gap-1.5">
-					<h2 className="font-display text-[32px] font-bold tracking-[-0.02em]">Crea tu cuenta</h2>
+					<h1 className="font-display text-[32px] font-bold tracking-[-0.02em]">Crea tu cuenta</h1>
 					<p className="text-[15px] text-muted-foreground">
 						¿Ya tienes cuenta?{" "}
 						<Link to="/login" className={linkClass}>

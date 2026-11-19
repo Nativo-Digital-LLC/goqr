@@ -1,19 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FirebaseError } from 'firebase/app';
-import * as Sentry from '@sentry/react';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
 import {
 	authWithApple,
 	authWithGoogle,
 	createAccount,
-	getCurrentSession,
 	login,
 	logout,
 	resetPasswordWithSecret,
-	sendResetPasswordEmail,
-	sendVerificationEmail
+	sendResetPasswordEmail
 } from '../services/auth';
 import { auth } from '../utils/firebase';
 import { useSessionStore } from '../store/session';
@@ -149,47 +144,6 @@ export const useLogin = (): UseLoginType => {
 	return [handleLogin, loading, type, error];
 }
 
-type UseHandleOAuth2SessionType = [
-	boolean,
-	FirebaseError | string | null
-];
-
-export const useHandleOAuth2Session = (status?: 'success' | 'failed'): UseHandleOAuth2SessionType => {
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<FirebaseError | string | null>(null);
-	const setSession = useSessionStore(({ setSession }) => setSession);
-
-	useEffect(() => {
-		if (status) {
-			handleChange(status);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status]);
-
-	async function handleChange(status: 'success' | 'failed') {
-		try {
-			if (status === 'failed') {
-				return setError('No se pudo iniciar sesion, por favor intentalo mas tarde');
-			}
-
-			setLoading(true);
-			const session = await getCurrentSession();
-			if (!session) {
-				return;
-			}
-
-			setSession(session);
-			location.href = '/dashboard';
-		} catch (error) {
-			setError(error as FirebaseError);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	return [loading, error];
-}
-
 type UseLogoutType = [
 	(onDone?: () => void) => void,
 	boolean,
@@ -216,57 +170,6 @@ export const useLogout = (): UseLogoutType => {
 	}
 
 	return [handleLogout, loading, error];
-}
-
-type UseSendVerificationEmailType = [
-	(
-		onDone: () => void
-	) => void,
-	boolean,
-	FirebaseError | null
-];
-
-export const useSendVerificationEmail = (): UseSendVerificationEmailType => {
-	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<FirebaseError | null>(null);
-
-	async function handleRequest(
-		onDone: () => void
-	) {
-		try {
-			const session = useSessionStore.getState().session;
-			if (!session) {
-				const { isConfirmed } = await Swal.fire({
-					title: 'No Autenticado',
-					text: 'No tienes ninguna sesión iniciada, se requiere iniciar sesión para verificar tu email.',
-					icon: 'warning',
-					confirmButtonText: 'Iniciar Sesión',
-					showCancelButton: true,
-					cancelButtonText: 'Cerrar',
-					reverseButtons: true
-				});
-
-				if (isConfirmed) {
-					navigate('/login');
-				}
-
-				return;
-			}
-
-			setLoading(true);
-			setError(null);
-			await sendVerificationEmail();
-			onDone?.();
-		} catch (error) {
-			setError(error as FirebaseError);
-			Sentry.captureException(error);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	return [handleRequest, loading, error];
 }
 
 type UseRequestResetPasswordEmailType = [

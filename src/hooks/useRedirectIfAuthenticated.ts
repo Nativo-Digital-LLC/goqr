@@ -7,6 +7,7 @@ import { authErrorMessage } from "@/lib/authErrors";
 import { postAuthPath } from "@/lib/postAuth";
 import { getEstablishmentsByUserId } from "@/services/establishments";
 import { useSessionStore } from "@/store/session";
+import { auth } from "@/utils/firebase";
 
 const ERROR_TOAST = "post-auth-error";
 
@@ -19,16 +20,25 @@ export function useRedirectIfAuthenticated(): void {
 	const navigate = useNavigate();
 	// Se depende del objeto de sesión (no solo del uid): cada login lo reemplaza y relanza la consulta aunque sea el mismo usuario.
 	const session = useSessionStore((state) => state.session);
-	const userId = session?.userId;
+	const setSession = useSessionStore((state) => state.setSession);
 	const [attempt, setAttempt] = useState(0);
 
 	useEffect(() => {
-		if (!userId) return;
+		if (!session) return;
 		let cancelled = false;
 		toast.dismiss(ERROR_TOAST);
-		getEstablishmentsByUserId(userId)
+		// Se decide con el usuario real de Firebase: el del store puede ser una sesión vieja de localStorage.
+		auth.authStateReady()
+			.then(() => {
+				const uid = auth.currentUser?.uid;
+				if (!uid) {
+					if (!cancelled) setSession(null);
+					return null;
+				}
+				return getEstablishmentsByUserId(uid);
+			})
 			.then((establishments) => {
-				if (!cancelled) navigate(postAuthPath(establishments), { replace: true });
+				if (establishments && !cancelled) navigate(postAuthPath(establishments), { replace: true });
 			})
 			.catch((error) => {
 				// Sin la consulta no se adivina el destino: se avisa y se permite reintentar.
@@ -44,5 +54,5 @@ export function useRedirectIfAuthenticated(): void {
 			cancelled = true;
 			toast.dismiss(ERROR_TOAST);
 		};
-	}, [session, userId, navigate, attempt]);
+	}, [session, setSession, navigate, attempt]);
 }

@@ -10,6 +10,7 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import MenusPage from "./pages/dashboard/Menus";
 import InvoicesPage from "./pages/dashboard/Invoices";
 import VerifyEmailPage from "./pages/account/VerifyEmailPage";
+import EmailActionRouter from "./pages/account/EmailActionRouter";
 import NotFoundPage from "./pages/404";
 import QrPage from "./pages/menu/qr";
 import TermsPage from "./pages/terms";
@@ -40,16 +41,16 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/reset-password",
-		element: <ResetPasswordPage />,
+		element: <EmailActionRouter><ResetPasswordPage /></EmailActionRouter>,
 	},
 	// Rutas viejas: los enlaces de correo existentes siguen funcionando con su query.
 	{
 		path: "/request-reset-password",
-		element: <ForgotPasswordPage />,
+		element: <EmailActionRouter><ForgotPasswordPage /></EmailActionRouter>,
 	},
 	{
 		path: "/change-password-after-request",
-		element: <ResetPasswordPage />,
+		element: <EmailActionRouter><ResetPasswordPage /></EmailActionRouter>,
 	},
 	{
 		path: "/register",
@@ -83,7 +84,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/verify",
-		element: <VerifyEmailPage />,
+		element: <EmailActionRouter><VerifyEmailPage /></EmailActionRouter>,
 	},
 	{
 		path: "/m/:establishmentUrl",
