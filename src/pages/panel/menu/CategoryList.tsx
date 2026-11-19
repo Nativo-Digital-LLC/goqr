@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { MoreVertical, Plus } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -120,5 +121,44 @@ export function CategoryList({
 				})}
 			</ul>
 		</section>
+	);
+}
+
+/** Carril horizontal de chips (categorías o subcategorías) para el celular. */
+export function ChipRow({
+	label,
+	items,
+	activeId,
+	onSelect,
+}: {
+	label: string;
+	items: { id: string; name: string; count: number }[];
+	activeId: string | undefined;
+	onSelect: (id: string) => void;
+}) {
+	const row = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		// Solo desplazamiento horizontal; scrollIntoView movería también la página.
+		const r = row.current;
+		const chip = r?.querySelector<HTMLElement>("[aria-current]");
+		if (r && chip) r.scrollTo({ left: chip.offsetLeft - (r.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
+	}, [activeId]);
+	return (
+		<div ref={row} role="group" aria-label={label} className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+			{items.map((c) => {
+				const active = c.id === activeId;
+				return (
+					<button
+						key={c.id}
+						type="button"
+						aria-current={active || undefined}
+						onClick={() => onSelect(c.id)}
+						className={`min-h-10 flex-none rounded-full px-4 text-sm ${active ? "bg-primary font-semibold text-primary-foreground" : "border border-border bg-card font-medium"}`}
+					>
+						{c.name} · {c.count}
+					</button>
+				);
+			})}
+		</div>
 	);
 }

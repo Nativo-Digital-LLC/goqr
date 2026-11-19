@@ -25,12 +25,15 @@ export function ProductRows({
 	busy,
 	onMove,
 	onDelete,
+	onQuickEdit,
 }: {
 	products: ProductProps[];
 	reordering: boolean;
 	busy: boolean;
 	onMove: (index: number, delta: -1 | 1) => void;
 	onDelete: (p: ProductProps) => void;
+	/** En el celular, tocar el producto abre el cambio rápido en vez de la página completa. */
+	onQuickEdit?: (p: ProductProps) => void;
 }) {
 	const locked = busy || reordering;
 
@@ -44,7 +47,13 @@ export function ProductRows({
 							to={`/dashboard/menu/product/${p.id}`}
 							aria-disabled={locked}
 							tabIndex={locked ? -1 : undefined}
-							onClick={(e) => locked && e.preventDefault()}
+							onClick={(e) => {
+								if (locked) return e.preventDefault();
+								if (onQuickEdit && window.matchMedia("(max-width: 1023px)").matches) {
+									e.preventDefault();
+									onQuickEdit(p);
+								}
+							}}
 							className={`flex min-w-0 flex-1 items-center gap-3 rounded-xl py-1 hover:bg-secondary/60 ${locked ? "pointer-events-none" : ""}`}
 						>
 							{p.photoUrl

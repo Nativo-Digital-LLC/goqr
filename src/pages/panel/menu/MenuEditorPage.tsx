@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Plus, Search } from "lucide-react";
+import { ListTree, Plus, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useDeleteCategory, useSaveCategory } from "@/hooks/useCategories";
 import { useDeleteSubcategory, useSaveSubcategory } from "@/hooks/useSubcategories";
-import { useDeleteProduct } from "@/hooks/useProducts";
+import { useDeleteProduct, useSaveProduct } from "@/hooks/useProducts";
 import { useMenuEditor } from "@/hooks/useMenuEditor";
 import { moveItem, ordersAfterMove } from "@/lib/panel";
 import { saveOrder } from "@/services/order";
@@ -17,10 +18,11 @@ import type { SubcategoryProps } from "@/types/Subcategory";
 import { usePanel } from "../PanelContext";
 import { PanelHeader } from "../components/PanelHeader";
 import { CategoryDialog, type CategoryValues } from "./CategoryDialog";
-import { CategoryList } from "./CategoryList";
+import { CategoryList, ChipRow, type CategoryActions } from "./CategoryList";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { MenuPreview } from "./MenuPreview";
 import { ProductRows } from "./ProductRows";
+import { QuickEditSheet } from "./QuickEditSheet";
 import { SubcategoryDialog, type SubcategoryValues } from "./SubcategoryDialog";
 
 const nextOrder = (items: { order?: number }[]) => Math.max(0, ...items.map((i) => i.order ?? 0)) + 1;
@@ -46,18 +48,21 @@ export default function MenuEditorPage() {
 	const [catDialog, setCatDialog] = useState<{ category: CategoryProps | null } | null>(null);
 	const [subDialog, setSubDialog] = useState<{ category: CategoryProps; sub: SubcategoryProps | null } | null>(null);
 	const [confirm, setConfirm] = useState<Confirm | null>(null);
+	const [quick, setQuick] = useState<ProductProps | null>(null); // producto abierto en el cambio rápido (celular)
+	const [catsOpen, setCatsOpen] = useState(false); // hoja de categorías (celular)
 
 	const [saveCategory, savingCategory, saveCategoryError] = useSaveCategory();
 	const [saveSubcategory, savingSub, saveSubError] = useSaveSubcategory();
 	const [deleteCategory, deletingCategory, deleteCategoryError] = useDeleteCategory();
 	const [deleteSubcategory, deletingSub, deleteSubError] = useDeleteSubcategory();
 	const [deleteProduct, deletingProduct, deleteProductError] = useDeleteProduct();
+	const [saveProduct, savingProduct, saveProductError] = useSaveProduct();
 
 	useEffect(() => {
-		if (saveCategoryError ?? saveSubError ?? deleteCategoryError ?? deleteSubError ?? deleteProductError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
-	}, [saveCategoryError, saveSubError, deleteCategoryError, deleteSubError, deleteProductError]);
+		if (saveCategoryError ?? saveSubError ?? deleteCategoryError ?? deleteSubError ?? deleteProductError ?? saveProductError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
+	}, [saveCategoryError, saveSubError, deleteCategoryError, deleteSubError, deleteProductError, saveProductError]);
 
-	const busy = writing || savingCategory || savingSub || deletingCategory || deletingSub || deletingProduct;
+	const busy = writing || savingCategory || savingSub || deletingCategory || deletingSub || deletingProduct || savingProduct;
 	const locked = busy || !!draft;
 
 	const category = categories.find((c) => c.id === sel.categoryId) ?? categories[0];
@@ -155,6 +160,37 @@ export default function MenuEditorPage() {
 		else deleteProduct(confirm.item.id, finish);
 	};
 
+	const closeThen = <A extends unknown[]>(fn: (...args: A) => void) => (...args: A) => {
+		setCatsOpen(false);
+		fn(...args);
+	};
+	const actions: CategoryActions = {
+		onSelect: select,
+		onNew: () => setCatDialog({ category: null }),
+		onEdit: (c) => setCatDialog({ category: c }),
+		onMove: moveCategory,
+		onToggleHidden: (c) =>
+			saveCategory(
+				{ id: c.id, establishmentId: est.id, es_name: c.es_name, en_name: c.en_name, enableSubcategories: c.enableSubcategories, hidden: !c.hidden },
+				done
+			),
+		onAddSubcategory: (c) => setSubDialog({ category: c, sub: null }),
+		onDelete: (c) => setConfirm({ kind: "category", item: c }),
+		onEditSubcategory: (c, s) => setSubDialog({ category: c, sub: s }),
+		onDeleteSubcategory: (c, s) => setConfirm({ kind: "subcategory", item: s, category: c }),
+	};
+	// En la hoja del celular, lo que abre un diálogo o cambia la selección la cierra primero.
+	const sheetActions: CategoryActions = {
+		...actions,
+		onSelect: closeThen(actions.onSelect),
+		onNew: closeThen(actions.onNew),
+		onEdit: closeThen(actions.onEdit),
+		onAddSubcategory: closeThen(actions.onAddSubcategory),
+		onDelete: closeThen(actions.onDelete),
+		onEditSubcategory: closeThen(actions.onEditSubcategory),
+		onDeleteSubcategory: closeThen(actions.onDeleteSubcategory),
+	};
+
 	const confirmCopy = confirm && {
 		title: `¿Eliminar «${confirm.item.es_name}»?`,
 		body: confirm.kind === "product" ? "El producto dejará de verse en el menú." : "Sus productos dejarán de verse en el menú.",
@@ -180,6 +216,7 @@ export default function MenuEditorPage() {
 
 			{!loading && !error && (
 				<div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)_320px]">
+					<div className="hidden lg:block">
 					<CategoryList
 						categories={categories}
 						subcategories={subcategories}
@@ -187,22 +224,27 @@ export default function MenuEditorPage() {
 						selectedCategoryId={category?.id}
 						selectedSubcategoryId={subcategory?.id ?? null}
 						busy={locked}
-						actions={{
-							onSelect: select,
-							onNew: () => setCatDialog({ category: null }),
-							onEdit: (c) => setCatDialog({ category: c }),
-							onMove: moveCategory,
-							onToggleHidden: (c) =>
-								saveCategory(
-									{ id: c.id, establishmentId: est.id, es_name: c.es_name, en_name: c.en_name, enableSubcategories: c.enableSubcategories, hidden: !c.hidden },
-									done
-								),
-							onAddSubcategory: (c) => setSubDialog({ category: c, sub: null }),
-							onDelete: (c) => setConfirm({ kind: "category", item: c }),
-							onEditSubcategory: (c, s) => setSubDialog({ category: c, sub: s }),
-							onDeleteSubcategory: (c, s) => setConfirm({ kind: "subcategory", item: s, category: c }),
-						}}
+						actions={actions}
 					/>
+					</div>
+
+					<div className="flex min-w-0 flex-col gap-3 lg:hidden">
+						<Button className="self-start" size="sm" variant="outline" disabled={locked} onClick={() => setCatsOpen(true)}><ListTree /> Categorías</Button>
+						<ChipRow
+							label="Categorías"
+							items={categories.map((c) => ({ id: c.id, name: c.es_name, count: products.filter((p) => p.categoryId === c.id).length }))}
+							activeId={category?.id}
+							onSelect={(id) => select(id, null)}
+						/>
+						{category?.enableSubcategories && subs.length > 0 && (
+							<ChipRow
+								label="Subcategorías"
+								items={subs.map((s) => ({ id: s.id, name: s.es_name, count: products.filter((p) => p.subcategoryId === s.id).length }))}
+								activeId={subcategory?.id}
+								onSelect={(id) => select(category.id, id)}
+							/>
+						)}
+					</div>
 
 					<section aria-label="Productos" className="flex min-w-0 flex-col gap-4 rounded-2xl border border-border bg-card p-4">
 						{!category ? (
@@ -259,6 +301,7 @@ export default function MenuEditorPage() {
 												busy={busy}
 												onMove={(i, d) => setDraft((cur) => (cur ? moveItem(cur, i, d) : cur))}
 												onDelete={(p) => setConfirm({ kind: "product", item: p })}
+												onQuickEdit={setQuick}
 											/>
 										)}
 									</>
@@ -286,6 +329,38 @@ export default function MenuEditorPage() {
 			{subDialog && (
 				<SubcategoryDialog subcategory={subDialog.sub} loading={savingSub} onSave={onSaveSub} onClose={() => setSubDialog(null)} />
 			)}
+			<QuickEditSheet
+				product={quick}
+				saving={savingProduct}
+				onClose={() => setQuick(null)}
+				onSave={(prices, status) =>
+					!busy &&
+					quick &&
+					saveProduct({ id: quick.id, prices, status }, () => {
+						setQuick(null);
+						done();
+					})
+				}
+			/>
+			<Sheet open={catsOpen} onOpenChange={setCatsOpen}>
+				<SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-3xl">
+					<SheetHeader className="pb-0">
+						<SheetTitle className="sr-only">Categorías</SheetTitle>
+						<SheetDescription className="sr-only">Administra tus categorías y subcategorías.</SheetDescription>
+					</SheetHeader>
+					<div className="px-4 pb-8">
+						<CategoryList
+							categories={categories}
+							subcategories={subcategories}
+							products={products}
+							selectedCategoryId={category?.id}
+							selectedSubcategoryId={subcategory?.id ?? null}
+							busy={locked}
+							actions={sheetActions}
+						/>
+					</div>
+				</SheetContent>
+			</Sheet>
 			<ConfirmDialog
 				open={!!confirm}
 				title={confirmCopy?.title ?? ""}
