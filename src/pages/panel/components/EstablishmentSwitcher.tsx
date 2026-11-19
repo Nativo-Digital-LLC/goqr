@@ -3,6 +3,8 @@ import { ChevronDown } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuRadioGroup,
 	DropdownMenuRadioItem,
 	DropdownMenuTrigger,
@@ -20,8 +22,6 @@ export function EstablishmentSwitcher() {
 		</>
 	);
 
-	if (establishments.length < 2) return <div className={chip}>{label}</div>;
-
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger aria-label="Cambiar establecimiento" className={`${chip} cursor-pointer`}>
@@ -36,6 +36,10 @@ export function EstablishmentSwitcher() {
 						</DropdownMenuRadioItem>
 					))}
 				</DropdownMenuRadioGroup>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem asChild>
+					<a href="mailto:contacto@goqr.com.do?subject=Quiero%20agregar%20otro%20local">¿Otro local? Escríbenos</a>
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

@@ -50,7 +50,7 @@ export default function HomePage() {
 
 	return (
 		<>
-			<PanelHeader title="Resumen" description="Así va tu menú esta semana." />
+			<PanelHeader title="Resumen" description="Lo que falta para dejar tu menú listo." />
 
 			{days !== null && (
 				<div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-warning-bg px-5 py-4">

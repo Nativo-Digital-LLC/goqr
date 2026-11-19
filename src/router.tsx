@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
+import QrRedirect from "./pages/panel/QrRedirect";
+
 import LandingPage from "./pages/landing/LandingPage";
 import LoginPage from "./pages/account/LoginPage";
 import ForgotPasswordPage from "./pages/account/ForgotPasswordPage";
@@ -101,7 +103,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/qr/:establishmentUrl",
-		element: <Navigate to="/dashboard/qr" replace />,
+		element: <QrRedirect />,
 	},
 	{
 		path: "*",

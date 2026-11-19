@@ -101,11 +101,14 @@ export default function QrPage() {
 		run(async () => {
 			try {
 				const src = (await render("qr")).toDataURL("image/png");
-				w.document.write(
-					`<!doctype html><title>goqr-${e.domain}</title><style>@page{margin:0}body{margin:0;text-align:center}img{width:16cm;max-width:100%}</style><img src="${src}">`,
-				);
-				w.document.close();
-				const img = w.document.querySelector("img")!;
+				const d = w.document;
+				d.title = `goqr-${e.domain}`;
+				const style = d.createElement("style");
+				style.textContent = "@page{margin:0}body{margin:0;text-align:center}img{width:16cm;max-width:100%}";
+				const img = d.createElement("img");
+				img.src = src;
+				d.head.append(style);
+				d.body.append(img);
 				const go = () => w.print();
 				if (img.complete) go();
 				else img.onload = go;
