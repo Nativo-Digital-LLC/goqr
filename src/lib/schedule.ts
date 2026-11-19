@@ -16,7 +16,9 @@ export function schedulesToWeek(schedules: ScheduleProps[] | undefined): { week:
 	for (const s of schedules ?? []) {
 		const days = parseDays(s.days);
 		const hours = parseHours(s.hours);
-		if (!days.length || !hours) {
+		const fragments = s.days.split(",").filter((f) => f.trim()).length;
+		// every fragment must be recognised, or the unknown ones would be lost on save
+		if (!days.length || days.length !== fragments || !hours) {
 			unparsed.push(s);
 			continue;
 		}

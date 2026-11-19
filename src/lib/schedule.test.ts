@@ -30,6 +30,13 @@ describe("schedulesToWeek", () => {
 		expect(weekToSchedules(week, unparsed)).toEqual([{ days: "Lunes", hours: "8:00 AM - 10:00 PM" }, odd]);
 	});
 
+	it("deja intacta una fila con algún día no reconocido", () => {
+		const mixed = { days: "Lunes, Lun", hours: "8:00 AM - 10:00 PM" };
+		const { week, unparsed } = schedulesToWeek([mixed]);
+		expect(week.every((d) => !d.open)).toBe(true);
+		expect(weekToSchedules(week, unparsed)).toEqual([mixed]);
+	});
+
 	it("sin horario o con horas ilegibles no abre nada", () => {
 		expect(schedulesToWeek(undefined).week.every((d) => !d.open)).toBe(true);
 		expect(schedulesToWeek([{ days: "Lunes", hours: "todo el día" }]).unparsed).toHaveLength(1);
