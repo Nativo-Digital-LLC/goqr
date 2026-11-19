@@ -32,12 +32,17 @@ export default function QrPage() {
 	const [frameText, setFrameText] = useState("Escanea para ver el menú");
 	const [withLogo, setWithLogo] = useState(!!e.logoUrl);
 	const [svg, setSvg] = useState("");
+	const [svgError, setSvgError] = useState(false);
 	const [busy, setBusy] = useState(false);
 	const [, bump] = useState(0);
 
 	useEffect(() => {
 		let off = false;
-		qrSvg(e.domain, color).then((s) => !off && setSvg(s));
+		setSvg("");
+		setSvgError(false);
+		qrSvg(e.domain, color)
+			.then((s) => !off && setSvg(s))
+			.catch(() => !off && setSvgError(true));
 		return () => {
 			off = true;
 		};
@@ -131,6 +136,7 @@ export default function QrPage() {
 				<section aria-label="Vista previa del QR" className="flex flex-[1_1_380px] flex-col items-center gap-5 rounded-2xl border border-border bg-card p-8">
 					<div className="flex flex-col items-center gap-3.5 rounded-3xl border-2 bg-white px-6 pb-4.5 pt-6" style={{ borderColor: color }}>
 						<div className="relative size-[260px]">
+							{svgError && <span className="flex size-full items-center justify-center text-center text-sm text-muted-foreground">No pudimos generar el QR. Intenta de nuevo.</span>}
 							{svg && <img src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`} alt={`Código QR de ${e.name}`} className="size-full" />}
 							{shownLogo && (
 								<img src={e.logoUrl!} alt="" className="absolute left-1/2 top-1/2 size-[22%] -translate-x-1/2 -translate-y-1/2 bg-white object-contain p-[3px]" />

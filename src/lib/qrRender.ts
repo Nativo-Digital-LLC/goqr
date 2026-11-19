@@ -90,7 +90,11 @@ export async function renderTemplate(kind: TemplateKind, opts: TemplateOpts): Pr
 	canvas.height = t.h;
 	const ctx = canvas.getContext("2d")!;
 	ctx.fillStyle = WHITE;
-	ctx.fillRect(0, 0, t.w, t.h);
+	if (t.circle) {
+		ctx.beginPath();
+		ctx.arc(t.w / 2, t.h / 2, t.w / 2, 0, Math.PI * 2);
+		ctx.fill();
+	} else ctx.fillRect(0, 0, t.w, t.h);
 
 	// Marco
 	const inset = Math.round(t.w * 0.03);
