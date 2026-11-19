@@ -174,7 +174,7 @@ export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt 
 export function maxFileSizeRule() {
 	return {
 		validator(_: unknown, value: any) {
-			const maxFileSizeInMb = 30;
+			const maxFileSizeInMb = 10;
 			const maxFileSize = maxFileSizeInMb * 1024 * 1024;
 
 			let file: any = null;
@@ -193,7 +193,7 @@ export function maxFileSizeRule() {
 			}
 
 			return Promise.reject(
-				new Error(`El archivo excede el tamaño máximo permitido de 30 MB. Por favor, selecciona un archivo más pequeño.`)
+				new Error(`El archivo excede el tamaño máximo permitido de 10 MB. Por favor, selecciona un archivo más pequeño.`)
 			);
 		}
 	}

@@ -6,7 +6,7 @@ import {
 	initializeTestEnvironment,
 	RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 let env: RulesTestEnvironment;
 
@@ -111,6 +111,20 @@ describe('migrated-users (Foco 1)', () => {
 
 	it('no escribe el doc de otro correo', async () => {
 		await assertFails(setDoc(doc(ana(), 'migrated-users/otro@correo.com'), { migratedAt: 'x' }));
+	});
+
+	it('no borra su propio marker', async () => {
+		await env.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), 'migrated-users/ana@correo.com'), { migratedAt: 'x' });
+		});
+		await assertFails(deleteDoc(doc(ana(), 'migrated-users/ana@correo.com')));
+	});
+
+	it('actualiza su propio marker', async () => {
+		await env.withSecurityRulesDisabled(async (ctx) => {
+			await setDoc(doc(ctx.firestore(), 'migrated-users/ana@correo.com'), { migratedAt: 'x' });
+		});
+		await assertSucceeds(setDoc(doc(ana(), 'migrated-users/ana@correo.com'), { migratedAt: 'y' }));
 	});
 
 	it('anónimo lee migrated-users (login lo consulta antes de autenticarse)', async () => {
