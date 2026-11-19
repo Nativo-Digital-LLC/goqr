@@ -25,6 +25,7 @@ import BillingPage from "./pages/panel/BillingPage";
 import TransferPage from "./pages/panel/billing/TransferPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminTransfersPage from "./pages/admin/AdminTransfersPage";
+import AdminClientsPage from "./pages/admin/AdminClientsPage";
 import CheckoutResultPage from "./pages/checkout/CheckoutResultPage";
 
 const router = createBrowserRouter([
@@ -96,7 +97,7 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <Navigate to="/admin/transfers" replace /> },
 			{ path: "transfers", element: <AdminTransfersPage /> },
-			{ path: "clients", element: <p>Muy pronto.</p> },
+			{ path: "clients", element: <AdminClientsPage /> },
 		],
 	},
 	{

@@ -1,0 +1,41 @@
+import { toDate } from './billing';
+import { AdminClient } from '../services/admin';
+
+const DAY = 86_400_000;
+const MONTHLY_DOP: Record<string, number> = { monthly: 300, annual: Math.round(2520 / 12), lifetime: 0 };
+
+const endOf = (c: AdminClient) => {
+	const b = c.billing;
+	const raw = b?.status === 'trialing' ? b.trialEndsAt : b?.currentPeriodEnd;
+	return raw ? toDate(raw) : null;
+};
+
+export const clientEnd = endOf;
+
+export function clientMetrics(clients: AdminClient[], now: Date) {
+	let active = 0, trialing = 0, mrrDop = 0, dueThisWeek = 0;
+	for (const c of clients) {
+		const b = c.billing;
+		if (b?.status === 'active') active++;
+		if (b?.status === 'trialing') trialing++;
+		if (b?.status === 'active' || b?.status === 'past_due') mrrDop += MONTHLY_DOP[b.plan ?? ''] ?? 0;
+		const end = endOf(c);
+		if (end && end >= now && end.getTime() <= now.getTime() + 7 * DAY) dueThisWeek++;
+	}
+	return { active, trialing, mrrDop, dueThisWeek };
+}
+
+export type ClientFilters = { q: string; status: string; plan: string; method: string };
+
+// 'all' (o vacío) no filtra.
+export function filterClients(clients: AdminClient[], { q, status, plan, method }: ClientFilters) {
+	const term = q.trim().toLowerCase();
+	const ok = (f: string, v?: string) => !f || f === 'all' || f === v;
+	return clients.filter(
+		(c) =>
+			(!term || [c.name, c.domain, c.ownerEmail].some((s) => s?.toLowerCase().includes(term))) &&
+			ok(status, c.billing?.status) &&
+			ok(plan, c.billing?.plan) &&
+			ok(method, c.billing?.method)
+	);
+}
