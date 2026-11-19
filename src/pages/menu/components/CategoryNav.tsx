@@ -18,7 +18,10 @@ export const CategoryNav = ({ categories, activeId, lang, color, onColor, onSele
 	const activeText = onColor;
 	const chips = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		chips.current?.querySelector("[aria-current]")?.scrollIntoView({ inline: "center", block: "nearest" });
+		// Solo desplazamiento horizontal del carril; scrollIntoView movería también la página.
+		const row = chips.current;
+		const chip = row?.querySelector<HTMLElement>("[aria-current]");
+		if (row && chip) row.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: "smooth" });
 	}, [activeId]);
 	const umami = (c: CategoryProps) => ({
 		"data-umami-event": "Category",
@@ -28,7 +31,7 @@ export const CategoryNav = ({ categories, activeId, lang, color, onColor, onSele
 	return (
 		<>
 		<nav className="sticky top-0 z-20 bg-white lg:hidden py-2.5 shadow-[0_6px_12px_-8px_rgba(42,20,16,0.2)]">
-			<div ref={chips} className="flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-2 overflow-x-auto px-5">
+			<div ref={chips} className="relative flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-2 overflow-x-auto px-5">
 				{categories.map((c) => {
 					const active = c.id === activeId;
 					const name = localized(c as unknown as Record<string, unknown>, "name", lang);
