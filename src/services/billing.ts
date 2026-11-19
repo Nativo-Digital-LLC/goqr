@@ -37,9 +37,7 @@ export async function submitTransfer(p: {
 	const proofPath = `proofs/${uid}/${Date.now()}-${p.file.name.replace(/[^\w.-]/g, '_')}`;
 	await uploadBytes(ref(storage, proofPath), p.file);
 
-	// La referencia depende del id y las reglas no permiten update: se reserva el id antes de crear.
-	const docRef = doc(collection(db, 'transfers'));
-	await setDoc(docRef, {
+	await setDoc(doc(collection(db, 'transfers')), {
 		establishmentId: p.establishmentId,
 		userId: uid,
 		plan: p.plan,
@@ -47,7 +45,7 @@ export async function submitTransfer(p: {
 		currency: p.currency,
 		proofPath,
 		declaredDate: p.declaredDate,
-		reference: transferReference(docRef.id),
+		reference: transferReference(p.establishmentId),
 		status: 'pending',
 		createdAt: serverTimestamp(),
 	});

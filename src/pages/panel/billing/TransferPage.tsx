@@ -64,7 +64,7 @@ export default function TransferPage() {
 					establishmentName={e.name}
 					plan={plan.id}
 					rejectedReason={rejected ? rejected.reason ?? "" : null}
-					onSent={() => setAttempt((n) => n + 1)}
+					onSent={() => { setTransfers(null); setAttempt((n) => n + 1); }}
 				/>
 			)}
 		</>
@@ -114,6 +114,7 @@ function TransferForm({ establishmentId, establishmentName, plan: planId, reject
 	const pick = (f?: File) => {
 		if (!f) return;
 		if (!TYPES.includes(f.type) || f.size >= MAX_BYTES) {
+			setFile(null);
 			return setErrors((x) => ({ ...x, file: "Usa una imagen JPG, PNG o un PDF de hasta 10 MB." }));
 		}
 		setErrors((x) => ({ ...x, file: undefined }));
@@ -124,7 +125,7 @@ function TransferForm({ establishmentId, establishmentName, plan: planId, reject
 		ev.preventDefault();
 		const amount = parsePrice(amountText);
 		const next: typeof errors = {};
-		if (!file) next.file = "Sube tu comprobante.";
+		if (!file) next.file = errors.file ?? "Sube tu comprobante.";
 		if (!date) next.date = "Elige la fecha de la transferencia.";
 		else if (date > today()) next.date = "La fecha no puede ser futura.";
 		if (!amount) next.amount = "Escribe el monto que transferiste.";
