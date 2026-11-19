@@ -4,7 +4,9 @@ import { toast } from "sonner";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
+import { StepBrand } from "./StepBrand";
 import { StepBusiness } from "./StepBusiness";
+import { StepFirstDish } from "./StepFirstDish";
 import { useOnboarding } from "./useOnboarding";
 
 const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
@@ -73,8 +75,12 @@ export default function OnboardingPage() {
 			<main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-wrap items-start gap-x-16 gap-y-10 px-4 py-8 sm:px-8 sm:py-12">
 				{step === 1 ? (
 					<StepBusiness establishment={establishment} saveStep={saveStep} />
+				) : step === 2 ? (
+					<StepBrand establishment={establishment} saveStep={saveStep} />
+				) : step === 3 ? (
+					<StepFirstDish establishment={establishment} saveStep={saveStep} />
 				) : (
-					// Marcador: las tareas 7 y 8 reemplazan los pasos 2 a 4.
+					// Marcador: la tarea 8 reemplaza el paso 4.
 					<p className="text-muted-foreground">Paso {step} próximamente.</p>
 				)}
 			</main>

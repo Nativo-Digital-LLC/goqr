@@ -1,3 +1,4 @@
+import { contrastRatio } from "@/lib/color";
 import { EstablishmentType } from "@/types/Establishment";
 import { TYPE_LABELS } from "./typeLabels";
 
@@ -14,6 +15,7 @@ type MenuPreviewProps = {
 };
 
 export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color, category, product }: MenuPreviewProps) {
+	const bg = color || "#2A1410";
 	const subtitle = [type && TYPE_LABELS[type], phone].filter(Boolean).join(" · ");
 	return (
 		<div className="w-[300px] rounded-[40px] bg-primary p-2.5 shadow-[0_24px_48px_rgba(42,20,16,0.18)]">
@@ -34,8 +36,8 @@ export function MenuPreview({ name, type, phone, slug, logoUrl, bannerUrl, color
 					<div className="flex gap-1.5">
 						{category ? (
 							<span
-								className="rounded-full px-3 py-1 text-xs font-semibold text-white"
-								style={{ background: color || "#2A1410" }}
+								className="rounded-full px-3 py-1 text-xs font-semibold"
+								style={{ background: bg, color: contrastRatio("#FFFFFF", bg) >= contrastRatio("#2A1410", bg) ? "#FFFFFF" : "#2A1410" }}
 							>
 								{category}
 							</span>

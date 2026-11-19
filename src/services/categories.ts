@@ -41,7 +41,7 @@ export async function createCategory({ es_name, en_name = null, order, establish
 
 	const snap = await getDocs(categoriesQuery);
 	if (snap.size <= 1) {
-		return;
+		return id;
 	}
 
 	await Promise.all(
@@ -55,6 +55,8 @@ export async function createCategory({ es_name, en_name = null, order, establish
 				});
 			})
 	);
+
+	return id;
 }
 
 export async function deleteCategory(id: string, establishmentId: string) {
