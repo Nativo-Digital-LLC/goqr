@@ -33,10 +33,11 @@ const byOrder = <T extends { order?: number }>(a: T, b: T) => (a.order ?? 0) - (
 const withId = <T>(d: { id: string; data: () => unknown }) => ({ ...(d.data() as object), id: d.id }) as T;
 
 export const usePublicMenu = (slug: string | undefined): PublicMenuResult => {
-	const [state, setState] = useState<State>({ status: 'loading' });
+	const [stored, setStored] = useState<{ slug: string | undefined; state: State }>({ slug, state: { status: 'loading' } });
 	const [attempt, setAttempt] = useState(0);
 
 	useEffect(() => {
+		const setState = (state: State) => setStored({ slug, state });
 		if (!slug) {
 			setState({ status: 'not-found' });
 			return;
@@ -97,6 +98,9 @@ export const usePublicMenu = (slug: string | undefined): PublicMenuResult => {
 		};
 	}, [slug, attempt]);
 
+	// Stale result from a previous slug: never show it.
+	if (stored.slug !== slug) return { status: slug ? 'loading' : 'not-found' };
+	const { state } = stored;
 	if (state.status === 'error') {
 		return { status: 'error', retry: () => setAttempt((n) => n + 1) };
 	}
