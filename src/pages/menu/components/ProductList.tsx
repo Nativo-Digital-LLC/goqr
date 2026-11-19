@@ -17,8 +17,8 @@ type Props = {
 export const ProductList = ({ products, categoryId, subcategoryId, lang, dictionary, color }: Props) => {
 	const [selected, setSelected] = useState<ProductProps | null>(null);
 	const [open, setOpen] = useState(false);
-	const list = products.filter((p) =>
-		subcategoryId ? p.subcategoryId === subcategoryId : p.categoryId === categoryId
+	const list = products.filter(
+		(p) => p.categoryId === categoryId && (!subcategoryId || p.subcategoryId === subcategoryId)
 	);
 
 	if (!list.length) return <p className="py-6 text-center text-muted-foreground">{dictionary.menu.emptyCategory}</p>;
