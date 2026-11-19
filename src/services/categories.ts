@@ -19,15 +19,17 @@ interface CreateCategoryParams {
 	en_name?: string | null;
 	order: number;
 	enableSubcategories?: boolean;
+	hidden?: boolean;
 }
 
-export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories }: CreateCategoryParams) {
+export async function createCategory({ es_name, en_name = null, order, establishmentId, enableSubcategories, hidden = false }: CreateCategoryParams) {
 	const ref = collection(db, Collection.Establishments, establishmentId, 'categories');
 	const { id } = await addDoc(ref, {
 		es_name,
 		en_name,
 		order,
 		enableSubcategories,
+		hidden,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		deletedAt: null
@@ -71,14 +73,16 @@ interface UpdateCategoryNameParams {
 	es_name: string;
 	en_name?: string | null;
 	enableSubcategories?: boolean;
+	hidden?: boolean;
 	establishmentId: string;
 }
 
-export async function updateCategoryName({ establishmentId, id, es_name, en_name = null, enableSubcategories }: UpdateCategoryNameParams) {
+export async function updateCategoryName({ establishmentId, id, es_name, en_name = null, enableSubcategories, hidden }: UpdateCategoryNameParams) {
 	await updateDoc(doc(db, Collection.Establishments, establishmentId, 'categories', id), {
 		es_name,
 		en_name,
 		enableSubcategories,
+		...(hidden !== undefined && { hidden }),
 		updatedAt: new Date()
 	});
 }

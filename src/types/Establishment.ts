@@ -38,7 +38,10 @@ export interface EstablishmentProps {
 	enableMultiLanguage: boolean;
 	isActive: boolean;
 	onboardingStep?: number | null;
-	billing?: { trialEndsAt?: Timestamp };
+	billing?: {
+		status?: 'trialing' | 'active' | 'past_due' | 'paused' | 'canceled' | 'legacy';
+		trialEndsAt?: Timestamp;
+	};
 	type?: EstablishmentType | null;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;

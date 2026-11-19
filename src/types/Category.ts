@@ -6,6 +6,7 @@ export interface CategoryProps {
 	en_name: string;
 	order: number;
 	enableSubcategories: boolean;
+	hidden?: boolean;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 	deletedAt: Timestamp | null;

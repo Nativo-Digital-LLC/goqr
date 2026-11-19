@@ -20,12 +20,12 @@ interface CreateSubcategoryParams {
 	es_name: string;
 	en_name?: string | null;
 	order: number;
-	photo: File;
+	photo?: File | null;
 }
 
 export async function createSubcategory({ es_name, en_name = null, order, categoryId, establishmentId, photo }: CreateSubcategoryParams) {
 	const subcategoriesRef = collection(db, Collection.Establishments, establishmentId, 'categories', categoryId, 'subcategories');
-	const photoUrl = await uploadFile(photo);
+	const photoUrl = photo ? await uploadFile(photo) : null;
 	const subcategory = {
 		es_name,
 		en_name,
@@ -44,7 +44,7 @@ export async function createSubcategory({ es_name, en_name = null, order, catego
 	);
 	const snap = await getDocs(subcategoriesQuery);
 	if (snap.size <= 1) {
-		return;
+		return id;
 	}
 
 	await Promise.all(
@@ -58,6 +58,8 @@ export async function createSubcategory({ es_name, en_name = null, order, catego
 				});
 			})
 	);
+
+	return id;
 }
 
 interface UpdateSubcategoryParams {

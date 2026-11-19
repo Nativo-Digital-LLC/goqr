@@ -74,20 +74,13 @@ export async function createProduct({ photo, ...data }: Partial<ProductProps> & 
 }
 
 export async function updateProduct(id: string, { photo, ...data }: Partial<ProductProps> & { photo?: File | null }) {
-	let photoUrl = null;
-	if (photo) {
-		photoUrl = await uploadFile(photo);
-	}
-	if (photo === null) {
-		photoUrl = null;
-	}
-
 	const updates: any = {
 		...data,
 		updatedAt: new Date()
 	};
 
-	if (photoUrl !== null) updates.photoUrl = photoUrl;
+	if (photo) updates.photoUrl = await uploadFile(photo);
+	else if (photo === null) updates.photoUrl = null;
 
 	await updateDoc(doc(db, Collection.Products, id), updates);
 

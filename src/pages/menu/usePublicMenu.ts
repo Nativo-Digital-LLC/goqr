@@ -69,7 +69,7 @@ export const usePublicMenu = (slug: string | undefined): PublicMenuResult => {
 						where('deletedAt', '==', null)
 					))
 				]);
-				const categories = catsSnap.docs.map((d) => withId<CategoryProps>(d)).sort(byOrder);
+				const categories = catsSnap.docs.map((d) => withId<CategoryProps>(d)).filter((c) => c.hidden !== true).sort(byOrder);
 				const products = prodsSnap.docs
 					.map((d) => withId<ProductProps>(d))
 					.filter(isVisibleProduct)
