@@ -13,6 +13,7 @@ import TermsPage from "./pages/terms";
 import PrivacyPoliciesPage from "./pages/privacy-policies";
 import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import PanelLayout from "./pages/panel/PanelLayout";
+import HomePage from "./pages/panel/HomePage";
 import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
 import SoonPage from "./pages/panel/SoonPage";
 import BillingPage from "./pages/panel/BillingPage";
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
 		path: "/dashboard",
 		element: <PanelLayout />,
 		children: [
-			{ index: true, element: <PanelPlaceholder title="Resumen" /> },
+			{ index: true, element: <HomePage /> },
 			{ path: "menu", element: <PanelPlaceholder title="Menú" /> },
 			{ path: "menu/product/new", element: <PanelPlaceholder title="Nuevo producto" /> },
 			{ path: "menu/product/:productId", element: <PanelPlaceholder title="Editar producto" /> },
