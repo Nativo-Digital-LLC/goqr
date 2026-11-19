@@ -157,7 +157,7 @@ function TransferForm({ establishmentId, establishmentName, plan: planId, reject
 						</dl>
 						<dl className="rounded-xl bg-secondary p-4 text-[15px]">
 							<dt className="font-bold">US$ · {formatMoney(plan.priceUsd, "USD")}</dt>
-							<dd>{usd.bank}</dd><dd>Cuenta {usd.account}</dd><dd>Routing {usd.routing}</dd><dd>{usd.holder}</dd>
+							<dd>{usd.bank}</dd><dd>Cuenta corriente {usd.account}</dd><dd>ABA {usd.routing}</dd><dd>{usd.holder}</dd>
 						</dl>
 					</div>
 					<p className="text-[15px]">Escribe este código en el concepto de la transferencia:</p>
