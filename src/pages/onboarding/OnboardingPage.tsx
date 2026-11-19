@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,7 @@ const STEP_TITLES = ["Tu restaurante", "Tu marca", "Tu primer plato", "Tu QR"];
 export default function OnboardingPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const isNew = useSearchParams()[0].get("new") === "1";
-	const { establishment, step, loading, unauthenticated, finished, loadError, hasOthers, retry, saveStep } = useOnboarding((location.state as { prefetched?: Prefetched } | null)?.prefetched, isNew);
+	const { establishment, step, loading, unauthenticated, finished, loadError, hasOthers, retry, saveStep } = useOnboarding((location.state as { prefetched?: Prefetched } | null)?.prefetched);
 	// El estado del historial sobrevive a una recarga: se borra apenas se usa para no retomar con datos viejos.
 	useEffect(() => {
 		if (location.state) navigate(".", { replace: true, state: null });

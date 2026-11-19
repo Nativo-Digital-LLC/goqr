@@ -103,7 +103,7 @@ export function StepDone({ establishment, dish, noTrial }: { establishment: Esta
 				</div>
 				<p className="text-[15px] text-muted-foreground">
 					{noTrial ? "Este local no tiene prueba gratis: lo activas al elegir un plan." : `Tu prueba gratis termina ${trialText}. No necesitas tarjeta hasta entonces.`}{" "}
-					<Link to="/dashboard/invoices" className={`font-semibold text-primary underline ${focus}`}>
+					<Link to="/dashboard/billing" className={`font-semibold text-primary underline ${focus}`}>
 						Ver planes
 					</Link>
 				</p>

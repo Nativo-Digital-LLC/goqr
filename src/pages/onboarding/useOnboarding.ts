@@ -6,6 +6,7 @@ import { createEstablishment, getEstablishmentsByUserId, isSlugAvailable, update
 import { useSessionStore } from "@/store/session";
 import { auth } from "@/utils/firebase";
 import { PANEL_ESTABLISHMENT_KEY } from "@/constants/panel";
+import { useSearchParams } from "react-router-dom";
 import { pickStart } from "./start";
 
 type Step = 1 | 2 | 3 | 4;
@@ -29,7 +30,11 @@ export type StepProps = {
 export type Prefetched = { uid: string; establishments: EstablishmentProps[] };
 
 /** isNew: añadir otro local (`?new=1`): no retoma ni redirige, crea uno nuevo desde el paso 1. */
-export function useOnboarding(prefetched?: Prefetched | null, isNew = false) {
+export function useOnboarding(prefetched?: Prefetched | null) {
+	const [params, setParams] = useSearchParams();
+	const isNew = params.get("new") === "1";
+	// Solo cuenta al montar; luego createdId manda.
+	const resumeId = useRef(params.get("id"));
 	const [establishment, setEstablishment] = useState<EstablishmentProps | null>(null);
 	const [step, setStep] = useState<Step>(1);
 	const [loading, setLoading] = useState(true);
@@ -79,8 +84,9 @@ export function useOnboarding(prefetched?: Prefetched | null, isNew = false) {
 					useSessionStore.getState().setSession(null);
 					return setUnauthenticated(true);
 				}
-				setHasOthers(isNew && list.length > 0);
-				const start = pickStart(list, isNew);
+				const start = pickStart(list, isNew, resumeId.current);
+				if (start.establishment) createdId.current = start.establishment.id;
+				setHasOthers(isNew && list.some((e) => e.id !== start.establishment?.id));
 				setEstablishment(start.establishment);
 				if (start.finished) setFinished(true);
 				else setStep(start.step);
@@ -131,13 +137,17 @@ export function useOnboarding(prefetched?: Prefetched | null, isNew = false) {
 					onboardingStep: n,
 				});
 				// El panel abre con el local nuevo seleccionado.
-				if (isNew) localStorage.setItem(PANEL_ESTABLISHMENT_KEY, createdId.current);
+				if (isNew) {
+					localStorage.setItem(PANEL_ESTABLISHMENT_KEY, createdId.current);
+					// Una recarga retoma este local en vez de crear otro.
+					setParams({ new: "1", id: createdId.current }, { replace: true });
+				}
 			}
 			const fresh = await fetchEstablishment();
 			if (fresh) setEstablishment(fresh);
 			setStep(n);
 		},
-		[establishment, fetchEstablishment, isNew]
+		[establishment, fetchEstablishment, isNew, setParams]
 	);
 
 	const retry = useCallback(() => setAttempt((a) => a + 1), []);
