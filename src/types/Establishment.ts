@@ -12,6 +12,8 @@ export interface SocialNetworkProps {
 	displayName?: string;
 }
 
+export type EstablishmentType = 'restaurant' | 'cafe' | 'bar' | 'hotel' | 'other';
+
 export interface EstablishmentProps {
 	id: string;
 	userId: string;
@@ -35,6 +37,7 @@ export interface EstablishmentProps {
 	enableMultiLanguage: boolean;
 	isActive: boolean;
 	onboardingStep?: number | null;
+	type?: EstablishmentType | null;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 	deletedAt: Timestamp | null;
@@ -61,6 +64,8 @@ export interface CreateEstablishmentParams {
 	paymentMethod: PaymentMethod;
 	schedules?: ScheduleProps[];
 	socialNetworks?: SocialNetworkProps[];
+	type?: EstablishmentType;
+	onboardingStep?: number;
 }
 
 export interface TaxPayerProps {

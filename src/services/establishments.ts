@@ -6,7 +6,8 @@ import {
 	updateDoc,
 	query,
 	where,
-	addDoc
+	addDoc,
+	limit
 } from 'firebase/firestore';
 
 import { db } from '../utils/firebase';
@@ -55,6 +56,8 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		requiresTaxReceipt: params.requiresTaxReceipt,
 		schedules: params.schedules || [],
 		socialNetworks: params.socialNetworks || [],
+		...(params.type && { type: params.type }),
+		...(params.onboardingStep && { onboardingStep: params.onboardingStep }),
 		createdAt: new Date(),
 		updatedAt: new Date(),
 	});
@@ -155,7 +158,10 @@ export async function createEstablishment(params: CreateEstablishmentParams) {
 		})
 	]);
 
-	sendConversionEvent(params.paymentFrequency);
+	// El onboarding crea el establecimiento al registrarse, no al contratar un plan.
+	if (!params.onboardingStep) sendConversionEvent(params.paymentFrequency);
+
+	return estabId;
 }
 
 export async function updateEstablishment(id: string, { banner, logo, ...rest }: Partial<CreateEstablishmentParams>) {
@@ -185,7 +191,16 @@ export async function getEstablishmentsByUserId(userId: string) {
 	);
 
 	const snapshot = await getDocs(q);
-	return snapshot.docs.map(doc => doc.data() as EstablishmentProps);
+	return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }) as EstablishmentProps);
+}
+
+export async function isSlugAvailable(slug: string) {
+	const snapshot = await getDocs(query(
+		collection(db, Collection.Establishments),
+		where('domain', '==', slug),
+		limit(1)
+	));
+	return snapshot.empty;
 }
 
 export async function getTaxInformation(rnc: string) {
