@@ -188,7 +188,7 @@ export function maxFileSizeRule() {
 				return Promise.resolve();
 			}
 
-			if (file.size <= maxFileSize) {
+			if (file.size < maxFileSize) {
 				return Promise.resolve();
 			}
 
