@@ -15,7 +15,7 @@ import OnboardingPage from "./pages/onboarding/OnboardingPage";
 import PanelLayout from "./pages/panel/PanelLayout";
 import HomePage from "./pages/panel/HomePage";
 import ProductEditPage from "./pages/panel/menu/ProductEditPage";
-import PanelPlaceholder from "./pages/panel/PanelPlaceholder";
+import QrPage from "./pages/panel/qr/QrPage";
 import MenuEditorPage from "./pages/panel/menu/MenuEditorPage";
 import EstablishmentPage from "./pages/panel/establishment/EstablishmentPage";
 import SoonPage from "./pages/panel/SoonPage";
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
 			{ path: "menu/product/new", element: <ProductEditPage /> },
 			{ path: "menu/product/:productId", element: <ProductEditPage /> },
 			{ path: "establishment", element: <EstablishmentPage /> },
-			{ path: "qr", element: <PanelPlaceholder title="Código QR" /> },
+			{ path: "qr", element: <QrPage /> },
 			{
 				path: "stats",
 				element: (
