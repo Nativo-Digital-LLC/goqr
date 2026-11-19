@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, QrCode } from "lucide-react";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useShowIntro } from "@/hooks/useShowIntro";
 import { menuColor, localized } from "@/lib/menu";
-import { readableOn } from "@/lib/color";
+import { contrastRatio } from "@/lib/color";
 import es from "@/locale/es";
 import { usePublicMenu, type PublicMenu } from "./usePublicMenu";
 import { useMenuLang } from "./useMenuLang";
@@ -40,6 +40,16 @@ export default function MenuPage() {
 	}
 }
 
+// Reloj del dispositivo, refrescado cada minuto para el estado abierto/cerrado y el día de hoy.
+function useNow(ms: number) {
+	const [now, setNow] = useState(() => new Date());
+	useEffect(() => {
+		const t = setInterval(() => setNow(new Date()), ms);
+		return () => clearInterval(t);
+	}, [ms]);
+	return now;
+}
+
 function MenuReady({ menu }: { menu: PublicMenu }) {
 	const { establishment, categories, subcategories } = menu;
 	const { lang, dictionary, setLang, canSwitch } = useMenuLang(establishment.enableMultiLanguage);
@@ -48,6 +58,8 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 	const [resultsEl, setResultsEl] = useState<HTMLElement | null>(null);
 	const [searchActive, setSearchActive] = useState(false);
+	const now = useNow(60_000);
+	const contentRef = useRef<HTMLElement>(null);
 
 	const allergyKey = `goqr:allergy:${establishment.id}`;
 	const [allergyOpen, setAllergyOpen] = useState(
@@ -59,6 +71,21 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 	const subs = category?.enableSubcategories ? subcategories[category.id] ?? [] : [];
 	const hasSubId = params.has("subcategoryId");
 	const subcategory = subs.find((s) => s.id === params.get("subcategoryId"));
+
+	useEffect(() => {
+		const previous = document.documentElement.lang;
+		document.documentElement.lang = lang;
+		return () => { document.documentElement.lang = previous; };
+	}, [lang]);
+
+	// Tras elegir categoría/subcategoría, si el usuario ya pasó el inicio del contenido, se lo vuelve a mostrar bajo la barra fija.
+	const goTo = (search: string) => {
+		navigate({ search });
+		requestAnimationFrame(() => {
+			const el = contentRef.current;
+			if (el && el.getBoundingClientRect().top < (isDesktop ? 88 : 64)) el.scrollIntoView({ block: "start" });
+		});
+	};
 
 	useEffect(() => {
 		const previous = document.title;
@@ -82,7 +109,7 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 		setAllergyOpen(false);
 	};
 	const name = (doc: object) => localized(doc as Record<string, unknown>, "name", lang);
-	const onColor = readableOn("#FFFFFF", color).ok ? "#FFFFFF" : "#2A1410";
+	const onColor = contrastRatio(color, "#FFFFFF") >= contrastRatio(color, "#2A1410") ? "#FFFFFF" : "#2A1410";
 
 	if (!establishment.isActive) return <MenuUnavailable establishment={establishment} dictionary={dictionary} />;
 
@@ -94,6 +121,7 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 			lang={lang}
 			dictionary={dictionary}
 			color={color}
+			onColor={onColor}
 			inline={isDesktop}
 			resultsEl={resultsEl}
 			onActiveChange={setSearchActive}
@@ -120,12 +148,13 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 					lang={lang}
 					dictionary={dictionary}
 					color={color}
+					now={now}
 					canSwitch={canSwitch}
 					onLangChange={setLang}
 				/>
-				<MenuInfoAside establishment={establishment} lang={lang} dictionary={dictionary} />
+				<MenuInfoAside establishment={establishment} lang={lang} dictionary={dictionary} now={now} />
 				{categories.length === 0 ? (
-					<p className="p-5 text-center text-muted-foreground">{dictionary.menu.emptyMenu}</p>
+					<p className="p-5 text-center text-muted-foreground lg:col-start-2 lg:row-start-2">{dictionary.menu.emptyMenu}</p>
 				) : (
 					<>
 						{!isDesktop && searchEl}
@@ -134,23 +163,24 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 							activeId={category?.id}
 							lang={lang}
 							color={color}
-							onSelect={(id) => navigate({ search: `?categoryId=${id}` })}
+							onColor={onColor}
+							onSelect={(id) => goTo(`?categoryId=${id}`)}
 						/>
 						<div ref={setResultsEl} className="hidden lg:col-start-2 lg:row-start-2 lg:block" />
-						<main className={searchActive ? "hidden" : "flex flex-1 flex-col gap-3.5 p-5 lg:col-start-2 lg:row-start-2 lg:p-0 lg:pt-2"}>
+						<main ref={contentRef} className={searchActive ? "hidden" : "flex flex-1 scroll-mt-16 flex-col gap-3.5 p-5 lg:scroll-mt-[88px] lg:col-start-2 lg:row-start-2 lg:p-0 lg:pt-2"}>
 							{category && category.enableSubcategories && !subcategory && (
 								<SubcategoryGrid
 									categoryName={name(category)}
 									subcategories={subs}
 									lang={lang}
 									dictionary={dictionary}
-									onSelect={(id) => navigate({ search: `?categoryId=${category.id}&subcategoryId=${id}` })}
+									onSelect={(id) => goTo(`?categoryId=${category.id}&subcategoryId=${id}`)}
 								/>
 							)}
 							{category && category.enableSubcategories && subcategory && (
 								<button
 									type="button"
-									onClick={() => navigate({ search: `?categoryId=${category.id}` })}
+									onClick={() => goTo(`?categoryId=${category.id}`)}
 									className="flex min-h-11 items-center gap-2 self-start text-sm font-semibold"
 								>
 									<ArrowLeft className="size-4" aria-hidden="true" />{name(category)}
@@ -180,7 +210,7 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 					</Link>
 				</footer>
 			</div>
-			<AllergyDialog open={allergyOpen} onClose={closeAllergy} dictionary={dictionary} color={color} onColor={onColor} />
+			<AllergyDialog open={allergyOpen} onClose={closeAllergy} dictionary={dictionary} color={color} onColor={onColor} lang={lang} />
 		</div>
 	);
 }

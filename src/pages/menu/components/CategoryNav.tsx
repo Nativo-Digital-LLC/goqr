@@ -1,5 +1,6 @@
+import { useEffect, useRef } from "react";
+
 import { cn } from "@/lib/utils";
-import { contrastRatio } from "@/lib/color";
 import { localized } from "@/lib/menu";
 import type { CategoryProps } from "@/types/Category";
 import type { Lang } from "@/types/Dictionary";
@@ -9,20 +10,25 @@ type Props = {
 	activeId: string | undefined;
 	lang: Lang;
 	color: string;
+	onColor: string;
 	onSelect: (id: string) => void;
 };
 
-export const CategoryNav = ({ categories, activeId, lang, color, onSelect }: Props) => {
-	const activeText = contrastRatio(color, "#FFFFFF") >= 4.5 ? "#FFFFFF" : "#2A1410";
-	const umami = (c: CategoryProps, name: string) => ({
+export const CategoryNav = ({ categories, activeId, lang, color, onColor, onSelect }: Props) => {
+	const activeText = onColor;
+	const chips = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		chips.current?.querySelector("[aria-current]")?.scrollIntoView({ inline: "center", block: "nearest" });
+	}, [activeId]);
+	const umami = (c: CategoryProps) => ({
 		"data-umami-event": "Category",
 		"data-umami-event-id": c.id,
-		"data-umami-event-name": name,
+		"data-umami-event-name": c.es_name,
 	});
 	return (
 		<>
 		<nav className="sticky top-0 z-20 bg-white lg:hidden py-2.5 shadow-[0_6px_12px_-8px_rgba(42,20,16,0.2)]">
-			<div className="flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-2 overflow-x-auto px-5">
+			<div ref={chips} className="flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-2 overflow-x-auto px-5">
 				{categories.map((c) => {
 					const active = c.id === activeId;
 					const name = localized(c as unknown as Record<string, unknown>, "name", lang);
@@ -32,7 +38,7 @@ export const CategoryNav = ({ categories, activeId, lang, color, onSelect }: Pro
 							type="button"
 							onClick={() => onSelect(c.id)}
 							aria-current={active || undefined}
-							{...umami(c, name)}
+							{...umami(c)}
 							className={cn(
 								"min-h-10 flex-none rounded-full px-4 text-sm",
 								active ? "font-semibold" : "border border-border font-medium text-foreground"
@@ -56,7 +62,7 @@ export const CategoryNav = ({ categories, activeId, lang, color, onSelect }: Pro
 								type="button"
 								onClick={() => onSelect(c.id)}
 								aria-current={active || undefined}
-								{...umami(c, name)}
+								{...umami(c)}
 								className={cn(
 									"min-h-10 w-full rounded-xl px-4 text-left text-sm",
 									active ? "font-semibold" : "font-medium text-foreground hover:bg-muted"

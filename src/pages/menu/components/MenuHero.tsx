@@ -10,15 +10,16 @@ type Props = {
 	lang: Lang;
 	dictionary: DictionaryProps;
 	color: string;
+	now: Date;
 	canSwitch: boolean;
 	onLangChange: (l: Lang) => void;
 };
 
 const tile = "flex min-h-11 flex-col items-center gap-1.5 rounded-[14px] bg-muted px-1 py-2.5 text-center text-xs font-semibold text-foreground";
 
-export const MenuHero = ({ establishment: e, lang, dictionary, color, canSwitch, onLangChange }: Props) => {
+export const MenuHero = ({ establishment: e, lang, dictionary, color, now, canSwitch, onLangChange }: Props) => {
 	const t = dictionary.menu;
-	const status = openStatus(e.schedules, new Date());
+	const status = openStatus(e.schedules, now);
 	const socials = (e.socialNetworks ?? [])
 		.map((s) => ({ href: socialHref(s), label: s.displayName || s.platform.charAt(0).toUpperCase() + s.platform.slice(1) }))
 		.filter((s): s is { href: string; label: string } => !!s.href);

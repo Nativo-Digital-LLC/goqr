@@ -4,13 +4,13 @@ import { dayLabel, mapsEmbedSrc, parseDays, parseHours, socialHref, telHref, wha
 import type { DictionaryProps, Lang } from "@/types/Dictionary";
 import type { EstablishmentProps } from "@/types/Establishment";
 
-type Props = { establishment: EstablishmentProps; lang: Lang; dictionary: DictionaryProps };
+type Props = { establishment: EstablishmentProps; lang: Lang; dictionary: DictionaryProps; now: Date };
 
 const card = "flex flex-col gap-3 rounded-2xl border border-border bg-white p-4";
 const title = "font-display text-base font-bold";
 const link = "flex min-h-11 items-center gap-2.5 text-sm font-medium";
 
-export const MenuInfoAside = ({ establishment: e, lang, dictionary }: Props) => {
+export const MenuInfoAside = ({ establishment: e, lang, dictionary, now }: Props) => {
 	const t = dictionary.menu;
 	const week: string[][] = Array.from({ length: 7 }, () => []);
 	for (const s of e.schedules ?? []) {
@@ -18,7 +18,7 @@ export const MenuInfoAside = ({ establishment: e, lang, dictionary }: Props) => 
 		for (const d of new Set(parseDays(s.days))) week[d].push(s.hours.trim());
 	}
 	const hasSchedule = week.some((r) => r.length);
-	const today = (new Date().getDay() + 6) % 7;
+	const today = (now.getDay() + 6) % 7;
 	const socials = (e.socialNetworks ?? [])
 		.map((s) => ({ href: socialHref(s), label: s.displayName || s.platform.charAt(0).toUpperCase() + s.platform.slice(1) }))
 		.filter((s): s is { href: string; label: string } => !!s.href);
