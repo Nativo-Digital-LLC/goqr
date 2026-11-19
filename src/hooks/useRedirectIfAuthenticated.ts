@@ -15,7 +15,9 @@ import { useSessionStore } from "@/store/session";
  */
 export function useRedirectIfAuthenticated(): void {
 	const navigate = useNavigate();
-	const userId = useSessionStore(({ session }) => session?.userId);
+	// Se depende del objeto de sesión (no solo del uid): cada login lo reemplaza y relanza la consulta aunque sea el mismo usuario.
+	const session = useSessionStore((state) => state.session);
+	const userId = session?.userId;
 	const [attempt, setAttempt] = useState(0);
 
 	useEffect(() => {
@@ -30,6 +32,7 @@ export function useRedirectIfAuthenticated(): void {
 				if (!cancelled) {
 					toast.error(authErrorMessage(error), {
 						id: "redirect-error",
+						duration: Infinity,
 						action: { label: "Reintentar", onClick: () => setAttempt((a) => a + 1) },
 					});
 				}
@@ -37,5 +40,5 @@ export function useRedirectIfAuthenticated(): void {
 		return () => {
 			cancelled = true;
 		};
-	}, [userId, navigate, attempt]);
+	}, [session, userId, navigate, attempt]);
 }
