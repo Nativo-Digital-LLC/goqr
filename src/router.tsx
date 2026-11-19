@@ -5,7 +5,7 @@ import LoginPage from "./pages/account/LoginPage";
 import ForgotPasswordPage from "./pages/account/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/account/ResetPasswordPage";
 import RegisterPage from "./pages/account/RegisterPage";
-import MenuPage from "./pages/menu";
+import MenuPage from "./pages/menu/MenuPage";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import MenusPage from "./pages/dashboard/Menus";
 import InvoicesPage from "./pages/dashboard/Invoices";
