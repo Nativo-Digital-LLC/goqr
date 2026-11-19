@@ -138,16 +138,14 @@ export default function AdminTransfersPage() {
 	}, []);
 
 	const [reloads, setReloads] = useState(0);
+	const [failed, setFailed] = useState(false);
 	useEffect(() => {
 		let cancelled = false; // una respuesta lenta de otra pestaña no debe pisar la lista
 		setItems(null);
+		setFailed(false);
 		listTransfers(status).then(
 			(l) => !cancelled && setItems(l),
-			() => {
-				if (cancelled) return;
-				setItems([]);
-				toast.error("No pudimos cargar las transferencias.");
-			}
+			() => !cancelled && setFailed(true)
 		);
 		return () => {
 			cancelled = true;
@@ -201,8 +199,14 @@ export default function AdminTransfersPage() {
 							})}
 						</tbody>
 					</table>
+					{failed && (
+						<div className="flex items-center gap-3 py-6 text-[14px]">
+							<span>No se pudieron cargar las transferencias.</span>
+							<Button size="sm" variant="outline" onClick={() => setReloads((n) => n + 1)}>Reintentar</Button>
+						</div>
+					)}
 					{items && !items.length && <p className="py-6 text-[14px] text-muted-foreground">No hay transferencias.</p>}
-					{!items && <p className="py-6 text-[14px] text-muted-foreground">Cargando…</p>}
+					{!items && !failed && <p className="py-6 text-[14px] text-muted-foreground">Cargando…</p>}
 				</div>
 				{isLg && detail && <div className="w-[380px] shrink-0 rounded-xl border border-border p-5">{detail}</div>}
 			</div>
