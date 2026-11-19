@@ -5,7 +5,6 @@ import { Logo } from "./Logo";
 const link =
 	"rounded-md text-muted-foreground underline-offset-4 hover:underline outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
-// Falta el enlace de WhatsApp: el artboard solo trae el placeholder "[YOUR WHATSAPP]".
 export function MarketingFooter() {
 	return (
 		<footer className="border-t border-line">
