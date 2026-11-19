@@ -13,11 +13,7 @@ import { MenuHero } from "./components/MenuHero";
 import { CategoryNav } from "./components/CategoryNav";
 import { SubcategoryGrid } from "./components/SubcategoryGrid";
 import { AllergyDialog } from "./components/AllergyDialog";
-
-type SlotProps = { categoryId: string; subcategoryId: string | null };
-// Task 5: reemplazar por ProductList (recibe la categoría y subcategoría elegidas).
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProductListSlot = (_props: SlotProps) => null;
+import { ProductList } from "./components/ProductList";
 
 export default function MenuPage() {
 	const { establishmentUrl } = useParams();
@@ -125,10 +121,14 @@ function MenuReady({ menu }: { menu: PublicMenu }) {
 								</button>
 							)}
 							{category && (!category.enableSubcategories || subcategory) && (
-								<>
-									{/* Task 5: ProductList */}
-									<ProductListSlot categoryId={category.id} subcategoryId={subcategory?.id ?? null} />
-								</>
+								<ProductList
+									products={menu.products}
+									categoryId={category.id}
+									subcategoryId={subcategory?.id ?? null}
+									lang={lang}
+									dictionary={dictionary}
+									color={color}
+								/>
 							)}
 						</main>
 					</>
