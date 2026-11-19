@@ -8,7 +8,8 @@ type PanelValue = {
 	establishments: EstablishmentProps[];
 	establishment: EstablishmentProps;
 	select: (id: string) => void;
-	reload: () => Promise<void>;
+	/** true si se pudo actualizar. */
+	reload: () => Promise<boolean>;
 	user: { name: string; email: string };
 };
 
@@ -21,7 +22,8 @@ export function PanelProvider({
 	children,
 }: {
 	establishments: EstablishmentProps[];
-	reload: () => Promise<void>;
+	/** true si se pudo actualizar. */
+	reload: () => Promise<boolean>;
 	user: PanelValue["user"];
 	children: ReactNode;
 }) {

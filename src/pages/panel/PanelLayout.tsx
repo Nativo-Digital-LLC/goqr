@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
@@ -42,24 +42,30 @@ export default function PanelLayout() {
 	const [establishments, setEstablishments] = useState<EstablishmentProps[] | null>(null);
 
 	const [failed, setFailed] = useState(false);
+	const loaded = useRef(false);
 
-	const load = useCallback(async () => {
+	const load = useCallback(async (): Promise<boolean> => {
 		setFailed(false);
 		await auth.authStateReady();
 		const user = auth.currentUser;
 		if (!user) {
 			navigate("/login", { replace: true });
-			return;
+			return true;
 		}
 		try {
 			const list = (await getEstablishmentsByUserId(user.uid)).filter((e) => !e.deletedAt);
-			if (postAuthPath(list) === "/onboarding") {
+			// Con varios establecimientos el dueño se queda en el panel (el orden de la lista no está garantizado).
+			if (list.length < 2 && postAuthPath(list) === "/onboarding") {
 				navigate("/onboarding", { replace: true });
-				return;
+				return true;
 			}
+			loaded.current = true;
 			setEstablishments(list);
+			return true;
 		} catch {
-			setFailed(true);
+			// Ya cargado: se conserva el panel (y lo que el dueño esté editando).
+			if (!loaded.current) setFailed(true);
+			return false;
 		}
 	}, [navigate]);
 
@@ -72,7 +78,7 @@ export default function PanelLayout() {
 		return (
 			<div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background">
 				<p className="text-[15px] font-semibold">No pudimos cargar tu panel.</p>
-				<Button onClick={load}>Reintentar</Button>
+				<Button onClick={() => load()}>Reintentar</Button>
 			</div>
 		);
 	}

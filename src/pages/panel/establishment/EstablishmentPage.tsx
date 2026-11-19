@@ -66,6 +66,8 @@ export default function EstablishmentPage() {
 	const [banner, setBanner] = useState<File | null | undefined>(undefined);
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [reloading, setReloading] = useState(false);
+	const [checking, setChecking] = useState(false); // comprobando el enlace nuevo
+	const [pending, setPending] = useState<FormValues | null>(null); // valores ya validados que esperan confirmación
 
 	useEffect(() => {
 		if (saveError) toast.error("No pudimos guardar los cambios. Intenta de nuevo.");
@@ -79,7 +81,7 @@ export default function EstablishmentPage() {
 			name: z.string().trim().min(1, "Escribe el nombre del establecimiento."),
 			domain: z.string(),
 			description: z.string(),
-			mainHexColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Escribe un color válido, por ejemplo #C2381F."),
+			mainHexColor: lenient(est.mainHexColor, (v) => /^#[0-9A-Fa-f]{6}$/.test(v), "Escribe un color válido, por ejemplo #C2381F."),
 			exactColor: z.boolean(),
 			address: z.string(),
 			addressLink: lenient(est.addressLink, (v) => { try { return /^https?:$/.test(new URL(v.trim()).protocol); } catch { return false; } }, "Escribe un enlace que empiece con https://"),
@@ -112,7 +114,7 @@ export default function EstablishmentPage() {
 
 	const values = watch();
 	const dirty = logo !== undefined || banner !== undefined || Object.keys(changedFields(est, toChangeValues(values, est))).length > 0;
-	const busy = saving || reloading;
+	const busy = saving || reloading || checking;
 
 	const checkSlug = useCallback(
 		async (slug: string) => {
@@ -135,9 +137,9 @@ export default function EstablishmentPage() {
 		await checkSlug(raw);
 	};
 
-	const doSave = () => {
+	const doSave = (v: FormValues) => {
 		setConfirmOpen(false);
-		const changes = changedFields(est, toChangeValues(form.getValues(), est));
+		const changes = changedFields(est, toChangeValues(v, est));
 		save(
 			{
 				...changes,
@@ -148,10 +150,10 @@ export default function EstablishmentPage() {
 			async () => {
 				setReloading(true);
 				try {
-					await reload();
-					toast.success("Guardado");
-				} catch {
-					toast.error("Guardamos los cambios, pero no pudimos actualizar la página. Recarga la página.");
+					if (await reload()) {
+						if (changes.domain) localStorage.removeItem(`goqr:qr-downloaded:${est.id}`); // el QR impreso ya no sirve
+						toast.success("Guardado");
+					} else toast.error("Guardamos los cambios, pero no pudimos actualizar la página. Recarga la página.");
 				} finally {
 					setReloading(false);
 				}
@@ -161,10 +163,16 @@ export default function EstablishmentPage() {
 
 	const onSubmit = handleSubmit(async (v) => {
 		if (v.domain !== est.domain) {
-			if (!(await checkSlug(v.domain))) return;
+			setChecking(true);
+			try {
+				if (!(await checkSlug(v.domain))) return;
+			} finally {
+				setChecking(false);
+			}
+			setPending(v);
 			return setConfirmOpen(true);
 		}
-		doSave();
+		doSave(v);
 	});
 
 	return (
@@ -220,7 +228,7 @@ export default function EstablishmentPage() {
 				body="El QR impreso dejará de funcionar y tendrás que imprimirlo de nuevo."
 				confirmLabel="Cambiar enlace"
 				loading={busy}
-				onConfirm={doSave}
+				onConfirm={() => pending && doSave(pending)}
 				onOpenChange={setConfirmOpen}
 			/>
 		</>
