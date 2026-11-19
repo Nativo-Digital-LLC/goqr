@@ -9,7 +9,7 @@
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"test": "vitest run --passWithNoTests",
-		"test:rules": "firebase emulators:exec --only firestore,storage --project demo-goqr \"vitest run tests/rules\""
+		"test:rules": "firebase emulators:exec --only firestore,storage --project demo-goqr \"vitest run --config vitest.rules.config.ts --passWithNoTests\""
 	},
 	"dependencies": {
 		"@ant-design/icons": "^5.5.1",
