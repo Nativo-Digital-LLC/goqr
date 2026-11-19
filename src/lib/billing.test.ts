@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Timestamp } from 'firebase/firestore';
-import { billingView, statusLabel, transferReference } from './billing';
+import { billingView, billsFor, billStatus, formatMoney, statusLabel, transferReference } from './billing';
 import { EstablishmentProps } from '../types/Establishment';
 
 const est = (billing?: EstablishmentProps['billing']) => ({ billing }) as EstablishmentProps;
@@ -37,5 +37,29 @@ describe('statusLabel', () => {
 		expect(statusLabel('paused')).toBe('Pausado');
 		expect(statusLabel('canceled')).toBe('Cancelado');
 		expect(statusLabel('legacy')).toBe('Cliente anterior');
+	});
+});
+
+describe('formatMoney', () => {
+	it('RD$ por defecto y US$ para usd', () => {
+		expect(formatMoney(2520)).toBe('RD$2,520');
+		expect(formatMoney(11000, 'DOP')).toBe('RD$11,000');
+		expect(formatMoney(42, 'usd')).toBe('US$42');
+		expect(formatMoney(185, 'USD')).toBe('US$185');
+	});
+});
+
+describe('billStatus', () => {
+	it('pagada, fallida (con factura de Stripe) o pendiente', () => {
+		expect(billStatus({ isPayed: true })).toBe('Pagada');
+		expect(billStatus({ isPayed: false, stripeInvoiceId: 'in_1' })).toBe('Fallida');
+		expect(billStatus({ isPayed: false })).toBe('Pendiente');
+	});
+});
+
+describe('billsFor', () => {
+	it('incluye las del establecimiento y las viejas sin establecimiento', () => {
+		const r = billsFor([{ establishmentId: 'a' }, { establishmentId: 'b' }, {}], 'a');
+		expect(r).toEqual([{ establishmentId: 'a' }, {}]);
 	});
 });

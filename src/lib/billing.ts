@@ -22,3 +22,18 @@ const LABELS: Record<Status, string> = {
 };
 
 export const statusLabel = (status: Status) => LABELS[status];
+
+// Firestore devuelve Timestamp o Date según el origen.
+export const toDate = (d: unknown) =>
+	d && typeof (d as { toDate?: unknown }).toDate === 'function' ? (d as { toDate(): Date }).toDate() : new Date(d as string);
+
+export const formatMoney = (amount: number, currency?: string) =>
+	`${currency?.toLowerCase() === 'usd' ? 'US$' : 'RD$'}${amount.toLocaleString('es-DO')}`;
+
+export type BillStatus = 'Pagada' | 'Pendiente' | 'Fallida';
+export const billStatus = (b: { isPayed: boolean; stripeInvoiceId?: string }): BillStatus =>
+	b.isPayed ? 'Pagada' : b.stripeInvoiceId ? 'Fallida' : 'Pendiente';
+
+// Las facturas viejas no tienen establecimiento: se muestran en todos.
+export const billsFor = <T extends { establishmentId?: string }>(bills: T[], establishmentId: string) =>
+	bills.filter((b) => !b.establishmentId || b.establishmentId === establishmentId);

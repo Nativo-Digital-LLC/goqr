@@ -52,6 +52,13 @@ export default function HomePage() {
 		<>
 			<PanelHeader title="Resumen" description="Lo que falta para dejar tu menú listo." />
 
+			{(e.billing?.status === "paused" || e.billing?.status === "canceled") && (
+				<div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-error-bg px-5 py-4">
+					<span className="text-[15px] font-bold">Tu menú está pausado.</span>
+					<Button asChild><Link to="/dashboard/billing">Elegir plan</Link></Button>
+				</div>
+			)}
+
 			{days !== null && (
 				<div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-warning-bg px-5 py-4">
 					<div className="flex flex-col gap-0.5">
