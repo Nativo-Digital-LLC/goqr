@@ -4,7 +4,7 @@ import LandingPage from "./pages/landing/LandingPage";
 import LoginPage from "./pages/account/LoginPage";
 import ForgotPasswordPage from "./pages/account/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/account/ResetPasswordPage";
-import RegisterPage from "./pages/auth/register";
+import RegisterPage from "./pages/account/RegisterPage";
 import MenuPage from "./pages/menu";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import MenusPage from "./pages/dashboard/Menus";
