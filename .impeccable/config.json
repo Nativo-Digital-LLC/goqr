@@ -209,6 +209,402 @@
         ],
         "createdAt": "2026-11-19T13:55:26.854Z",
         "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/AdminClients.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.223Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/AdminTransfers.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.273Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/AdminTransfers.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.291Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/BillingActive.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.343Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/BillingPlan.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.392Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/BillingTransfer.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.442Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/design/DesignSystem.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.517Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "em-dash-overuse",
+        "value": "*",
+        "files": [
+          "docs/design/DesignSystem.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.531Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "docs/design/DesignSystem.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.545Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/DesignSystem.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.559Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/DesignSystem.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.572Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "docs/design/DirB.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.614Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          "docs/design/DirB.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.627Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "docs/design/DirB.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.640Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/DirB.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.653Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "hard-offset-shadow",
+        "value": "*",
+        "files": [
+          "docs/design/DirC.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.694Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "docs/design/DirC.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.706Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/DirC.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.720Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailAdminNewTransfer.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.759Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailPaymentFailed.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.797Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/EmailPaymentReceived.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.837Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailPaymentReceived.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.851Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailResetPassword.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.889Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/EmailTransferApproved.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.929Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailTransferApproved.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.943Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailTransferReceived.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:33.981Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailTrialEnded.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.019Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailTrialEnding.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.059Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailVerify.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.097Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailWeeklyStats.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.138Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/EmailWelcome.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.178Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          "docs/design/Landing.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.252Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/Landing.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.265Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/design/Landing.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.279Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          "docs/design/LandingMobile.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.324Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/LandingMobile.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.338Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/Login.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.380Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/design/Login.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.394Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/design/Login.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.408Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "docs/design/Main.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.452Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          "docs/design/Main.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.466Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/Main.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.480Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          "docs/design/Main.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.494Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/design/Onboarding4.dc.html"
+        ],
+        "createdAt": "2026-11-19T14:19:34.780Z",
+        "reason": "Claude: reference copy of the Claude Design canvas the user approved; not shipped code"
       }
     ]
   }

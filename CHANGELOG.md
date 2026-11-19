@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.0 · 2026-11-19 · Relanzamiento, fase 1 (landing, cuenta y onboarding)
+
+### Nuevo
+- Landing nueva con la marca de GoQR: hero, cómo funciona, objeciones, celular y computadora, precios (RD$300 / RD$210 anual / RD$11,000), preguntas frecuentes y cierre. Responsive.
+- Ingresar, recuperar contraseña, nueva contraseña y crear cuenta con el diseño nuevo (react-hook-form + zod, errores de Firebase en español, medidor de contraseña).
+- Verificar correo con estados pendiente, verificado, vencido y error. No bloquea el uso.
+- Onboarding de 4 pasos en `/onboarding`: datos del negocio con enlace propio y comprobación de disponibilidad, marca (logo, portada, color con aviso de contraste), primer plato y QR listo para descargar o compartir. Retoma donde quedó y nunca crea un segundo establecimiento.
+- Los enlaces de correo de Firebase se atienden según `mode` en `/verify`, `/reset-password` y las rutas viejas.
+
+### Cambios
+- Después de ingresar: sin establecimiento → `/onboarding`; con establecimiento → `/dashboard`.
+- La sesión guardada en el navegador se reconcilia con Firebase al iniciar.
+- Google guarda la sesión en el store.
+- `createEstablishment` devuelve el id y acepta `type`, `onboardingStep` y `exactColor`. `getEstablishmentsByUserId` incluye `id`. `createCategory` devuelve el id.
+- Se eliminan la landing, el login, el registro y la verificación viejos (`pages/home`, `pages/containers`, `pages/auth`, `pages/verify-email`).
+
 ## 0.6.0 · 2026-11-19 · Relanzamiento, fase 0 (base y seguridad)
 
 ### Seguridad
