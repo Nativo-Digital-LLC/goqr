@@ -10,7 +10,11 @@ import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/dm-sans';
 import './index.css'
 import router from './router';
+import { Toaster } from '@/components/ui/sonner';
 
 createRoot(document.getElementById('root')!).render(
-	<RouterProvider router={router} />
+	<>
+		<RouterProvider router={router} />
+		<Toaster />
+	</>
 )

@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import LandingPage from "./pages/landing/LandingPage";
-import LoginPage from "./pages/auth/login";
-import RequestResetPasswordPage from "./pages/auth/request-reset-password";
-import ChangePasswordAfterRequestPage from "./pages/auth/change-password-after-request";
+import LoginPage from "./pages/account/LoginPage";
+import ForgotPasswordPage from "./pages/account/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/account/ResetPasswordPage";
 import RegisterPage from "./pages/auth/register";
 import MenuPage from "./pages/menu";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
@@ -34,12 +34,21 @@ const router = createBrowserRouter([
 		element: <LoginPage />,
 	},
 	{
+		path: "/forgot-password",
+		element: <ForgotPasswordPage />,
+	},
+	{
+		path: "/reset-password",
+		element: <ResetPasswordPage />,
+	},
+	// Rutas viejas: los enlaces de correo existentes siguen funcionando con su query.
+	{
 		path: "/request-reset-password",
-		element: <RequestResetPasswordPage />,
+		element: <ForgotPasswordPage />,
 	},
 	{
 		path: "/change-password-after-request",
-		element: <ChangePasswordAfterRequestPage />,
+		element: <ResetPasswordPage />,
 	},
 	{
 		path: "/register",

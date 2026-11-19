@@ -34,6 +34,7 @@ export interface EstablishmentProps {
 	showFoodAllergyAndRiskDisclaimer: boolean;
 	enableMultiLanguage: boolean;
 	isActive: boolean;
+	onboardingStep?: number | null;
 	createdAt: Timestamp;
 	updatedAt: Timestamp;
 	deletedAt: Timestamp | null;
