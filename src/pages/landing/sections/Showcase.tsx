@@ -4,7 +4,6 @@ import { ExternalLink } from "lucide-react";
 const REAL_MENUS = [
 	{ name: "Grey Café", slug: "greycafe", image: "/showcase/greycafe.webp", height: 1688 },
 	{ name: "La Roca Restaurant", slug: "la-roca-restaurant", image: "/showcase/la-roca.webp", height: 1400 },
-	{ name: "El Catador", slug: "el-catador", image: "/showcase/el-catador.webp", height: 1400 },
 ];
 
 export function Showcase() {
@@ -16,7 +15,7 @@ export function Showcase() {
 				</h2>
 				<p className="text-cacao-2">Entra a uno y verás exactamente lo que ven tus clientes.</p>
 			</div>
-			<ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			<ul className="mx-auto grid w-full max-w-3xl gap-6 sm:grid-cols-2">
 				{REAL_MENUS.map((m) => (
 					<li key={m.slug}>
 						<a
