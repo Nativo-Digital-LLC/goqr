@@ -21,10 +21,6 @@ describe("authErrorMessage", () => {
 		expect(authErrorMessage({ code })).toBe(message);
 	});
 
-	it("trata un 401 de Appwrite como credenciales incorrectas", () => {
-		expect(authErrorMessage({ isAxiosError: true, response: { status: 401 } })).toBe(BAD_LOGIN);
-	});
-
 	it("muestra el mensaje en español de los errores de Functions", () => {
 		const msg = "Espera un minuto antes de pedir otro correo.";
 		expect(authErrorMessage({ code: "functions/resource-exhausted", message: msg })).toBe(msg);

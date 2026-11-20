@@ -7,66 +7,23 @@ import {
 	updateProfile,
 	User
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { confirmPasswordReset } from 'firebase/auth';
-import axios from 'axios';
 
-import { auth, googleProvider, appleProvider, db, functions } from '../utils/firebase';
+import { auth, googleProvider, appleProvider, functions } from '../utils/firebase';
 import { SessionProps } from '../types/Session';
-
-const APPWRITE_ENDPOINT = 'https://appwrite.nd.com.do/v1';
-const APPWRITE_PROJECT_ID = '66f768e4001537551adf';
 
 export async function createAccount(name: string, email: string, password: string) {
 	const { user } = await createUserWithEmailAndPassword(auth, email, password);
 	if (name) {
 		await updateProfile(user, { displayName: name });
 	}
-	// Registrar como migrado para evitar el check de Appwrite. El correo de verificación lo envía el trigger onUserCreated.
-	await setDoc(doc(db, 'migrated-users', email.toLowerCase()), {
-		migratedAt: new Date().toISOString(),
-		email: email.toLowerCase()
-	});
-
+	// El correo de verificación lo envía el trigger onUserCreated.
 	return user;
 }
 
 export async function login(email: string, password: string) {
-	const migrationDocRef = doc(db, 'migrated-users', email.toLowerCase());
-	const migrationDoc = await getDoc(migrationDocRef);
-
-	if (migrationDoc.exists()) {
-		// Ya fue migrado o creado acá, inicia sesión directo con Firebase
-		const { user } = await signInWithEmailAndPassword(auth, email, password);
-		return user;
-	}
-
-	// No migrado, intentar con Appwrite
-	await axios.post(
-		`${APPWRITE_ENDPOINT}/account/sessions/email`,
-		{ email, password },
-		{
-			headers: {
-				'Content-Type': 'application/json',
-				'X-Appwrite-Project': APPWRITE_PROJECT_ID,
-			},
-		}
-	);
-
-	// Si Appwrite acepta, migramos la contraseña en Firebase llamando a la Cloud Function
-	const updateUserPassword = httpsCallable(functions, 'updateUserPassword');
-	await updateUserPassword({ email, newPassword: password });
-
-	// Iniciamos sesión con la nueva contraseña en Firebase
 	const { user } = await signInWithEmailAndPassword(auth, email, password);
-
-	// Lo marcamos como migrado
-	await setDoc(migrationDocRef, {
-		migratedAt: new Date().toISOString(),
-		email: email.toLowerCase()
-	});
-
 	return user;
 }
 
@@ -122,8 +79,7 @@ export async function sendResetPasswordEmail(email: string) {
 }
 
 /**
- * Cambia la contraseña, inicia sesión en Firebase y marca la cuenta como migrada: si no, un usuario
- * de Appwrite sin marca caería en la ruta de Appwrite al ingresar y su nueva contraseña no serviría.
+ * Cambia la contraseña e inicia sesión.
  * Devuelve null si la contraseña cambió pero no se pudo iniciar sesión.
  */
 export async function resetPasswordWithSecret(oobCode: string, email: string, newPassword: string): Promise<User | null> {
@@ -135,9 +91,5 @@ export async function resetPasswordWithSecret(oobCode: string, email: string, ne
 		console.error('No se pudo iniciar sesión tras restablecer la contraseña', error);
 		return null;
 	}
-	await setDoc(doc(db, 'migrated-users', email.toLowerCase()), {
-		migratedAt: new Date().toISOString(),
-		email: email.toLowerCase()
-	}).catch((error) => console.error('No se pudo marcar la cuenta como migrada', error));
 	return user;
 }

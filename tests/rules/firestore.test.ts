@@ -102,33 +102,10 @@ describe('establishments', () => {
 	});
 });
 
-describe('migrated-users (Foco 1)', () => {
-	const ana = () => env.authenticatedContext('ana', { email: 'Ana@Correo.com' }).firestore();
-
-	it('correo con mayúsculas escribe su doc en minúsculas', async () => {
-		await assertSucceeds(setDoc(doc(ana(), 'migrated-users/ana@correo.com'), { migratedAt: 'x' }));
-	});
-
-	it('no escribe el doc de otro correo', async () => {
-		await assertFails(setDoc(doc(ana(), 'migrated-users/otro@correo.com'), { migratedAt: 'x' }));
-	});
-
-	it('no borra su propio marker', async () => {
-		await env.withSecurityRulesDisabled(async (ctx) => {
-			await setDoc(doc(ctx.firestore(), 'migrated-users/ana@correo.com'), { migratedAt: 'x' });
-		});
-		await assertFails(deleteDoc(doc(ana(), 'migrated-users/ana@correo.com')));
-	});
-
-	it('actualiza su propio marker', async () => {
-		await env.withSecurityRulesDisabled(async (ctx) => {
-			await setDoc(doc(ctx.firestore(), 'migrated-users/ana@correo.com'), { migratedAt: 'x' });
-		});
-		await assertSucceeds(setDoc(doc(ana(), 'migrated-users/ana@correo.com'), { migratedAt: 'y' }));
-	});
-
-	it('anónimo lee migrated-users (login lo consulta antes de autenticarse)', async () => {
-		await assertSucceeds(getDoc(doc(env.unauthenticatedContext().firestore(), 'migrated-users/ana@correo.com')));
+describe('migrated-users (retirado con Appwrite)', () => {
+	it('nadie puede escribirlo', async () => {
+		const ana = env.authenticatedContext('ana', { email: 'ana@correo.com' }).firestore();
+		await assertFails(setDoc(doc(ana, 'migrated-users/ana@correo.com'), { migratedAt: 'x' }));
 	});
 });
 
