@@ -27,10 +27,9 @@ function actionsFor(c: AdminClient, now: Date): Action[] {
 	const s = c.billing?.status;
 	const end = clientEnd(c);
 	if (s === "active") return ["pause"];
-	if (s === "trialing") return ["extendTrial"];
-	if (s === "past_due") return ["markPaid"];
+	if (s === "trialing") return ["extendTrial", "markPaid"];
 	if (s === "paused") return end && end > now ? ["reactivate", "markPaid"] : ["markPaid"];
-	return [];
+	return ["markPaid"]; // past_due, sin billing, legacy o canceled: el servidor acepta cualquier estado
 }
 
 function Metric({ label, value }: { label: string; value: string | number }) {
@@ -143,7 +142,7 @@ export default function AdminClientsPage() {
 										<div className="text-[12px] text-muted-foreground">{c.ownerEmail}</div>
 									</td>
 									<td className="px-2 py-2">{PLANS.find((p) => p.id === b?.plan)?.name ?? "—"}</td>
-									<td className="px-2 py-2">{b?.status ? (b.status === "past_due" ? "Vencido" : statusLabel(b.status)) : "—"}</td>
+									<td className="px-2 py-2">{b?.status ? (b.status === "past_due" ? "Vencido" : statusLabel(b.status)) : "Sin plan"}</td>
 									<td className="px-2 py-2">{b?.status === "legacy" ? "—" : date(clientEnd(c))}</td>
 									<td className="px-2 py-2">{b?.method ? METHODS[b.method] : "—"}</td>
 									<td className="px-2 py-2">{date(c.lastSignIn ? toDate(c.lastSignIn) : null)}</td>
