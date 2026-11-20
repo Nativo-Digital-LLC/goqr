@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.0.0 · 2026-11-20 · Cierre del relanzamiento
+
+### Nuevo
+- Imágenes comprimidas: toda imagen subida se convierte a WebP (máximo 2000 px) en el servidor y reemplaza a la original. Un script aplica la misma compresión a las imágenes existentes (muestra visual, respaldo y limpieza de huérfanos).
+- Panel de admin con métricas: clientes con MRR, filtros, vencimientos y acciones (por ejemplo, Marcar pagado).
+
+### Arreglos
+- Meilisearch se indexa desde el servidor (trigger sobre `products`); el cliente solo usa una clave de búsqueda.
+- Marcar pagado funciona para clientes sin plan, legacy o cancelados.
+- Al restablecer la contraseña se entra directo a la cuenta.
+
+### Cambios
+- Se retira Appwrite: se elimina el login con Appwrite y el marcador `migrated-users`.
+
+## 0.10.0 · 2026-11-19 · Correos
+
+### Nuevo
+- Correos de GoQR: bienvenida, verificación de correo y restablecer contraseña (reemplazan los de Firebase).
+- Recibos de pago, aviso de pago fallido y aviso de vencimiento.
+- Menú en pausa: el menú público se pausa cuando vence el plan y el cliente recibe el aviso.
+
+## 0.9.0 · 2026-11-19 · Pagos
+
+### Nuevo
+- Pago con tarjeta por Stripe: Checkout, portal del cliente, webhook y estado del plan.
+- Pago por transferencia con comprobante: datos bancarios RD y EE. UU., subida del comprobante y referencia por establecimiento.
+- Administración: revisión de transferencias (aprobar o rechazar con motivo) y lista de clientes.
+- Páginas de pago completado y cancelado.
+- Facturas privadas y Plan y pagos en el panel.
+
+### Cambios
+- Reglas de Firestore para transferencias y facturación; solo el servidor escribe el estado del plan.
+
 ## 0.8.0 · 2026-11-19 · Relanzamiento, fases 2 y 3 (menú público y panel nuevos)
 
 ### Nuevo
