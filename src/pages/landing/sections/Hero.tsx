@@ -3,7 +3,6 @@ import { PLANS, TRIAL_DAYS } from "@/constants/plans";
 
 import { CtaLink } from "./CtaLink";
 import { ctaClass } from "./ctaClass";
-import { PhoneMenu } from "./mockups";
 
 const monthly = PLANS.find((p) => p.id === "monthly")!;
 
@@ -42,7 +41,20 @@ export function Hero() {
 				</div>
 			</div>
 			<div className="flex justify-center">
-				<PhoneMenu />
+				{/* Captura real de un menú publicado (780×1688, 3× del ancho mostrado para que se vea nítida). */}
+				<div className="w-[280px] rounded-[36px] bg-primary p-2.5 shadow-xl">
+					<div className="overflow-hidden rounded-[28px] bg-crema">
+						<img
+							src="/showcase/greycafe.webp"
+							width={780}
+							height={1688}
+							loading="eager"
+							decoding="async"
+							alt="Menú digital real de Grey Café abierto en un celular"
+							className="block h-auto w-full"
+						/>
+					</div>
+				</div>
 			</div>
 		</section>
 	);

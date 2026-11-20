@@ -13,10 +13,10 @@ export default function LandingPage() {
 	return (
 		<MarketingLayout>
 			<Hero />
+			<Showcase />
 			<SocialProof />
 			<HowItWorks />
 			<Objections />
-			<Showcase />
 			<Pricing />
 			<Faq />
 			<FinalCta />
