@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Timestamp } from 'firebase/firestore';
-import { billingView, billsFor, billStatus, formatMoney, statusLabel, toDate, transferReference } from './billing';
+import { billingView, billsFor, billStatus, effectivePrice, formatMoney, monthlyDop, statusLabel, toDate, transferReference } from './billing';
 import { EstablishmentProps } from '../types/Establishment';
 
 const est = (billing?: EstablishmentProps['billing']) => ({ billing }) as EstablishmentProps;
@@ -42,10 +42,31 @@ describe('statusLabel', () => {
 
 describe('formatMoney', () => {
 	it('RD$ por defecto y US$ para usd', () => {
-		expect(formatMoney(2520)).toBe('RD$2,520');
+		expect(formatMoney(4800)).toBe('RD$4,800');
 		expect(formatMoney(11000, 'DOP')).toBe('RD$11,000');
 		expect(formatMoney(42, 'usd')).toBe('US$42');
 		expect(formatMoney(185, 'USD')).toBe('US$185');
+	});
+});
+
+describe('effectivePrice', () => {
+	const legacy = { priceLock: { plan: 'monthly' as const, dop: 300, usd: 5 } };
+	it('sin precio congelado: lista (clientes nuevos pagan 500)', () => {
+		expect(effectivePrice(undefined, 'monthly')).toEqual({ plan: 'monthly', dop: 500, usd: 5 });
+		expect(effectivePrice({}, 'annual')).toEqual({ plan: 'annual', dop: 4800, usd: 42 });
+	});
+	it('legacy conserva 300 en su plan; otro plan va a lista', () => {
+		expect(effectivePrice(legacy, 'monthly').dop).toBe(300);
+		expect(effectivePrice(legacy, 'annual').dop).toBe(4800);
+	});
+	it('un lock mal formado se ignora', () => {
+		expect(effectivePrice({ priceLock: { plan: 'monthly', dop: 0, usd: 5 } }, 'monthly').dop).toBe(500);
+		expect(effectivePrice({ priceLock: { plan: 'monthly', dop: 300 } }, 'monthly').dop).toBe(500);
+	});
+	it('monthlyDop para MRR', () => {
+		expect(monthlyDop(legacy, 'monthly')).toBe(300);
+		expect(monthlyDop(undefined, 'annual')).toBe(400);
+		expect(monthlyDop(undefined, 'lifetime')).toBe(0);
 	});
 });
 

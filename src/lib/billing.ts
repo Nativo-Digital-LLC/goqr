@@ -1,6 +1,21 @@
+import { PLANS, PlanId } from '../constants/plans';
 import { EstablishmentProps } from '../types/Establishment';
 
 type Status = NonNullable<NonNullable<EstablishmentProps['billing']>['status']>;
+
+export type EffectivePrice = { plan: PlanId; dop: number; usd: number };
+
+// Misma regla que Functions (plans.effectivePrice): el precio congelado del cliente si es del mismo plan; si no, el de lista.
+export function effectivePrice(billing: { priceLock?: unknown } | null | undefined, plan: PlanId): EffectivePrice {
+	const l = billing?.priceLock as Partial<EffectivePrice> | null | undefined;
+	if (l && l.plan === plan && Number.isFinite(l.dop) && l.dop! > 0 && Number.isFinite(l.usd) && l.usd! > 0) return { plan, dop: l.dop!, usd: l.usd! };
+	const p = PLANS.find((x) => x.id === plan)!;
+	return { plan, dop: p.priceDop, usd: p.priceUsd };
+}
+
+// Equivalente mensual para MRR: anual / 12, de por vida 0.
+export const monthlyDop = (billing: { priceLock?: unknown } | null | undefined, plan: PlanId) =>
+	plan === 'lifetime' ? 0 : plan === 'annual' ? Math.round(effectivePrice(billing, plan).dop / 12) : effectivePrice(billing, plan).dop;
 
 // Misma regla que Functions.
 export const transferReference = (id: string) => 'GOQR-' + id.slice(0, 6).toUpperCase();

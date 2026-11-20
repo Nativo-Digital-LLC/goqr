@@ -10,9 +10,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BANK_ACCOUNTS } from "@/constants/bankAccounts";
 import { PLANS, PlanId } from "@/constants/plans";
 import { useSubmitTransfer } from "@/hooks/useBilling";
-import { formatMoney, transferReference } from "@/lib/billing";
+import { effectivePrice, formatMoney, transferReference } from "@/lib/billing";
 import { parsePrice } from "@/lib/price";
 import { getTransfers } from "@/services/billing";
+import { EstablishmentProps } from "@/types/Establishment";
 import { TransferProps } from "@/types/Transfer";
 import { usePanel } from "../PanelContext";
 import { PanelHeader } from "../components/PanelHeader";
@@ -63,6 +64,7 @@ export default function TransferPage() {
 					establishmentId={e.id}
 					establishmentName={e.name}
 					plan={plan.id}
+					billing={e.billing}
 					rejectedReason={rejected ? rejected.reason ?? "" : null}
 					onSent={() => { setTransfers(null); setAttempt((n) => n + 1); }}
 				/>
@@ -94,14 +96,16 @@ function StatusLine() {
 	);
 }
 
-function TransferForm({ establishmentId, establishmentName, plan: planId, rejectedReason, onSent }: {
+function TransferForm({ establishmentId, establishmentName, plan: planId, billing, rejectedReason, onSent }: {
 	establishmentId: string;
 	establishmentName: string;
 	plan: PlanId;
+	billing: EstablishmentProps["billing"];
 	rejectedReason: string | null;
 	onSent: () => void;
 }) {
 	const plan = PLANS.find((p) => p.id === planId)!;
+	const price = effectivePrice(billing, planId); // precio congelado del cliente o el de lista
 	const [submit, sending] = useSubmitTransfer();
 	const [file, setFile] = useState<File | null>(null);
 	const [date, setDate] = useState("");
@@ -152,11 +156,11 @@ function TransferForm({ establishmentId, establishmentName, plan: planId, reject
 					<h2 id="paso1" className="text-lg font-bold">1. Transfiere a una de estas cuentas</h2>
 					<div className="grid gap-3 sm:grid-cols-2">
 						<dl className="rounded-xl bg-secondary p-4 text-[15px]">
-							<dt className="font-bold">RD$ · {formatMoney(plan.priceDop, "DOP")}</dt>
+							<dt className="font-bold">RD$ · {formatMoney(price.dop, "DOP")}</dt>
 							<dd>{dop.bank} · {dop.type}</dd><dd>{dop.number}</dd><dd>{dop.holder}</dd><dd>RNC {dop.rnc}</dd>
 						</dl>
 						<dl className="rounded-xl bg-secondary p-4 text-[15px]">
-							<dt className="font-bold">US$ · {formatMoney(plan.priceUsd, "USD")}</dt>
+							<dt className="font-bold">US$ · {formatMoney(price.usd, "USD")}</dt>
 							<dd>{usd.bank}</dd><dd>Cuenta corriente {usd.account}</dd><dd>ABA {usd.routing}</dd><dd>{usd.holder}</dd>
 						</dl>
 					</div>
@@ -225,7 +229,7 @@ function TransferForm({ establishmentId, establishmentName, plan: planId, reject
 				<h2 className="text-lg font-bold">Resumen</h2>
 				<p className="text-[15px]">{establishmentName}</p>
 				<p className="text-[15px]">Plan {plan.name.toLowerCase()}</p>
-				<p className="text-2xl font-extrabold">{formatMoney(plan.priceDop, "DOP")}</p>
+				<p className="text-2xl font-extrabold">{formatMoney(price.dop, "DOP")}</p>
 				<p className="text-sm text-muted-foreground">ITBIS incluido.</p>
 			</aside>
 		</form>

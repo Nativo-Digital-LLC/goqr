@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BANK_ACCOUNTS } from "@/constants/bankAccounts";
 import { PLANS } from "@/constants/plans";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { formatMoney, toDate } from "@/lib/billing";
+import { effectivePrice, formatMoney, toDate } from "@/lib/billing";
 import { AdminClient, listClients, listTransfers, proofUrl, reviewTransfer } from "@/services/admin";
 import { TransferProps } from "@/types/Transfer";
 import { ConfirmDialog } from "../panel/menu/ConfirmDialog";
@@ -46,7 +46,9 @@ function Detail({ t, client, onDone }: { t: TransferProps; client?: AdminClient;
 	}, [t.proofPath, attempt]);
 
 	const plan = PLANS.find((p) => p.id === t.plan)!;
-	const expected = t.currency === "USD" ? plan.priceUsd : plan.priceDop;
+	// Esperado = precio del cliente (congelado si lo tiene), igual que Functions.
+	const price = effectivePrice(client?.billing, t.plan);
+	const expected = t.currency === "USD" ? price.usd : price.dop;
 	const account = t.currency === "USD" ? `US$ · ${BANK_ACCOUNTS.usd.bank}` : `RD$ · ${BANK_ACCOUNTS.dop.bank}`;
 	const finalReason = reason === OTHER ? other.trim() : reason;
 	const pending = t.status === "pending";

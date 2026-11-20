@@ -26,8 +26,17 @@ describe('clientMetrics', () => {
 		expect(m.active).toBe(3);
 		expect(m.trialing).toBe(2);
 	});
-	it('MRR: mensual 300, anual 210, lifetime 0, active y past_due', () => {
-		expect(clientMetrics(list, now).mrrDop).toBe(300 + 210 + 0 + 300);
+	it('MRR con precio de lista: mensual 500, anual 400, lifetime 0, active y past_due', () => {
+		expect(clientMetrics(list, now).mrrDop).toBe(500 + 400 + 0 + 500);
+	});
+	it('MRR usa el precio congelado del cliente (legacy en 300)', () => {
+		const lock = { plan: 'monthly', dop: 300, usd: 5 };
+		const mixed = [
+			c('legacy', b({ status: 'active', plan: 'monthly', priceLock: lock, currentPeriodEnd: days(10) })),
+			c('nuevo', b({ status: 'active', plan: 'monthly', priceLock: { plan: 'monthly', dop: 500, usd: 5 }, currentPeriodEnd: days(10) })),
+			c('cambio', b({ status: 'active', plan: 'annual', priceLock: lock, currentPeriodEnd: days(10) })), // lock de otro plan: lista
+		];
+		expect(clientMetrics(mixed, now).mrrDop).toBe(300 + 500 + 400);
 	});
 	it('vencen esta semana usa trialEndsAt en prueba', () => {
 		expect(clientMetrics(list, now).dueThisWeek).toBe(2); // a y t; pausado y cancelado con fecha próxima no cuentan

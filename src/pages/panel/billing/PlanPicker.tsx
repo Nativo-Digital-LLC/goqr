@@ -5,14 +5,14 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PLANS, PlanId } from "@/constants/plans";
 import { useStartCheckout } from "@/hooks/useBilling";
-import { formatMoney, toDate } from "@/lib/billing";
+import { effectivePrice, formatMoney, toDate } from "@/lib/billing";
 import { trialDaysLeft } from "@/lib/panel";
 import { EstablishmentProps } from "@/types/Establishment";
 
 const SUFFIX: Record<PlanId, string> = { monthly: "/mes", annual: "/año", lifetime: "pago único" };
 const DETAIL: Record<PlanId, string> = {
 	monthly: "Se cobra cada mes. Cancela cuando quieras.",
-	annual: "Equivale a RD$210/mes. Un solo cobro al año.",
+	annual: "Un solo cobro al año.",
 	lifetime: "Pagas una vez y tu menú queda activo para siempre.",
 };
 const choice = (on: boolean) => `relative flex cursor-pointer flex-col gap-1 rounded-2xl border-2 bg-card p-4 text-left has-[:focus-visible]:ring-[3px] has-[:focus-visible]:ring-ring/50 ${on ? "border-brand" : "border-border"}`;
@@ -23,6 +23,8 @@ export function PlanPicker({ establishment: e }: { establishment: EstablishmentP
 	const [startCheckout, loading] = useStartCheckout();
 	const navigate = useNavigate();
 	const selected = PLANS.find((p) => p.id === plan)!;
+	// Lo que este cliente pagaría (precio congelado si es su plan; si no, el de lista).
+	const price = (id: PlanId) => effectivePrice(e.billing, id);
 	const days = e.billing?.status === "trialing" ? trialDaysLeft(e.billing.trialEndsAt, new Date()) : null;
 
 	const proceed = async () => {
@@ -57,9 +59,13 @@ export function PlanPicker({ establishment: e }: { establishment: EstablishmentP
 						<label key={p.id} className={choice(plan === p.id)}>
 							<input type="radio" name="plan" className="sr-only" checked={plan === p.id} onChange={() => setPlan(p.id)} />
 							<span className="text-[15px] font-bold">{p.name}</span>
-							{p.id === "annual" && <span className="text-[13px] font-semibold text-success">Recomendado · ahorras 30%</span>}
-							<span className="text-2xl font-bold">{formatMoney(p.priceDop)} <span className="text-sm font-medium text-muted-foreground">{SUFFIX[p.id]}</span></span>
-							<span className="text-sm text-muted-foreground">{DETAIL[p.id]}</span>
+							{/* Con mensual congelado (p. ej. RD$300) el anual de lista no es ahorro: no se promete. */}
+							{p.id === "annual" && price("monthly").dop * 12 > price("annual").dop && <span className="text-[13px] font-semibold text-success">Recomendado · ahorras 20%</span>}
+							<span className="text-2xl font-bold">{formatMoney(price(p.id).dop)} <span className="text-sm font-medium text-muted-foreground">{SUFFIX[p.id]}</span></span>
+							<span className="text-sm text-muted-foreground">
+								{p.id === "annual" ? `Equivale a ${formatMoney(Math.round(price("annual").dop / 12))}/mes. ` : ""}
+								{DETAIL[p.id]}
+							</span>
 						</label>
 					))}
 				</div>
@@ -84,8 +90,8 @@ export function PlanPicker({ establishment: e }: { establishment: EstablishmentP
 			<div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5">
 				<div className="flex flex-col gap-0.5">
 					<span className="text-sm text-muted-foreground">Total a pagar hoy</span>
-					<span className="text-xl font-bold">{formatMoney(selected.priceDop)} · Plan {selected.name.toLowerCase()}</span>
-					{method === "transfer" && <span className="text-sm text-muted-foreground">o {formatMoney(selected.priceUsd, "usd")} si pagas a la cuenta de EE. UU.</span>}
+					<span className="text-xl font-bold">{formatMoney(price(plan).dop)} · Plan {selected.name.toLowerCase()}</span>
+					{method === "transfer" && <span className="text-sm text-muted-foreground">o {formatMoney(price(plan).usd, "usd")} si pagas a la cuenta de EE. UU.</span>}
 				</div>
 				<Button onClick={proceed} loading={loading}>Continuar al pago</Button>
 			</div>

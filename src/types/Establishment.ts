@@ -46,6 +46,8 @@ export interface EstablishmentProps {
 		currentPeriodEnd?: Timestamp;
 		stripeCustomerId?: string;
 		stripeSubscriptionId?: string;
+		// Precio congelado (lo escriben las Functions al activar). Ausente = precio de lista.
+		priceLock?: { plan: 'monthly' | 'annual' | 'lifetime'; dop: number; usd: number } | null;
 	};
 	type?: EstablishmentType | null;
 	createdAt: Timestamp;

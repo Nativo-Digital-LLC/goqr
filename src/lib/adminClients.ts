@@ -1,10 +1,9 @@
-import { PLANS } from '../constants/plans';
-import { toDate } from './billing';
+import { PLANS, PlanId } from '../constants/plans';
+import { monthlyDop, toDate } from './billing';
 import { AdminClient } from '../services/admin';
 
 const DAY = 86_400_000;
-const price = (id: string) => PLANS.find((p) => p.id === id)!.priceDop;
-const MONTHLY_DOP: Record<string, number> = { monthly: price('monthly'), annual: Math.round(price('annual') / 12), lifetime: 0 };
+const isPlan = (p: unknown): p is PlanId => PLANS.some((x) => x.id === p);
 
 const endOf = (c: AdminClient) => {
 	const b = c.billing;
@@ -20,7 +19,8 @@ export function clientMetrics(clients: AdminClient[], now: Date) {
 		const b = c.billing;
 		if (b?.status === 'active') active++;
 		if (b?.status === 'trialing') trialing++;
-		if (b?.status === 'active' || b?.status === 'past_due') mrrDop += MONTHLY_DOP[b.plan ?? ''] ?? 0;
+		// MRR con lo que paga cada cliente (precio congelado), no con la lista.
+		if ((b?.status === 'active' || b?.status === 'past_due') && isPlan(b.plan)) mrrDop += monthlyDop(b, b.plan);
 		const end = b?.status === 'trialing' || b?.status === 'active' || b?.status === 'past_due' ? endOf(c) : null;
 		if (end && end >= now && end.getTime() <= now.getTime() + 7 * DAY) dueThisWeek++;
 	}

@@ -7,7 +7,7 @@ import { PLANS } from "@/constants/plans";
 import { Collection } from "@/constants/Collections";
 import { PANEL_ESTABLISHMENT_KEY } from "@/constants/panel";
 import { AuthLayout } from "@/layouts/AuthLayout";
-import { formatMoney, toDate } from "@/lib/billing";
+import { effectivePrice, formatMoney, toDate } from "@/lib/billing";
 import { auth, db } from "@/utils/firebase";
 import type { EstablishmentProps } from "@/types/Establishment";
 
@@ -100,7 +100,7 @@ export default function CheckoutResultPage({ result }: { result: "success" | "ca
 			["Establecimiento", e?.name ?? "—"],
 			["Plan", plan?.name ?? "—"],
 			["Próximo cobro", lifetime ? "De por vida" : end ? end.toLocaleDateString("es-DO") : "—"],
-			["Total", plan ? formatMoney(plan.priceDop) : "—"],
+			["Total", plan ? formatMoney(effectivePrice(b, plan.id).dop) : "—"],
 		];
 		body = (
 			<>

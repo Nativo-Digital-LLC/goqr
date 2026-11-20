@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PLANS } from "@/constants/plans";
 import { useOpenPortal } from "@/hooks/useBilling";
-import { formatMoney, statusLabel, toDate } from "@/lib/billing";
+import { effectivePrice, formatMoney, statusLabel, toDate } from "@/lib/billing";
 import { EstablishmentProps } from "@/types/Establishment";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -42,7 +42,7 @@ export function ActivePlan({ establishment: e, past }: { establishment: Establis
 					<h2 id="tu-plan" className="text-lg font-bold">Tu plan</h2>
 					{b.status && <span className="rounded-full bg-secondary px-3 py-1 text-[13px] font-semibold">{statusLabel(b.status)}</span>}
 				</div>
-				<span className="text-xl font-bold">{plan ? `${plan.name} · ${formatMoney(plan.priceDop)}` : "—"}</span>
+				<span className="text-xl font-bold">{plan ? `${plan.name} · ${formatMoney(effectivePrice(b, plan.id).dop)}` : "—"}</span>
 				<dl className="grid gap-3 sm:grid-cols-2">
 					<div>
 						<dt className="text-sm text-muted-foreground">{b.method === "card" && !lifetime ? "Próximo cobro" : "Vence"}</dt>
