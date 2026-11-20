@@ -6,7 +6,8 @@ const DISHES = [
 
 export function MockDish({ name, note, price }: { name: string; note?: string; price: string }) {
 	return (
-		<div className="flex items-center gap-3 rounded-xl border border-border bg-white p-2.5">
+		// Fila plana con divisor (no tarjeta): ya vive dentro del marco del teléfono o de la ventana.
+		<div className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
 			<div className="size-12 shrink-0 rounded-lg bg-[#D9A98A]" aria-hidden="true" />
 			<div className="flex min-w-0 flex-1 flex-col text-sm">
 				<strong className="truncate">{name}</strong>
@@ -41,9 +42,11 @@ export function PhoneMenu({ compact = false }: { compact?: boolean }) {
 						<span className="rounded-full border border-line px-3 py-1.5">Sándwiches</span>
 						<span className="rounded-full border border-line px-3 py-1.5">Desayunos</span>
 					</div>
-					{DISHES.slice(0, compact ? 2 : 3).map((d) => (
-						<MockDish key={d.name} {...d} />
-					))}
+					<div className="flex flex-col">
+						{DISHES.slice(0, compact ? 2 : 3).map((d) => (
+							<MockDish key={d.name} {...d} />
+						))}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -71,7 +74,7 @@ export function DesktopMenu() {
 						</span>
 					))}
 				</div>
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col">
 					{DISHES.map((d) => (
 						<MockDish key={d.name} name={d.name} price={d.price} />
 					))}

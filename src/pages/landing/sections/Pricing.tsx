@@ -56,8 +56,8 @@ function PlanCard({ plan }: { plan: Plan }) {
 			<span className={cn("text-sm text-cacao-2", highlighted && "max-md:text-white")}>{plan.note}</span>
 			<CtaLink
 				to={`/register?plan=${plan.id}`}
-				variant={highlighted ? "primary" : "outline"}
-				className={cn("mt-auto", highlighted && "max-md:bg-platano max-md:text-primary max-md:hover:bg-platano/90")}
+				variant={highlighted ? "featured" : "outline"}
+				className="mt-auto"
 				onClick={() => savePlan(plan.id)}
 			>
 				Empezar gratis
