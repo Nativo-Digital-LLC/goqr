@@ -94,7 +94,7 @@ export function Pricing() {
 						<Building2 className="size-[18px]" aria-hidden="true" />
 						Transferencia a cuenta en RD o EE. UU.
 					</span>
-					<span>Todos los planes incluyen todo.</span>
+					<span>Un solo producto, todo incluido: mensual, anual o de por vida solo cambia cómo pagas.</span>
 				</div>
 			</div>
 		</section>

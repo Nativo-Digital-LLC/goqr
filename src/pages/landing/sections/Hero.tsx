@@ -14,7 +14,7 @@ export function Hero() {
 		<section className="mx-auto grid max-w-[1200px] items-center gap-10 px-5 pt-6 pb-16 md:px-8 md:pt-10 md:pb-24 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14">
 			<div className="flex flex-col items-start gap-5">
 				<span className="-rotate-3 rounded-full bg-platano px-3.5 py-1.5 text-sm font-bold text-primary">
-					Hecho en RD
+					Menú digital QR para restaurantes · Hecho en RD
 				</span>
 				<h1 className="font-display text-[1.75rem] leading-[1.1] font-extrabold tracking-tight text-balance sm:text-4xl md:text-5xl">
 					Tu menú en cada celular, con un solo QR.
@@ -26,7 +26,7 @@ export function Hero() {
 					<span className="font-display text-3xl font-extrabold text-primary">
 						RD${monthly.priceDop.toLocaleString("en-US")}
 					</span>
-					<span>al mes ·</span>
+					<span>al mes, cancela cuando quieras ·</span>
 					<strong className="font-semibold text-primary">{TRIAL_DAYS} días gratis, sin tarjeta</strong>
 				</p>
 				<div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">

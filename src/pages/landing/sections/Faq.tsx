@@ -3,7 +3,19 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 const FAQS = [
 	{
 		q: "¿Tengo que pagar algo para probar?",
-		a: "No. Tienes 30 días gratis con todas las funciones y no te pedimos tarjeta. Al final eliges un plan o tu menú se pausa hasta que lo actives.",
+		a: "No. Tienes 30 días gratis con todas las funciones y no te pedimos tarjeta. Al terminar no se cobra nada sin tu autorización: eliges una forma de pago o tu menú público se pausa hasta que pagues.",
+	},
+	{
+		q: "¿Hay límite de platos o de fotos?",
+		a: "No. Puedes subir todos los platos y fotos que quieras, sin límite.",
+	},
+	{
+		q: "¿Hay planes distintos?",
+		a: "No. Es un solo producto a RD$500 al mes, con todo incluido. Mensual, anual y de por vida son formas de pago, no planes con menos funciones. Cancelas cuando quieras desde tu panel.",
+	},
+	{
+		q: "¿Qué pasa con mi menú y mi QR si dejo de pagar?",
+		a: "El QR es tuyo y nunca cambia: sigue siendo el mismo. Tu menú público se pausa y se reactiva en cuanto pagas de nuevo.",
 	},
 	{
 		q: "Si cambio un precio, ¿tengo que imprimir otro QR?",
@@ -19,7 +31,7 @@ const FAQS = [
 	},
 	{
 		q: "¿Puedo tener varios locales?",
-		a: "Sí. Cada local tiene su propio menú, su QR y su plan, y los manejas todos desde la misma cuenta.",
+		a: "Sí. Cada local tiene su propio menú y su QR, y los manejas todos desde la misma cuenta.",
 	},
 	{
 		q: "¿Y si necesito ayuda?",
