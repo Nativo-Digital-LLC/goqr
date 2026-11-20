@@ -1,6 +1,6 @@
 import { Link2, MapPin, MessageCircle, Phone, Star, ExternalLink } from "lucide-react";
 
-import { descriptionLines, openStatus, reviewHref, socialHref, telHref, whatsappHref } from "@/lib/menu";
+import { descriptionLines, openStatus, reviewHref, socialHref, socialLabel, telHref, whatsappHref } from "@/lib/menu";
 import type { DictionaryProps, Lang } from "@/types/Dictionary";
 import type { EstablishmentProps } from "@/types/Establishment";
 import { LanguageToggle } from "./LanguageToggle";
@@ -15,14 +15,14 @@ type Props = {
 	onLangChange: (l: Lang) => void;
 };
 
-const tile = "flex min-h-11 flex-col items-center gap-1.5 rounded-[14px] bg-muted px-1 py-2.5 text-center text-xs font-semibold text-foreground";
+const tile = "flex min-h-11 min-w-0 flex-col items-center gap-1.5 rounded-[14px] bg-muted px-1 py-2.5 text-center text-xs font-semibold text-foreground";
 
 export const MenuHero = ({ establishment: e, lang, dictionary, color, now, canSwitch, onLangChange }: Props) => {
 	const t = dictionary.menu;
 	const status = openStatus(e.schedules, now);
 	const socials = (e.socialNetworks ?? [])
-		.map((s) => ({ href: socialHref(s), label: s.displayName || s.platform.charAt(0).toUpperCase() + s.platform.slice(1) }))
-		.filter((s): s is { href: string; label: string } => !!s.href);
+		.map((s) => ({ href: socialHref(s), label: socialLabel(s), handle: s.displayName || s.link?.trim() || "" }))
+		.filter((s): s is { href: string; label: string; handle: string } => !!s.href);
 
 	return (
 		<header className="lg:col-start-2 lg:row-start-1 lg:pt-4">
@@ -57,7 +57,7 @@ export const MenuHero = ({ establishment: e, lang, dictionary, color, now, canSw
 					{e.phone && <a href={telHref(e.phone)} className={tile}><Phone className="size-5" aria-hidden="true" />{t.call}</a>}
 					{e.whatsapp && <a href={whatsappHref(e.whatsapp)} target="_blank" rel="noreferrer" className={tile}><MessageCircle className="size-5" aria-hidden="true" />{t.whatsapp}</a>}
 					{socials.map((s) => (
-						<a key={s.href} href={s.href} target="_blank" rel="noreferrer" className={tile}><Link2 className="size-5" aria-hidden="true" />{s.label}</a>
+						<a key={s.href} href={s.href} target="_blank" rel="noreferrer" title={s.handle} aria-label={`${s.label}: ${s.handle}`} className={tile}><Link2 className="size-5 shrink-0" aria-hidden="true" /><span className="w-full min-w-0 truncate text-center">{s.label}</span></a>
 					))}
 				</div>
 				{e.googlePlaceId && (

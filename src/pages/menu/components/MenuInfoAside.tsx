@@ -1,6 +1,6 @@
 import { Link2, MapPin, MessageCircle, Phone } from "lucide-react";
 
-import { dayLabel, mapsEmbedSrc, parseDays, parseHours, socialHref, telHref, whatsappHref } from "@/lib/menu";
+import { dayLabel, mapsEmbedSrc, parseDays, parseHours, socialHref, socialLabel, telHref, whatsappHref } from "@/lib/menu";
 import type { DictionaryProps, Lang } from "@/types/Dictionary";
 import type { EstablishmentProps } from "@/types/Establishment";
 
@@ -20,8 +20,8 @@ export const MenuInfoAside = ({ establishment: e, lang, dictionary, now }: Props
 	const hasSchedule = week.some((r) => r.length);
 	const today = (now.getDay() + 6) % 7;
 	const socials = (e.socialNetworks ?? [])
-		.map((s) => ({ href: socialHref(s), label: s.displayName || s.platform.charAt(0).toUpperCase() + s.platform.slice(1) }))
-		.filter((s): s is { href: string; label: string } => !!s.href);
+		.map((s) => ({ href: socialHref(s), label: socialLabel(s), handle: s.displayName || s.link?.trim() || "" }))
+		.filter((s): s is { href: string; label: string; handle: string } => !!s.href);
 	const hasContact = !!(e.phone || e.whatsapp || socials.length);
 
 	return (
@@ -64,7 +64,7 @@ export const MenuInfoAside = ({ establishment: e, lang, dictionary, now }: Props
 						{e.phone && <a href={telHref(e.phone)} className={link}><Phone className="size-4" aria-hidden="true" />{e.phone}</a>}
 						{e.whatsapp && <a href={whatsappHref(e.whatsapp)} target="_blank" rel="noreferrer" className={link}><MessageCircle className="size-4" aria-hidden="true" />{t.whatsapp}</a>}
 						{socials.map((s) => (
-							<a key={s.href} href={s.href} target="_blank" rel="noreferrer" className={link}><Link2 className="size-4" aria-hidden="true" />{s.label}</a>
+							<a key={s.href} href={s.href} target="_blank" rel="noreferrer" title={s.handle} aria-label={`${s.label}: ${s.handle}`} className={link}><Link2 className="size-4 shrink-0" aria-hidden="true" /><span className="min-w-0 truncate">{s.label}</span></a>
 						))}
 					</div>
 				</section>

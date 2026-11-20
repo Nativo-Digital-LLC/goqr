@@ -126,6 +126,12 @@ export const reviewHref = (placeId: string): string =>
 export const mapsEmbedSrc = (address: string): string =>
 	`https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
+const SOCIAL_LABELS: Record<string, string> = { instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok", x: "X", website: "Sitio" };
+
+export function socialLabel(s: SocialNetworkProps): string {
+	return SOCIAL_LABELS[s.platform] ?? s.platform.charAt(0).toUpperCase() + s.platform.slice(1);
+}
+
 export function socialHref(s: SocialNetworkProps): string | null {
 	const link = s.link?.trim();
 	if (!link) return null;
