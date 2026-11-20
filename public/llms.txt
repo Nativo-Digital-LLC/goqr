@@ -1,0 +1,25 @@
+# GoQR
+
+> GoQR es una plataforma dominicana para crear menús digitales con código QR para restaurantes, que puedes editar cuando quieras sin volver a imprimir.
+
+GoQR está pensado para restaurantes, cafeterías, bares y otros negocios de comida en República Dominicana que quieren dejar de pagar imprenta cada vez que cambian un plato o un precio. El dueño crea su menú, genera un código QR y los clientes lo abren desde el celular, sin instalar nada.
+
+## Cómo funciona
+
+- Crea tu cuenta y registra tu establecimiento.
+- Carga tus categorías y platos con precios desde el panel.
+- Descarga tu código QR y ponlo en mesas, mostrador o redes.
+- Cambia el menú cuando quieras: el QR sigue siendo el mismo.
+
+## Precios
+
+- Mensual: RD$300 al mes.
+- Anual: RD$2,520 al año.
+- De por vida: RD$11,000, pago único.
+- Prueba gratuita de 30 días, sin tarjeta.
+
+## Enlaces
+
+- [Landing de GoQR](https://goqr.com.do/): qué es, cómo funciona y planes.
+- [Términos y condiciones](https://goqr.com.do/terms)
+- [Políticas de privacidad](https://goqr.com.do/privacy-policies)
