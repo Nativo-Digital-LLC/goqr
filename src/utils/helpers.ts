@@ -30,9 +30,9 @@ export function sendConversionEvent(paymentFrequency: PaymentFrequency, attempt 
 	}
 
 	const value = {
-		[PaymentFrequency.Annual]: 2500,
-		[PaymentFrequency.Monthly]: 300,
-		[PaymentFrequency.Never]: 9000
+		[PaymentFrequency.Annual]: 4800,
+		[PaymentFrequency.Monthly]: 500,
+		[PaymentFrequency.Never]: 11000
 	};
 
 	// eslint-disable-next-line prefer-rest-params

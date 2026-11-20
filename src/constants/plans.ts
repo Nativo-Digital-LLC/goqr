@@ -13,17 +13,17 @@ export type Plan = {
 // Precios de lista para clientes NUEVOS. Lo que paga un cliente existente sale de su billing.priceLock
 // (ver effectivePrice en lib/billing); no mostrar ni cobrar estos montos a un cliente sin pasar por ahí.
 export const PLANS: Plan[] = [
-	{ id: "monthly", name: "Mensual", priceDop: 500, priceUsd: 5, perMonthDop: 500, note: "Cancela cuando quieras." },
+	{ id: "monthly", name: "Mensual", priceDop: 500, priceUsd: 9, perMonthDop: 500, note: "Cancela cuando quieras." },
 	{
 		id: "annual",
 		name: "Anual",
 		priceDop: 4800,
-		priceUsd: 42,
+		priceUsd: 86,
 		perMonthDop: 400,
 		note: "RD$4,800 al año, en un solo pago.",
 		badge: "Ahorras 20%",
 	},
-	{ id: "lifetime", name: "De por vida", priceDop: 11000, priceUsd: 185, perMonthDop: 0, note: "Un solo pago. Nunca más una factura." },
+	{ id: "lifetime", name: "De por vida", priceDop: 11000, priceUsd: 190, perMonthDop: 0, note: "Un solo pago. Nunca más una factura." },
 ];
 
 export const TRIAL_DAYS = 30;
