@@ -76,6 +76,10 @@ export function Pricing() {
 						Menos que una impresión de menús.
 					</h2>
 					<p className="text-cacao-2">Empieza con {TRIAL_DAYS} días gratis. Sin tarjeta. ITBIS incluido.</p>
+						<p className="font-semibold text-primary">
+							El precio es por menú: cada local tiene su propio menú, QR y suscripción, y se cobra aparte, con sus
+							propios {TRIAL_DAYS} días gratis.
+						</p>
 				</div>
 				<div className="grid gap-8 md:grid-cols-3">
 					{PLANS.map((p) => (

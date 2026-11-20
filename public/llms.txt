@@ -13,9 +13,9 @@ GoQR está pensado para restaurantes, cafeterías, bares y otros negocios de com
 
 ## Precios
 
-- Mensual: RD$500 al mes.
-- Anual: RD$4,800 al año (equivale a RD$400 al mes, ahorras 20%).
-- De por vida: RD$11,000, pago único.
+- Mensual: RD$500 por menú al mes.
+- Anual: RD$4,800 por menú al año (equivale a RD$400 por menú al mes, ahorras 20%).
+- De por vida: RD$11,000 por menú, pago único.
 - Prueba gratuita de 30 días, sin tarjeta.
 
 ## Enlaces

@@ -25,7 +25,7 @@ export function Hero() {
 					<span className="font-display text-3xl font-extrabold text-primary">
 						RD${monthly.priceDop.toLocaleString("en-US")}
 					</span>
-					<span>al mes, cancela cuando quieras ·</span>
+					<span>por menú al mes·</span>
 					<strong className="font-semibold text-primary">{TRIAL_DAYS} días gratis, sin tarjeta</strong>
 				</p>
 				<div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">

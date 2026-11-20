@@ -31,7 +31,7 @@ const FAQS = [
 	},
 	{
 		q: "¿Puedo tener varios locales?",
-		a: "Sí. Cada local tiene su propio menú y su QR, y los manejas todos desde la misma cuenta.",
+		a: "Sí. Cada local tiene su propio menú, su QR y su suscripción, y se cobran por separado: pagas RD$500 al mes por cada menú, y cada uno tiene sus propios 30 días gratis. Los manejas todos desde la misma cuenta.",
 	},
 	{
 		q: "¿Y si necesito ayuda?",
